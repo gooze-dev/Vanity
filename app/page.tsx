@@ -71,26 +71,60 @@ export default function Home() {
               What is Mutation Testing?
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-              Mutation testing introduces small changes (mutations) to your
-              code and verifies that your tests catch them. If a test fails,
-              the mutation is "killed" - proving your tests are effective. If
-              tests still pass, the mutation "survived" - indicating a gap in
-              your test coverage.
+              Mutation testing measures how good your tests are at catching real bugs.
+              It works by making small, intentional changes (mutations) to your code and
+              rerunning your test suite. If a test fails, the mutation is "killed".
+              If tests still pass, the mutation "survived" — your tests didn’t notice a behavior change.
             </p>
-            <div className="grid gap-6 md:grid-cols-3 mt-12">
-              <div className="rounded-lg border bg-card p-6 text-center">
-                <div className="mb-3 text-3xl font-bold text-green-600 dark:text-green-400">Killed</div>
-                <p className="text-sm text-muted-foreground">Tests caught the mutation - your tests are working!</p>
-              </div>
-              <div className="rounded-lg border bg-card p-6 text-center">
-                <div className="mb-3 text-3xl font-bold text-red-600 dark:text-red-400">Survived</div>
-                <p className="text-sm text-muted-foreground">Tests didn't catch it - potential gap in coverage</p>
-              </div>
-              <div className="rounded-lg border bg-card p-6 text-center">
-                <div className="mb-3 text-3xl font-bold text-yellow-600 dark:text-yellow-400">Timeout</div>
-                <p className="text-sm text-muted-foreground">Tests took too long - possible infinite loop</p>
+            <div className="mx-auto max-w-2xl text-center mb-10">
+              <p className="text-lg text-muted-foreground leading-relaxed mb-3">
+                Here’s what mutation testing does on each run:
+              </p>
+              <ol className="mx-auto inline-block list-decimal pl-5 space-y-2 text-left text-lg text-muted-foreground leading-relaxed">
+                <li>Generate a mutant (a small code change).</li>
+                <li>Run the test suite against that mutant.</li>
+                <li>
+                  Report <span className="font-medium text-foreground">killed</span> vs{' '}
+                  <span className="font-medium text-foreground">survived</span> and compute a mutation score.
+                </li>
+              </ol>
+            </div>
+
+
+
+            {/* Mutation Example */}
+            <div className="rounded-lg  bg-card p-6 text-center mb-12">
+              <h3 className="text-lg font-semibold mb-2">Here’s an example mutation</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                One common mutation changes a comparison operator (like <code className="px-1.5 py-0.5 rounded bg-muted text-xs">&gt;</code> → <code className="px-1.5 py-0.5 rounded bg-muted text-xs">&gt;=</code>).
+              </p>
+              <div className="overflow-hidden rounded-md border border-zinc-700 text-left">
+                <div className="flex items-center gap-2 bg-zinc-900 px-3 py-2">
+                  <span className="h-2.5 w-2.5 rounded-full bg-red-500" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-yellow-500" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-green-500" />
+                </div>
+                <div className="bg-black dark:bg-zinc-950 p-4 font-mono text-sm overflow-x-auto">
+                  <div className="space-y-1">
+                    <div className="text-zinc-500">gooze@linux:~/app $ gooze run ./...</div>
+                    <div className="text-zinc-500">--- a/balance.go</div>
+                    <div className="text-zinc-500">+++ b/balance.go</div>
+                    <div className="text-zinc-500">@@ function label(balance int) string @@</div>
+                    <div className="flex">
+                      <span className="text-red-500 mr-2">-</span>
+                      <span className="text-red-300">if balance &gt; 0 &#123;</span>
+                    </div>
+                    <div className="flex">
+                      <span className="text-green-500 mr-2">+</span>
+                      <span className="text-green-300">if balance &gt;= 0 &#123;</span>
+                    </div>
+                    <div className="text-zinc-300">    return "positive"</div>
+                    <div className="text-zinc-300">&#125;</div>
+                  </div>
+                </div>
               </div>
             </div>
+
           </div>
         </div>
       </section>
