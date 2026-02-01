@@ -3,7 +3,12 @@ import Link from "next/link"
 export default function DocsPage() {
   return (
     <section>
-      <h1 className="text-4xl font-bold tracking-tight mb-4">Gooze</h1>
+      <h1 className="text-4xl font-bold tracking-tight mb-4">
+        <span className="inline-flex items-baseline font-extrabold">
+          <span style={{ color: "var(--gooze-green)" }}>GO</span>
+          <span style={{ color: "var(--gooze-teal)" }}>OZE</span>
+        </span>
+      </h1>
       <p className="text-lg text-muted-foreground mb-10">
         Mutation testing for Go: Gooze mutates your source and runs tests to see what your suite catches.
       </p>
@@ -17,7 +22,7 @@ export default function DocsPage() {
 
           <Link
             href="/docs/quick-start"
-            className="inline-flex items-center justify-center rounded-md border bg-card px-4 py-2 text-sm font-medium hover:bg-muted/50 transition-colors"
+            className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] px-4 py-2 text-sm font-medium text-white hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--gooze-teal)]"
           >
             Open Quick start
           </Link>
@@ -28,21 +33,21 @@ export default function DocsPage() {
           <div className="grid gap-4 md:grid-cols-3">
             <Link
               href="/docs/features/bypass-mutation"
-              className="rounded-lg border bg-card p-5 hover:bg-muted/50 transition-colors"
+              className="rounded-lg border bg-card p-5 hover:bg-muted/50 hover:border-[color:var(--gooze-teal)] transition-colors"
             >
               <div className="font-semibold mb-1">Bypass mutation</div>
               <div className="text-sm text-muted-foreground">Use -x and //gooze:ignore to skip.</div>
             </Link>
             <Link
               href="/docs/features/incremental-execution"
-              className="rounded-lg border bg-card p-5 hover:bg-muted/50 transition-colors"
+              className="rounded-lg border bg-card p-5 hover:bg-muted/50 hover:border-[color:var(--gooze-teal)] transition-colors"
             >
               <div className="font-semibold mb-1">Incremental execution</div>
               <div className="text-sm text-muted-foreground">Output (-o), reports, and OCI storage.</div>
             </Link>
             <Link
               href="/docs/features/ui-modes"
-              className="rounded-lg border bg-card p-5 hover:bg-muted/50 transition-colors"
+              className="rounded-lg border bg-card p-5 hover:bg-muted/50 hover:border-[color:var(--gooze-teal)] transition-colors"
             >
               <div className="font-semibold mb-1">UI modes</div>
               <div className="text-sm text-muted-foreground">TTY vs NOT TTY behavior.</div>

@@ -25,8 +25,8 @@ export default function VanityPage() {
         <div className="max-w-2xl mx-auto text-center space-y-8">
           <div className="space-y-4">
             <h1 className="text-5xl font-extrabold" style={{ fontFamily: 'var(--font-inter)', letterSpacing: '-0.02em' }}>
-              <span style={{ color: '#7DBC23' }}>GO</span>
-              <span style={{ color: '#4CB8B8' }}>OZE</span>
+              <span style={{ color: 'var(--gooze-green)' }}>GO</span>
+              <span style={{ color: 'var(--gooze-teal)' }}>OZE</span>
             </h1>
             <p className="text-xl text-muted-foreground">
               Mutation testing for Go
@@ -36,7 +36,7 @@ export default function VanityPage() {
           {/* Import Path */}
           <div className="rounded-lg border bg-card p-6 space-y-4">
             <div className="flex items-center justify-center gap-2 text-muted-foreground">
-              <Terminal className="h-5 w-5" />
+              <Terminal className="h-5 w-5 text-[color:var(--gooze-teal)]" />
               <span className="font-semibold">Installation</span>
             </div>
             <div className="bg-muted rounded-lg p-4">
@@ -51,13 +51,22 @@ export default function VanityPage() {
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg">
+            <Button
+              asChild
+              size="lg"
+              className="bg-gradient-to-r from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white hover:opacity-90"
+            >
               <Link href="/" className="flex items-center gap-2">
                 Learn More
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg">
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="border-[color:var(--gooze-teal)] text-[color:var(--gooze-teal)] hover:text-[color:var(--gooze-teal)]"
+            >
               <Link
                 href={GITHUB_REPO}
                 target="_blank"

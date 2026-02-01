@@ -97,11 +97,13 @@ export function GoozeDocsSidebar({
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                        <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-gradient-to-r from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white">
                   <FileText className="h-4 w-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Gooze</span>
+                          <span className="truncate font-semibold bg-gradient-to-r from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] bg-clip-text text-transparent">
+                            Gooze
+                          </span>
                   <span className="truncate text-xs">Documentation</span>
                 </div>
               </Link>

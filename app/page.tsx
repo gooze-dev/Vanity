@@ -31,8 +31,8 @@ export default function Home() {
         {/* Hero Content */}
         <div className="flex max-w-[980px] flex-col items-center gap-8 text-center">
           <h1 className="text-6xl font-extrabold leading-tight md:text-8xl lg:text-9xl" style={{ fontFamily: 'var(--font-inter)', letterSpacing: '-0.02em' }}>
-            <span style={{ color: '#7DBC23' }}>GO</span>
-            <span style={{ color: '#4CB8B8' }}>OZE</span>
+            <span style={{ color: 'var(--gooze-green)' }}>GO</span>
+            <span style={{ color: 'var(--gooze-teal)' }}>OZE</span>
           </h1>
           <p className="max-w-[750px] text-xl text-muted-foreground sm:text-2xl">
             Mutation testing for Go that helps you assess the quality of your
@@ -40,10 +40,19 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col gap-4 sm:flex-row">
-            <Button asChild size="lg">
+            <Button
+              asChild
+              size="lg"
+              className="bg-gradient-to-r from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white hover:opacity-90"
+            >
               <Link href="/docs">Get Started</Link>
             </Button>
-            <Button asChild variant="outline" size="lg">
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="border-[color:var(--gooze-teal)] text-[color:var(--gooze-teal)] hover:text-[color:var(--gooze-teal)]"
+            >
               <Link
                 href="https://github.com/gooze-dev/gooze"
                 target="_blank"
@@ -59,7 +68,7 @@ export default function Home() {
 
         {/* Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="h-8 w-0.5 bg-foreground/20 rounded-full"></div>
+          <div className="h-8 w-0.5 rounded-full bg-gradient-to-b from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] opacity-60" />
         </div>
       </section>
 
@@ -140,7 +149,7 @@ export default function Home() {
             <div className="space-y-16">
               {/* Step 1 */}
               <div className="flex gap-8 items-start">
-                <div className="flex-shrink-0 flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground text-2xl font-bold">
+                <div className="flex-shrink-0 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white text-2xl font-bold">
                   1
                 </div>
                 <div className="flex-1">
@@ -156,7 +165,7 @@ export default function Home() {
 
               {/* Step 2 */}
               <div className="flex gap-8 items-start">
-                <div className="flex-shrink-0 flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground text-2xl font-bold">
+                <div className="flex-shrink-0 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white text-2xl font-bold">
                   2
                 </div>
                 <div className="flex-1">
@@ -172,7 +181,7 @@ export default function Home() {
 
               {/* Step 3 */}
               <div className="flex gap-8 items-start">
-                <div className="flex-shrink-0 flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground text-2xl font-bold">
+                <div className="flex-shrink-0 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white text-2xl font-bold">
                   3
                 </div>
                 <div className="flex-1">

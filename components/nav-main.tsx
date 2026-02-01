@@ -2,6 +2,8 @@
 
 import { ChevronRight, type LucideIcon } from "lucide-react"
 
+import { cn } from "@/lib/utils"
+
 import {
   Collapsible,
   CollapsibleContent,
@@ -45,10 +47,19 @@ export function NavMain({
           >
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip={item.title}>
-                  {item.icon && <item.icon />}
+                <SidebarMenuButton tooltip={item.title} isActive={item.isActive}>
+                  {item.icon && (
+                    <item.icon
+                      className={cn(
+                        "transition-colors",
+                        item.isActive
+                          ? "text-[color:var(--gooze-green)]"
+                          : "text-[color:var(--gooze-teal)]"
+                      )}
+                    />
+                  )}
                   <span>{item.title}</span>
-                  <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  <ChevronRight className="ml-auto text-[color:var(--gooze-teal)] transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                 </SidebarMenuButton>
               </CollapsibleTrigger>
               <CollapsibleContent>

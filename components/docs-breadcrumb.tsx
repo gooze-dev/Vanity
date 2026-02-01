@@ -48,7 +48,9 @@ export function DocsBreadcrumb() {
       <BreadcrumbList>
         <BreadcrumbItem className="hidden md:block">
           <BreadcrumbLink asChild>
-            <Link href="/">Home</Link>
+            <Link href="/" className="transition-colors hover:text-[color:var(--gooze-teal)]">
+              Home
+            </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
 
@@ -59,7 +61,9 @@ export function DocsBreadcrumb() {
             <BreadcrumbPage>Documentation</BreadcrumbPage>
           ) : (
             <BreadcrumbLink asChild>
-              <Link href="/docs">Documentation</Link>
+              <Link href="/docs" className="transition-colors hover:text-[color:var(--gooze-teal)]">
+                Documentation
+              </Link>
             </BreadcrumbLink>
           )}
         </BreadcrumbItem>
@@ -69,7 +73,9 @@ export function DocsBreadcrumb() {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link href="/docs#features">Features</Link>
+                <Link href="/docs#features" className="transition-colors hover:text-[color:var(--gooze-teal)]">
+                  Features
+                </Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
