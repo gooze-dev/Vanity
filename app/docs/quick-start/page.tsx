@@ -1,3 +1,5 @@
+import { CodeBlock } from "@/components/code-block"
+
 export default function QuickStartPage() {
   return (
     <section>
@@ -12,9 +14,7 @@ export default function QuickStartPage() {
           <p className="mb-3 text-muted-foreground">
             Install the latest <code className="bg-muted px-1 py-0.5 rounded">gooze</code> binary to your Go bin directory:
           </p>
-          <pre className="bg-muted p-4 rounded-lg overflow-x-auto">
-            <code>go install gooze.dev/pkg/gooze@latest</code>
-          </pre>
+          <CodeBlock lang="bash" code="go install gooze.dev/pkg/gooze@latest" />
         </div>
 
         <div id="list">
@@ -22,17 +22,13 @@ export default function QuickStartPage() {
           <p className="mb-3 text-muted-foreground">
             Preview which files will be mutated and how many mutations apply.
           </p>
-          <pre className="bg-muted p-4 rounded-lg overflow-x-auto">
-            <code>gooze list ./...</code>
-          </pre>
+          <CodeBlock lang="bash" code="gooze list ./..." />
         </div>
 
         <div id="run">
           <h2 className="text-2xl font-semibold mb-3">Run mutation testing</h2>
           <p className="mb-3 text-muted-foreground">Execute mutation testing across the target paths.</p>
-          <pre className="bg-muted p-4 rounded-lg overflow-x-auto">
-            <code>gooze run ./...</code>
-          </pre>
+          <CodeBlock lang="bash" code="gooze run ./..." />
         </div>
 
         <div id="view">
@@ -44,16 +40,12 @@ export default function QuickStartPage() {
           </p>
 
           <p className="mb-3 text-muted-foreground">View the last run:</p>
-          <pre className="bg-muted p-4 rounded-lg overflow-x-auto">
-            <code>gooze view</code>
-          </pre>
+          <CodeBlock lang="bash" code="gooze view" />
 
           <p className="mt-5 mb-3 text-muted-foreground">
             Or point <code className="bg-muted px-1 py-0.5 rounded">view</code> at an explicit directory:
           </p>
-          <pre className="bg-muted p-4 rounded-lg overflow-x-auto">
-            <code>gooze view -o .gooze-reports</code>
-          </pre>
+          <CodeBlock lang="bash" code="gooze view -o .gooze-reports" />
         </div>
       </div>
     </section>

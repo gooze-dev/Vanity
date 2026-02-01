@@ -1,3 +1,5 @@
+import { CodeBlock } from "@/components/code-block"
+
 export default function BypassMutationPage() {
   return (
     <section>
@@ -14,9 +16,7 @@ export default function BypassMutationPage() {
           <p className="mb-3 text-muted-foreground">
             Skip files by regex. You can pass <code className="bg-muted px-1 py-0.5 rounded">-x</code> multiple times.
           </p>
-          <pre className="bg-muted p-4 rounded-lg overflow-x-auto">
-            <code>{"gooze run -x '^vendor/' -x '^mock_' ./..."}</code>
-          </pre>
+          <CodeBlock lang="bash" code="gooze run -x '^vendor/' -x '^mock_' ./..." />
           <p className="mt-3 text-sm text-muted-foreground">
             The regex matches either the full path or the base filename.
           </p>
@@ -33,15 +33,16 @@ export default function BypassMutationPage() {
           <p className="mb-3 text-muted-foreground">
             Optionally target specific mutagens: <code className="bg-muted px-1 py-0.5 rounded">{"//gooze:ignore arithmetic,comparison"}</code>.
           </p>
-          <pre className="bg-muted p-4 rounded-lg overflow-x-auto">
-            <code>{`//gooze:ignore arithmetic,comparison
+          <CodeBlock
+            lang="go"
+            code={`//gooze:ignore arithmetic,comparison
 package main
 
 func main() {
   x := 1 + 2 //gooze:ignore numbers
   _ = x
-}`}</code>
-          </pre>
+}`}
+          />
         </div>
       </div>
     </section>

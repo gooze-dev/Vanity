@@ -1,3 +1,5 @@
+import { CodeBlock } from "@/components/code-block"
+
 export default function IncrementalExecutionPage() {
   return (
     <section>
@@ -15,9 +17,7 @@ export default function IncrementalExecutionPage() {
           <p className="mb-3 text-muted-foreground">
             Choose where reports are written. This is also where the incremental cache lives.
           </p>
-          <pre className="bg-muted p-4 rounded-lg overflow-x-auto">
-            <code>gooze run -o .gooze-reports ./...</code>
-          </pre>
+          <CodeBlock lang="bash" code="gooze run -o .gooze-reports ./..." />
           <p className="mt-3 text-sm text-muted-foreground">
             Reports are written as one YAML per run (<code className="bg-muted px-1 py-0.5 rounded">&lt;hash&gt;.yaml</code>) plus an index (<code className="bg-muted px-1 py-0.5 rounded">_index.yaml</code>).
           </p>
@@ -28,8 +28,9 @@ export default function IncrementalExecutionPage() {
           <p className="mb-3 text-muted-foreground">
             Store and retrieve reports as OCI artifacts (e.g. in GHCR) so CI and teammates can reuse baseline results.
           </p>
-          <pre className="bg-muted p-4 rounded-lg overflow-x-auto">
-            <code>{`# create/update local reports
+          <CodeBlock
+            lang="bash"
+            code={`# create/update local reports
 gooze run -o .gooze-reports ./...
 
 # package and push
@@ -44,8 +45,8 @@ rm -rf .gooze-reports && mkdir -p .gooze-reports
 tar -C .gooze-reports -xzf /tmp/gooze-reports-oci/gooze-reports.tgz
 
 # incremental run uses restored cache
-gooze run -o .gooze-reports ./...`}</code>
-          </pre>
+gooze run -o .gooze-reports ./...`}
+          />
         </div>
       </div>
     </section>

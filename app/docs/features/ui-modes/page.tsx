@@ -1,3 +1,5 @@
+import { CodeBlock } from "@/components/code-block"
+
 export default function UIModesPage() {
   return (
     <section>
@@ -19,10 +21,7 @@ export default function UIModesPage() {
           <p className="mb-3 text-muted-foreground">
             When output is redirected (or in CI), Gooze uses a simple UI.
           </p>
-          <pre className="bg-muted p-4 rounded-lg overflow-x-auto">
-            <code>{`# force non-interactive output even in a terminal
-gooze run ./... | cat`}</code>
-          </pre>
+          <CodeBlock lang="bash" code={"gooze run ./... | cat"} />
         </div>
       </div>
     </section>
