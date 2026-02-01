@@ -14,6 +14,9 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
+env:
+  CUSTOM_DOMAIN: gooze.dev
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,9 +34,15 @@ jobs:
         run: npm ci
 
       - name: Build (static export)
-        env:
-          BASE_PATH: /${{ github.event.repository.name }}
-        run: npm run build
+        run: |
+          set -euo pipefail
+          if [ -n "${CUSTOM_DOMAIN:-}" ]; then
+            echo "$CUSTOM_DOMAIN" > public/CNAME
+            npm run build
+            echo "$CUSTOM_DOMAIN" > out/CNAME
+          else
+            BASE_PATH="/${{ github.event.repository.name }}" npm run build
+          fi
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
