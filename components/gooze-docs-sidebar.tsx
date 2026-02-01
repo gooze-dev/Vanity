@@ -9,6 +9,7 @@ import {
   FileText,
 } from "lucide-react"
 
+import { GoozeLogo } from "@/components/gooze-logo"
 import { NavMain } from "@/components/nav-main"
 import {
   Sidebar,
@@ -101,9 +102,7 @@ export function GoozeDocsSidebar({
                   <FileText className="h-4 w-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                          <span className="truncate font-semibold bg-gradient-to-r from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] bg-clip-text text-transparent">
-                            Gooze
-                          </span>
+                  <GoozeLogo variant="gradient" className="truncate font-semibold" />
                   <span className="truncate text-xs">Documentation</span>
                 </div>
               </Link>

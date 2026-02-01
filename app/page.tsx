@@ -1,6 +1,11 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import {
+  GoozeOutlineCtaButton,
+  GoozePrimaryCtaButton,
+} from "@/components/gooze-cta-button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { GoozeLogo } from "@/components/gooze-logo";
 import { Github } from "lucide-react";
 
 export default function Home() {
@@ -30,9 +35,8 @@ export default function Home() {
 
         {/* Hero Content */}
         <div className="flex max-w-[980px] flex-col items-center gap-8 text-center">
-          <h1 className="text-6xl font-extrabold leading-tight md:text-8xl lg:text-9xl" style={{ fontFamily: 'var(--font-inter)', letterSpacing: '-0.02em' }}>
-            <span style={{ color: 'var(--gooze-green)' }}>GO</span>
-            <span style={{ color: 'var(--gooze-teal)' }}>OZE</span>
+          <h1 className="text-6xl font-extrabold leading-tight md:text-8xl lg:text-9xl">
+            <GoozeLogo className="text-inherit" />
           </h1>
           <p className="max-w-[750px] text-xl text-muted-foreground sm:text-2xl">
             Mutation testing for Go that helps you assess the quality of your
@@ -40,18 +44,16 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col gap-4 sm:flex-row">
-            <Button
+            <GoozePrimaryCtaButton
               asChild
               size="lg"
-              className="bg-gradient-to-r from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white hover:opacity-90"
             >
               <Link href="/docs">Get Started</Link>
-            </Button>
-            <Button
+            </GoozePrimaryCtaButton>
+            <GoozeOutlineCtaButton
               asChild
               variant="outline"
               size="lg"
-              className="border-[color:var(--gooze-teal)] text-[color:var(--gooze-teal)] hover:text-[color:var(--gooze-teal)]"
             >
               <Link
                 href="https://github.com/gooze-dev/gooze"
@@ -62,7 +64,7 @@ export default function Home() {
                 <Github className="h-5 w-5" />
                 View on GitHub
               </Link>
-            </Button>
+            </GoozeOutlineCtaButton>
           </div>
         </div>
 
@@ -153,7 +155,7 @@ export default function Home() {
                   1
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold mb-3">Install GOOZE</h3>
+                  <h3 className="text-2xl font-bold mb-3">Install Gooze</h3>
                   <p className="text-muted-foreground mb-4">
                     Install with a single command using Go's package manager
                   </p>

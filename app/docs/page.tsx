@@ -1,13 +1,13 @@
 import Link from "next/link"
 
+import { GoozeLogo } from "@/components/gooze-logo"
+import { GoozePrimaryCtaButton } from "@/components/gooze-cta-button"
+
 export default function DocsPage() {
   return (
     <section>
       <h1 className="text-4xl font-bold tracking-tight mb-4">
-        <span className="inline-flex items-baseline font-extrabold">
-          <span style={{ color: "var(--gooze-green)" }}>GO</span>
-          <span style={{ color: "var(--gooze-teal)" }}>OZE</span>
-        </span>
+        <GoozeLogo />
       </h1>
       <p className="text-lg text-muted-foreground mb-10">
         Mutation testing for Go: Gooze mutates your source and runs tests to see what your suite catches.
@@ -20,12 +20,9 @@ export default function DocsPage() {
             Install Gooze, preview what will be mutated, run mutation testing, then view the latest report.
           </p>
 
-          <Link
-            href="/docs/quick-start"
-            className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] px-4 py-2 text-sm font-medium text-white hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--gooze-teal)]"
-          >
-            Open Quick start
-          </Link>
+          <GoozePrimaryCtaButton asChild>
+            <Link href="/docs/quick-start">Open Quick start</Link>
+          </GoozePrimaryCtaButton>
         </div>
 
         <div id="features" className="scroll-mt-20">

@@ -1,6 +1,10 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import {
+  GoozeOutlineCtaButton,
+  GoozePrimaryCtaButton,
+} from "@/components/gooze-cta-button";
+import { GoozeLogo } from "@/components/gooze-logo";
 import { ArrowRight, Github, Terminal } from "lucide-react";
 
 const GITHUB_REPO = "https://github.com/gooze-dev/gooze";
@@ -8,7 +12,7 @@ const IMPORT_PREFIX = "gooze.dev/pkg/gooze";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "GOOZE - Go Mutation Testing",
+    title: "Gooze - Go Mutation Testing",
     description: "Import path for Gooze - Mutation testing for Go",
     other: {
       "go-import": `${IMPORT_PREFIX} git ${GITHUB_REPO}`,
@@ -24,9 +28,8 @@ export default function VanityPage() {
       <main className="flex-1 flex items-center justify-center px-4 py-16">
         <div className="max-w-2xl mx-auto text-center space-y-8">
           <div className="space-y-4">
-            <h1 className="text-5xl font-extrabold" style={{ fontFamily: 'var(--font-inter)', letterSpacing: '-0.02em' }}>
-              <span style={{ color: 'var(--gooze-green)' }}>GO</span>
-              <span style={{ color: 'var(--gooze-teal)' }}>OZE</span>
+            <h1 className="text-5xl font-extrabold">
+              <GoozeLogo className="text-inherit" />
             </h1>
             <p className="text-xl text-muted-foreground">
               Mutation testing for Go
@@ -51,21 +54,19 @@ export default function VanityPage() {
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
+            <GoozePrimaryCtaButton
               asChild
               size="lg"
-              className="bg-gradient-to-r from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white hover:opacity-90"
             >
               <Link href="/" className="flex items-center gap-2">
                 Learn More
                 <ArrowRight className="h-4 w-4" />
               </Link>
-            </Button>
-            <Button
+            </GoozePrimaryCtaButton>
+            <GoozeOutlineCtaButton
               asChild
               variant="outline"
               size="lg"
-              className="border-[color:var(--gooze-teal)] text-[color:var(--gooze-teal)] hover:text-[color:var(--gooze-teal)]"
             >
               <Link
                 href={GITHUB_REPO}
@@ -76,7 +77,7 @@ export default function VanityPage() {
                 <Github className="h-5 w-5" />
                 View on GitHub
               </Link>
-            </Button>
+            </GoozeOutlineCtaButton>
           </div>
         </div>
       </main>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Oxanium } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
@@ -18,9 +18,38 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+const oxanium = Oxanium({
+  variable: "--font-oxanium",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
-  title: "Gooze - Mutation Testing for Go",
+  title: "Gooze",
   description: "Mutation testing for Go that helps you assess the quality of your test suite",
+  openGraph: {
+    title: "Gooze",
+    description: "Mutation testing for Go that helps you assess the quality of your test suite",
+    url: "https://gooze.dev/",
+    siteName: "Gooze",
+    images: [
+      {
+        url: "https://gooze.dev/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Gooze - Mutation testing for Go",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Gooze",
+    description: "Mutation testing for Go that helps you assess the quality of your test suite",
+    site: "@gooze_dev",
+    creator: "@gooze_dev",
+    images: ["https://gooze.dev/og-image.png"],
+  },
 };
 
 export default function RootLayout({
@@ -31,7 +60,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${oxanium.variable} antialiased`}
       >
         <ThemeProvider
           attribute="class"
