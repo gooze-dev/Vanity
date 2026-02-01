@@ -93,7 +93,7 @@ export default function Home() {
 
 
             {/* Mutation Example */}
-            <div className="rounded-lg  bg-card p-6 text-center mb-12">
+            <div className="rounded-lg  p-6 text-center mb-12">
               <h3 className="text-lg font-semibold mb-2">Here’s an example mutation</h3>
               <p className="text-sm text-muted-foreground mb-4">
                 One common mutation changes a comparison operator (like <code className="px-1.5 py-0.5 rounded bg-muted text-xs">&gt;</code> → <code className="px-1.5 py-0.5 rounded bg-muted text-xs">&gt;=</code>).
