@@ -149,7 +149,7 @@ export default function Home() {
                     Install with a single command using Go's package manager
                   </p>
                   <div className="rounded-lg bg-muted p-4">
-                    <code className="text-sm">go install github.com/mouse-blink/gooze@latest</code>
+                    <code className="text-sm">go install gooze.dev/pkg/gooze@latest</code>
                   </div>
                 </div>
               </div>

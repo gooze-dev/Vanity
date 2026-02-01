@@ -1,21 +1,17 @@
 "use client"
 
 import * as React from "react"
+import Link from "next/link"
 import {
-  BookOpen,
   Command,
-  FileText,
   Home,
-  Play,
-  Settings,
+  FileText,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
-import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarRail,
   SidebarMenu,
@@ -25,105 +21,43 @@ import {
 
 // Gooze documentation data
 const data = {
-  user: {
-    name: "Gooze User",
-    email: "user@example.com",
-    avatar: "", // No avatar image
-  },
   navMain: [
     {
-      title: "Getting Started",
+      title: "Get started",
       url: "#",
       icon: Home,
       isActive: true,
       items: [
         {
-          title: "Introduction",
-          url: "#introduction",
+          title: "Overview",
+          url: "/docs",
         },
         {
-          title: "Quick Start",
-          url: "#quick-start",
+          title: "Quick start",
+          url: "/docs/quick-start",
         },
         {
           title: "Installation",
-          url: "#installation",
+          url: "/docs/quick-start#installation",
         },
       ],
     },
     {
-      title: "Commands",
+      title: "Features",
       url: "#",
       icon: Command,
       items: [
         {
-          title: "gooze list",
-          url: "#list",
+          title: "Bypass mutation",
+          url: "/docs/features/bypass-mutation",
         },
         {
-          title: "gooze run",
-          url: "#run",
+          title: "Incremental execution",
+          url: "/docs/features/incremental-execution",
         },
         {
-          title: "gooze view",
-          url: "#view",
-        },
-      ],
-    },
-    {
-      title: "Concepts",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Mutation Testing",
-          url: "#mutation-testing",
-        },
-        {
-          title: "Mutation Types",
-          url: "#mutation-types",
-        },
-        {
-          title: "Test Status",
-          url: "#test-status",
-        },
-      ],
-    },
-    {
-      title: "Advanced",
-      url: "#",
-      icon: Settings,
-      items: [
-        {
-          title: "Configuration",
-          url: "#configuration",
-        },
-        {
-          title: "Ignore Directives",
-          url: "#ignore-directives",
-        },
-        {
-          title: "Sharding",
-          url: "#sharding",
-        },
-      ],
-    },
-    {
-      title: "Examples",
-      url: "#",
-      icon: Play,
-      items: [
-        {
-          title: "Basic Usage",
-          url: "#basic",
-        },
-        {
-          title: "CI/CD Integration",
-          url: "#cicd",
-        },
-        {
-          title: "Reports",
-          url: "#reports",
+          title: "UI modes",
+          url: "/docs/features/ui-modes",
         },
       ],
     },
@@ -139,7 +73,7 @@ export function GoozeDocsSidebar({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="/">
+              <Link href="/">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <FileText className="h-4 w-4" />
                 </div>
@@ -147,7 +81,7 @@ export function GoozeDocsSidebar({
                   <span className="truncate font-semibold">Gooze</span>
                   <span className="truncate text-xs">Documentation</span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -155,9 +89,7 @@ export function GoozeDocsSidebar({
       <SidebarContent>
         <NavMain items={data.navMain} />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
-      </SidebarFooter>
+      
       <SidebarRail />
     </Sidebar>
   )
