@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import {
   Command,
   Home,
@@ -20,13 +21,19 @@ import {
 } from "@/components/ui/sidebar"
 
 // Gooze documentation data
-const data = {
-  navMain: [
+function getNavMain(pathname: string) {
+  const isFeatures = pathname.startsWith("/docs/features/")
+  const isRoadmap = pathname.startsWith("/docs/roadmap")
+  const isGetStarted =
+    pathname === "/docs" ||
+    pathname.startsWith("/docs/quick-start")
+
+  return [
     {
       title: "Get started",
       url: "#",
       icon: Home,
-      isActive: true,
+      isActive: isGetStarted && !isFeatures,
       items: [
         {
           title: "Overview",
@@ -46,6 +53,7 @@ const data = {
       title: "Features",
       url: "#",
       icon: Command,
+      isActive: isFeatures,
       items: [
         {
           title: "Bypass mutation",
@@ -61,12 +69,27 @@ const data = {
         },
       ],
     },
-  ],
+    {
+      title: "Roadmap",
+      url: "#",
+      icon: FileText,
+      isActive: isRoadmap,
+      items: [
+        {
+          title: "Roadmap",
+          url: "/docs/roadmap",
+        },
+      ],
+    },
+  ]
 }
 
 export function GoozeDocsSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
+  const pathname = usePathname() || "/docs"
+  const navMain = React.useMemo(() => getNavMain(pathname), [pathname])
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -87,7 +110,7 @@ export function GoozeDocsSidebar({
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={navMain} />
       </SidebarContent>
       
       <SidebarRail />
