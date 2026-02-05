@@ -6,6 +6,7 @@ import {
 } from "@/components/gooze-cta-button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { GoozeLogo } from "@/components/gooze-logo";
+import { LatestReleaseBadge } from "@/components/latest-release-badge";
 import { Github } from "lucide-react";
 import { CodeBlock } from "@/components/code-block";
 
@@ -22,15 +23,18 @@ export default async function Home() {
           >
             Documentation
           </Link>
-          <Link
-            href="https://github.com/gooze-dev/gooze"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60"
-          >
-            <Github className="h-4 w-4" />
-            GitHub
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href="https://github.com/gooze-dev/gooze"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60"
+            >
+              <Github className="h-4 w-4" />
+              GitHub
+            </Link>
+            <LatestReleaseBadge className="px-2 py-0.5 text-xs" />
+          </div>
           <ThemeToggle />
         </div>
 
