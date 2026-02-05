@@ -18,6 +18,26 @@ const featureTitles: Record<string, string> = {
   "ui-modes": "UI modes",
 }
 
+const sectionTitles: Record<string, string> = {
+  "quick-start": "Quick start",
+  install: "Installation",
+  "mutation-testing": "Mutation testing",
+  cli: "CLI",
+  config: "Configuration",
+  reports: "Reports",
+  mutations: "Mutations",
+  troubleshooting: "Troubleshooting",
+}
+
+const cliCommandTitles: Record<string, string> = {
+  init: "init",
+  list: "list",
+  run: "run",
+  view: "view",
+  merge: "merge",
+  version: "version",
+}
+
 function titleFromSlug(slug: string) {
   return slug
     .split("-")
@@ -29,10 +49,11 @@ export function DocsBreadcrumb() {
   const pathname = usePathname() || "/docs"
   const parts = pathname.split("?")[0].split("#")[0].split("/").filter(Boolean)
 
-  // Expected:
+  // Common:
   // /docs
-  // /docs/quick-start
+  // /docs/<section>
   // /docs/features/<slug>
+  // /docs/cli/<command>
   const isDocs = parts[0] === "docs"
   const section = parts[1]
   const featureSlug = parts[2]
@@ -83,11 +104,33 @@ export function DocsBreadcrumb() {
               <BreadcrumbPage>{featureTitles[featureSlug] ?? titleFromSlug(featureSlug)}</BreadcrumbPage>
             </BreadcrumbItem>
           </>
+        ) : section && parts.length >= 3 ? (
+          <>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link
+                  href={`/docs/${section}`}
+                  className="transition-colors hover:text-[color:var(--gooze-teal)]"
+                >
+                  {sectionTitles[section] ?? titleFromSlug(section)}
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>
+                {section === "cli" && parts[2]
+                  ? cliCommandTitles[parts[2]] ?? titleFromSlug(parts[2])
+                  : titleFromSlug(parts[2])}
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+          </>
         ) : section ? (
           <>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>{titleFromSlug(section)}</BreadcrumbPage>
+              <BreadcrumbPage>{sectionTitles[section] ?? titleFromSlug(section)}</BreadcrumbPage>
             </BreadcrumbItem>
           </>
         ) : null}

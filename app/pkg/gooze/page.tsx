@@ -6,6 +6,7 @@ import {
 } from "@/components/gooze-cta-button";
 import { GoozeLogo } from "@/components/gooze-logo";
 import { ArrowRight, Github, Terminal } from "lucide-react";
+import { CodeBlock } from "@/components/code-block";
 
 const GITHUB_REPO = "https://github.com/gooze-dev/gooze";
 const IMPORT_PREFIX = "gooze.dev/pkg/gooze";
@@ -21,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function VanityPage() {
+export default async function VanityPage() {
   return (
     <div className="flex min-h-screen flex-col">
       {/* Main Content */}
@@ -42,11 +43,7 @@ export default function VanityPage() {
               <Terminal className="h-5 w-5 text-[color:var(--gooze-teal)]" />
               <span className="font-semibold">Installation</span>
             </div>
-            <div className="bg-muted rounded-lg p-4">
-              <code className="text-sm font-mono">
-                go install {IMPORT_PREFIX}@latest
-              </code>
-            </div>
+            <CodeBlock code={`go install ${IMPORT_PREFIX}@latest`} lang="bash" />
             <p className="text-sm text-muted-foreground">
               This vanity import path redirects to the official Git repository
             </p>

@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 import { CodeBlock } from "@/components/code-block"
 
 export default function IncrementalExecutionPage() {
@@ -8,6 +10,13 @@ export default function IncrementalExecutionPage() {
         Gooze caches mutation results and skips unchanged files on subsequent runs. Use{" "}
         <code className="bg-muted px-1 py-0.5 rounded">--no-cache</code> to force a full re-test.
       </p>
+
+      <div className="rounded-lg border bg-card p-5 mb-10">
+        <p className="text-muted-foreground">
+          Related pages: <Link href="/docs/reports" className="underline underline-offset-4">Reports</Link> and{" "}
+          <Link href="/docs/cli/run" className="underline underline-offset-4">gooze run</Link>.
+        </p>
+      </div>
 
       <div className="space-y-10">
         <div>
@@ -27,6 +36,9 @@ export default function IncrementalExecutionPage() {
           <h2 className="text-2xl font-semibold mb-3">OCI reports (ORAS)</h2>
           <p className="mb-3 text-muted-foreground">
             Store and retrieve reports as OCI artifacts (e.g. in GHCR) so CI and teammates can reuse baseline results.
+          </p>
+          <p className="mb-3 text-sm text-muted-foreground">
+            This is an advanced workflow. You need the <code className="bg-muted px-1 py-0.5 rounded">oras</code> CLI installed.
           </p>
           <CodeBlock
             lang="bash"

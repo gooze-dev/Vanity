@@ -7,8 +7,9 @@ import {
 import { ThemeToggle } from "@/components/theme-toggle";
 import { GoozeLogo } from "@/components/gooze-logo";
 import { Github } from "lucide-react";
+import { CodeBlock } from "@/components/code-block";
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="flex min-h-screen flex-col">
       {/* Hero Section - Full Height */}
@@ -84,8 +85,8 @@ export default function Home() {
             <p className="text-lg text-muted-foreground leading-relaxed mb-8">
               Mutation testing measures how good your tests are at catching real bugs.
               It works by making small, intentional changes (mutations) to your code and
-              rerunning your test suite. If a test fails, the mutation is "killed".
-              If tests still pass, the mutation "survived" — your tests didn’t notice a behavior change.
+              rerunning your test suite. If a test fails, the mutation is &quot;killed&quot;.
+              If tests still pass, the mutation &quot;survived&quot; — your tests didn&apos;t notice a behavior change.
             </p>
             <div className="mx-auto max-w-2xl text-center mb-10">
               <p className="text-lg text-muted-foreground leading-relaxed mb-3">
@@ -129,7 +130,7 @@ export default function Home() {
                       <span className="text-green-500 mr-2">+</span>
                       <span className="text-green-300">if balance &gt;= 0 &#123;</span>
                     </div>
-                    <div className="text-zinc-300">    return "positive"</div>
+                      <div className="text-zinc-300">    return &quot;positive&quot;</div>
                     <div className="text-zinc-300">&#125;</div>
                   </div>
                 </div>
@@ -157,11 +158,9 @@ export default function Home() {
                 <div className="flex-1">
                   <h3 className="text-2xl font-bold mb-3">Install Gooze</h3>
                   <p className="text-muted-foreground mb-4">
-                    Install with a single command using Go's package manager
+                      Install with a single command using Go&apos;s package manager
                   </p>
-                  <div className="rounded-lg bg-muted p-4">
-                    <code className="text-sm">go install gooze.dev/pkg/gooze@latest</code>
-                  </div>
+                  <CodeBlock code="go install gooze.dev/pkg/gooze@latest" lang="bash" />
                 </div>
               </div>
 
@@ -175,9 +174,7 @@ export default function Home() {
                   <p className="text-muted-foreground mb-4">
                     Execute mutation testing across your codebase
                   </p>
-                  <div className="rounded-lg bg-muted p-4">
-                    <code className="text-sm">gooze run ./...</code>
-                  </div>
+                  <CodeBlock code="gooze run ./..." lang="bash" />
                 </div>
               </div>
 
@@ -189,11 +186,9 @@ export default function Home() {
                 <div className="flex-1">
                   <h3 className="text-2xl font-bold mb-3">View Results</h3>
                   <p className="text-muted-foreground mb-4">
-                    Get detailed insights into your test suite's effectiveness
+                      Get detailed insights into your test suite&apos;s effectiveness
                   </p>
-                  <div className="rounded-lg bg-muted p-4">
-                    <code className="text-sm">gooze view</code>
-                  </div>
+                  <CodeBlock code="gooze view" lang="bash" />
                 </div>
               </div>
             </div>

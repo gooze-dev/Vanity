@@ -27,7 +27,14 @@ function getNavMain(pathname: string) {
   const isRoadmap = pathname.startsWith("/docs/roadmap")
   const isGetStarted =
     pathname === "/docs" ||
-    pathname.startsWith("/docs/quick-start")
+    pathname.startsWith("/docs/quick-start") ||
+    pathname.startsWith("/docs/install") ||
+    pathname.startsWith("/docs/mutation-testing") ||
+    pathname.startsWith("/docs/cli") ||
+    pathname.startsWith("/docs/config") ||
+    pathname.startsWith("/docs/reports") ||
+    pathname.startsWith("/docs/mutations") ||
+    pathname.startsWith("/docs/troubleshooting")
 
   return [
     {
@@ -46,7 +53,31 @@ function getNavMain(pathname: string) {
         },
         {
           title: "Installation",
-          url: "/docs/quick-start#installation",
+          url: "/docs/install",
+        },
+        {
+          title: "What is mutation testing?",
+          url: "/docs/mutation-testing",
+        },
+        {
+          title: "CLI reference",
+          url: "/docs/cli",
+        },
+        {
+          title: "Configuration",
+          url: "/docs/config",
+        },
+        {
+          title: "Reports",
+          url: "/docs/reports",
+        },
+        {
+          title: "Mutations",
+          url: "/docs/mutations",
+        },
+        {
+          title: "Troubleshooting",
+          url: "/docs/troubleshooting",
         },
       ],
     },

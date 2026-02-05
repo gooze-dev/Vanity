@@ -8,6 +8,13 @@ export default function BypassMutationPage() {
         Skip mutations when you already know certain paths or regions shouldn&apos;t be touched.
       </p>
 
+      <div className="rounded-lg border bg-card p-5 mb-10">
+        <p className="text-muted-foreground">
+          Tip: ignore as little as possible.
+          If you ignore too much, mutation testing becomes less useful.
+        </p>
+      </div>
+
       <div className="space-y-10">
         <div>
           <h2 className="text-2xl font-semibold mb-3">
@@ -43,6 +50,57 @@ func main() {
   _ = x
 }`}
           />
+
+          <div className="mt-8 space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Example: ignore the whole file</h3>
+              <p className="mb-2 text-muted-foreground">
+                Put the directive near the top of the file.
+              </p>
+              <CodeBlock
+                lang="go"
+                code={`//gooze:ignore
+package main
+
+// Whole file is ignored
+`}
+              />
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Example: ignore one function</h3>
+              <p className="mb-2 text-muted-foreground">
+                Put it on the function you want to ignore.
+              </p>
+              <CodeBlock
+                lang="go"
+                code={`package main
+
+//gooze:ignore comparison
+func isOk(x int) bool {
+  return x > 0
+}
+`}
+              />
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Example: ignore one line</h3>
+              <p className="mb-2 text-muted-foreground">
+                Put it at the end of the line.
+              </p>
+              <CodeBlock
+                lang="go"
+                code={`package main
+
+func f() int {
+  x := 1 + 2 //gooze:ignore numbers
+  return x
+}
+`}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>

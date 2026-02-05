@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 import { CodeBlock } from "@/components/code-block"
 
 export default function UIModesPage() {
@@ -14,6 +16,27 @@ export default function UIModesPage() {
           <p className="text-muted-foreground">
             When running in a terminal, Gooze uses an interactive TUI.
           </p>
+
+          <div className="mt-4">
+            <p className="text-muted-foreground mb-2">Common keys in the viewer:</p>
+            <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
+              <li>
+                <code className="bg-muted px-1 py-0.5 rounded">↑/↓</code> or <code className="bg-muted px-1 py-0.5 rounded">j/k</code> to move
+              </li>
+              <li>
+                <code className="bg-muted px-1 py-0.5 rounded">/</code> to filter
+              </li>
+              <li>
+                <code className="bg-muted px-1 py-0.5 rounded">enter</code> / <code className="bg-muted px-1 py-0.5 rounded">space</code> to toggle the diff
+              </li>
+              <li>
+                <code className="bg-muted px-1 py-0.5 rounded">q</code> to quit
+              </li>
+            </ul>
+            <p className="mt-3 text-sm text-muted-foreground">
+              More details: <Link href="/docs/cli/view" className="underline underline-offset-4">gooze view</Link>.
+            </p>
+          </div>
         </div>
 
         <div>
@@ -22,6 +45,11 @@ export default function UIModesPage() {
             When output is redirected (or in CI), Gooze uses a simple UI.
           </p>
           <CodeBlock lang="bash" code={"gooze run ./... | cat"} />
+
+          <p className="mt-3 text-sm text-muted-foreground">
+            This example forces non-interactive mode by piping output.
+            It is useful when you want stable CI logs.
+          </p>
         </div>
       </div>
     </section>
