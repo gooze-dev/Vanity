@@ -156,7 +156,7 @@ export default async function Home() {
             <div className="space-y-16">
               {/* Step 1 */}
               <div className="flex gap-8 items-start">
-                <div className="flex-shrink-0 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white text-2xl font-bold">
+                <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white text-xl font-bold md:h-16 md:w-16 md:text-2xl">
                   1
                 </div>
                 <div className="flex-1">
@@ -170,7 +170,7 @@ export default async function Home() {
 
               {/* Step 2 */}
               <div className="flex gap-8 items-start">
-                <div className="flex-shrink-0 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white text-2xl font-bold">
+                <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white text-xl font-bold md:h-16 md:w-16 md:text-2xl">
                   2
                 </div>
                 <div className="flex-1">
@@ -184,7 +184,7 @@ export default async function Home() {
 
               {/* Step 3 */}
               <div className="flex gap-8 items-start">
-                <div className="flex-shrink-0 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white text-2xl font-bold">
+                <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white text-xl font-bold md:h-16 md:w-16 md:text-2xl">
                   3
                 </div>
                 <div className="flex-1">

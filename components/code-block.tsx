@@ -19,7 +19,7 @@ export async function CodeBlock({ code, lang, className }: CodeBlockProps) {
   return (
     <div
       className={cn(
-        "overflow-x-auto [&>pre]:bg-[#0d1117] [&>pre]:p-4 [&>pre]:rounded-lg [&>pre]:overflow-x-auto",
+        "w-full min-w-0 overflow-x-auto [&>pre]:min-w-max [&>pre]:bg-[#0d1117] [&>pre]:p-4 [&>pre]:rounded-lg [&>pre]:overflow-x-auto",
         className,
       )}
       // Shiki returns trusted HTML for syntax highlighting.
