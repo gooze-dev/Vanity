@@ -155,11 +155,11 @@ export default async function Home() {
             
             <div className="space-y-16">
               {/* Step 1 */}
-              <div className="flex gap-8 items-start">
+              <div className="flex flex-col gap-4 items-stretch sm:flex-row sm:gap-8 sm:items-start">
                 <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white text-xl font-bold md:h-16 md:w-16 md:text-2xl">
                   1
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <h3 className="text-2xl font-bold mb-3">Install Gooze</h3>
                   <p className="text-muted-foreground mb-4">
                       Install with a single command using Go&apos;s package manager
@@ -169,11 +169,11 @@ export default async function Home() {
               </div>
 
               {/* Step 2 */}
-              <div className="flex gap-8 items-start">
+              <div className="flex flex-col gap-4 items-stretch sm:flex-row sm:gap-8 sm:items-start">
                 <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white text-xl font-bold md:h-16 md:w-16 md:text-2xl">
                   2
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <h3 className="text-2xl font-bold mb-3">Run Mutation Tests</h3>
                   <p className="text-muted-foreground mb-4">
                     Execute mutation testing across your codebase
@@ -183,11 +183,11 @@ export default async function Home() {
               </div>
 
               {/* Step 3 */}
-              <div className="flex gap-8 items-start">
+              <div className="flex flex-col gap-4 items-stretch sm:flex-row sm:gap-8 sm:items-start">
                 <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white text-xl font-bold md:h-16 md:w-16 md:text-2xl">
                   3
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <h3 className="text-2xl font-bold mb-3">View Results</h3>
                   <p className="text-muted-foreground mb-4">
                       Get detailed insights into your test suite&apos;s effectiveness

@@ -27,7 +27,7 @@ export default async function VanityPage() {
     <div className="flex min-h-screen flex-col">
       {/* Main Content */}
       <main className="flex-1 flex items-center justify-center px-4 py-16">
-        <div className="max-w-2xl mx-auto text-center space-y-8">
+        <div className="w-full min-w-0 max-w-2xl mx-auto text-center space-y-8">
           <div className="space-y-4">
             <h1 className="text-5xl font-extrabold">
               <GoozeLogo className="text-inherit" />
@@ -38,7 +38,7 @@ export default async function VanityPage() {
           </div>
 
           {/* Import Path */}
-          <div className="rounded-lg border bg-card p-6 space-y-4">
+          <div className="rounded-lg border bg-card p-6 space-y-4 min-w-0">
             <div className="flex items-center justify-center gap-2 text-muted-foreground">
               <Terminal className="h-5 w-5 text-[color:var(--gooze-teal)]" />
               <span className="font-semibold">Installation</span>
