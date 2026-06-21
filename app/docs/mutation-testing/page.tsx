@@ -1,4 +1,7 @@
+import { docsMetadata } from "@/lib/docs-meta"
 import { CodeBlock } from "@/components/code-block"
+
+export const metadata = docsMetadata("/docs/mutation-testing")
 
 export default function MutationTestingPage() {
   return (

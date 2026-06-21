@@ -1,7 +1,10 @@
+import { docsMetadata } from "@/lib/docs-meta"
 import Link from "next/link"
 
 import { GoozeLogo } from "@/components/gooze-logo"
 import { GoozePrimaryCtaButton } from "@/components/gooze-cta-button"
+
+export const metadata = docsMetadata("/docs")
 
 export default function DocsPage() {
   return (

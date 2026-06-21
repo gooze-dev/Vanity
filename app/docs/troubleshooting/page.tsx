@@ -1,4 +1,7 @@
+import { docsMetadata } from "@/lib/docs-meta"
 import { CodeBlock } from "@/components/code-block"
+
+export const metadata = docsMetadata("/docs/troubleshooting")
 
 export default function TroubleshootingPage() {
   return (

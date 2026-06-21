@@ -1,3 +1,4 @@
+import { docsMetadata } from "@/lib/docs-meta"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
@@ -68,6 +69,8 @@ boolean       true false       true <-> false
 numbers       5, 2.5, ...      literal -> 0 and 1
 unary         - + ! ^          - <-> + ;  ! and ^ removed`
 
+export const metadata = docsMetadata("/docs/mutations")
+
 export default function MutationsPage() {
   return (
     <section>
@@ -93,6 +96,12 @@ export default function MutationsPage() {
             </li>
             <li>
               <strong>Skipped</strong>: Gooze did not run it (example: no matching test)
+            </li>
+            <li>
+              <strong>Not covered</strong>: the mutated line is not covered by the coverage profile
+              passed with <code className="bg-muted px-1 py-0.5 rounded">--coverage-profile</code>, so
+              Gooze skipped its tests. It counts as a survivor (it lowers the score) but is tallied
+              separately.
             </li>
             <li>
               <strong>Error</strong>: Gooze had an unexpected error

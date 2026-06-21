@@ -1,3 +1,4 @@
+import { docsMetadata } from "@/lib/docs-meta"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
@@ -65,6 +66,8 @@ merge:
       if [ "$CI_COMMIT_BRANCH" = "main" ]; then
         gooze report push "$REPORTS_REF"
       fi`
+
+export const metadata = docsMetadata("/docs/gitlab")
 
 export default function GitlabPage() {
   return (

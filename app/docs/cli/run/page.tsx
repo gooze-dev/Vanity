@@ -1,7 +1,10 @@
+import { docsMetadata } from "@/lib/docs-meta"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
 import { Button } from "@/components/ui/button"
+
+export const metadata = docsMetadata("/docs/cli/run")
 
 export default function CliRunPage() {
   return (
@@ -81,6 +84,40 @@ export default function CliRunPage() {
             To force a full re-run:
           </p>
           <CodeBlock lang="bash" code="gooze run --no-cache ./..." />
+        </div>
+
+        <div id="coverage-profile" className="scroll-mt-20">
+          <h2 className="text-2xl font-semibold mb-3">Coverage profile (skip uncovered mutations)</h2>
+          <p className="mb-3 text-muted-foreground">
+            Pass an existing Go coverage profile with{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">--coverage-profile</code> to skip
+            mutations on lines your tests never execute. Gooze does not generate the profile;
+            produce it first with <code className="bg-muted px-1 py-0.5 rounded">go test -coverprofile</code>.
+          </p>
+          <CodeBlock
+            lang="bash"
+            code={`# 1. Generate a coverage profile with the Go toolchain
+go test -coverprofile=coverage.out ./...
+
+# 2. Run gooze, skipping mutations on uncovered lines
+gooze run --coverage-profile coverage.out ./...`}
+          />
+          <p className="mt-4 text-muted-foreground">
+            Before testing each mutation, Gooze checks whether the mutated line is covered by the
+            profile. If the line is not covered (or its file is absent from the profile), Gooze
+            reports the mutation as{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">not_covered</code> and skips running its
+            tests. Uncovered mutations can never be killed, so this is a large speed-up.
+          </p>
+          <p className="mt-3 text-muted-foreground">
+            A <code className="bg-muted px-1 py-0.5 rounded">not_covered</code> mutation counts as a
+            survivor in the mutation score (it lowers the score like{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">survived</code>) but is tallied
+            separately. The default is empty, which disables the feature. You can also set it via{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">run.coverage_profile</code> in{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code> or{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">GOOZE_RUN_COVERAGE_PROFILE</code>.
+          </p>
         </div>
 
         <div id="shard" className="scroll-mt-20">

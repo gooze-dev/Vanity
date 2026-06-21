@@ -1,3 +1,4 @@
+import { docsMetadata } from "@/lib/docs-meta"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
@@ -8,6 +9,8 @@ const subcommands = [
   { title: "report push", href: "/docs/cli/report/push", desc: "Push reports to an OCI registry" },
   { title: "report pull", href: "/docs/cli/report/pull", desc: "Pull reports from an OCI registry" },
 ]
+
+export const metadata = docsMetadata("/docs/cli/report")
 
 export default function CliReportPage() {
   return (

@@ -1,6 +1,9 @@
+import { docsMetadata } from "@/lib/docs-meta"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
+
+export const metadata = docsMetadata("/docs/cli/report/push")
 
 export default function CliReportPushPage() {
   return (

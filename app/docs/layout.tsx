@@ -2,6 +2,8 @@ import * as React from "react"
 
 import { GoozeDocsSidebar } from "@/components/gooze-docs-sidebar"
 import { DocsBreadcrumb } from "@/components/docs-breadcrumb"
+import { DocsSearch } from "@/components/docs-search"
+import { DocsStructuredData } from "@/components/docs-structured-data"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Separator } from "@/components/ui/separator"
 import {
@@ -17,6 +19,7 @@ export default function DocsLayout({
 }) {
   return (
     <div className="gooze-docs">
+      <DocsStructuredData />
       <SidebarProvider defaultOpen={true}>
         <GoozeDocsSidebar />
         <SidebarInset>
@@ -29,7 +32,8 @@ export default function DocsLayout({
               />
               <DocsBreadcrumb />
             </div>
-            <div className="pr-4">
+            <div className="flex items-center gap-2 pr-4">
+              <DocsSearch />
               <ThemeToggle />
             </div>
           </header>

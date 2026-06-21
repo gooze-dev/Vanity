@@ -63,7 +63,22 @@ function getNavMain(pathname: string) {
       icon: BookOpen,
       isActive: isReference,
       items: [
-        { title: "CLI reference", url: "/docs/cli" },
+        {
+          title: "CLI reference",
+          url: "/docs/cli",
+          isActive: pathname.startsWith("/docs/cli"),
+          items: [
+            { title: "gooze run", url: "/docs/cli/run" },
+            { title: "gooze version", url: "/docs/cli/version" },
+            { title: "gooze config", url: "/docs/cli/config" },
+            { title: "gooze config init", url: "/docs/cli/config/init" },
+            { title: "gooze report", url: "/docs/cli/report" },
+            { title: "gooze report view", url: "/docs/cli/report/view" },
+            { title: "gooze report push", url: "/docs/cli/report/push" },
+            { title: "gooze report pull", url: "/docs/cli/report/pull" },
+            { title: "gooze report merge", url: "/docs/cli/report/merge" },
+          ],
+        },
         { title: "Configuration", url: "/docs/config" },
         { title: "Reports", url: "/docs/reports" },
         { title: "Mutations", url: "/docs/mutations" },

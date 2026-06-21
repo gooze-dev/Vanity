@@ -1,3 +1,4 @@
+import { docsMetadata } from "@/lib/docs-meta"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
@@ -5,6 +6,8 @@ import { CodeBlock } from "@/components/code-block"
 const subcommands = [
   { title: "config init", href: "/docs/cli/config/init", desc: "Create a starter gooze.yaml" },
 ]
+
+export const metadata = docsMetadata("/docs/cli/config")
 
 export default function CliConfigPage() {
   return (
