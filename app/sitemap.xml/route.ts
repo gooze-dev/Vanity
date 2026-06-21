@@ -11,8 +11,10 @@ export async function GET() {
     "/docs/features/incremental-execution",
     "/docs/features/ui-modes",
     "/docs/quick-start",
+    "/docs/editor-support",
     "/docs/roadmap",
     "/pkg/gooze",
+    "/pkg/goozels",
   ];
 
   const today = new Date().toISOString().split("T")[0];

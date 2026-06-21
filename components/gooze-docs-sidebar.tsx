@@ -34,6 +34,7 @@ function getNavMain(pathname: string) {
     pathname.startsWith("/docs/config") ||
     pathname.startsWith("/docs/reports") ||
     pathname.startsWith("/docs/mutations") ||
+    pathname.startsWith("/docs/editor-support") ||
     pathname.startsWith("/docs/troubleshooting")
 
   return [
@@ -74,6 +75,10 @@ function getNavMain(pathname: string) {
         {
           title: "Mutations",
           url: "/docs/mutations",
+        },
+        {
+          title: "Editor support (LSP)",
+          url: "/docs/editor-support",
         },
         {
           title: "Troubleshooting",
