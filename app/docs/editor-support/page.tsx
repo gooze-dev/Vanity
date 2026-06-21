@@ -1,6 +1,9 @@
+import { docsMetadata } from "@/lib/docs-meta"
 import { CodeBlock } from "@/components/code-block"
 
 const GITHUB_REPO = "https://github.com/gooze-dev/goozels"
+
+export const metadata = docsMetadata("/docs/editor-support")
 
 export default function EditorSupportPage() {
   return (

@@ -23,12 +23,52 @@ const oxanium = Oxanium({
   subsets: ["latin"],
 });
 
+const siteDescription =
+  "Mutation testing for Go that helps you assess the quality of your test suite";
+
 export const metadata: Metadata = {
-  title: "Gooze",
-  description: "Mutation testing for Go that helps you assess the quality of your test suite",
+  metadataBase: new URL("https://gooze.dev"),
+  title: {
+    default: "Gooze — Mutation testing for Go",
+    template: "%s · Gooze",
+  },
+  description: siteDescription,
+  applicationName: "Gooze",
+  category: "Developer Tools",
+  keywords: [
+    "mutation testing",
+    "Go",
+    "golang",
+    "test quality",
+    "test coverage",
+    "mutation score",
+    "testing tool",
+    "gooze",
+  ],
+  authors: [{ name: "Gooze" }],
+  creator: "Gooze",
+  publisher: "Gooze",
+  alternates: {
+    canonical: "/",
+  },
+  formatDetection: {
+    telephone: false,
+    email: false,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
-    title: "Gooze",
-    description: "Mutation testing for Go that helps you assess the quality of your test suite",
+    title: "Gooze — Mutation testing for Go",
+    description: siteDescription,
     url: "https://gooze.dev/",
     siteName: "Gooze",
     images: [
@@ -37,6 +77,7 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         alt: "Gooze - Mutation testing for Go",
+        type: "image/png",
       },
     ],
     locale: "en_US",
@@ -44,12 +85,41 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Gooze",
-    description: "Mutation testing for Go that helps you assess the quality of your test suite",
+    title: "Gooze — Mutation testing for Go",
+    description: siteDescription,
     site: "@gooze_dev",
     creator: "@gooze_dev",
-    images: ["https://gooze.dev/og-image.png"],
+    images: [
+      {
+        url: "https://gooze.dev/og-image.png",
+        alt: "Gooze - Mutation testing for Go",
+      },
+    ],
   },
+};
+
+// Structured data so search engines can render a rich result for the tool and
+// its publisher. Kept truthful: only fields we can stand behind.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      name: "Gooze",
+      description: siteDescription,
+      url: "https://gooze.dev/",
+      applicationCategory: "DeveloperApplication",
+      operatingSystem: "Linux, macOS, Windows",
+      programmingLanguage: "Go",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    },
+    {
+      "@type": "WebSite",
+      name: "Gooze",
+      url: "https://gooze.dev/",
+      description: siteDescription,
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -62,6 +132,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${oxanium.variable} antialiased`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

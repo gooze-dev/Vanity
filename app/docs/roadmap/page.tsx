@@ -1,3 +1,7 @@
+import { docsMetadata } from "@/lib/docs-meta"
+
+export const metadata = docsMetadata("/docs/roadmap")
+
 export default function RoadmapPage() {
   return (
     <section>

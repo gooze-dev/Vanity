@@ -1,3 +1,4 @@
+import { docsMetadata } from "@/lib/docs-meta"
 import { CodeBlock } from "@/components/code-block"
 import {
   Table,
@@ -7,6 +8,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+
+export const metadata = docsMetadata("/docs/config")
 
 export default function ConfigPage() {
   return (
@@ -96,6 +99,14 @@ export default function ConfigPage() {
                 </TableRow>
                 <TableRow>
                   <TableCell>
+                    <code className="bg-muted px-1 py-0.5 rounded">GOOZE_RUN_COVERAGE_PROFILE</code>
+                  </TableCell>
+                  <TableCell>
+                    Path to a Go coverage profile; skips mutations on uncovered lines (default empty)
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
                     <code className="bg-muted px-1 py-0.5 rounded">GOOZE_LOG_FILENAME</code>
                   </TableCell>
                   <TableCell>Log file path</TableCell>
@@ -152,6 +163,10 @@ run:
   # Some versions support a timeout flag/config.
   # Check: gooze run --help
   mutation_timeout: 120
+  # Skip mutations on lines not covered by an existing Go coverage profile.
+  # Generate it first: go test -coverprofile=coverage.out ./...
+  # Default empty (disabled).
+  coverage_profile: coverage.out
 
 paths:
   exclude:

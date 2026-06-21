@@ -1,3 +1,4 @@
+import { docsMetadata } from "@/lib/docs-meta"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
@@ -111,6 +112,8 @@ jobs:
       - name: Publish merged baseline (main only)
         if: \${{ github.ref == 'refs/heads/main' }}
         run: gooze report push "$REPORTS_REF"`
+
+export const metadata = docsMetadata("/docs/ci")
 
 export default function CiPage() {
   return (

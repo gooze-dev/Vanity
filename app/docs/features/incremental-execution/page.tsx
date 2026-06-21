@@ -1,6 +1,9 @@
+import { docsMetadata } from "@/lib/docs-meta"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
+
+export const metadata = docsMetadata("/docs/features/incremental-execution")
 
 export default function IncrementalExecutionPage() {
   return (

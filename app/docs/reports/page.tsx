@@ -1,4 +1,7 @@
+import { docsMetadata } from "@/lib/docs-meta"
 import { CodeBlock } from "@/components/code-block"
+
+export const metadata = docsMetadata("/docs/reports")
 
 export default function ReportsPage() {
   return (
@@ -22,7 +25,11 @@ export default function ReportsPage() {
           <h2 className="text-2xl font-semibold mb-3">What gets written</h2>
           <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
             <li>One YAML file per report, named by hash: <code className="bg-muted px-1 py-0.5 rounded">&lt;hash&gt;.yaml</code></li>
-            <li>A summary index file: <code className="bg-muted px-1 py-0.5 rounded">_index.yaml</code></li>
+            <li>
+              A summary index file: <code className="bg-muted px-1 py-0.5 rounded">_index.yaml</code>.
+              When you use <code className="bg-muted px-1 py-0.5 rounded">--coverage-profile</code>, it
+              also includes a <code className="bg-muted px-1 py-0.5 rounded">not_covered_mutations</code> count.
+            </li>
           </ul>
         </div>
 

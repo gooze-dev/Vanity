@@ -1,3 +1,4 @@
+import { docsMetadata } from "@/lib/docs-meta"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
@@ -8,6 +9,8 @@ const commands = [
   { title: "config", href: "/docs/cli/config", desc: "Manage configuration (config init)" },
   { title: "version", href: "/docs/cli/version", desc: "Print version/build info" },
 ]
+
+export const metadata = docsMetadata("/docs/cli")
 
 export default function CliPage() {
   return (
@@ -40,6 +43,9 @@ export default function CliPage() {
             </li>
             <li>
               <code className="bg-muted px-1 py-0.5 rounded">-x, --exclude &lt;regex&gt;</code>: exclude files by regex (you can repeat this)
+            </li>
+            <li>
+              <code className="bg-muted px-1 py-0.5 rounded">--coverage-profile &lt;file&gt;</code>: skip mutations on lines not covered by an existing Go coverage profile (<code className="bg-muted px-1 py-0.5 rounded">run</code> only)
             </li>
             <li>
               <code className="bg-muted px-1 py-0.5 rounded">-v, --verbose</code>: write extra debug logs

@@ -1,4 +1,7 @@
+import { docsMetadata } from "@/lib/docs-meta"
 import { CodeBlock } from "@/components/code-block"
+
+export const metadata = docsMetadata("/docs/cli/report/merge")
 
 export default function CliReportMergePage() {
   return (
