@@ -1,9 +1,9 @@
 import { CodeBlock } from "@/components/code-block"
 
-export default function CliViewPage() {
+export default function CliReportViewPage() {
   return (
     <section>
-      <h1 className="text-4xl font-bold tracking-tight mb-4">gooze view</h1>
+      <h1 className="text-4xl font-bold tracking-tight mb-4">gooze report view</h1>
       <p className="text-lg text-muted-foreground mb-8">
         Loads reports from the output directory and displays results.
       </p>
@@ -11,11 +11,15 @@ export default function CliViewPage() {
       <div className="space-y-12">
         <div id="usage" className="scroll-mt-20">
           <h2 className="text-2xl font-semibold mb-3">Usage</h2>
-          <CodeBlock lang="bash" code="gooze view" />
+          <CodeBlock lang="bash" code="gooze report view" />
           <p className="mt-3 text-muted-foreground">
             This reads from <code className="bg-muted px-1 py-0.5 rounded">--output</code>.
             Default is usually <code className="bg-muted px-1 py-0.5 rounded">.gooze-reports</code>.
           </p>
+          <p className="mt-3 text-muted-foreground">
+            If you used a custom output dir, pass it:
+          </p>
+          <CodeBlock lang="bash" code="gooze report view -o DIR" />
         </div>
 
         <div id="what" className="scroll-mt-20">
@@ -45,7 +49,7 @@ export default function CliViewPage() {
             When not interactive, view prints results linearly.
             Example:
           </p>
-          <CodeBlock lang="bash" code="gooze view | cat" />
+          <CodeBlock lang="bash" code="gooze report view | cat" />
         </div>
       </div>
     </section>

@@ -82,7 +82,7 @@ export default function RoadmapPage() {
             <label className="flex items-start gap-3">
               <input type="checkbox" checked readOnly disabled className="mt-1" />
               <span className="text-muted-foreground">
-                Automatic report merging from multiple shards (<code className="bg-muted px-1 py-0.5 rounded">gooze merge</code>)
+                Automatic report merging from multiple shards (<code className="bg-muted px-1 py-0.5 rounded">gooze report merge</code>)
               </span>
             </label>
           </div>

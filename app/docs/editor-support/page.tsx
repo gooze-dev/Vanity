@@ -33,7 +33,7 @@ export default function EditorSupportPage() {
               <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code> config.
             </li>
             <li>
-              <strong>▶ gooze run</strong>, <strong>gooze list</strong>, and
+              <strong>▶ gooze run</strong>, <strong>gooze run --estimate</strong>, and
               <strong> 📊 gooze report</strong> code lenses at the top of every Go file.
             </li>
             <li>

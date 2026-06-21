@@ -28,16 +28,24 @@ const sectionTitles: Record<string, string> = {
   mutations: "Mutations",
   "editor-support": "Editor support",
   troubleshooting: "Troubleshooting",
+  ci: "GitHub Actions",
+  gitlab: "GitLab CI",
 }
 
 const cliCommandTitles: Record<string, string> = {
-  init: "init",
-  list: "list",
   run: "run",
+  report: "report",
+  config: "config",
+  init: "init",
   view: "view",
   merge: "merge",
+  push: "push",
+  pull: "pull",
   version: "version",
 }
+
+// CLI commands that are groups with their own subcommand pages.
+const cliGroups = new Set(["report", "config"])
 
 function titleFromSlug(slug: string) {
   return slug
@@ -103,6 +111,37 @@ export function DocsBreadcrumb() {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbPage>{featureTitles[featureSlug] ?? titleFromSlug(featureSlug)}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </>
+        ) : section === "cli" && parts.length >= 4 && cliGroups.has(parts[2]) ? (
+          <>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link
+                  href="/docs/cli"
+                  className="transition-colors hover:text-[color:var(--gooze-teal)]"
+                >
+                  {sectionTitles.cli}
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link
+                  href={`/docs/cli/${parts[2]}`}
+                  className="transition-colors hover:text-[color:var(--gooze-teal)]"
+                >
+                  {cliCommandTitles[parts[2]] ?? titleFromSlug(parts[2])}
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>
+                {cliCommandTitles[parts[3]] ?? titleFromSlug(parts[3])}
+              </BreadcrumbPage>
             </BreadcrumbItem>
           </>
         ) : section && parts.length >= 3 ? (

@@ -3,11 +3,9 @@ import Link from "next/link"
 import { CodeBlock } from "@/components/code-block"
 
 const commands = [
-  { title: "init", href: "/docs/cli/init", desc: "Create a starter gooze.yaml" },
-  { title: "list", href: "/docs/cli/list", desc: "Dry run: what would be mutated" },
-  { title: "run", href: "/docs/cli/run", desc: "Run mutation testing" },
-  { title: "view", href: "/docs/cli/view", desc: "View existing reports" },
-  { title: "merge", href: "/docs/cli/merge", desc: "Merge shard reports" },
+  { title: "run", href: "/docs/cli/run", desc: "Run mutation testing (use --estimate to preview)" },
+  { title: "report", href: "/docs/cli/report", desc: "View, merge, push, and pull reports" },
+  { title: "config", href: "/docs/cli/config", desc: "Manage configuration (config init)" },
   { title: "version", href: "/docs/cli/version", desc: "Print version/build info" },
 ]
 
@@ -25,9 +23,9 @@ export default function CliPage() {
           <CodeBlock lang="bash" code="gooze [global flags] <command> [command flags] [paths...]" />
           <p className="mt-3 text-muted-foreground">Most people start with:</p>
           <div className="space-y-2">
-            <CodeBlock lang="bash" code="gooze list ./..." />
+            <CodeBlock lang="bash" code="gooze run --estimate ./..." />
             <CodeBlock lang="bash" code="gooze run ./..." />
-            <CodeBlock lang="bash" code="gooze view" />
+            <CodeBlock lang="bash" code="gooze report view" />
           </div>
         </div>
 

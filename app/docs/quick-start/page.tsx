@@ -28,22 +28,22 @@ export default function QuickStartPage() {
             Gooze can read <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code>.
             This is useful in CI and for shared settings.
           </p>
-          <CodeBlock lang="bash" code="gooze init" />
+          <CodeBlock lang="bash" code="gooze config init" />
           <p className="mt-3 text-sm text-muted-foreground">
             This only creates the file. It does not run tests.
           </p>
         </div>
 
-        <div id="list">
-          <h2 className="text-2xl font-semibold mb-3">List files and mutation counts</h2>
+        <div id="estimate">
+          <h2 className="text-2xl font-semibold mb-3">Preview files and mutation counts</h2>
           <p className="mb-3 text-muted-foreground">
-            Preview which files will be mutated and how many mutations apply.
+            Preview which files will be mutated and how many mutations apply, without running tests.
           </p>
-          <CodeBlock lang="bash" code="gooze list ./..." />
+          <CodeBlock lang="bash" code="gooze run --estimate ./..." />
           <p className="mt-4 mb-3 text-muted-foreground">
             Exclude directories/files using regex (repeat the flag as needed):
           </p>
-          <CodeBlock lang="bash" code="gooze list -x '^vendor/' -x '^internal/mocks/' ./..." />
+          <CodeBlock lang="bash" code="gooze run --estimate -x '^vendor/' -x '^internal/mocks/' ./..." />
           <p className="mt-3 text-sm text-muted-foreground">
             If you get 0 mutations, first check you are running from your module root (where <code className="bg-muted px-1 py-0.5 rounded">go.mod</code> is).
           </p>
@@ -76,12 +76,12 @@ export default function QuickStartPage() {
           </p>
 
           <p className="mb-3 text-muted-foreground">View the last run:</p>
-          <CodeBlock lang="bash" code="gooze view" />
+          <CodeBlock lang="bash" code="gooze report view" />
 
           <p className="mt-5 mb-3 text-muted-foreground">
-            Or point <code className="bg-muted px-1 py-0.5 rounded">view</code> at an explicit directory:
+            Or point <code className="bg-muted px-1 py-0.5 rounded">report view</code> at an explicit directory:
           </p>
-          <CodeBlock lang="bash" code="gooze view -o .gooze-reports" />
+          <CodeBlock lang="bash" code="gooze report view -o .gooze-reports" />
 
           <p className="mt-6 text-muted-foreground">
             In the interactive UI you can usually:
@@ -104,9 +104,9 @@ export default function QuickStartPage() {
           <p className="my-3 text-muted-foreground">
             After all jobs finish, merge and view:
           </p>
-          <CodeBlock lang="bash" code="gooze merge" />
+          <CodeBlock lang="bash" code="gooze report merge" />
           <div className="mt-2">
-            <CodeBlock lang="bash" code="gooze view" />
+            <CodeBlock lang="bash" code="gooze report view" />
           </div>
         </div>
       </div>

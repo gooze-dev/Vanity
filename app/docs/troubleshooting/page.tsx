@@ -29,11 +29,11 @@ export default function TroubleshootingPage() {
           <h2 className="text-2xl font-semibold mb-3">Gooze finds 0 files / 0 mutations</h2>
           <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
             <li>Run from the module root (where <code className="bg-muted px-1 py-0.5 rounded">go.mod</code> is).</li>
-            <li>Try <code className="bg-muted px-1 py-0.5 rounded">gooze list ./...</code> and verify paths.</li>
+            <li>Try <code className="bg-muted px-1 py-0.5 rounded">gooze run --estimate ./...</code> and verify paths.</li>
             <li>Check your exclude regex rules. You can exclude everything by mistake.</li>
           </ul>
           <div className="mt-3">
-            <CodeBlock lang="bash" code="gooze list ./..." />
+            <CodeBlock lang="bash" code="gooze run --estimate ./..." />
           </div>
         </div>
 
@@ -58,9 +58,9 @@ export default function TroubleshootingPage() {
           <p className="mb-3 text-muted-foreground">
             If you ran with <code className="bg-muted px-1 py-0.5 rounded">-s INDEX/TOTAL</code>, you need to merge before viewing:
           </p>
-          <CodeBlock lang="bash" code="gooze merge" />
+          <CodeBlock lang="bash" code="gooze report merge" />
           <div className="mt-2">
-            <CodeBlock lang="bash" code="gooze view" />
+            <CodeBlock lang="bash" code="gooze report view" />
           </div>
         </div>
       </div>

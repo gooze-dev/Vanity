@@ -23,7 +23,7 @@ export default function ConfigPage() {
           <p className="mb-3 text-muted-foreground">
             This command creates a starter <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code> in the current directory.
           </p>
-          <CodeBlock lang="bash" code="gooze init" />
+          <CodeBlock lang="bash" code="gooze config init" />
         </div>
 
         <div id="load" className="scroll-mt-20">
