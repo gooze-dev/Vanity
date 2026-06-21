@@ -34,7 +34,7 @@ export default function UIModesPage() {
               </li>
             </ul>
             <p className="mt-3 text-sm text-muted-foreground">
-              More details: <Link href="/docs/cli/view" className="underline underline-offset-4">gooze view</Link>.
+              More details: <Link href="/docs/cli/report/view" className="underline underline-offset-4">gooze report view</Link>.
             </p>
           </div>
         </div>

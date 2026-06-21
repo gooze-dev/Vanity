@@ -16,6 +16,12 @@ export default function CliRunPage() {
         <div id="usage" className="scroll-mt-20">
           <h2 className="text-2xl font-semibold mb-3">Usage</h2>
           <CodeBlock lang="bash" code="gooze run [global flags] [paths...]" />
+          <p className="mt-4 text-muted-foreground">
+            With no paths, <code className="bg-muted px-1 py-0.5 rounded">run</code> defaults to{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">./...</code> (the current module,
+            recursively), so <code className="bg-muted px-1 py-0.5 rounded">gooze run</code> is the
+            same as <code className="bg-muted px-1 py-0.5 rounded">gooze run ./...</code>.
+          </p>
         </div>
 
         <div id="what" className="scroll-mt-20">
@@ -26,6 +32,21 @@ export default function CliRunPage() {
             <li>Runs tests to see if they fail.</li>
             <li>Writes results into the reports directory.</li>
           </ol>
+        </div>
+
+        <div id="estimate" className="scroll-mt-20">
+          <h2 className="text-2xl font-semibold mb-3">Preview with --estimate</h2>
+          <p className="mb-3 text-muted-foreground">
+            See which source files would be mutated and how many mutations apply, without
+            running any tests. This is a safe first command.
+          </p>
+          <CodeBlock lang="bash" code="gooze run --estimate ./..." />
+          <p className="mt-4 mb-2 text-muted-foreground">Scan only one sub-tree:</p>
+          <CodeBlock lang="bash" code="gooze run --estimate ./internal/domain/..." />
+          <p className="mt-3 text-sm text-muted-foreground">
+            In a TTY you get an interactive, filterable list; in CI you get a table with
+            per-file mutation counts.
+          </p>
         </div>
 
         <div id="parallel" className="scroll-mt-20">
@@ -77,7 +98,7 @@ gooze run -s 2/3 ./...`}
           <p className="mt-3 text-muted-foreground">
             After all jobs finish, merge reports:
           </p>
-          <CodeBlock lang="bash" code="gooze merge" />
+          <CodeBlock lang="bash" code="gooze report merge" />
         </div>
 
         <div id="next" className="scroll-mt-20">
@@ -87,7 +108,7 @@ gooze run -s 2/3 ./...`}
               <Link href="/docs/reports">Reports</Link>
             </Button>
             <Button asChild variant="outline">
-              <Link href="/docs/cli/view">gooze view</Link>
+              <Link href="/docs/cli/report/view">gooze report view</Link>
             </Button>
           </div>
         </div>

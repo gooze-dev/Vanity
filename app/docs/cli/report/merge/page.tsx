@@ -1,9 +1,9 @@
 import { CodeBlock } from "@/components/code-block"
 
-export default function CliMergePage() {
+export default function CliReportMergePage() {
   return (
     <section>
-      <h1 className="text-4xl font-bold tracking-tight mb-4">gooze merge</h1>
+      <h1 className="text-4xl font-bold tracking-tight mb-4">gooze report merge</h1>
       <p className="text-lg text-muted-foreground mb-8">
         Merges sharded reports (from <code className="bg-muted px-1 py-0.5 rounded">shard_*</code> folders) into the base output dir.
       </p>
@@ -11,14 +11,14 @@ export default function CliMergePage() {
       <div className="space-y-12">
         <div id="usage" className="scroll-mt-20">
           <h2 className="text-2xl font-semibold mb-3">Usage</h2>
-          <CodeBlock lang="bash" code="gooze merge" />
+          <CodeBlock lang="bash" code="gooze report merge" />
         </div>
 
         <div id="when" className="scroll-mt-20">
           <h2 className="text-2xl font-semibold mb-3">When you need this</h2>
           <p className="text-muted-foreground">
             If you run <code className="bg-muted px-1 py-0.5 rounded">gooze run -s INDEX/TOTAL</code>, Gooze writes into shard folders.
-            You merge them before running <code className="bg-muted px-1 py-0.5 rounded">gooze view</code>.
+            You merge them before running <code className="bg-muted px-1 py-0.5 rounded">gooze report view</code>.
           </p>
         </div>
 
@@ -31,8 +31,8 @@ gooze run -s 1/4 ./...
 gooze run -s 2/4 ./...
 gooze run -s 3/4 ./...
 
-gooze merge
-gooze view`}
+gooze report merge
+gooze report view`}
           />
           <p className="mt-3 text-muted-foreground">
             This example splits work into 4 jobs, then merges, then opens the viewer.

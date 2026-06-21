@@ -192,7 +192,7 @@ export default async function Home() {
                   <p className="text-muted-foreground mb-4">
                       Get detailed insights into your test suite&apos;s effectiveness
                   </p>
-                  <CodeBlock code="gooze view" lang="bash" />
+                  <CodeBlock code="gooze report view" lang="bash" />
                 </div>
               </div>
             </div>
