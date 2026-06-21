@@ -26,6 +26,7 @@ const sectionTitles: Record<string, string> = {
   config: "Configuration",
   reports: "Reports",
   mutations: "Mutations",
+  "editor-support": "Editor support",
   troubleshooting: "Troubleshooting",
 }
 
