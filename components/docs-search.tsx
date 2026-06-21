@@ -138,11 +138,11 @@ export function DocsSearch() {
         <button
           type="button"
           aria-label="Search documentation"
-          className="inline-flex h-9 w-full max-w-56 items-center gap-2 rounded-md border border-input bg-transparent px-3 text-sm text-muted-foreground shadow-xs transition-colors hover:bg-accent hover:text-accent-foreground"
+          className="inline-flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-md border border-input bg-transparent px-0 text-sm text-muted-foreground shadow-xs transition-colors hover:bg-accent hover:text-accent-foreground lg:w-56 lg:justify-start lg:px-3"
         >
           <Search className="h-4 w-4 shrink-0" />
-          <span className="flex-1 text-left">Search docs…</span>
-          <kbd className="pointer-events-none hidden items-center gap-0.5 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground sm:inline-flex">
+          <span className="hidden flex-1 truncate whitespace-nowrap text-left lg:block">Search</span>
+          <kbd className="pointer-events-none hidden items-center gap-0.5 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground lg:inline-flex">
             <span className="text-xs">⌘</span>K
           </kbd>
         </button>
@@ -176,7 +176,7 @@ export function DocsSearch() {
               </li>
             ) : (
               results.map((entry, index) => (
-                <li key={`${entry.kind}:${entry.href}`}>
+                <li key={`${entry.kind}:${entry.title}:${entry.href}`}>
                   <Link
                     href={entry.href}
                     onClick={() => setOpen(false)}
