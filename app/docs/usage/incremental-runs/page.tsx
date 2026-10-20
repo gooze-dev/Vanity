@@ -54,6 +54,11 @@ export default function IncrementalRunsPage() {
             score always covers the whole codebase, not only the files that were re-tested.
           </p>
           <p className="mt-3 text-muted-foreground">
+            Changes are detected from file contents, not from git: no base branch, commit, or
+            history is needed, and uncommitted edits are picked up. See{" "}
+            <Link href="/docs/comparison#incremental-vs-diff" className="underline underline-offset-4">incremental execution vs git diff</Link>.
+          </p>
+          <p className="mt-3 text-muted-foreground">
             What the cache does not see: changes in <em>other</em> files that a file&apos;s tests
             depend on (a helper in another file, a shared test fixture, testdata, a dependency bump).
             Those can leave a cached result out of date. Run a full pass with{" "}
