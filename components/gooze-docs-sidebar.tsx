@@ -4,12 +4,13 @@ import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
-  Command,
   Home,
   FileText,
   BookOpen,
-  GraduationCap,
-  Map,
+  LifeBuoy,
+  Terminal,
+  Workflow,
+  type LucideIcon,
 } from "lucide-react"
 
 import { GoozeLogo } from "@/components/gooze-logo"
@@ -23,95 +24,68 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
+import {
+  docsPages,
+  docsSections,
+  getDocsPage,
+  navTitle,
+  type DocsPage,
+  type DocsSection,
+} from "@/lib/docs-pages"
 
-// Gooze documentation data
+const sectionIcons: Record<DocsSection, LucideIcon> = {
+  "Get started": Home,
+  "Using gooze": Terminal,
+  "CI & teams": Workflow,
+  Reference: BookOpen,
+  Help: LifeBuoy,
+}
+
+// Top-level page of the nesting chain (e.g. /docs/cli for /docs/cli/report#view).
+function rootOf(page: DocsPage): DocsPage {
+  let root = page
+  while (root.parent) {
+    const parent = getDocsPage(root.parent)
+    if (!parent) break
+    root = parent
+  }
+  return root
+}
+
+// Built from the docs registry, so adding a page there is enough to list it.
+// Nested pages (CLI subcommands) are flattened under their top-level page,
+// which is listed first as its "Overview".
 function getNavMain(pathname: string) {
-  const isFeatures = pathname.startsWith("/docs/features/")
-  const isRoadmap = pathname.startsWith("/docs/roadmap")
-  const isGuides =
-    pathname.startsWith("/docs/ci") ||
-    pathname.startsWith("/docs/gitlab") ||
-    pathname.startsWith("/docs/editor-support") ||
-    pathname.startsWith("/docs/troubleshooting")
-  const isReference =
-    pathname.startsWith("/docs/cli") ||
-    pathname.startsWith("/docs/config") ||
-    pathname.startsWith("/docs/reports") ||
-    pathname.startsWith("/docs/mutations")
-  const isGetStarted =
-    pathname === "/docs" ||
-    pathname.startsWith("/docs/quick-start") ||
-    pathname.startsWith("/docs/install") ||
-    pathname.startsWith("/docs/mutation-testing")
+  const path = pathname.replace(/\/$/, "") || "/docs"
+  const current = getDocsPage(path)
+  const currentRoot = current ? rootOf(current) : undefined
 
-  return [
-    {
-      title: "Get started",
+  return docsSections.map((section) => {
+    const pages = docsPages.filter((page) => page.section === section)
+    const roots = pages.filter((page) => !page.parent)
+
+    return {
+      title: section,
       url: "#",
-      icon: Home,
-      isActive: isGetStarted,
-      items: [
-        { title: "Overview", url: "/docs" },
-        { title: "Quick start", url: "/docs/quick-start" },
-        { title: "Installation", url: "/docs/install" },
-        { title: "Mutation testing basics", url: "/docs/mutation-testing" },
-      ],
-    },
-    {
-      title: "Reference",
-      url: "#",
-      icon: BookOpen,
-      isActive: isReference,
-      items: [
-        {
-          title: "CLI reference",
-          url: "/docs/cli",
-          isActive: pathname.startsWith("/docs/cli"),
-          items: [
-            { title: "gooze run", url: "/docs/cli/run" },
-            { title: "gooze version", url: "/docs/cli/version" },
-            { title: "gooze config", url: "/docs/cli/config" },
-            { title: "gooze report", url: "/docs/cli/report" },
-          ],
-        },
-        { title: "Configuration", url: "/docs/config" },
-        { title: "Reports", url: "/docs/reports" },
-        { title: "Mutations", url: "/docs/mutations" },
-      ],
-    },
-    {
-      title: "Features",
-      url: "#",
-      icon: Command,
-      isActive: isFeatures,
-      items: [
-        { title: "Bypass mutation", url: "/docs/features/bypass-mutation" },
-        { title: "Incremental execution", url: "/docs/features/incremental-execution" },
-        { title: "UI modes", url: "/docs/features/ui-modes" },
-      ],
-    },
-    {
-      title: "Guides",
-      url: "#",
-      icon: GraduationCap,
-      isActive: isGuides,
-      items: [
-        { title: "GitHub Actions", url: "/docs/ci" },
-        { title: "GitLab CI", url: "/docs/gitlab" },
-        { title: "Editor support (LSP)", url: "/docs/editor-support" },
-        { title: "Troubleshooting", url: "/docs/troubleshooting" },
-      ],
-    },
-    {
-      title: "Roadmap",
-      url: "#",
-      icon: Map,
-      isActive: isRoadmap,
-      items: [
-        { title: "Roadmap", url: "/docs/roadmap" },
-      ],
-    },
-  ]
+      icon: sectionIcons[section],
+      isActive: current?.section === section,
+      items: roots.map((root) => {
+        const children = pages.filter((page) => page.parent && rootOf(page) === root)
+        return {
+          title: navTitle(root),
+          url: root.href,
+          isActive: currentRoot === root,
+          items: children.length
+            ? [root, ...children].map((page) => ({
+                title: page === root ? "Overview" : navTitle(page),
+                url: page.href,
+                isActive: page.href === path,
+              }))
+            : undefined,
+        }
+      }),
+    }
+  })
 }
 
 export function GoozeDocsSidebar({

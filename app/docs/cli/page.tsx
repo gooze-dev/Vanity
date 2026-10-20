@@ -60,6 +60,19 @@ export default function CliPage() {
           </p>
         </div>
 
+        <div id="exit-codes">
+          <h2 className="text-2xl font-semibold mb-3">Exit codes</h2>
+          <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
+            <li><code className="bg-muted px-1 py-0.5 rounded">0</code>: the command completed, whatever the mutation score.</li>
+            <li><code className="bg-muted px-1 py-0.5 rounded">1</code>: the command failed (bad flag or config, build or I/O error, registry error, interrupted).</li>
+          </ul>
+          <p className="mt-3 text-muted-foreground">
+            Survivors never change the exit code, and there is no threshold flag yet. To fail a
+            build below a minimum score, use the{" "}
+            <Link href="/docs/ci/github#gate" className="underline underline-offset-4">score gate step</Link>.
+          </p>
+        </div>
+
         <div id="commands">
           <h2 className="text-2xl font-semibold mb-4">Commands</h2>
           <div className="grid gap-4 md:grid-cols-2">

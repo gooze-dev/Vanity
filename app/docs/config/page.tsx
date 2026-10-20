@@ -14,7 +14,7 @@ export const metadata = docsMetadata("/docs/config")
 export default function ConfigPage() {
   return (
     <section>
-      <h1 className="text-4xl font-bold tracking-tight mb-4">Configuration</h1>
+      <h1 className="text-4xl font-bold tracking-tight mb-4">Configuration (gooze.yaml)</h1>
       <p className="text-lg text-muted-foreground mb-8">
         Gooze reads config from a file named <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code>.
         This helps you keep the same settings in your repo and in CI.
