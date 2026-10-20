@@ -286,6 +286,27 @@ export default function ComparisonPage() {
               cache, JSON/HTML) but pre-release at the time of writing.
             </li>
           </ul>
+          <p className="text-sm text-muted-foreground">
+            Why bother at all: Just et al. (FSE 2014) found a test suite&apos;s
+            ability to{" "}
+            <a
+              href="https://dl.acm.org/doi/10.1145/2635868.2635929"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              kill mutants correlates with catching real faults
+            </a>
+            , while Inozemtseva &amp; Holmes (ICSE 2014) found{" "}
+            <a
+              href="https://dl.acm.org/doi/10.1145/2568225.2568271"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              code coverage alone is not strongly correlated with test-suite
+              effectiveness
+            </a>
+            &nbsp;— which is the gap every tool here targets.
+          </p>
         </div>
 
         <div id="matrix">
