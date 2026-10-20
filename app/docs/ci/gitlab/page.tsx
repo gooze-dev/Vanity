@@ -79,11 +79,48 @@ const gate = `merge:
       echo "Mutation score: \${score}% (minimum \${MIN_SCORE}%)"
       awk -v s="$score" -v m="$MIN_SCORE" 'BEGIN { exit !(s != "" && s >= m) }'`
 
+const faqs = [
+  {
+    q: "How do I run Gooze mutation tests in GitLab CI?",
+    a: "Use a golang:1.27 image, install the CLI with go install gooze.dev/pkg/gooze@latest, and run gooze run ./... in the job script.",
+  },
+  {
+    q: "How do I shard Gooze across parallel GitLab runners?",
+    a: "Set parallel: N and map GitLab's 1-based CI_NODE_INDEX to gooze's 0-based shards: gooze run -s \"$((CI_NODE_INDEX - 1))/$CI_NODE_TOTAL\" ./... Then merge the artifacts with gooze report merge.",
+  },
+  {
+    q: "How do I cache incremental Gooze reports in GitLab CI?",
+    a: "Pull a baseline from your container registry with gooze report pull before the run so unchanged files are skipped, and push the merged baseline back from the main branch.",
+  },
+  {
+    q: "How do I fail a merge request when the mutation score is too low?",
+    a: "Gooze has no threshold flag; add a short script step that reads 'Mutation score' from gooze report view and fails the job below your minimum. Gate in the merge job when sharding.",
+  },
+  {
+    q: "Does Gooze post results as a GitLab merge-request note?",
+    a: "No. Gooze does not post MR notes. Surface results by failing the job with the mutation-score gate, or by storing the report as an artifact or OCI baseline.",
+  },
+]
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+}
+
 export const metadata = docsMetadata("/docs/ci/gitlab")
 
 export default function GitlabPage() {
   return (
     <section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">GitLab CI</h1>
       <p className="text-lg text-muted-foreground mb-8">
         The same three setups as the{" "}
@@ -129,7 +166,7 @@ export default function GitlabPage() {
           <h2>Fail the build below a score (quality gate)</h2>
           <p>
             Gooze has no threshold flag yet: survivors never change its exit code. Add this
-            step %s. It reads the{" "}
+            step to the job that runs gooze. It reads the{" "}
             <Link href="/docs/usage/results#score">mutation score</Link>{" "}
             from the non-interactive output and fails when it is below{" "}
             <code>MIN_SCORE</code>.
@@ -163,6 +200,16 @@ export default function GitlabPage() {
               <code>--insecure</code> to push/pull.
             </li>
           </ul>
+        </div>
+
+        <div id="faq">
+          <h2>FAQ</h2>
+          {faqs.map((f) => (
+            <div key={f.q}>
+              <h3>{f.q}</h3>
+              <p>{f.a}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

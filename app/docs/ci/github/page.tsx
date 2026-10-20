@@ -122,11 +122,48 @@ const gate = `      # Fail the job when the mutation score is below MIN_SCORE (p
           echo "Mutation score: \${score}% (minimum \${MIN_SCORE}%)"
           awk -v s="$score" -v m="$MIN_SCORE" 'BEGIN { exit !(s != "" && s >= m) }'`
 
+const faqs = [
+  {
+    q: "How do I run Gooze mutation tests in GitHub Actions?",
+    a: "In a golang:1.27 container, install the CLI with go install gooze.dev/pkg/gooze@latest and run gooze run ./... There is no dedicated action — the plain go install step is the supported approach.",
+  },
+  {
+    q: "How do I shard Gooze across multiple GitHub Actions runners?",
+    a: "Use a strategy.matrix of shard indexes (0-based) and pass them to gooze run -s INDEX/TOTAL, for example gooze run -s ${{ matrix.shard }}/3. A final job downloads every shard's reports and runs gooze report merge.",
+  },
+  {
+    q: "How do I cache incremental Gooze reports in CI?",
+    a: "Pull a baseline from an OCI registry with gooze report pull at the start of each shard so unchanged files are skipped, and push the merged baseline back from the main branch after gooze report merge.",
+  },
+  {
+    q: "How do I fail a pull request when the mutation score is too low?",
+    a: "Gooze has no built-in threshold flag; add a short shell step that reads 'Mutation score' from gooze report view and fails the job below your minimum. Gate in the merge job when sharding.",
+  },
+  {
+    q: "Does Gooze post results as a pull-request comment?",
+    a: "No. Gooze does not post PR comments. Surface results by failing the job with the mutation-score gate, or by publishing the report as an artifact or OCI baseline.",
+  },
+]
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+}
+
 export const metadata = docsMetadata("/docs/ci/github")
 
 export default function CiPage() {
   return (
     <section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">GitHub Actions</h1>
       <p className="text-lg text-muted-foreground mb-8">
         Three workflows, from a one-liner to a sharded, cached pipeline, plus a step that
@@ -176,7 +213,7 @@ export default function CiPage() {
           <h2>Fail the build below a score (quality gate)</h2>
           <p>
             Gooze has no threshold flag yet: survivors never change its exit code. Add this
-            step %s. It reads the{" "}
+            step to the job that runs gooze. It reads the{" "}
             <Link href="/docs/usage/results#score">mutation score</Link>{" "}
             from the non-interactive output and fails when it is below{" "}
             <code>MIN_SCORE</code>.
@@ -207,6 +244,16 @@ export default function CiPage() {
               <code>--insecure</code> to push/pull.
             </li>
           </ul>
+        </div>
+
+        <div id="faq">
+          <h2>FAQ</h2>
+          {faqs.map((f) => (
+            <div key={f.q}>
+              <h3>{f.q}</h3>
+              <p>{f.a}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
