@@ -142,7 +142,7 @@ export default function CiPage() {
             time. Each job tests its own slice and uploads its reports; a final{" "}
             <code className="bg-muted px-1 py-0.5 rounded">merge</code> job downloads them all and
             combines them with{" "}
-            <Link href="/docs/cli/report/merge" className="underline underline-offset-4">gooze report merge</Link>.
+            <Link href="/docs/cli/report#merge" className="underline underline-offset-4">gooze report merge</Link>.
           </p>
           <CodeBlock lang="yaml" code={sharded} />
         </div>
@@ -155,7 +155,7 @@ export default function CiPage() {
             Every shard pulls the <code className="bg-muted px-1 py-0.5 rounded">:main</code> baseline
             for the cache, then hands its reports to the merge job as an artifact — shards never push
             to the registry. The merge job combines them with{" "}
-            <Link href="/docs/cli/report/merge" className="underline underline-offset-4">gooze report merge</Link>{" "}
+            <Link href="/docs/cli/report#merge" className="underline underline-offset-4">gooze report merge</Link>{" "}
             and, <strong>only on main</strong>, publishes the single merged baseline back to{" "}
             <code className="bg-muted px-1 py-0.5 rounded">:main</code>.
           </p>

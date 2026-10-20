@@ -96,7 +96,7 @@ export default function GitlabPage() {
             <code className="bg-muted px-1 py-0.5 rounded">-s INDEX/TOTAL</code> and saves its
             reports as an artifact. The <code className="bg-muted px-1 py-0.5 rounded">merge</code>{" "}
             job collects them all and runs{" "}
-            <Link href="/docs/cli/report/merge" className="underline underline-offset-4">gooze report merge</Link>.
+            <Link href="/docs/cli/report#merge" className="underline underline-offset-4">gooze report merge</Link>.
           </p>
           <CodeBlock lang="yaml" code={sharded} />
         </div>

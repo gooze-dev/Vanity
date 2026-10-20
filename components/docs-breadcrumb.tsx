@@ -38,16 +38,8 @@ const cliCommandTitles: Record<string, string> = {
   run: "run",
   report: "report",
   config: "config",
-  init: "init",
-  view: "view",
-  merge: "merge",
-  push: "push",
-  pull: "pull",
   version: "version",
 }
-
-// CLI commands that are groups with their own subcommand pages.
-const cliGroups = new Set(["report", "config"])
 
 type Crumb = {
   label: string
@@ -72,12 +64,6 @@ function buildCrumbs(parts: string[]): Crumb[] {
     crumbs.push(
       { label: "Features", href: "/docs#features" },
       { label: featureTitles[parts[2]] ?? titleFromSlug(parts[2]) },
-    )
-  } else if (section === "cli" && parts.length >= 4 && cliGroups.has(parts[2])) {
-    crumbs.push(
-      { label: sectionTitles.cli, href: "/docs/cli" },
-      { label: cliCommandTitles[parts[2]] ?? titleFromSlug(parts[2]), href: `/docs/cli/${parts[2]}` },
-      { label: cliCommandTitles[parts[3]] ?? titleFromSlug(parts[3]) },
     )
   } else if (section && parts.length >= 3) {
     crumbs.push(

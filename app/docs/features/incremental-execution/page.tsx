@@ -43,8 +43,8 @@ export default function IncrementalExecutionPage() {
           <p className="mb-3 text-muted-foreground">
             Store and retrieve reports as OCI artifacts (e.g. in GHCR) so CI and teammates can reuse baseline results.
             Gooze does the packaging and transfer for you with{" "}
-            <Link href="/docs/cli/report/push" className="underline underline-offset-4">gooze report push</Link> and{" "}
-            <Link href="/docs/cli/report/pull" className="underline underline-offset-4">gooze report pull</Link> &mdash;
+            <Link href="/docs/cli/report#push" className="underline underline-offset-4">gooze report push</Link> and{" "}
+            <Link href="/docs/cli/report#pull" className="underline underline-offset-4">gooze report pull</Link> &mdash;
             no <code className="bg-muted px-1 py-0.5 rounded">tar</code> or external tooling required.
           </p>
           <CodeBlock
