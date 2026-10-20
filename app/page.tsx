@@ -18,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ClaudeCodeAnnouncement } from "@/components/agent-install";
 
 // Self-canonical for the homepage. The root layout no longer sets a default
 // canonical (it would leak onto every other page).
@@ -169,6 +170,8 @@ export default async function Home() {
           <div className="min-w-0 max-w-full text-left">
             <CodeBlock code="go install gooze.dev/pkg/gooze@latest" lang="bash" />
           </div>
+
+          <ClaudeCodeAnnouncement />
         </div>
 
         {/* Scroll Indicator */}
