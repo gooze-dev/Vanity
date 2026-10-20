@@ -10,6 +10,14 @@ import { GoozeLogo } from "@/components/gooze-logo";
 import { LatestReleaseBadge } from "@/components/latest-release-badge";
 import { Github } from "lucide-react";
 import { CodeBlock } from "@/components/code-block";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 // Self-canonical for the homepage. The root layout no longer sets a default
 // canonical (it would leak onto every other page).
@@ -17,9 +25,87 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
+// Core capabilities, surfaced as a table so answer engines can extract how
+// Gooze scales. Facts verified against the gooze CLI (v1.x).
+const capabilities = [
+  {
+    feature: "Incremental caching",
+    how: "Caches results in .gooze-reports/ and re-tests only files whose source, test, or mutators changed.",
+    benefit: "Repeat and CI runs stay fast — unchanged files are reused.",
+  },
+  {
+    feature: "Coverage-profile integration",
+    how: "Reads a go test -coverprofile file; mutations on uncovered lines are reported as not_covered without running.",
+    benefit: "Skips wasted work on code no test exercises.",
+  },
+  {
+    feature: "CI/CD sharding",
+    how: "gooze run -s INDEX/TOTAL splits a run across parallel jobs; gooze report merge recombines them.",
+    benefit: "Spread heavy mutation runs over many runners.",
+  },
+  {
+    feature: "OCI registry baselines",
+    how: "gooze report push / pull store the reports directory in any OCI registry (e.g. GHCR).",
+    benefit: "Share one baseline across CI jobs and teammates.",
+  },
+];
+
+// Q&As rendered visibly on the page AND emitted as FAQPage JSON-LD from the
+// same source, so the structured data always matches what people read. Wording
+// kept truthful to the CLI (e.g. the score gate is a documented CI step, not a
+// built-in flag).
+const faqs = [
+  {
+    q: "What is Gooze?",
+    a: "Gooze is an open-source mutation testing tool for Go (Golang) that measures the quality of your test suite by injecting small, deliberate bugs (mutations) into your code and checking whether your tests catch them.",
+  },
+  {
+    q: "Why use Gooze for Go mutation testing?",
+    a: "Gooze is built for scale and CI/CD. It features incremental caching that re-tests only changed files, sharding across parallel CI runners, coverage-profile integration to skip untested lines, and OCI-registry support to share baseline reports across teams.",
+  },
+  {
+    q: "How can I speed up Go mutation testing with Gooze?",
+    a: "Use incremental runs (Gooze caches results and re-tests only files whose source, test, or mutators changed), raise the --parallel worker count, or pass --coverage-profile so mutations on uncovered lines are tallied as not_covered without running tests.",
+  },
+  {
+    q: "Our coverage is high but bugs still reach production — how does Gooze help?",
+    a: "High line coverage only proves your code was executed, not that your assertions check the result. Gooze injects deliberate faults into your code and verifies your tests actually fail, proving the tests are meaningful.",
+  },
+  {
+    q: "Mutation testing is slow — will it block our CI/CD pipeline?",
+    a: "Gooze is optimized for CI. Passing a Go coverage profile skips uncovered lines, incremental caching reuses unchanged results, and parallel workers keep builds fast.",
+  },
+  {
+    q: "How can we use mutation testing as an automated quality gate?",
+    a: "Configure your pipeline to compare the mutation score against a threshold and fail the job when it drops below it — a short documented CI step (gooze does not need a built-in flag). This blocks pull requests that weaken your tests.",
+  },
+  {
+    q: "How do we store reports across ephemeral CI runners?",
+    a: "Gooze packages the reports directory as an OCI artifact. CI jobs can push and pull it to your existing container registry (such as GHCR) with gooze report push and gooze report pull, so runs share one baseline.",
+  },
+  {
+    q: "How can developers see mutation results without waiting for CI?",
+    a: "Gooze ships goozels, a language server (LSP) that surfaces mutation results inline in LSP-capable editors such as Neovim and Helix, so developers can fix weak tests before they commit.",
+  },
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
 export default async function Home() {
   return (
     <div className="flex min-h-screen flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       {/* Hero Section - Full Height */}
       <section className="relative flex min-h-screen flex-col items-center justify-center px-4">
         {/* Floating Nav */}
@@ -51,8 +137,9 @@ export default async function Home() {
             <GoozeLogo className="text-inherit" />
           </h1>
           <p className="max-w-[750px] text-xl text-muted-foreground sm:text-2xl">
-            Mutation testing for Go that helps you assess the quality of your
-            test suite
+            Gooze is an open-source mutation testing tool for Go that measures
+            how good your tests really are — it injects small bugs into your
+            code and checks whether your tests catch them.
           </p>
 
           <div className="flex flex-col gap-4 sm:flex-row">
@@ -103,6 +190,29 @@ export default async function Home() {
               rerunning your test suite. If a test fails, the mutation is &quot;killed&quot;.
               If tests still pass, the mutation &quot;survived&quot; — your tests didn&apos;t notice a behavior change.
             </p>
+            <p className="text-base text-muted-foreground leading-relaxed mb-8">
+              The research backs this up. Just et al. (FSE 2014) found that a test
+              suite&apos;s ability to{" "}
+              <a
+                href="https://dl.acm.org/doi/10.1145/2635868.2635929"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-4"
+              >
+                kill mutants correlates with detecting real faults
+              </a>
+              , while Inozemtseva &amp; Holmes (ICSE 2014) showed that{" "}
+              <a
+                href="https://dl.acm.org/doi/10.1145/2568225.2568271"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-4"
+              >
+                code coverage alone is not strongly correlated with test-suite
+                effectiveness
+              </a>
+              . Mutation score measures what coverage can&apos;t.
+            </p>
             <div className="mx-auto max-w-2xl text-center mb-10">
               <p className="text-lg text-muted-foreground leading-relaxed mb-3">
                 Here’s what mutation testing does on each run:
@@ -152,6 +262,45 @@ export default async function Home() {
               </div>
             </div>
 
+          </div>
+        </div>
+      </section>
+
+      {/* Core Capabilities */}
+      <section className="border-t py-24">
+        <div className="container mx-auto max-w-screen-xl px-4">
+          <div className="mx-auto max-w-4xl">
+            <h2 className="text-4xl font-bold tracking-tight text-center mb-6">
+              Core Capabilities
+            </h2>
+            <p className="text-lg text-muted-foreground leading-relaxed text-center mb-10">
+              Gooze is engineered for real codebases and CI/CD, not just toy
+              examples.
+            </p>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Capability</TableHead>
+                  <TableHead>How Gooze handles it</TableHead>
+                  <TableHead>Benefit for teams</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {capabilities.map((c) => (
+                  <TableRow key={c.feature}>
+                    <TableCell className="font-medium whitespace-nowrap">
+                      {c.feature}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {c.how}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {c.benefit}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
         </div>
       </section>
@@ -219,6 +368,37 @@ export default async function Home() {
                 </Link>
               </Button>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="border-t bg-muted/50 py-24">
+        <div className="container mx-auto max-w-screen-xl px-4">
+          <div className="mx-auto max-w-3xl">
+            <h2 className="text-4xl font-bold tracking-tight text-center mb-12">
+              Frequently asked questions
+            </h2>
+            <dl className="space-y-8">
+              {faqs.map((f) => (
+                <div key={f.q}>
+                  <dt className="text-lg font-semibold mb-2">{f.q}</dt>
+                  <dd className="text-muted-foreground leading-relaxed">
+                    {f.a}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-12 text-center text-muted-foreground">
+              A modern alternative to tools like Gremlins — see the{" "}
+              <Link
+                href="/docs/comparison/"
+                className="underline underline-offset-4"
+              >
+                comparison
+              </Link>{" "}
+              for how caching and CI sharding scale on larger monorepos.
+            </p>
           </div>
         </div>
       </section>
