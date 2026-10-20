@@ -180,8 +180,19 @@ const themes: Theme[] = [
         detail: "Surface surviving mutants in GitHub code scanning and other SARIF tools.",
       },
       {
-        title: "GitLab Code Quality report",
-        detail: "Show surviving mutants in the merge request widget.",
+        title: "Code Climate report",
+        detail: "Surviving mutants in the Code Climate JSON format, which GitLab's Code Quality merge request widget reads.",
+      },
+      {
+        title: "LLM training dataset",
+        detail: (
+          <>
+            Export mutants and the tests that kill them as chat-format JSONL (<code>messages</code>, with{" "}
+            <code>rejected_response</code> for preference pairs), the format Qwen&apos;s fine-tuning tools
+            such as ms-swift, LLaMA-Factory, Axolotl and Unsloth read, to train models that write stronger
+            tests.
+          </>
+        ),
       },
       {
         title: "Status filter",
@@ -357,54 +368,6 @@ const themes: Theme[] = [
       {
         title: "opencode",
         detail: "Mutation results after every opencode edit through a plugin for opencode 1.x and 2.x. The plugins exist in goozels; support lands once they're verified with opencode.",
-      },
-    ],
-  },
-  {
-    id: "fixes",
-    title: "Polish & fixes",
-    items: [
-      {
-        title: "Real defaults in --help",
-        detail: (
-          <>
-            <code>gooze run --help</code> shows the real defaults for <code>--parallel</code> and{" "}
-            <code>--mutation-timeout</code>.
-          </>
-        ),
-      },
-      {
-        title: "Log level flag",
-        detail: (
-          <>
-            Set <code>log.level</code> per run with a <code>--log-level</code> flag.
-          </>
-        ),
-      },
-      {
-        title: "Log rotation env vars documented",
-        detail: (
-          <>
-            List <code>GOOZE_LOG_MAX_SIZE</code>, <code>GOOZE_LOG_MAX_BACKUPS</code>,{" "}
-            <code>GOOZE_LOG_MAX_AGE</code>, and <code>GOOZE_LOG_COMPRESS</code> in the config reference.
-          </>
-        ),
-      },
-      {
-        title: "Config validation",
-        detail: (
-          <>
-            Clear errors for invalid values in <code>gooze.yaml</code> and warnings for unknown keys, so every setting takes effect as written. Out-of-range values (such as <code>run.parallel: 0</code>) are already rejected, and goozels flags unknown keys in the editor.
-          </>
-        ),
-      },
-      {
-        title: "Clean config init",
-        detail: (
-          <>
-            <code>gooze config init</code> writes a commented file straight from the schema, with every default explained.
-          </>
-        ),
       },
     ],
   },
