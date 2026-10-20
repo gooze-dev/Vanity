@@ -24,6 +24,10 @@ export default function CliRunPage() {
             <code className="bg-muted px-1 py-0.5 rounded">./...</code> (the current module,
             recursively), so <code className="bg-muted px-1 py-0.5 rounded">gooze run</code> is the
             same as <code className="bg-muted px-1 py-0.5 rounded">gooze run ./...</code>.
+            Like <code className="bg-muted px-1 py-0.5 rounded">go list ./...</code>, scanning skips{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">vendor/</code>, <code className="bg-muted px-1 py-0.5 rounded">testdata/</code>, directories starting with{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">.</code> or <code className="bg-muted px-1 py-0.5 rounded">_</code>, and nested modules (directories with their own{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">go.mod</code>).
           </p>
         </div>
 
@@ -32,7 +36,11 @@ export default function CliRunPage() {
           <ol className="list-decimal pl-5 space-y-2 text-muted-foreground">
             <li>Generates mutations for a source file.</li>
             <li>Applies one mutation.</li>
-            <li>Runs tests to see if they fail.</li>
+            <li>
+              Runs the tests of the package that owns the file (<code className="bg-muted px-1 py-0.5 rounded">go test -count=1 ./&lt;pkg&gt;</code>)
+              to see if they fail. A mutant that does not compile is reported as{" "}
+              <code className="bg-muted px-1 py-0.5 rounded">error</code>, not killed.
+            </li>
             <li>Writes results into the reports directory.</li>
           </ol>
         </div>
@@ -104,10 +112,13 @@ gooze run --coverage-profile coverage.out ./...`}
           />
           <p className="mt-4 text-muted-foreground">
             Before testing each mutation, Gooze checks whether the mutated line is covered by the
-            profile. If the line is not covered (or its file is absent from the profile), Gooze
+            profile. If the profile shows the line with a zero count, Gooze
             reports the mutation as{" "}
             <code className="bg-muted px-1 py-0.5 rounded">not_covered</code> and skips running its
             tests. Uncovered mutations can never be killed, so this is a large speed-up.
+            Lines outside any profiled block (for example package-level{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">const</code>/<code className="bg-muted px-1 py-0.5 rounded">var</code> declarations) and files absent from the
+            profile are tested normally.
           </p>
           <p className="mt-3 text-muted-foreground">
             A <code className="bg-muted px-1 py-0.5 rounded">not_covered</code> mutation counts as a
@@ -136,6 +147,11 @@ gooze run -s 2/3 ./...`}
             After all jobs finish, merge reports:
           </p>
           <CodeBlock lang="bash" code="gooze report merge" />
+          <p className="mt-3 text-sm text-muted-foreground">
+            The value must be <code className="bg-muted px-1 py-0.5 rounded">INDEX/TOTAL</code> with{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">0 &lt;= INDEX &lt; TOTAL</code>; anything else (for example{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">4/4</code> or <code className="bg-muted px-1 py-0.5 rounded">1/4abc</code>) is an error.
+          </p>
         </div>
 
         <div id="next" className="scroll-mt-20">

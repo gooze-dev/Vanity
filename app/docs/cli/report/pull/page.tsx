@@ -21,6 +21,9 @@ export default function CliReportPullPage() {
           <p className="mt-3 text-muted-foreground">
             This pulls the artifact and extracts it into the reports dir (<code className="bg-muted px-1 py-0.5 rounded">-o/--output</code>, default{" "}
             <code className="bg-muted px-1 py-0.5 rounded">.gooze-reports</code>).
+            The reference must include a tag. Extracting into the current directory
+            (<code className="bg-muted px-1 py-0.5 rounded">-o .</code>) works, file modes are preserved, and pulling an artifact that was not
+            pushed by Gooze fails with a clear error.
           </p>
         </div>
 
@@ -54,8 +57,11 @@ export default function CliReportPullPage() {
             <code className="bg-muted px-1 py-0.5 rounded">GITHUB_TOKEN</code> in CI).
           </p>
           <p className="text-muted-foreground">
-            If unset, Gooze falls back to the Docker credential store (whatever{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">docker login</code> saved). See{" "}
+            If both are unset, Gooze falls back to the Docker credential store (whatever{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">docker login</code> saved). Setting{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">GOOZE_REGISTRY_USERNAME</code> without{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">GOOZE_REGISTRY_PASSWORD</code> is an error;{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">GOOZE_REGISTRY_PASSWORD</code> alone is sent as a bearer token. See{" "}
             <Link href="/docs/ci" className="underline underline-offset-4">CI / GitHub Actions</Link>{" "}
             for a full workflow.
           </p>

@@ -15,8 +15,10 @@ export default function TroubleshootingPage() {
         <div id="everything-killed" className="scroll-mt-20">
           <h2 className="text-2xl font-semibold mb-3">“Everything is killed” (or killed looks suspicious)</h2>
           <p className="text-muted-foreground">
-            <strong>Killed</strong> means <code className="bg-muted px-1 py-0.5 rounded">go test</code> returned an error for that mutation.
-            Sometimes this is good (your tests catch the bug).
+            <strong>Killed</strong> means the tests of the package that owns the mutated file failed for that mutation
+            (<code className="bg-muted px-1 py-0.5 rounded">go test -count=1</code> on that package).
+            A mutant that does not compile is reported as <strong>error</strong>, not killed.
+            Sometimes a kill is good (your tests catch the bug).
             Sometimes it is not (timeouts, flaky tests, setup problems).
           </p>
           <p className="mt-4 text-muted-foreground">
@@ -34,6 +36,12 @@ export default function TroubleshootingPage() {
             <li>Run from the module root (where <code className="bg-muted px-1 py-0.5 rounded">go.mod</code> is).</li>
             <li>Try <code className="bg-muted px-1 py-0.5 rounded">gooze run --estimate ./...</code> and verify paths.</li>
             <li>Check your exclude regex rules. You can exclude everything by mistake.</li>
+            <li>
+              <code className="bg-muted px-1 py-0.5 rounded">vendor/</code>, <code className="bg-muted px-1 py-0.5 rounded">testdata/</code>, directories starting with{" "}
+              <code className="bg-muted px-1 py-0.5 rounded">.</code> or <code className="bg-muted px-1 py-0.5 rounded">_</code>, and nested modules (their own{" "}
+              <code className="bg-muted px-1 py-0.5 rounded">go.mod</code>) are skipped automatically, like <code className="bg-muted px-1 py-0.5 rounded">go list ./...</code>.
+            </li>
+            <li>Files that fail to parse are skipped with a warning in the log.</li>
           </ul>
           <div className="mt-3">
             <CodeBlock lang="bash" code="gooze run --estimate ./..." />
@@ -44,7 +52,10 @@ export default function TroubleshootingPage() {
           <h2 className="text-2xl font-semibold mb-3">“Skipped” mutations</h2>
           <p className="text-muted-foreground">
             <strong>Skipped</strong> usually means Gooze did not run the mutation.
-            A common reason: it could not find a matching test file for the source.
+            Note that a missing test file does not skip anything: Gooze runs the sibling{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">&lt;name&gt;_test.go</code> if it exists, otherwise any{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">*_test.go</code> in the same package. If the package has no test file at all,
+            the mutation is reported as <strong>survived</strong>.
           </p>
         </div>
 

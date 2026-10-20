@@ -95,7 +95,7 @@ export default function MutationsPage() {
               <strong>Survived</strong>: tests still passed (usually means weak/missing assertion)
             </li>
             <li>
-              <strong>Skipped</strong>: Gooze did not run it (example: no matching test)
+              <strong>Skipped</strong>: Gooze did not run it
             </li>
             <li>
               <strong>Not covered</strong>: the mutated line is not covered by the coverage profile
@@ -104,7 +104,7 @@ export default function MutationsPage() {
               separately.
             </li>
             <li>
-              <strong>Error</strong>: Gooze had an unexpected error
+              <strong>Error</strong>: the mutant did not compile, or Gooze had an unexpected error
             </li>
           </ul>
           <p className="mt-4 text-muted-foreground">
