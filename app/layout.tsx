@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Inter, Oxanium } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { getSoftwareVersion } from "@/lib/version";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,36 +26,32 @@ const oxanium = Oxanium({
 });
 
 const siteDescription =
-  "Mutation testing for Go that helps you assess the quality of your test suite";
+  "Gooze evaluates the true quality of your Go tests by introducing controlled mutations. Find hidden bugs, enforce CI gates, and eliminate coverage blind spots.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gooze.dev"),
   title: {
-    default: "Gooze — Mutation testing for Go",
+    default: "Gooze: Advanced Mutation Testing for Golang",
     template: "%s · Gooze",
   },
   description: siteDescription,
   applicationName: "Gooze",
   category: "Developer Tools",
   keywords: [
-    "mutation testing",
-    "Go",
-    "golang",
-    "test quality",
-    "test coverage",
+    "go mutation testing",
+    "golang testing framework",
     "mutation score",
-    "testing tool",
-    "gooze",
-    "go mutation testing tool",
-    "gremlins alternative",
-    "go-mutesting alternative",
+    "test suite quality",
+    "go mutesting alternative",
+    "ast mutation",
   ],
   authors: [{ name: "Gooze" }],
   creator: "Gooze",
   publisher: "Gooze",
-  alternates: {
-    canonical: "/",
-  },
+  // No default canonical here: a root canonical is inherited by every page that
+  // doesn't set its own, which silently points pages like /pkg/* at the
+  // homepage. Each page declares its own canonical instead (the home page below,
+  // docs via docsMetadata, redirects via redirectMetadata).
   formatDetection: {
     telephone: false,
     email: false,
@@ -71,7 +68,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Gooze — Mutation testing for Go",
+    title: "Gooze: Advanced Mutation Testing for Golang",
     description: siteDescription,
     url: "https://gooze.dev/",
     siteName: "Gooze",
@@ -89,7 +86,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Gooze — Mutation testing for Go",
+    title: "Gooze: Advanced Mutation Testing for Golang",
     description: siteDescription,
     site: "@gooze_dev",
     creator: "@gooze_dev",
@@ -104,7 +101,7 @@ export const metadata: Metadata = {
 
 // Structured data so search engines can render a rich result for the tool and
 // its publisher. Kept truthful: only fields we can stand behind.
-const jsonLd = {
+const buildJsonLd = (softwareVersion: string) => ({
   "@context": "https://schema.org",
   "@graph": [
     {
@@ -115,7 +112,7 @@ const jsonLd = {
       applicationCategory: "DeveloperApplication",
       operatingSystem: "Linux, macOS, Windows",
       programmingLanguage: "Go",
-      softwareVersion: "1.1.0",
+      softwareVersion,
       license: "https://opensource.org/licenses/MIT",
       codeRepository: "https://github.com/gooze-dev/gooze",
       sameAs: ["https://github.com/gooze-dev/gooze"],
@@ -138,13 +135,15 @@ const jsonLd = {
       description: siteDescription,
     },
   ],
-};
+});
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = buildJsonLd(await getSoftwareVersion());
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body

@@ -12,10 +12,41 @@ const GITHUB_REPO = "https://github.com/gooze-dev/goozels";
 const IMPORT_PREFIX = "gooze.dev/pkg/goozels";
 const INSTALL_PATH = "gooze.dev/pkg/goozels/cmd/goozels";
 
+const TITLE = "pkg/goozels - Mutation Testing LSP for Editors";
+const DESCRIPTION =
+  "Import the goozels language server module. Enable inline code diagnostics and surface real-time Gooze mutation results directly in editors like VSCode.";
+const KEYWORDS = [
+  "pkg/goozels",
+  "language server protocol",
+  "lsp module",
+  "editor integration",
+  "inline diagnostics",
+  "real-time results",
+];
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "Goozels - Language Server for Gooze",
-    description: "Import path for goozels - editor support (LSP) for Gooze mutation testing",
+    // absolute: this page supplies its own full title, no "· Gooze" suffix.
+    title: { absolute: TITLE },
+    description: DESCRIPTION,
+    keywords: KEYWORDS,
+    alternates: { canonical: "/pkg/goozels/" },
+    openGraph: {
+      type: "website",
+      title: TITLE,
+      description: DESCRIPTION,
+      url: "https://gooze.dev/pkg/goozels/",
+      siteName: "Gooze",
+      images: [
+        { url: "/og-image.png", width: 1200, height: 630, alt: "Goozels", type: "image/png" },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: TITLE,
+      description: DESCRIPTION,
+      images: [{ url: "/og-image.png", alt: "Goozels" }],
+    },
     other: {
       "go-import": `${IMPORT_PREFIX} git ${GITHUB_REPO}`,
       "go-source": `${IMPORT_PREFIX} ${GITHUB_REPO} ${GITHUB_REPO}/tree/main{/dir} ${GITHUB_REPO}/blob/main{/dir}/{file}#L{line}`,

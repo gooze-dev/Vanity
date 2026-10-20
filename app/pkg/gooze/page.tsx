@@ -11,10 +11,41 @@ import { CodeBlock } from "@/components/code-block";
 const GITHUB_REPO = "https://github.com/gooze-dev/gooze";
 const IMPORT_PREFIX = "gooze.dev/pkg/gooze";
 
+const TITLE = "pkg/gooze - Core Go Mutation Testing Module";
+const DESCRIPTION =
+  "Import the core Gooze Go module into your projects. Access the programmatic API for measuring test efficacy and integrating AST mutation into custom pipelines.";
+const KEYWORDS = [
+  "pkg/gooze",
+  "go module import",
+  "golang api",
+  "programmatic testing",
+  "ast mutation core",
+  "integrate gooze",
+];
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "Gooze - Go Mutation Testing",
-    description: "Import path for Gooze - Mutation testing for Go",
+    // absolute: this page supplies its own full title, no "· Gooze" suffix.
+    title: { absolute: TITLE },
+    description: DESCRIPTION,
+    keywords: KEYWORDS,
+    alternates: { canonical: "/pkg/gooze/" },
+    openGraph: {
+      type: "website",
+      title: TITLE,
+      description: DESCRIPTION,
+      url: "https://gooze.dev/pkg/gooze/",
+      siteName: "Gooze",
+      images: [
+        { url: "/og-image.png", width: 1200, height: 630, alt: "Gooze", type: "image/png" },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: TITLE,
+      description: DESCRIPTION,
+      images: [{ url: "/og-image.png", alt: "Gooze" }],
+    },
     other: {
       "go-import": `${IMPORT_PREFIX} git ${GITHUB_REPO}`,
       "go-source": `${IMPORT_PREFIX} ${GITHUB_REPO} ${GITHUB_REPO}/tree/main{/dir} ${GITHUB_REPO}/blob/main{/dir}/{file}#L{line}`,
