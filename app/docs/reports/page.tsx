@@ -12,7 +12,7 @@ export default function ReportsPage() {
       </p>
 
       <div className="space-y-12">
-        <div id="where" className="scroll-mt-20">
+        <div id="where">
           <h2 className="text-2xl font-semibold mb-3">Where reports are stored</h2>
           <p className="mb-3 text-muted-foreground">
             Default output directory is <code className="bg-muted px-1 py-0.5 rounded">.gooze-reports/</code>.
@@ -21,7 +21,7 @@ export default function ReportsPage() {
           <CodeBlock lang="bash" code="gooze run -o .gooze-reports ./..." />
         </div>
 
-        <div id="files" className="scroll-mt-20">
+        <div id="files">
           <h2 className="text-2xl font-semibold mb-3">What gets written</h2>
           <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
             <li>One YAML file per report, named by hash: <code className="bg-muted px-1 py-0.5 rounded">&lt;hash&gt;.yaml</code></li>
@@ -33,7 +33,7 @@ export default function ReportsPage() {
           </ul>
         </div>
 
-        <div id="view" className="scroll-mt-20">
+        <div id="view">
           <h2 className="text-2xl font-semibold mb-3">Viewing reports</h2>
           <p className="mb-3 text-muted-foreground">
             This reads from the output directory and shows results.
@@ -45,7 +45,7 @@ export default function ReportsPage() {
           <CodeBlock lang="bash" code="gooze report view -o .gooze-reports" />
         </div>
 
-        <div id="shards" className="scroll-mt-20">
+        <div id="shards">
           <h2 className="text-2xl font-semibold mb-3">Shards and merge</h2>
           <p className="mb-3 text-muted-foreground">
             When you run with <code className="bg-muted px-1 py-0.5 rounded">-s INDEX/TOTAL</code>, Gooze writes into shard directories.
@@ -65,7 +65,7 @@ gooze report view`}
           </p>
         </div>
 
-        <div id="cache" className="scroll-mt-20">
+        <div id="cache">
           <h2 className="text-2xl font-semibold mb-3">Cache behavior (incremental runs)</h2>
           <p className="mb-3 text-muted-foreground">
             Gooze can reuse stored reports for unchanged sources.
@@ -76,7 +76,7 @@ gooze report view`}
           <CodeBlock lang="bash" code="gooze run --no-cache ./..." />
         </div>
 
-        <div id="oci" className="scroll-mt-20">
+        <div id="oci">
           <h2 className="text-2xl font-semibold mb-3">Storing reports in an OCI registry</h2>
           <p className="mb-3 text-muted-foreground">
             Push the reports directory to an OCI registry (e.g. GHCR) so CI and teammates can

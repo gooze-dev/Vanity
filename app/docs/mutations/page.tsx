@@ -81,7 +81,7 @@ export default function MutationsPage() {
       </p>
 
       <div className="space-y-12">
-        <div id="statuses" className="scroll-mt-20">
+        <div id="statuses">
           <h2 className="text-2xl font-semibold mb-3">Statuses</h2>
           <p className="mb-3 text-muted-foreground">
             Each mutation ends in a status.
@@ -109,7 +109,7 @@ export default function MutationsPage() {
           </ul>
         </div>
 
-        <div id="types" className="scroll-mt-20">
+        <div id="types">
           <h2 className="text-2xl font-semibold mb-3">Mutation types</h2>
           <p className="mb-3 text-muted-foreground">
             These six types run by default. Each one makes a single, mechanical change to
@@ -124,7 +124,7 @@ export default function MutationsPage() {
 
           <div className="mt-6 space-y-8">
             {mutationTypes.map((t) => (
-              <div key={t.name} id={t.name} className="scroll-mt-20">
+              <div key={t.name} id={t.name}>
                 <h3 className="text-lg font-semibold">
                   <code className="bg-muted px-1 py-0.5 rounded">{t.name}</code>{" "}
                   <span className="text-sm font-normal text-muted-foreground">— {t.ops}</span>
@@ -155,7 +155,7 @@ export default function MutationsPage() {
           </p>
         </div>
 
-        <div id="what-to-do" className="scroll-mt-20">
+        <div id="what-to-do">
           <h2 className="text-2xl font-semibold mb-3">What to do when you see a survivor</h2>
           <p className="mb-3 text-muted-foreground">
             A survivor is a hint.
@@ -172,7 +172,7 @@ export default function MutationsPage() {
           </div>
         </div>
 
-        <div id="learn" className="scroll-mt-20">
+        <div id="learn">
           <h2 className="text-2xl font-semibold mb-3">Next pages</h2>
           <div className="flex flex-wrap gap-3">
             <Button asChild variant="outline">

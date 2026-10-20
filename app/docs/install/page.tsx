@@ -12,7 +12,7 @@ export default function InstallPage() {
       </p>
 
       <div className="space-y-12">
-        <div id="requirements" className="scroll-mt-20">
+        <div id="requirements">
           <h2 className="text-2xl font-semibold mb-3">What you need</h2>
           <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
             <li>Go installed on your machine.</li>
@@ -24,7 +24,7 @@ export default function InstallPage() {
           </p>
         </div>
 
-        <div id="install" className="scroll-mt-20">
+        <div id="install">
           <h2 className="text-2xl font-semibold mb-3">Install Gooze</h2>
           <CodeBlock lang="bash" code="go install gooze.dev/pkg/gooze@latest" />
           <p className="mt-3 text-muted-foreground">
@@ -32,7 +32,7 @@ export default function InstallPage() {
           </p>
         </div>
 
-        <div id="verify" className="scroll-mt-20">
+        <div id="verify">
           <h2 className="text-2xl font-semibold mb-3">Verify the install</h2>
           <CodeBlock lang="bash" code="gooze version" />
           <p className="mt-3 text-muted-foreground">
@@ -40,7 +40,7 @@ export default function InstallPage() {
           </p>
         </div>
 
-          <div id="path" className="scroll-mt-20">
+          <div id="path">
             <h2 className="text-2xl font-semibold mb-3">If you get &quot;command not found&quot;</h2>
           <p className="mb-3 text-muted-foreground">
             Go installs binaries into your Go bin dir.
@@ -50,7 +50,7 @@ export default function InstallPage() {
             <CodeBlock lang="bash" code='echo "$(go env GOPATH)/bin"' />
         </div>
 
-        <div id="tty" className="scroll-mt-20">
+        <div id="tty">
           <h2 className="text-2xl font-semibold mb-3">Interactive vs CI output</h2>
           <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
             <li>In a terminal (TTY), Gooze shows an interactive UI.</li>
@@ -58,7 +58,7 @@ export default function InstallPage() {
           </ul>
         </div>
 
-        <div id="logs" className="scroll-mt-20">
+        <div id="logs">
           <h2 className="text-2xl font-semibold mb-3">Logs</h2>
           <p className="text-muted-foreground">
             If something looks wrong, run with <code className="bg-muted px-1 py-0.5 rounded">--verbose</code>.

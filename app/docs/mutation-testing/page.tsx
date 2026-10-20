@@ -13,7 +13,7 @@ export default function MutationTestingPage() {
       </p>
 
       <div className="space-y-12">
-        <div id="idea" className="scroll-mt-20">
+        <div id="idea">
           <h2 className="text-2xl font-semibold mb-3">The idea (simple)</h2>
           <ol className="list-decimal pl-5 space-y-2 text-muted-foreground">
             <li>Take your real code.</li>
@@ -26,7 +26,7 @@ export default function MutationTestingPage() {
           </ol>
         </div>
 
-        <div id="why" className="scroll-mt-20">
+        <div id="why">
           <h2 className="text-2xl font-semibold mb-3">Why people use it</h2>
           <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
             <li>Your tests can be green but still miss important behavior.</li>
@@ -35,7 +35,7 @@ export default function MutationTestingPage() {
           </ul>
         </div>
 
-        <div id="example" className="scroll-mt-20">
+        <div id="example">
           <h2 className="text-2xl font-semibold mb-3">A small example (what Gooze finds)</h2>
           <p className="mb-3 text-muted-foreground">
             Code:

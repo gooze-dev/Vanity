@@ -4,9 +4,14 @@ import { usePathname } from "next/navigation"
 
 import { getDocsPage, SITE_URL } from "@/lib/docs-pages"
 
-// Emits BreadcrumbList structured data for the current docs page so search
-// engines can show breadcrumb trails in results. Derived from the URL segments
-// and the docs registry, so it stays correct as pages are added.
+// Emits structured data for the current docs page:
+// - BreadcrumbList, so search engines can show breadcrumb trails in results.
+// - TechArticle, so browser reader views (Firefox Reader View, Safari Reader)
+//   and search engines pick up the clean page title and summary instead of
+//   the "· Gooze docs" suffixed <title>.
+// Derived from the URL segments and the docs registry, so it stays correct as
+// pages are added. Pages missing from the registry (e.g. redirect stubs) get
+// no TechArticle.
 export function DocsStructuredData() {
   const pathname = usePathname() || "/docs"
   const clean = pathname.replace(/\/$/, "") || "/docs"
@@ -27,10 +32,34 @@ export function DocsStructuredData() {
     }
   })
 
+  const page = getDocsPage(clean)
+  const url = `${SITE_URL}${clean}/`
+
+  const graph: Record<string, unknown>[] = [
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: items,
+    },
+  ]
+
+  if (page) {
+    graph.push({
+      "@type": "TechArticle",
+      headline: page.title,
+      name: page.title,
+      description: page.description,
+      keywords: page.keywords.join(", "),
+      url,
+      mainEntityOfPage: url,
+      inLanguage: "en",
+      isPartOf: { "@type": "WebSite", name: "Gooze", url: `${SITE_URL}/` },
+      publisher: { "@type": "Organization", name: "Gooze", url: `${SITE_URL}/` },
+    })
+  }
+
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: items,
+    "@graph": graph,
   }
 
   return (

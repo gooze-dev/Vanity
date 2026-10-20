@@ -133,6 +133,14 @@
     --ring: var(--gooze-teal);
   }
 
+  /* Keep anchored sections clear of the sticky header. Set here instead of a
+     scroll-mt-* class on each wrapper: reader views (Firefox Reader View,
+     Safari Reader) penalize class names containing "scroll" and drop those
+     sections from the article. */
+  .gooze-docs #docs-content [id] {
+    scroll-margin-top: 5rem;
+  }
+
   .gooze-docs input[type="checkbox"] {
     accent-color: var(--gooze-teal);
   }

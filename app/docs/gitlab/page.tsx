@@ -80,7 +80,7 @@ export default function GitlabPage() {
       </p>
 
       <div className="space-y-12">
-        <div id="simple" className="scroll-mt-20">
+        <div id="simple">
           <h2 className="text-2xl font-semibold mb-3">1. Simplest: run</h2>
           <p className="mb-3 text-muted-foreground">
             Install Gooze and run the whole suite. No registry, no caching.
@@ -88,7 +88,7 @@ export default function GitlabPage() {
           <CodeBlock lang="yaml" code={simple} />
         </div>
 
-        <div id="sharded" className="scroll-mt-20">
+        <div id="sharded">
           <h2 className="text-2xl font-semibold mb-3">2. Sharded: run in parallel</h2>
           <p className="mb-3 text-muted-foreground">
             <code className="bg-muted px-1 py-0.5 rounded">parallel: 3</code> fans the job out;
@@ -101,7 +101,7 @@ export default function GitlabPage() {
           <CodeBlock lang="yaml" code={sharded} />
         </div>
 
-        <div id="cached" className="scroll-mt-20">
+        <div id="cached">
           <h2 className="text-2xl font-semibold mb-3">3. Sharded + cached baseline</h2>
           <p className="mb-3 text-muted-foreground">
             Each shard pulls the <code className="bg-muted px-1 py-0.5 rounded">:main</code> baseline
@@ -113,7 +113,7 @@ export default function GitlabPage() {
           <CodeBlock lang="yaml" code={cached} />
         </div>
 
-        <div id="auth" className="scroll-mt-20">
+        <div id="auth">
           <h2 className="text-2xl font-semibold mb-3">Authentication</h2>
           <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
             <li>

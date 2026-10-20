@@ -97,7 +97,7 @@ export default function CliRunPage() {
       </p>
 
       <div className="space-y-12">
-        <div id="usage" className="scroll-mt-20">
+        <div id="usage">
           <h2 className="text-2xl font-semibold mb-3">Usage</h2>
           <CodeBlock lang="bash" code="gooze run [global flags] [paths...]" />
           <p className="mt-4 text-muted-foreground">
@@ -112,7 +112,7 @@ export default function CliRunPage() {
           </p>
         </div>
 
-        <div id="flags" className="scroll-mt-20">
+        <div id="flags">
           <h2 className="text-2xl font-semibold mb-3">Flags</h2>
           <p className="mb-4 text-muted-foreground">
             Every flag can also be set in <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code> under its config key, or
@@ -177,7 +177,7 @@ export default function CliRunPage() {
           </div>
         </div>
 
-        <div id="what" className="scroll-mt-20">
+        <div id="what">
           <h2 className="text-2xl font-semibold mb-3">What it does (high level)</h2>
           <ol className="list-decimal pl-5 space-y-2 text-muted-foreground">
             <li>Generates mutations for a source file.</li>
@@ -191,7 +191,7 @@ export default function CliRunPage() {
           </ol>
         </div>
 
-        <div id="estimate" className="scroll-mt-20">
+        <div id="estimate">
           <h2 className="text-2xl font-semibold mb-3">Preview with --estimate</h2>
           <p className="mb-3 text-muted-foreground">
             See which source files would be mutated and how many mutations apply, without
@@ -206,7 +206,7 @@ export default function CliRunPage() {
           </p>
         </div>
 
-        <div id="parallel" className="scroll-mt-20">
+        <div id="parallel">
           <h2 className="text-2xl font-semibold mb-3">Parallel workers</h2>
           <p className="mb-3 text-muted-foreground">
             Run faster by using multiple workers:
@@ -217,7 +217,7 @@ export default function CliRunPage() {
           </p>
         </div>
 
-        <div id="timeout" className="scroll-mt-20">
+        <div id="timeout">
           <h2 className="text-2xl font-semibold mb-3">Timeouts</h2>
           <p className="mb-3 text-muted-foreground">
             The tests for each mutation must finish within{" "}
@@ -233,7 +233,7 @@ export default function CliRunPage() {
           <CodeBlock lang="bash" code="gooze run --verbose ./..." />
         </div>
 
-        <div id="cache" className="scroll-mt-20">
+        <div id="cache">
           <h2 className="text-2xl font-semibold mb-3">Caching / incremental runs</h2>
           <p className="mb-3 text-muted-foreground">
             Gooze can reuse stored reports if nothing changed.
@@ -242,7 +242,7 @@ export default function CliRunPage() {
           <CodeBlock lang="bash" code="gooze run --no-cache ./..." />
         </div>
 
-        <div id="coverage-profile" className="scroll-mt-20">
+        <div id="coverage-profile">
           <h2 className="text-2xl font-semibold mb-3">Coverage profile (skip uncovered mutations)</h2>
           <p className="mb-3 text-muted-foreground">
             Pass an existing Go coverage profile with{" "}
@@ -279,7 +279,7 @@ gooze run --coverage-profile coverage.out ./...`}
           </p>
         </div>
 
-        <div id="shard" className="scroll-mt-20">
+        <div id="shard">
           <h2 className="text-2xl font-semibold mb-3">Sharding (CI)</h2>
           <p className="mb-3 text-muted-foreground">
             Sharding splits the work across jobs.
@@ -302,7 +302,7 @@ gooze run -s 2/3 ./...`}
           </p>
         </div>
 
-        <div id="next" className="scroll-mt-20">
+        <div id="next">
           <h2 className="text-2xl font-semibold mb-3">Next</h2>
           <div className="flex flex-wrap gap-3">
             <Button asChild variant="outline">

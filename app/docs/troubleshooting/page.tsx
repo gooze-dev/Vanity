@@ -12,7 +12,7 @@ export default function TroubleshootingPage() {
       </p>
 
       <div className="space-y-12">
-        <div id="everything-killed" className="scroll-mt-20">
+        <div id="everything-killed">
           <h2 className="text-2xl font-semibold mb-3">“Everything is killed” (or killed looks suspicious)</h2>
           <p className="text-muted-foreground">
             <strong>Killed</strong> means the tests of the package that owns the mutated file failed for that mutation
@@ -31,7 +31,7 @@ export default function TroubleshootingPage() {
           </div>
         </div>
 
-        <div id="zero" className="scroll-mt-20">
+        <div id="zero">
           <h2 className="text-2xl font-semibold mb-3">Gooze finds 0 files / 0 mutations</h2>
           <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
             <li>Run from the module root (where <code className="bg-muted px-1 py-0.5 rounded">go.mod</code> is).</li>
@@ -49,7 +49,7 @@ export default function TroubleshootingPage() {
           </div>
         </div>
 
-        <div id="statuses" className="scroll-mt-20">
+        <div id="statuses">
           <h2 className="text-2xl font-semibold mb-3">Statuses you will see</h2>
           <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
             <li><code className="bg-muted px-1 py-0.5 rounded">killed</code>: the package tests failed for the mutation.</li>
@@ -69,7 +69,7 @@ export default function TroubleshootingPage() {
           </p>
         </div>
 
-        <div id="stale" className="scroll-mt-20">
+        <div id="stale">
           <h2 className="text-2xl font-semibold mb-3">Reports look stale</h2>
           <p className="mb-3 text-muted-foreground">
             If you suspect cached results are reused, force a full re-run:
@@ -77,7 +77,7 @@ export default function TroubleshootingPage() {
           <CodeBlock lang="bash" code="gooze run --no-cache ./..." />
         </div>
 
-        <div id="shards" className="scroll-mt-20">
+        <div id="shards">
           <h2 className="text-2xl font-semibold mb-3">Shards not showing up in view</h2>
           <p className="mb-3 text-muted-foreground">
             If you ran with <code className="bg-muted px-1 py-0.5 rounded">-s INDEX/TOTAL</code>, you need to merge before viewing:
