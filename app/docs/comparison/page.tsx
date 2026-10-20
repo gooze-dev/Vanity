@@ -1,6 +1,7 @@
 import type * as React from "react"
 
 import { docsMetadata } from "@/lib/docs-meta"
+import { DOCS_FACTS_VERSION } from "@/lib/version"
 import Link from "next/link"
 
 import { Badge } from "@/components/ui/badge"
@@ -13,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-// Facts last checked against gooze v1.1.0 and the competitors' own docs. Only
+// Facts last checked against gooze DOCS_FACTS_VERSION and the competitors' own docs. Only
 // mark a competitor "yes" when its docs say so; anything else is "unknown",
 // never a guess. Update VERIFIED when re-checking.
 const VERIFIED = "October 2026"
@@ -136,7 +137,7 @@ const rows: Row[] = [
   },
   {
     feature: "Interactive results viewer",
-    gooze: ["yes", "TUI with diffs (report view)"],
+    gooze: ["yes", "TUI with diffs (report view --all)"],
     gremlins: ["unknown", ""],
     goMutesting: ["unknown", ""],
     avito: ["partial", "static HTML report"],
@@ -204,7 +205,7 @@ const faqs = [
   },
   {
     q: "Can gooze fail CI when the mutation score drops below a threshold?",
-    a: "Not with a built-in flag yet (as of v1.1.0). gooze prints `Mutation score: NN.NN%` in non-interactive output, and a three-line shell step compares it to a minimum and fails the job. The GitHub Actions and GitLab CI guides include it.",
+    a: "Not with a built-in flag yet (as of " + DOCS_FACTS_VERSION + "). gooze prints `Mutation score: NN.NN%` in non-interactive output, and a three-line shell step compares it to a minimum and fails the job. The GitHub Actions and GitLab CI guides include it.",
   },
   {
     q: "Does gooze only test changed code?",
@@ -248,7 +249,7 @@ export default function ComparisonPage() {
         How Gooze compares with Gremlins, go-mutesting, and go-mutants, including what Gooze does not do yet.
       </p>
       <p className="text-sm text-muted-foreground mb-8">
-        Last verified {VERIFIED} against Gooze v1.1.0 and each tool&apos;s own documentation
+        Last verified {VERIFIED} against Gooze {DOCS_FACTS_VERSION} and each tool&apos;s own documentation
         (<a href="https://gremlins.dev">gremlins.dev</a>,{" "}
         <a href="https://github.com/zimmski/go-mutesting">zimmski/go-mutesting</a>,{" "}
         <a href="https://github.com/avito-tech/go-mutesting">avito-tech/go-mutesting</a>,{" "}
@@ -396,7 +397,7 @@ export default function ComparisonPage() {
           <h2>What Gooze doesn&apos;t do (yet)</h2>
           <p>
             A threshold flag, custom mutator plugins, and a custom test runner are not
-            supported in v1.1.0. Workarounds and status are on the{" "}
+            supported in {DOCS_FACTS_VERSION}. Workarounds and status are on the{" "}
             <Link href="/docs/roadmap#limitations">Roadmap</Link>.
           </p>
         </div>
