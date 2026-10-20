@@ -16,22 +16,17 @@ export default function CliVersionPage() {
           <h2>Usage</h2>
           <CodeBlock lang="bash" code="gooze version" />
           <p>
-            The command takes no flags and prints the version, the git commit it
-            was built from, and the build date.
+            The command takes no flags and prints one line: the gooze version
+            and the Go version it was built with.
           </p>
         </div>
 
         <div id="output">
           <h2>Example output</h2>
-          <CodeBlock
-            lang="text"
-            code={`gooze version 1.1.0
-commit: 9f3c2a1
-built:  2026-02-14T10:21:00Z`}
-          />
+          <CodeBlock lang="text" code={`gooze v1.1.1 (go1.27.3)`} />
           <p>
-            The exact fields follow the release build; the version line always
-            comes first so it is easy to grep in scripts.
+            The version comes from the module build info, so a binary installed
+            with <code>go install …@latest</code> reports that release&apos;s tag.
           </p>
         </div>
 
@@ -55,7 +50,7 @@ built:  2026-02-14T10:21:00Z`}
           <CodeBlock
             lang="bash"
             code={`gooze version
-gooze version | grep -q '1.1.0' || { echo 'unexpected gooze version'; exit 1; }`}
+gooze version | grep -q 'v1.1.1' || { echo 'unexpected gooze version'; exit 1; }`}
           />
         </div>
       </div>

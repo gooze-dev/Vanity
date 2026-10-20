@@ -5,9 +5,46 @@ import { CodeBlock } from "@/components/code-block"
 
 export const metadata = docsMetadata("/docs/usage/results")
 
+const faqs = [
+  {
+    q: "How do I view my Gooze mutation results?",
+    a: "Run gooze report view. It reads the reports directory and shows every mutation with its diff in an interactive viewer (plain text in CI).",
+  },
+  {
+    q: "What does a 'survived' mutation mean in Gooze?",
+    a: "A survived mutation means Gooze injected a bug but the package's tests still passed — usually a weak or missing assertion. Add a test that would fail on that behavior change.",
+  },
+  {
+    q: "What does a 'killed' mutation mean?",
+    a: "A killed mutation is the good case: the tests of the package owning the mutated file failed for the mutation, so your tests caught the change.",
+  },
+  {
+    q: "What does a 'timeout' status mean in Gooze?",
+    a: "The mutant's tests exceeded --mutation-timeout (default 120 seconds). A timeout is not a kill — it lowers the mutation score like a survivor.",
+  },
+  {
+    q: "How is the Gooze mutation score calculated?",
+    a: "score = killed / (all mutations − error). Only killed counts in your favour; survived, not_covered, and timeout lower it; error mutants (that did not compile) are excluded.",
+  },
+]
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+}
+
 export default function ResultsPage() {
   return (
     <section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Reading results</h1>
       <p className="text-lg text-muted-foreground mb-8">
         Every mutation ends in one status. The statuses decide your mutation score and tell you
@@ -118,6 +155,16 @@ export default function ResultsPage() {
             If the code genuinely should not be tested (generated code, debug helpers), skip it
             instead: see <Link href="/docs/usage/ignoring-code">Ignoring code</Link>.
           </p>
+        </div>
+
+        <div id="faq">
+          <h2>FAQ</h2>
+          {faqs.map((f) => (
+            <div key={f.q}>
+              <h3>{f.q}</h3>
+              <p>{f.a}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
