@@ -3,10 +3,18 @@
 import * as React from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import * as Dialog from "@radix-ui/react-dialog"
-import { Search } from "lucide-react"
+import { Dialog } from "radix-ui"
+import { Search, SearchX } from "lucide-react"
 
 import { docsPages, docsFlags, type DocsPage, type DocsFlag } from "@/lib/docs-pages"
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
+import { Kbd, KbdGroup } from "@/components/ui/kbd"
 import { cn } from "@/lib/utils"
 
 // A unified search result: either a documentation page or a CLI flag. The site
@@ -152,9 +160,10 @@ export function DocsSearch() {
         >
           <Search className="h-4 w-4 shrink-0" />
           <span className="hidden flex-1 truncate whitespace-nowrap text-left lg:block">Search</span>
-          <kbd className="pointer-events-none hidden items-center gap-0.5 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground lg:inline-flex">
-            {isMac ? <span className="text-xs">⌘</span> : <span>Ctrl</span>}K
-          </kbd>
+          <KbdGroup className="pointer-events-none hidden lg:inline-flex">
+            <Kbd>{isMac ? "⌘" : "Ctrl"}</Kbd>
+            <Kbd>K</Kbd>
+          </KbdGroup>
         </button>
       </Dialog.Trigger>
 
@@ -181,8 +190,18 @@ export function DocsSearch() {
 
           <ul className="max-h-80 overflow-y-auto p-2">
             {results.length === 0 ? (
-              <li className="px-3 py-6 text-center text-sm text-muted-foreground">
-                No results for “{query}”.
+              <li>
+                <Empty className="py-8">
+                  <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                      <SearchX />
+                    </EmptyMedia>
+                    <EmptyTitle>No results for “{query}”</EmptyTitle>
+                    <EmptyDescription>
+                      Try a command (<code>report merge</code>), a flag (<code>--shard</code>), or a topic (<code>cache</code>).
+                    </EmptyDescription>
+                  </EmptyHeader>
+                </Empty>
               </li>
             ) : (
               results.map((entry, index) => (

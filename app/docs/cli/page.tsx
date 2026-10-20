@@ -2,6 +2,7 @@ import { docsMetadata } from "@/lib/docs-meta"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
+import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item"
 
 const commands = [
   { title: "run", href: "/docs/cli/run", desc: "Run mutation testing (use --estimate to preview)" },
@@ -77,14 +78,14 @@ export default function CliPage() {
           <h2 className="text-2xl font-semibold mb-4">Commands</h2>
           <div className="grid gap-4 md:grid-cols-2">
             {commands.map((cmd) => (
-              <Link
-                key={cmd.title}
-                href={cmd.href}
-                className="rounded-lg border bg-card p-5 hover:bg-muted/50 hover:border-[color:var(--gooze-teal)] transition-colors"
-              >
-                <div className="font-semibold mb-1">{cmd.title}</div>
-                <div className="text-sm text-muted-foreground">{cmd.desc}</div>
-              </Link>
+              <Item key={cmd.title} variant="outline" asChild className="hover:border-[color:var(--gooze-teal)]">
+                <Link href={cmd.href}>
+                  <ItemContent>
+                    <ItemTitle>{cmd.title}</ItemTitle>
+                    <ItemDescription>{cmd.desc}</ItemDescription>
+                  </ItemContent>
+                </Link>
+              </Item>
             ))}
           </div>
         </div>

@@ -3,6 +3,7 @@ import Link from "next/link"
 
 import { GoozeLogo } from "@/components/gooze-logo"
 import { GoozePrimaryCtaButton } from "@/components/gooze-cta-button"
+import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item"
 
 // One row of cards per sidebar section, pointing at the most-used pages.
 const sections = [
@@ -91,14 +92,14 @@ export default function DocsPage() {
             <h2 className="text-2xl font-semibold mb-4">{section.title}</h2>
             <div className="grid gap-4 md:grid-cols-3">
               {section.cards.map((card) => (
-                <Link
-                  key={card.href}
-                  href={card.href}
-                  className="rounded-lg border bg-card p-5 hover:bg-muted/50 hover:border-[color:var(--gooze-teal)] transition-colors"
-                >
-                  <div className="font-semibold mb-1">{card.title}</div>
-                  <div className="text-sm text-muted-foreground">{card.desc}</div>
-                </Link>
+                <Item key={card.href} variant="outline" asChild className="hover:border-[color:var(--gooze-teal)]">
+                  <Link href={card.href}>
+                    <ItemContent>
+                      <ItemTitle>{card.title}</ItemTitle>
+                      <ItemDescription>{card.desc}</ItemDescription>
+                    </ItemContent>
+                  </Link>
+                </Item>
               ))}
             </div>
           </div>
