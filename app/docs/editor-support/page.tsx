@@ -5,9 +5,38 @@ const GITHUB_REPO = "https://github.com/gooze-dev/goozels"
 
 export const metadata = docsMetadata("/docs/editor-support")
 
+const faqs = [
+  {
+    q: "What is goozels?",
+    a: "goozels is the Gooze language server (LSP). It runs in front of gopls, so you keep all normal Go features and get Gooze ones on top: completion and validation for //gooze:ignore directives and gooze.yaml, code lenses to run gooze, and mutation scores shown inline.",
+  },
+  {
+    q: "Does Gooze work in VS Code?",
+    a: "Yes. Install goozels (go install gooze.dev/pkg/goozels/cmd/goozels@latest) and set go.alternateTools so the Go extension launches goozels instead of gopls: {\"go.alternateTools\": {\"gopls\": \"goozels\"}}. goozels proxies gopls for you.",
+  },
+  {
+    q: "How do I use Gooze in Neovim or other editors?",
+    a: "Point your Go LSP config at the goozels binary instead of gopls; goozels proxies gopls. JetBrains works via the LSP4IJ plugin. See the editor guides in the goozels repository.",
+  },
+]
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+}
+
 export default function EditorSupportPage() {
   return (
     <section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Editor support (goozels)</h1>
       <p className="text-lg text-muted-foreground mb-8">
         <a
@@ -120,6 +149,16 @@ export default function EditorSupportPage() {
             </a>
             .
           </p>
+        </div>
+
+        <div id="faq">
+          <h2>FAQ</h2>
+          {faqs.map((f) => (
+            <div key={f.q}>
+              <h3>{f.q}</h3>
+              <p>{f.a}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

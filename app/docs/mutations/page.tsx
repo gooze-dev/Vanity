@@ -3,6 +3,14 @@ import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
 import { Button } from "@/components/ui/button"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 // Default mutation types and their before -> after transformations.
 const mutationTypes = [
@@ -62,12 +70,19 @@ const mutationTypes = [
   },
 ]
 
-const reference = `arithmetic   + - * / %         each -> every other operator
-comparison   < > <= >= == !=   each -> every other operator
-logical       && ||            && <-> ||
-boolean       true false       true <-> false
-numbers       5, 2.5, ...      literal -> 0 and 1
-unary         - + ! ^          - <-> + ;  ! and ^ removed`
+// Every mutator, default status, and transformation — a compact matrix engines
+// can extract. The six defaults are detailed as cards below.
+const referenceRows = [
+  { name: "arithmetic", ops: "+ - * / %", rule: "each becomes every other arithmetic operator", def: "Default" },
+  { name: "comparison", ops: "< > <= >= == !=", rule: "each becomes every other comparison operator", def: "Default" },
+  { name: "logical", ops: "&& ||", rule: "&& ↔ ||", def: "Default" },
+  { name: "boolean", ops: "true false", rule: "true ↔ false", def: "Default" },
+  { name: "numbers", ops: "int & float literals", rule: "literal → 0 and 1", def: "Default" },
+  { name: "unary", ops: "- + ! ^", rule: "-x ↔ +x; ! and ^ removed", def: "Default" },
+  { name: "branch", ops: "if / switch conditions", rule: "condition → true / false", def: "Off by default" },
+  { name: "statement", ops: "statements", rule: "delete a statement", def: "Off by default" },
+  { name: "loop", ops: "for / range", rule: "loop boundaries and body removal", def: "Off by default" },
+]
 
 export const metadata = docsMetadata("/docs/mutations")
 
@@ -93,8 +108,29 @@ export default function MutationsPage() {
             your code, the <code>+</code> line is what
             Gooze runs instead.
           </p>
-          <p>Quick reference:</p>
-          <CodeBlock lang="text" code={reference} />
+          <p>Quick reference (all operators):</p>
+          <div className="rounded border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Operator</TableHead>
+                  <TableHead>Affects</TableHead>
+                  <TableHead>Transformation</TableHead>
+                  <TableHead>Default</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="text-muted-foreground">
+                {referenceRows.map((r) => (
+                  <TableRow key={r.name}>
+                    <TableCell className="font-medium"><code>{r.name}</code></TableCell>
+                    <TableCell className="whitespace-nowrap">{r.ops}</TableCell>
+                    <TableCell>{r.rule}</TableCell>
+                    <TableCell className="whitespace-nowrap">{r.def}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
 
           <div className="mt-6 space-y-8">
             {mutationTypes.map((t) => (
