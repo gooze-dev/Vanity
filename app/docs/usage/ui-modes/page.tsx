@@ -21,7 +21,9 @@ export default function UIModesPage() {
           </p>
 
           <div className="mt-4">
-            <p className="text-muted-foreground mb-2">Common keys in the viewer:</p>
+            <p className="text-muted-foreground mb-2">
+              Common keys in the viewer (<code>gooze report view --all</code>):
+            </p>
             <ul>
               <li>
                 <code>↑/↓</code> or <code>j/k</code> to move
@@ -52,6 +54,10 @@ export default function UIModesPage() {
           <p className="text-sm text-muted-foreground">
             This example forces non-interactive mode by piping output.
             It is useful when you want stable CI logs.
+          </p>
+          <p className="text-sm text-muted-foreground">
+            <code>gooze report view</code> without <code>--all</code> prints the same plain
+            summary in both modes.
           </p>
         </div>
       </div>
