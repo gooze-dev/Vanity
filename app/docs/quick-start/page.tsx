@@ -3,9 +3,45 @@ import { CodeBlock } from "@/components/code-block"
 
 export const metadata = docsMetadata("/docs/quick-start")
 
+// HowTo structured data mirroring the visible steps below, so AI assistants
+// extract the exact install→run→view sequence. Commands verified against the CLI.
+const howToJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "Run your first Gooze mutation test",
+  description:
+    "Install Gooze, preview what will be mutated, run mutation testing on a Go project, and view the report.",
+  step: [
+    {
+      "@type": "HowToStep",
+      name: "Install Gooze",
+      text: "Run go install gooze.dev/pkg/gooze@latest and verify with gooze version.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Preview the mutations",
+      text: "Run gooze run --estimate ./... to list the files and mutation counts without running tests.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Run mutation testing",
+      text: "Run gooze run ./... from your module root to inject mutations and produce a report.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "View the report",
+      text: "Run gooze report view to open the interactive report and inspect killed and surviving mutations.",
+    },
+  ],
+}
+
 export default function QuickStartPage() {
   return (
     <section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
+      />
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Quick Start</h1>
       <p className="text-lg text-muted-foreground mb-6">
         Install Gooze, preview what will be mutated, run mutation testing, then view reports.
