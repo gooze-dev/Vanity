@@ -3,6 +3,7 @@ import Link from "next/link"
 
 import { GoozeLogo } from "@/components/gooze-logo"
 import { GoozePrimaryCtaButton } from "@/components/gooze-cta-button"
+import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item"
 
 // One row of cards per sidebar section, pointing at the most-used pages.
 const sections = [
@@ -40,7 +41,7 @@ export const metadata = docsMetadata("/docs")
 export default function DocsPage() {
   return (
     <section>
-      <h1 className="text-4xl font-bold tracking-tight mb-4">
+      <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">
         <GoozeLogo />
       </h1>
       <p className="text-lg text-muted-foreground mb-10">
@@ -48,8 +49,8 @@ export default function DocsPage() {
       </p>
 
       <div className="rounded-lg border bg-card p-5 mb-12">
-        <h2 className="text-xl font-semibold mb-2">New to mutation testing?</h2>
-        <p className="text-muted-foreground mb-4">
+        <h2>New to mutation testing?</h2>
+        <p>
           No problem. Start with the basics, then run Gooze once and read a report.
         </p>
         <div className="flex flex-wrap gap-3">
@@ -74,10 +75,10 @@ export default function DocsPage() {
         </div>
       </div>
 
-      <div className="space-y-12">
+      <div>
         <div id="get-started">
-          <h2 className="text-2xl font-semibold mb-3">Get started</h2>
-          <p className="mb-4 text-muted-foreground">
+          <h2>Get started</h2>
+          <p>
             Install Gooze, preview what will be mutated, run mutation testing, then view the latest report.
           </p>
 
@@ -88,17 +89,17 @@ export default function DocsPage() {
 
         {sections.map((section) => (
           <div key={section.id} id={section.id}>
-            <h2 className="text-2xl font-semibold mb-4">{section.title}</h2>
+            <h2>{section.title}</h2>
             <div className="grid gap-4 md:grid-cols-3">
               {section.cards.map((card) => (
-                <Link
-                  key={card.href}
-                  href={card.href}
-                  className="rounded-lg border bg-card p-5 hover:bg-muted/50 hover:border-[color:var(--gooze-teal)] transition-colors"
-                >
-                  <div className="font-semibold mb-1">{card.title}</div>
-                  <div className="text-sm text-muted-foreground">{card.desc}</div>
-                </Link>
+                <Item key={card.href} variant="outline" asChild className="hover:border-[color:var(--gooze-teal)]">
+                  <Link href={card.href}>
+                    <ItemContent>
+                      <ItemTitle>{card.title}</ItemTitle>
+                      <ItemDescription>{card.desc}</ItemDescription>
+                    </ItemContent>
+                  </Link>
+                </Item>
               ))}
             </div>
           </div>

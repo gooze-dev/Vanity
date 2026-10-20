@@ -1,37 +1,73 @@
-import { cn } from "@/lib/utils"
-import { codeToHtml } from "shiki"
-
-import { CopyButton } from "@/components/copy-button"
+import {
+  CodeBlock as CodeBlockRoot,
+  CodeBlockActions,
+  CodeBlockContent,
+  CodeBlockCopyButton,
+  CodeBlockHeader,
+  CodeBlockLine,
+  CodeBlockTitle,
+} from "@/components/ui/code-block"
+import { highlightCode } from "@/lib/highlighter"
 
 type CodeBlockProps = {
   code: string
   lang: string
+  /** File name or label shown in a header row, e.g. ".github/workflows/gooze.yml". */
+  title?: string
+  /** 1-based line numbers to call out. */
+  highlight?: number[]
+  lineNumbers?: boolean
   className?: string
 }
 
-export async function CodeBlock({ code, lang, className }: CodeBlockProps) {
+// Diff examples mark lines with a leading "+" or "-"; show them as added and
+// removed lines instead of plain text.
+function lineVariant(line: string, lang: string, highlighted: boolean) {
+  if (lang === "diff") {
+    if (line.startsWith("+")) return "added"
+    if (line.startsWith("-")) return "removed"
+  }
+  return highlighted ? "highlighted" : "default"
+}
+
+// Server-rendered: Shiki runs at build time, so pages ship highlighted HTML in
+// both the light and dark themes and no highlighter JavaScript.
+export async function CodeBlock({
+  code,
+  lang,
+  title,
+  highlight = [],
+  lineNumbers = false,
+  className,
+}: CodeBlockProps) {
   const raw = code.trimEnd()
-  const html = await codeToHtml(raw, {
-    lang,
-    theme: "github-dark",
-  })
-
-  // Let the app's theme tokens control the surface; keep Shiki's token colors.
-  const cleaned = html.replace(/\sstyle="background-color:[^"]*"/g, "")
-
-  const multiline = raw.includes("\n")
+  const lines = raw.split("\n")
+  const highlighted = (await highlightCode(raw, lang)) ?? lines
 
   return (
-    <div className={cn("relative", className)}>
-      <div
-        className="overflow-x-auto [&>pre]:bg-[#0d1117] [&>pre]:p-4 [&>pre]:pr-14 [&>pre]:rounded-lg [&>pre]:overflow-x-auto"
-        // Shiki returns trusted HTML for syntax highlighting.
-        dangerouslySetInnerHTML={{ __html: cleaned }}
-      />
-      <CopyButton
-        text={raw}
-        className={cn("absolute right-3", multiline ? "top-3" : "top-1/2 -translate-y-1/2")}
-      />
-    </div>
+    <CodeBlockRoot className={className}>
+      {title ? (
+        <CodeBlockHeader>
+          <CodeBlockTitle>{title}</CodeBlockTitle>
+          <CodeBlockActions>
+            <CodeBlockCopyButton value={raw} />
+          </CodeBlockActions>
+        </CodeBlockHeader>
+      ) : (
+        <CodeBlockActions>
+          <CodeBlockCopyButton value={raw} />
+        </CodeBlockActions>
+      )}
+      <CodeBlockContent lineNumbers={lineNumbers}>
+        {highlighted.map((content, index) => (
+          <CodeBlockLine
+            key={index}
+            variant={lineVariant(lines[index] ?? "", lang, highlight.includes(index + 1))}
+          >
+            {content}
+          </CodeBlockLine>
+        ))}
+      </CodeBlockContent>
+    </CodeBlockRoot>
   )
 }

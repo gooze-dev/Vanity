@@ -6,16 +6,16 @@ export const metadata = docsMetadata("/docs/mutation-testing")
 export default function MutationTestingPage() {
   return (
     <section>
-      <h1 className="text-4xl font-bold tracking-tight mb-4">What is mutation testing?</h1>
+      <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">What is mutation testing?</h1>
       <p className="text-lg text-muted-foreground mb-8">
         Mutation testing is a way to check your tests.
         It asks: if we make a small bug in the code, will the tests fail?
       </p>
 
-      <div className="space-y-12">
+      <div>
         <div id="idea">
-          <h2 className="text-2xl font-semibold mb-3">The idea (simple)</h2>
-          <ol className="list-decimal pl-5 space-y-2 text-muted-foreground">
+          <h2>The idea (simple)</h2>
+          <ol>
             <li>Take your real code.</li>
             <li>Make one tiny change (a mutation).</li>
             <li>Run your tests.</li>
@@ -27,8 +27,8 @@ export default function MutationTestingPage() {
         </div>
 
         <div id="why">
-          <h2 className="text-2xl font-semibold mb-3">Why people use it</h2>
-          <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
+          <h2>Why people use it</h2>
+          <ul>
             <li>Your tests can be green but still miss important behavior.</li>
             <li>Mutation testing shows where assertions are missing or too weak.</li>
             <li>It gives a repeatable signal in CI (not just &quot;coverage&quot;).</li>
@@ -36,8 +36,8 @@ export default function MutationTestingPage() {
         </div>
 
         <div id="example">
-          <h2 className="text-2xl font-semibold mb-3">A small example (what Gooze finds)</h2>
-          <p className="mb-3 text-muted-foreground">
+          <h2>A small example (what Gooze finds)</h2>
+          <p>
             Code:
           </p>
           <CodeBlock
@@ -51,7 +51,7 @@ export default function MutationTestingPage() {
 `}
           />
 
-          <p className="mt-6 mb-3 text-muted-foreground">
+          <p>
             Test (too weak): it only checks balance = 1.
           </p>
           <CodeBlock
@@ -67,8 +67,8 @@ func TestLabel_Positive(t *testing.T) {
 `}
           />
 
-          <p className="mt-6 mb-3 text-muted-foreground">
-            One common mutation is changing <code className="bg-muted px-1 py-0.5 rounded">&gt;</code> to <code className="bg-muted px-1 py-0.5 rounded">&gt;=</code>.
+          <p>
+            One common mutation is changing <code>&gt;</code> to <code>&gt;=</code>.
             That means balance = 0 becomes &quot;positive&quot;.
             If you do not test balance = 0, this mutation can survive.
           </p>
@@ -80,7 +80,7 @@ func TestLabel_Positive(t *testing.T) {
 }`}
           />
 
-          <p className="mt-6 text-muted-foreground">
+          <p>
             Fix: add a test for balance = 0 (and maybe negative too).
           </p>
         </div>

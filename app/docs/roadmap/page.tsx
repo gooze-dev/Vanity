@@ -34,22 +34,22 @@ export const metadata = docsMetadata("/docs/roadmap")
 export default function RoadmapPage() {
   return (
     <section>
-      <h1 className="text-4xl font-bold tracking-tight mb-4">Roadmap</h1>
+      <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Roadmap</h1>
       <p className="text-lg text-muted-foreground mb-8">
         Known limitations, with workarounds, and a high-level view of what&apos;s planned for Gooze.
       </p>
 
-      <div className="space-y-10">
+      <div>
         <div id="limitations">
-          <h2 className="text-2xl font-semibold mb-3">Known limitations (v1.1.0)</h2>
-          <ul className="space-y-3 text-muted-foreground">
+          <h2>Known limitations (v1.1.0)</h2>
+          <ul>
             {limitations.map((item) => (
               <li key={item.id} id={item.id}>
                 <span className="font-medium text-foreground">{item.title}</span>: {item.detail}
                 {item.workaround && (
                   <>
                     {" "}Instead, use{" "}
-                    <Link href={item.workaround.href} className="underline underline-offset-4">
+                    <Link href={item.workaround.href}>
                       {item.workaround.text}
                     </Link>
                     .
@@ -58,27 +58,27 @@ export default function RoadmapPage() {
               </li>
             ))}
           </ul>
-          <p className="mt-3 text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             How this compares with other tools:{" "}
-            <Link href="/docs/comparison" className="underline underline-offset-4">Gooze vs Gremlins vs go-mutesting</Link>.
+            <Link href="/docs/comparison">Gooze vs other Go mutation testing tools</Link>.
           </p>
         </div>
 
         <div>
-          <h2 className="text-2xl font-semibold mb-3">Core features</h2>
-          <div className="space-y-2">
+          <h2>Core features</h2>
+          <div>
             <label className="flex items-start gap-3">
               <input type="checkbox" checked readOnly disabled className="mt-1" />
               <span className="text-muted-foreground">
                 <span className="font-medium text-foreground">Annotation skipping</span>: support{" "}
-                <code className="bg-muted px-1 py-0.5 rounded">{"//gooze:ignore"}</code> at file/function/line scope (optionally per mutagen)
+                <code>{"//gooze:ignore"}</code> at file/function/line scope (optionally per mutagen)
               </span>
             </label>
             <label className="flex items-start gap-3">
               <input type="checkbox" readOnly disabled className="mt-1" />
               <span className="text-muted-foreground">
                 <span className="font-medium text-foreground">Custom exec hook</span>: custom test runner command (similar to go-mutesting&apos;s{" "}
-                <code className="bg-muted px-1 py-0.5 rounded">--exec</code>)
+                <code>--exec</code>)
               </span>
             </label>
             <label className="flex items-start gap-3">
@@ -90,14 +90,14 @@ export default function RoadmapPage() {
             <label className="flex items-start gap-3">
               <input type="checkbox" checked readOnly disabled className="mt-1" />
               <span className="text-muted-foreground">
-                <span className="font-medium text-foreground">Timeouts</span>: per-mutation execution budgets (<code className="bg-muted px-1 py-0.5 rounded">--mutation-timeout</code>)
+                <span className="font-medium text-foreground">Timeouts</span>: per-mutation execution budgets (<code>--mutation-timeout</code>)
               </span>
             </label>
             <label className="flex items-start gap-3">
               <input type="checkbox" readOnly disabled className="mt-1" />
               <span className="text-muted-foreground">
                 <span className="font-medium text-foreground">Config file</span>: support{" "}
-                <code className="bg-muted px-1 py-0.5 rounded">.gooze.yml</code> for persistent configuration
+                <code>.gooze.yml</code> for persistent configuration
               </span>
             </label>
             <label className="flex items-start gap-3">
@@ -116,8 +116,8 @@ export default function RoadmapPage() {
         </div>
 
         <div>
-          <h2 className="text-2xl font-semibold mb-3">Smart test execution</h2>
-          <div className="space-y-2">
+          <h2>Smart test execution</h2>
+          <div>
             <label className="flex items-start gap-3">
               <input type="checkbox" checked readOnly disabled className="mt-1" />
               <span className="text-muted-foreground">
@@ -132,12 +132,12 @@ export default function RoadmapPage() {
         </div>
 
         <div>
-          <h2 className="text-2xl font-semibold mb-3">Performance &amp; scalability</h2>
-          <div className="space-y-2">
+          <h2>Performance &amp; scalability</h2>
+          <div>
             <label className="flex items-start gap-3">
               <input type="checkbox" checked readOnly disabled className="mt-1" />
               <span className="text-muted-foreground">
-                <code className="bg-muted px-1 py-0.5 rounded">--parallel</code> flag for concurrent mutation testing
+                <code>--parallel</code> flag for concurrent mutation testing
               </span>
             </label>
             <label className="flex items-start gap-3">
@@ -151,15 +151,15 @@ export default function RoadmapPage() {
             <label className="flex items-start gap-3">
               <input type="checkbox" checked readOnly disabled className="mt-1" />
               <span className="text-muted-foreground">
-                Automatic report merging from multiple shards (<code className="bg-muted px-1 py-0.5 rounded">gooze report merge</code>)
+                Automatic report merging from multiple shards (<code>gooze report merge</code>)
               </span>
             </label>
           </div>
         </div>
 
         <div>
-          <h2 className="text-2xl font-semibold mb-3">Reporting</h2>
-          <div className="space-y-2">
+          <h2>Reporting</h2>
+          <div>
             <label className="flex items-start gap-3">
               <input type="checkbox" checked readOnly disabled className="mt-1" />
               <span className="text-muted-foreground">Incremental testing: cache and reuse results for unchanged files</span>
@@ -171,7 +171,7 @@ export default function RoadmapPage() {
             <label className="flex items-start gap-3">
               <input type="checkbox" checked readOnly disabled className="mt-1" />
               <span className="text-muted-foreground">
-                Index file with summary (<code className="bg-muted px-1 py-0.5 rounded">_index.yaml</code>)
+                Index file with summary (<code>_index.yaml</code>)
               </span>
             </label>
             <label className="flex items-start gap-3">
@@ -182,18 +182,18 @@ export default function RoadmapPage() {
         </div>
 
         <div>
-          <h2 className="text-2xl font-semibold mb-3">CI/CD integration</h2>
-          <div className="space-y-2">
+          <h2>CI/CD integration</h2>
+          <div>
             <label className="flex items-start gap-3">
               <input type="checkbox" checked readOnly disabled className="mt-1" />
               <span className="text-muted-foreground">
-                <Link href="/docs/ci/github" className="underline underline-offset-4">GitHub Actions workflow templates</Link>
+                <Link href="/docs/ci/github">GitHub Actions workflow templates</Link>
               </span>
             </label>
             <label className="flex items-start gap-3">
               <input type="checkbox" checked readOnly disabled className="mt-1" />
               <span className="text-muted-foreground">
-                <Link href="/docs/ci/gitlab" className="underline underline-offset-4">GitLab CI pipeline configuration</Link>
+                <Link href="/docs/ci/gitlab">GitLab CI pipeline configuration</Link>
               </span>
             </label>
           </div>

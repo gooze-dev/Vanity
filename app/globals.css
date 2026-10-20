@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "./typeset.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -143,5 +144,29 @@
 
   .gooze-docs input[type="checkbox"] {
     accent-color: var(--gooze-teal);
+  }
+}
+
+/* Docs preset for shadcn/typeset (app/typeset.css). Typeset styles the prose
+   inside #docs-content and skips shadcn components (anything with
+   data-slot), so give those the same vertical rhythm as the text around
+   them. */
+@layer components {
+  .typeset-docs {
+    --typeset-flow: 1.1em;
+    /* @theme inline doesn't emit --font-mono/--font-heading at runtime, so
+       point typeset at the font variables next/font sets. */
+    --typeset-font-heading: var(--font-geist-sans);
+    --typeset-font-mono: var(--font-geist-mono);
+  }
+
+  .typeset-docs
+    :where(
+      [data-slot="code-block"],
+      [data-slot="alert"],
+      [data-slot="tabs"],
+      [data-slot="table-container"]
+    ) {
+    margin-block-start: var(--typeset-flow);
   }
 }

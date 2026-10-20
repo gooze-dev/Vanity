@@ -8,7 +8,7 @@ export const metadata = docsMetadata("/docs/editor-support")
 export default function EditorSupportPage() {
   return (
     <section>
-      <h1 className="text-4xl font-bold tracking-tight mb-4">Editor support (goozels)</h1>
+      <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Editor support (goozels)</h1>
       <p className="text-lg text-muted-foreground mb-8">
         <a
           href={GITHUB_REPO}
@@ -18,22 +18,22 @@ export default function EditorSupportPage() {
         >
           goozels
         </a>{" "}
-        is the Language Server for Gooze. It runs in front of <code className="bg-muted px-1 py-0.5 rounded">gopls</code>,
+        is the Language Server for Gooze. It runs in front of <code>gopls</code>,
         so you keep all your normal Go features and get Gooze ones on top — autocompletion,
         hovers, live validation, and one-click mutation runs.
       </p>
 
-      <div className="space-y-12">
+      <div>
         <div id="features">
-          <h2 className="text-2xl font-semibold mb-3">What you get</h2>
-          <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
+          <h2>What you get</h2>
+          <ul>
             <li>
               Completion, hover docs, and a warning for unknown names inside
-              <code className="bg-muted px-1 py-0.5 rounded">{"//gooze:ignore"}</code> comments.
+              <code>{"//gooze:ignore"}</code> comments.
             </li>
             <li>
               Key/value completion, hover, and validation for your
-              <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code> config.
+              <code>gooze.yaml</code> config.
             </li>
             <li>
               <strong>▶ gooze run</strong>, <strong>gooze run --estimate</strong>, and
@@ -46,36 +46,36 @@ export default function EditorSupportPage() {
         </div>
 
         <div id="requirements">
-          <h2 className="text-2xl font-semibold mb-3">What you need</h2>
-          <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
+          <h2>What you need</h2>
+          <ul>
             <li>Go installed on your machine.</li>
             <li>
-              <code className="bg-muted px-1 py-0.5 rounded">gopls</code> on your{" "}
-              <code className="bg-muted px-1 py-0.5 rounded">PATH</code>:
+              <code>gopls</code> on your{" "}
+              <code>PATH</code>:
             </li>
           </ul>
-          <div className="mt-3">
+          <div>
             <CodeBlock lang="bash" code="go install golang.org/x/tools/gopls@latest" />
           </div>
-          <p className="mt-3 text-muted-foreground">
+          <p>
             Gooze itself is only needed for the run / report actions.
           </p>
         </div>
 
         <div id="install">
-          <h2 className="text-2xl font-semibold mb-3">Install goozels</h2>
+          <h2>Install goozels</h2>
           <CodeBlock lang="bash" code="go install gooze.dev/pkg/goozels/cmd/goozels@latest" />
-          <p className="mt-3 text-muted-foreground">
-            This puts a <code className="bg-muted px-1 py-0.5 rounded">goozels</code> binary in your Go bin
-            directory. goozels finds <code className="bg-muted px-1 py-0.5 rounded">gopls</code> and{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">gooze</code> on your{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">PATH</code> automatically.
+          <p>
+            This puts a <code>goozels</code> binary in your Go bin
+            directory. goozels finds <code>gopls</code> and{" "}
+            <code>gooze</code> on your{" "}
+            <code>PATH</code> automatically.
           </p>
         </div>
 
         <div id="vscode">
-          <h2 className="text-2xl font-semibold mb-3">VS Code</h2>
-          <p className="mb-3 text-muted-foreground">
+          <h2>VS Code</h2>
+          <p>
             Tell the Go extension to launch goozels instead of gopls (it proxies gopls for you):
           </p>
           <CodeBlock
@@ -89,10 +89,10 @@ export default function EditorSupportPage() {
         </div>
 
         <div id="neovim">
-          <h2 className="text-2xl font-semibold mb-3">Neovim</h2>
-          <p className="text-muted-foreground">
-            Point your Go LSP config at the <code className="bg-muted px-1 py-0.5 rounded">goozels</code>{" "}
-            binary instead of <code className="bg-muted px-1 py-0.5 rounded">gopls</code>, and attach it to
+          <h2>Neovim</h2>
+          <p>
+            Point your Go LSP config at the <code>goozels</code>{" "}
+            binary instead of <code>gopls</code>, and attach it to
             gooze config files. See{" "}
             <a
               href={`${GITHUB_REPO}/blob/main/editors/neovim.md`}
@@ -107,8 +107,8 @@ export default function EditorSupportPage() {
         </div>
 
         <div id="jetbrains">
-          <h2 className="text-2xl font-semibold mb-3">JetBrains (GoLand / IntelliJ)</h2>
-          <p className="text-muted-foreground">
+          <h2>JetBrains (GoLand / IntelliJ)</h2>
+          <p>
             Register goozels through the LSP4IJ plugin. See{" "}
             <a
               href={`${GITHUB_REPO}/blob/main/editors/jetbrains.md`}

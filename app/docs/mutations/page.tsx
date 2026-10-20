@@ -74,33 +74,33 @@ export const metadata = docsMetadata("/docs/mutations")
 export default function MutationsPage() {
   return (
     <section>
-      <h1 className="text-4xl font-bold tracking-tight mb-4">Mutation operators</h1>
+      <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Mutation operators</h1>
       <p className="text-lg text-muted-foreground mb-8">
         A mutation is a tiny change in your code.
         Gooze applies one mutation and runs tests to see if tests notice.
         For what each result status means, see{" "}
-        <Link href="/docs/usage/results" className="underline underline-offset-4">Reading results</Link>.
+        <Link href="/docs/usage/results">Reading results</Link>.
       </p>
 
-      <div className="space-y-12">
+      <div>
         <div id="types">
-          <h2 className="text-2xl font-semibold mb-3">Mutation types</h2>
-          <p className="mb-3 text-muted-foreground">
+          <h2>Mutation types</h2>
+          <p>
             These six types run by default. Each one makes a single, mechanical change to
             one spot in your code, then your tests run against it. If the tests still pass,
             the mutation <strong>survived</strong> — a gap in coverage. Each example below is
-            shown as a diff: the <code className="bg-muted px-1 py-0.5 rounded">-</code> line is
-            your code, the <code className="bg-muted px-1 py-0.5 rounded">+</code> line is what
+            shown as a diff: the <code>-</code> line is
+            your code, the <code>+</code> line is what
             Gooze runs instead.
           </p>
-          <p className="mb-3 text-muted-foreground">Quick reference:</p>
+          <p>Quick reference:</p>
           <CodeBlock lang="text" code={reference} />
 
           <div className="mt-6 space-y-8">
             {mutationTypes.map((t) => (
               <div key={t.name} id={t.name}>
-                <h3 className="text-lg font-semibold">
-                  <code className="bg-muted px-1 py-0.5 rounded">{t.name}</code>{" "}
+                <h3>
+                  <code>{t.name}</code>{" "}
                   <span className="text-sm font-normal text-muted-foreground">— {t.ops}</span>
                 </h3>
                 <p className="mt-1 mb-1 text-muted-foreground">{t.desc}</p>
@@ -115,22 +115,22 @@ export default function MutationsPage() {
             ))}
           </div>
 
-          <p className="mt-6 text-muted-foreground">
-            The engine also contains <code className="bg-muted px-1 py-0.5 rounded">branch</code>{" "}
-            (replace a condition with <code className="bg-muted px-1 py-0.5 rounded">true</code>/<code className="bg-muted px-1 py-0.5 rounded">false</code>),{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">statement</code> (delete a statement), and{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">loop</code> (loop boundaries and body
+          <p>
+            The engine also contains <code>branch</code>{" "}
+            (replace a condition with <code>true</code>/<code>false</code>),{" "}
+            <code>statement</code> (delete a statement), and{" "}
+            <code>loop</code> (loop boundaries and body
             removal) mutators; these are not part of the default set.
           </p>
 
-          <p className="mt-3 text-muted-foreground">
+          <p>
             Skip a line or block with the{" "}
-            <Link href="/docs/usage/ignoring-code" className="underline underline-offset-4">{"//gooze:ignore"} directive</Link>.
+            <Link href="/docs/usage/ignoring-code">{"//gooze:ignore"} directive</Link>.
           </p>
         </div>
 
         <div id="learn">
-          <h2 className="text-2xl font-semibold mb-3">Next pages</h2>
+          <h2>Next pages</h2>
           <div className="flex flex-wrap gap-3">
             <Button asChild variant="outline">
               <Link href="/docs/mutation-testing">Mutation testing basics</Link>

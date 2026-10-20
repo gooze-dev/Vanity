@@ -127,17 +127,17 @@ export const metadata = docsMetadata("/docs/ci/github")
 export default function CiPage() {
   return (
     <section>
-      <h1 className="text-4xl font-bold tracking-tight mb-4">GitHub Actions</h1>
+      <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">GitHub Actions</h1>
       <p className="text-lg text-muted-foreground mb-8">
         Three workflows, from a one-liner to a sharded, cached pipeline, plus a step that
         fails the build below a mutation score. Pick the one that matches how much you want
         to optimize.
       </p>
 
-      <div className="space-y-12">
+      <div>
         <div id="simple">
-          <h2 className="text-2xl font-semibold mb-3">1. Simplest: checkout and run</h2>
-          <p className="mb-3 text-muted-foreground">
+          <h2>1. Simplest: checkout and run</h2>
+          <p>
             Install Gooze and run the whole suite. No registry, no caching — a good
             starting point.
           </p>
@@ -145,66 +145,66 @@ export default function CiPage() {
         </div>
 
         <div id="sharded">
-          <h2 className="text-2xl font-semibold mb-3">2. Sharded: run in parallel</h2>
-          <p className="mb-3 text-muted-foreground">
+          <h2>2. Sharded: run in parallel</h2>
+          <p>
             Split the run across jobs with{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">-s INDEX/TOTAL</code> to cut wall-clock
+            <code>-s INDEX/TOTAL</code> to cut wall-clock
             time. Each job tests its own slice and uploads its reports; a final{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">merge</code> job downloads them all and
+            <code>merge</code> job downloads them all and
             combines them with{" "}
-            <Link href="/docs/cli/report#merge" className="underline underline-offset-4">gooze report merge</Link>.
+            <Link href="/docs/cli/report#merge">gooze report merge</Link>.
           </p>
           <CodeBlock lang="yaml" code={sharded} />
         </div>
 
         <div id="cached">
-          <h2 className="text-2xl font-semibold mb-3">3. Sharded + cached baseline</h2>
-          <p className="mb-3 text-muted-foreground">
+          <h2>3. Sharded + cached baseline</h2>
+          <p>
             Add an OCI baseline so each run only re-tests changed files
-            (<Link href="/docs/usage/incremental-runs" className="underline underline-offset-4">incremental runs</Link>).
-            Every shard pulls the <code className="bg-muted px-1 py-0.5 rounded">:main</code> baseline
+            (<Link href="/docs/usage/incremental-runs">incremental runs</Link>).
+            Every shard pulls the <code>:main</code> baseline
             for the cache, then hands its reports to the merge job as an artifact — shards never push
             to the registry. The merge job combines them with{" "}
-            <Link href="/docs/cli/report#merge" className="underline underline-offset-4">gooze report merge</Link>{" "}
+            <Link href="/docs/cli/report#merge">gooze report merge</Link>{" "}
             and, <strong>only on main</strong>, publishes the single merged baseline back to{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">:main</code>.
+            <code>:main</code>.
           </p>
           <CodeBlock lang="yaml" code={cached} />
         </div>
 
         <div id="gate">
-          <h2 className="text-2xl font-semibold mb-3">Fail the build below a score (quality gate)</h2>
-          <p className="mb-3 text-muted-foreground">
+          <h2>Fail the build below a score (quality gate)</h2>
+          <p>
             Gooze has no threshold flag yet: survivors never change its exit code. Add this
             step %s. It reads the{" "}
-            <Link href="/docs/usage/results#score" className="underline underline-offset-4">mutation score</Link>{" "}
+            <Link href="/docs/usage/results#score">mutation score</Link>{" "}
             from the non-interactive output and fails when it is below{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">MIN_SCORE</code>.
+            <code>MIN_SCORE</code>.
           </p>
           <CodeBlock lang="yaml" code={gate} />
-          <p className="mt-3 text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             With sharding, gate only in the merge job: a single shard&apos;s score covers only its slice.
             A missing score (no reports) also fails the step.
           </p>
         </div>
 
         <div id="auth">
-          <h2 className="text-2xl font-semibold mb-3">Authentication</h2>
-          <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
+          <h2>Authentication</h2>
+          <ul>
             <li>
-              <code className="bg-muted px-1 py-0.5 rounded">GOOZE_REGISTRY_USERNAME</code> /{" "}
-              <code className="bg-muted px-1 py-0.5 rounded">GOOZE_REGISTRY_PASSWORD</code> — the
+              <code>GOOZE_REGISTRY_USERNAME</code> /{" "}
+              <code>GOOZE_REGISTRY_PASSWORD</code> — the
               password may be a token/PAT (for GHCR use{" "}
-              <code className="bg-muted px-1 py-0.5 rounded">GITHUB_TOKEN</code>).
+              <code>GITHUB_TOKEN</code>).
             </li>
             <li>
               If unset, Gooze falls back to the Docker credential store, so a prior{" "}
-              <code className="bg-muted px-1 py-0.5 rounded">docker/login-action</code> step also works.
+              <code>docker/login-action</code> step also works.
             </li>
             <li>
               For a non-TLS or self-signed registry add{" "}
-              <code className="bg-muted px-1 py-0.5 rounded">--plain-http</code> or{" "}
-              <code className="bg-muted px-1 py-0.5 rounded">--insecure</code> to push/pull.
+              <code>--plain-http</code> or{" "}
+              <code>--insecure</code> to push/pull.
             </li>
           </ul>
         </div>

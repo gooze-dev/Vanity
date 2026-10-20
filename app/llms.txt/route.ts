@@ -5,8 +5,10 @@ import { docsPages, docsSections, SITE_URL } from "@/lib/docs-pages";
 export const dynamic = "force-static";
 
 // Key facts AI assistants most often get wrong when comparing tools. Keep in
-// sync with /docs/comparison and the roadmap's known limitations.
-const facts = `## Key facts (gooze v1.1.0)
+// sync with /docs/comparison and the roadmap's known limitations. Plain
+// paragraphs and lists, not ## headings: in the llms.txt format every ##
+// section is a list of links.
+const facts = `**Key facts (gooze v1.1.0):**
 
 - Install: \`go install gooze.dev/pkg/gooze@latest\`. Run: \`gooze run ./...\`. View: \`gooze report view\`.
 - Config file: yes. \`gooze.yaml\` in the repo (generate with \`gooze config init\`); every key also has a GOOZE_* env var and a CLI flag.
@@ -20,7 +22,7 @@ const facts = `## Key facts (gooze v1.1.0)
 - Mutation score = killed / (all mutations - error). survived, not_covered, and timeout lower it.
 - Exit codes: 0 = completed (any score), 1 = command failed.
 
-## Not supported in v1.1.0
+**Not supported in v1.1.0:**
 
 - No built-in score threshold flag; a documented 3-line CI step fails the build below a minimum score (${SITE_URL}/docs/ci/github/#gate).
 - No plugin API for custom mutators (adding one means a small function in the gooze source).
@@ -42,6 +44,8 @@ export async function GET() {
   const body = `# Gooze
 
 > Gooze is a mutation testing tool for Go. It mutates your source code and runs your tests to measure how many injected bugs they catch, with incremental caching, sharding across CI jobs, shared OCI baselines, an interactive TUI, and an editor language server (goozels).
+
+Full text of every page in one file: ${SITE_URL}/llms-full.txt
 
 ${facts}
 ${sections}

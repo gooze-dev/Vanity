@@ -90,54 +90,54 @@ const runFlags: RunFlag[] = [
 export default function CliRunPage() {
   return (
     <section>
-      <h1 className="text-4xl font-bold tracking-tight mb-4">gooze run</h1>
+      <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">gooze run</h1>
       <p className="text-lg text-muted-foreground mb-8">
         Runs mutation testing and writes reports.
         This is the main command.
       </p>
 
-      <div className="space-y-12">
+      <div>
         <div id="usage">
-          <h2 className="text-2xl font-semibold mb-3">Usage</h2>
+          <h2>Usage</h2>
           <CodeBlock lang="bash" code="gooze run [global flags] [paths...]" />
-          <p className="mt-4 text-muted-foreground">
-            With no paths, <code className="bg-muted px-1 py-0.5 rounded">run</code> defaults to{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">./...</code> (the current module,
-            recursively), so <code className="bg-muted px-1 py-0.5 rounded">gooze run</code> is the
-            same as <code className="bg-muted px-1 py-0.5 rounded">gooze run ./...</code>.
-            Like <code className="bg-muted px-1 py-0.5 rounded">go list ./...</code>, scanning skips{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">vendor/</code>, <code className="bg-muted px-1 py-0.5 rounded">testdata/</code>, directories starting with{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">.</code> or <code className="bg-muted px-1 py-0.5 rounded">_</code>, and nested modules (directories with their own{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">go.mod</code>).
+          <p>
+            With no paths, <code>run</code> defaults to{" "}
+            <code>./...</code> (the current module,
+            recursively), so <code>gooze run</code> is the
+            same as <code>gooze run ./...</code>.
+            Like <code>go list ./...</code>, scanning skips{" "}
+            <code>vendor/</code>, <code>testdata/</code>, directories starting with{" "}
+            <code>.</code> or <code>_</code>, and nested modules (directories with their own{" "}
+            <code>go.mod</code>).
           </p>
         </div>
 
         <div id="flags">
-          <h2 className="text-2xl font-semibold mb-3">Flags</h2>
-          <p className="mb-4 text-muted-foreground">
-            Every flag can also be set in <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code> under its config key, or
-            through the matching <code className="bg-muted px-1 py-0.5 rounded">GOOZE_*</code> environment variable. Gooze reads{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code> from the current directory; there is no{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">--config</code> flag. See <Link href="/docs/config" className="underline underline-offset-4 hover:text-foreground">Configuration</Link> for precedence.
+          <h2>Flags</h2>
+          <p>
+            Every flag can also be set in <code>gooze.yaml</code> under its config key, or
+            through the matching <code>GOOZE_*</code> environment variable. Gooze reads{" "}
+            <code>gooze.yaml</code> from the current directory; there is no{" "}
+            <code>--config</code> flag. See <Link href="/docs/config">Configuration</Link> for precedence.
           </p>
           <ul className="space-y-3 md:hidden">
             {runFlags.map((row) => (
               <li key={row.flag} className="rounded-lg border p-4 text-sm">
                 <div className="flex flex-wrap items-center gap-1 font-mono">
-                  <code className="bg-muted px-1 py-0.5 rounded">{row.flag}</code>
+                  <code>{row.flag}</code>
                   {row.alias && (
                     <>
                       <span className="text-muted-foreground">,</span>
-                      <code className="bg-muted px-1 py-0.5 rounded">{row.alias}</code>
+                      <code>{row.alias}</code>
                     </>
                   )}
                 </div>
                 <p className="mt-2 text-muted-foreground">{row.description}</p>
                 <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-xs text-muted-foreground">
                   <dt>Default</dt>
-                  <dd>{row.defaultValue ? <code className="bg-muted px-1 py-0.5 rounded">{row.defaultValue}</code> : "—"}</dd>
+                  <dd>{row.defaultValue ? <code>{row.defaultValue}</code> : "—"}</dd>
                   <dt>Config key</dt>
-                  <dd>{row.configKey ? <code className="bg-muted px-1 py-0.5 rounded">{row.configKey}</code> : "—"}</dd>
+                  <dd>{row.configKey ? <code>{row.configKey}</code> : "—"}</dd>
                 </dl>
               </li>
             ))}
@@ -156,19 +156,19 @@ export default function CliRunPage() {
                 {runFlags.map((row) => (
                   <TableRow key={row.flag}>
                     <TableCell className="whitespace-nowrap">
-                      <code className="bg-muted px-1 py-0.5 rounded">{row.flag}</code>
+                      <code>{row.flag}</code>
                       {row.alias && (
                         <>
-                          , <code className="bg-muted px-1 py-0.5 rounded">{row.alias}</code>
+                          , <code>{row.alias}</code>
                         </>
                       )}
                     </TableCell>
                     <TableCell className="min-w-64">{row.description}</TableCell>
                     <TableCell className="whitespace-nowrap">
-                      {row.defaultValue ? <code className="bg-muted px-1 py-0.5 rounded">{row.defaultValue}</code> : "—"}
+                      {row.defaultValue ? <code>{row.defaultValue}</code> : "—"}
                     </TableCell>
                     <TableCell className="whitespace-nowrap">
-                      {row.configKey ? <code className="bg-muted px-1 py-0.5 rounded">{row.configKey}</code> : "—"}
+                      {row.configKey ? <code>{row.configKey}</code> : "—"}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -178,78 +178,78 @@ export default function CliRunPage() {
         </div>
 
         <div id="what">
-          <h2 className="text-2xl font-semibold mb-3">What it does (high level)</h2>
-          <ol className="list-decimal pl-5 space-y-2 text-muted-foreground">
+          <h2>What it does (high level)</h2>
+          <ol>
             <li>Generates mutations for a source file.</li>
             <li>Applies one mutation.</li>
             <li>
-              Runs the tests of the package that owns the file (<code className="bg-muted px-1 py-0.5 rounded">go test -count=1 ./&lt;pkg&gt;</code>)
+              Runs the tests of the package that owns the file (<code>go test -count=1 ./&lt;pkg&gt;</code>)
               to see if they fail. A mutant that does not compile is reported as{" "}
-              <code className="bg-muted px-1 py-0.5 rounded">error</code>, not killed.
+              <code>error</code>, not killed.
             </li>
             <li>Writes results into the reports directory.</li>
           </ol>
         </div>
 
         <div id="estimate">
-          <h2 className="text-2xl font-semibold mb-3">Preview with --estimate</h2>
-          <p className="mb-3 text-muted-foreground">
+          <h2>Preview with --estimate</h2>
+          <p>
             See which source files would be mutated and how many mutations apply, without
             running any tests. This is a safe first command.
           </p>
           <CodeBlock lang="bash" code="gooze run --estimate ./..." />
           <p className="mt-4 mb-2 text-muted-foreground">Scan only one sub-tree:</p>
           <CodeBlock lang="bash" code="gooze run --estimate ./internal/domain/..." />
-          <p className="mt-3 text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             In a TTY you get an interactive, filterable list; in CI you get a table with
             per-file mutation counts.
           </p>
         </div>
 
         <div id="parallel">
-          <h2 className="text-2xl font-semibold mb-3">Parallel workers</h2>
-          <p className="mb-3 text-muted-foreground">
+          <h2>Parallel workers</h2>
+          <p>
             Run faster by using multiple workers:
           </p>
           <CodeBlock lang="bash" code="gooze run -p 4 ./..." />
-          <p className="mt-3 text-muted-foreground">
+          <p>
             This example runs up to 4 mutations at the same time.
           </p>
         </div>
 
         <div id="timeout">
-          <h2 className="text-2xl font-semibold mb-3">Timeouts</h2>
-          <p className="mb-3 text-muted-foreground">
+          <h2>Timeouts</h2>
+          <p>
             The tests for each mutation must finish within{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">--mutation-timeout</code> seconds (default 120). A mutation
-            whose tests exceed it is reported as <code className="bg-muted px-1 py-0.5 rounded">timeout</code>.
+            <code>--mutation-timeout</code> seconds (default 120). A mutation
+            whose tests exceed it is reported as <code>timeout</code>.
           </p>
           <CodeBlock lang="bash" code="gooze run --mutation-timeout 300 ./..." />
-          <p className="mt-4 text-muted-foreground">
-            You can also set it via <code className="bg-muted px-1 py-0.5 rounded">run.mutation_timeout</code> in{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code> or <code className="bg-muted px-1 py-0.5 rounded">GOOZE_RUN_MUTATION_TIMEOUT</code>.
+          <p>
+            You can also set it via <code>run.mutation_timeout</code> in{" "}
+            <code>gooze.yaml</code> or <code>GOOZE_RUN_MUTATION_TIMEOUT</code>.
             If you see many unexpected timeouts, run verbose and inspect the logs:
           </p>
           <CodeBlock lang="bash" code="gooze run --verbose ./..." />
         </div>
 
         <div id="cache">
-          <h2 className="text-2xl font-semibold mb-3">Caching / incremental runs</h2>
-          <p className="mb-3 text-muted-foreground">
+          <h2>Caching / incremental runs</h2>
+          <p>
             Gooze can reuse stored reports if nothing changed
-            (see <Link href="/docs/usage/incremental-runs" className="underline underline-offset-4">Incremental runs</Link>).
+            (see <Link href="/docs/usage/incremental-runs">Incremental runs</Link>).
             To force a full re-run:
           </p>
           <CodeBlock lang="bash" code="gooze run --no-cache ./..." />
         </div>
 
         <div id="coverage-profile">
-          <h2 className="text-2xl font-semibold mb-3">Coverage profile (skip uncovered mutations)</h2>
-          <p className="mb-3 text-muted-foreground">
+          <h2>Coverage profile (skip uncovered mutations)</h2>
+          <p>
             Pass an existing Go coverage profile with{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">--coverage-profile</code> to skip
+            <code>--coverage-profile</code> to skip
             mutations on lines your tests never execute. Gooze does not generate the profile;
-            produce it first with <code className="bg-muted px-1 py-0.5 rounded">go test -coverprofile</code>.
+            produce it first with <code>go test -coverprofile</code>.
           </p>
           <CodeBlock
             lang="bash"
@@ -259,32 +259,32 @@ go test -coverprofile=coverage.out ./...
 # 2. Run gooze, skipping mutations on uncovered lines
 gooze run --coverage-profile coverage.out ./...`}
           />
-          <p className="mt-4 text-muted-foreground">
+          <p>
             Before testing each mutation, Gooze checks whether the mutated line is covered by the
             profile. If the profile shows the line with a zero count, Gooze
             reports the mutation as{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">not_covered</code> and skips running its
+            <code>not_covered</code> and skips running its
             tests. Uncovered mutations can never be killed, so this is a large speed-up.
             Lines outside any profiled block (for example package-level{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">const</code>/<code className="bg-muted px-1 py-0.5 rounded">var</code> declarations) and files absent from the
+            <code>const</code>/<code>var</code> declarations) and files absent from the
             profile are tested normally.
           </p>
-          <p className="mt-3 text-muted-foreground">
-            A <code className="bg-muted px-1 py-0.5 rounded">not_covered</code> mutation counts as a
+          <p>
+            A <code>not_covered</code> mutation counts as a
             survivor in the mutation score (it lowers the score like{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">survived</code>) but is tallied
+            <code>survived</code>) but is tallied
             separately. The default is empty, which disables the feature. You can also set it via{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">run.coverage_profile</code> in{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code> or{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">GOOZE_RUN_COVERAGE_PROFILE</code>.
+            <code>run.coverage_profile</code> in{" "}
+            <code>gooze.yaml</code> or{" "}
+            <code>GOOZE_RUN_COVERAGE_PROFILE</code>.
           </p>
         </div>
 
         <div id="shard">
-          <h2 className="text-2xl font-semibold mb-3">Sharding (CI)</h2>
-          <p className="mb-3 text-muted-foreground">
+          <h2>Sharding (CI)</h2>
+          <p>
             Sharding splits the work across jobs
-            (walkthrough: <Link href="/docs/ci/sharding" className="underline underline-offset-4">Sharding and merging</Link>).
+            (walkthrough: <Link href="/docs/ci/sharding">Sharding and merging</Link>).
             Example with 3 jobs:
           </p>
           <CodeBlock
@@ -293,19 +293,19 @@ gooze run --coverage-profile coverage.out ./...`}
 gooze run -s 1/3 ./...
 gooze run -s 2/3 ./...`}
           />
-          <p className="mt-3 text-muted-foreground">
+          <p>
             After all jobs finish, merge reports:
           </p>
           <CodeBlock lang="bash" code="gooze report merge" />
-          <p className="mt-3 text-sm text-muted-foreground">
-            The value must be <code className="bg-muted px-1 py-0.5 rounded">INDEX/TOTAL</code> with{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">0 &lt;= INDEX &lt; TOTAL</code>; anything else (for example{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">4/4</code> or <code className="bg-muted px-1 py-0.5 rounded">1/4abc</code>) is an error.
+          <p className="text-sm text-muted-foreground">
+            The value must be <code>INDEX/TOTAL</code> with{" "}
+            <code>0 &lt;= INDEX &lt; TOTAL</code>; anything else (for example{" "}
+            <code>4/4</code> or <code>1/4abc</code>) is an error.
           </p>
         </div>
 
         <div id="next">
-          <h2 className="text-2xl font-semibold mb-3">Next</h2>
+          <h2>Next</h2>
           <div className="flex flex-wrap gap-3">
             <Button asChild variant="outline">
               <Link href="/docs/usage/results">Reading results</Link>

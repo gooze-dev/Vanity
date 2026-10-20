@@ -84,83 +84,83 @@ export const metadata = docsMetadata("/docs/ci/gitlab")
 export default function GitlabPage() {
   return (
     <section>
-      <h1 className="text-4xl font-bold tracking-tight mb-4">GitLab CI</h1>
+      <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">GitLab CI</h1>
       <p className="text-lg text-muted-foreground mb-8">
         The same three setups as the{" "}
-        <Link href="/docs/ci/github" className="underline underline-offset-4">GitHub Actions</Link> guide,
-        written for <code className="bg-muted px-1 py-0.5 rounded">.gitlab-ci.yml</code>.
+        <Link href="/docs/ci/github">GitHub Actions</Link> guide,
+        written for <code>.gitlab-ci.yml</code>.
       </p>
 
-      <div className="space-y-12">
+      <div>
         <div id="simple">
-          <h2 className="text-2xl font-semibold mb-3">1. Simplest: run</h2>
-          <p className="mb-3 text-muted-foreground">
+          <h2>1. Simplest: run</h2>
+          <p>
             Install Gooze and run the whole suite. No registry, no caching.
           </p>
           <CodeBlock lang="yaml" code={simple} />
         </div>
 
         <div id="sharded">
-          <h2 className="text-2xl font-semibold mb-3">2. Sharded: run in parallel</h2>
-          <p className="mb-3 text-muted-foreground">
-            <code className="bg-muted px-1 py-0.5 rounded">parallel: 3</code> fans the job out;
+          <h2>2. Sharded: run in parallel</h2>
+          <p>
+            <code>parallel: 3</code> fans the job out;
             each instance tests its slice with{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">-s INDEX/TOTAL</code> and saves its
-            reports as an artifact. The <code className="bg-muted px-1 py-0.5 rounded">merge</code>{" "}
+            <code>-s INDEX/TOTAL</code> and saves its
+            reports as an artifact. The <code>merge</code>{" "}
             job collects them all and runs{" "}
-            <Link href="/docs/cli/report#merge" className="underline underline-offset-4">gooze report merge</Link>.
+            <Link href="/docs/cli/report#merge">gooze report merge</Link>.
           </p>
           <CodeBlock lang="yaml" code={sharded} />
         </div>
 
         <div id="cached">
-          <h2 className="text-2xl font-semibold mb-3">3. Sharded + cached baseline</h2>
-          <p className="mb-3 text-muted-foreground">
-            Each shard pulls the <code className="bg-muted px-1 py-0.5 rounded">:main</code> baseline
-            for the cache (<Link href="/docs/usage/incremental-runs" className="underline underline-offset-4">incremental runs</Link>),
+          <h2>3. Sharded + cached baseline</h2>
+          <p>
+            Each shard pulls the <code>:main</code> baseline
+            for the cache (<Link href="/docs/usage/incremental-runs">incremental runs</Link>),
             then hands its reports to the merge job as an artifact — shards never push to the
             registry. The merge job combines them and, <strong>only on main</strong>, publishes the
-            single merged baseline back to <code className="bg-muted px-1 py-0.5 rounded">:main</code>.
+            single merged baseline back to <code>:main</code>.
           </p>
           <CodeBlock lang="yaml" code={cached} />
         </div>
 
         <div id="gate">
-          <h2 className="text-2xl font-semibold mb-3">Fail the build below a score (quality gate)</h2>
-          <p className="mb-3 text-muted-foreground">
+          <h2>Fail the build below a score (quality gate)</h2>
+          <p>
             Gooze has no threshold flag yet: survivors never change its exit code. Add this
             step %s. It reads the{" "}
-            <Link href="/docs/usage/results#score" className="underline underline-offset-4">mutation score</Link>{" "}
+            <Link href="/docs/usage/results#score">mutation score</Link>{" "}
             from the non-interactive output and fails when it is below{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">MIN_SCORE</code>.
+            <code>MIN_SCORE</code>.
           </p>
           <CodeBlock lang="yaml" code={gate} />
-          <p className="mt-3 text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             With sharding, gate only in the merge job: a single shard&apos;s score covers only its slice.
             A missing score (no reports) also fails the step.
           </p>
         </div>
 
         <div id="auth">
-          <h2 className="text-2xl font-semibold mb-3">Authentication</h2>
-          <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
+          <h2>Authentication</h2>
+          <ul>
             <li>
               For the project&apos;s own container registry, use{" "}
-              <code className="bg-muted px-1 py-0.5 rounded">gitlab-ci-token</code> with{" "}
-              <code className="bg-muted px-1 py-0.5 rounded">$CI_JOB_TOKEN</code> (shown above), or{" "}
-              <code className="bg-muted px-1 py-0.5 rounded">$CI_REGISTRY_USER</code> /{" "}
-              <code className="bg-muted px-1 py-0.5 rounded">$CI_REGISTRY_PASSWORD</code>.
+              <code>gitlab-ci-token</code> with{" "}
+              <code>$CI_JOB_TOKEN</code> (shown above), or{" "}
+              <code>$CI_REGISTRY_USER</code> /{" "}
+              <code>$CI_REGISTRY_PASSWORD</code>.
             </li>
             <li>
               For another registry, set{" "}
-              <code className="bg-muted px-1 py-0.5 rounded">GOOZE_REGISTRY_USERNAME</code> /{" "}
-              <code className="bg-muted px-1 py-0.5 rounded">GOOZE_REGISTRY_PASSWORD</code> (the
+              <code>GOOZE_REGISTRY_USERNAME</code> /{" "}
+              <code>GOOZE_REGISTRY_PASSWORD</code> (the
               password may be a token/PAT), or rely on the Docker credential store.
             </li>
             <li>
               For a non-TLS or self-signed registry add{" "}
-              <code className="bg-muted px-1 py-0.5 rounded">--plain-http</code> or{" "}
-              <code className="bg-muted px-1 py-0.5 rounded">--insecure</code> to push/pull.
+              <code>--plain-http</code> or{" "}
+              <code>--insecure</code> to push/pull.
             </li>
           </ul>
         </div>
