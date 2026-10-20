@@ -1,11 +1,8 @@
-"use client"
-
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
 
-import { Button } from "@/components/ui/button"
-import { CheckIcon, CopyIcon } from "lucide-react"
+import { CodeBlockCopyButton } from "@/components/ui/code-block-copy-button"
 
 const codeBlockVariants = cva(
   "group/code-block relative flex w-full min-w-0 flex-col overflow-hidden rounded-2xl text-sm has-[>[data-slot=code-block-content]:focus-visible]:ring-3 has-[>[data-slot=code-block-content]:focus-visible]:ring-ring/30 data-[size=sm]:rounded-xl data-[size=sm]:text-xs",
@@ -84,61 +81,6 @@ function CodeBlockActions({
   )
 }
 
-function CodeBlockCopyButton({
-  value,
-  variant = "ghost",
-  size = "icon-xs",
-  className,
-  onClick,
-  ...props
-}: React.ComponentProps<typeof Button> & { value: string }) {
-  const [copied, setCopied] = React.useState(false)
-
-  React.useEffect(() => {
-    if (!copied) {
-      return
-    }
-
-    const timeout = setTimeout(() => setCopied(false), 2000)
-    return () => clearTimeout(timeout)
-  }, [copied])
-
-  return (
-    <>
-      <Button
-        data-slot="code-block-copy-button"
-        data-copied={copied || undefined}
-        variant={variant}
-        size={size}
-        aria-label={copied ? "Copied" : "Copy"}
-        className={cn(
-          "hover:bg-foreground/5 dark:hover:bg-foreground/10",
-          className
-        )}
-        onClick={(event) => {
-          onClick?.(event)
-          navigator.clipboard
-            .writeText(value)
-            .then(() => setCopied(true))
-            .catch(() => {})
-        }}
-        {...props}
-      >
-        {copied ? (
-          <CheckIcon
-          />
-        ) : (
-          <CopyIcon
-          />
-        )}
-      </Button>
-      <span aria-live="polite" className="sr-only">
-        {copied ? "Copied" : ""}
-      </span>
-    </>
-  )
-}
-
 function CodeBlockContent({
   className,
   children,
@@ -183,29 +125,17 @@ function CodeBlockContent({
   )
 }
 
-const codeBlockLineVariants = cva(
-  "relative -mx-5 block min-h-lh px-5 group-data-[size=sm]/code-block:-mx-3 group-data-[size=sm]/code-block:px-3 before:min-w-6 before:text-end before:text-muted-foreground after:absolute after:start-1 after:top-0 after:text-muted-foreground after:select-none in-data-numbered:col-span-2 in-data-numbered:grid in-data-numbered:grid-cols-subgrid in-data-numbered:gap-x-3 in-data-numbered:[counter-increment:line] in-data-numbered:before:content-[counter(line)] in-data-numbered:before:select-none in-data-numbered:supports-[content:counter(line)_/_'']:before:content-[counter(line)_/_'']",
-  {
-    variants: {
-      variant: {
-        default: "",
-        added: "bg-foreground/5 after:content-['+']",
-        removed: "bg-destructive/10 after:text-destructive after:content-['−']",
-        highlighted: "bg-foreground/5",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
-)
+// Line styles (bleed into the padding, diff markers, line numbers) live in
+// app/globals.css keyed on data-slot/data-variant: the class string they
+// replace was ~670 bytes repeated on every line of every code block.
+type CodeBlockLineVariant = "default" | "added" | "removed" | "highlighted"
 
 function CodeBlockLine({
   className,
   variant = "default",
   children,
   ...props
-}: React.ComponentProps<"span"> & VariantProps<typeof codeBlockLineVariants>) {
+}: React.ComponentProps<"span"> & { variant?: CodeBlockLineVariant }) {
   // An empty line holds a newline so copying a selection keeps blank lines.
   const empty =
     children === undefined ||
@@ -217,10 +147,10 @@ function CodeBlockLine({
     <span
       data-slot="code-block-line"
       data-variant={variant}
-      className={cn(codeBlockLineVariants({ variant }), className)}
+      className={className}
       {...props}
     >
-      <span data-slot="code-block-line-content" className="min-w-0">
+      <span data-slot="code-block-line-content">
         {empty ? "\n" : children}
       </span>
     </span>

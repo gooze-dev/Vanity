@@ -106,7 +106,8 @@ export async function loadHighlighter(language: string) {
             <span
               key={index}
               style={token.htmlStyle as React.CSSProperties}
-              className="text-(--shiki-light) dark:text-(--shiki-dark)"
+              // Short class; colors come from .sk in app/globals.css.
+              className="sk"
             >
               {token.content}
             </span>
