@@ -44,12 +44,12 @@ const rows: Row[] = [
     goMutants: ["yes", "policy.minimum_score + --strict"],
   },
   {
-    feature: "Mutate only changed code (git diff)",
-    gooze: ["no", "unchanged files are skipped by the cache instead"],
-    gremlins: ["yes", "--diff <branch|commit>"],
+    feature: "Test only changed code",
+    gooze: ["yes", "detected by incremental execution (content hashes); no git or base ref"],
+    gremlins: ["yes", "git diff against a ref (--diff)"],
     goMutesting: ["unknown", ""],
     avito: ["unknown", ""],
-    goMutants: ["yes", "--changed=<ref>"],
+    goMutants: ["yes", "git diff against a ref (--changed)"],
   },
   {
     feature: "Incremental cache between runs",
@@ -202,7 +202,7 @@ const faqs = [
   },
   {
     q: "Does gooze only test changed code?",
-    a: "gooze re-tests only files whose source, test file, or mutators changed and reuses stored results for the rest, so the score always covers the whole codebase. With a baseline pulled from an OCI registry this also works on fresh CI runners. There is no git-diff mode that limits mutations to changed lines; changes in other files don't invalidate cached results, so run --no-cache periodically.",
+    a: "Yes, by design without git. gooze detects changes through incremental execution: it hashes each file and its test file and re-tests only what changed since the stored reports, reusing results for the rest, so the score always covers the whole codebase. No base branch, commit, or git history is needed, and uncommitted edits count. Granularity is per file, not per changed line. Changes in other files don't invalidate cached results, so run --no-cache periodically.",
   },
   {
     q: "Can I write custom mutators for gooze?",
@@ -266,7 +266,7 @@ export default function ComparisonPage() {
               editor integration come built in.
             </li>
             <li>
-              <strong>Gremlins</strong> has a built-in score threshold and a git-diff mode, but
+              <strong>Gremlins</strong> has a built-in score threshold and a git-based diff mode, but
               describes itself as best for &ldquo;smallish&rdquo; modules and is still 0.x.
             </li>
             <li>
@@ -276,7 +276,7 @@ export default function ComparisonPage() {
               fork adds a config file, JSON/HTML reports, and ignore directives.
             </li>
             <li>
-              <strong>go-mutants</strong> is feature-rich (threshold, diff mode, sharding, outcome
+              <strong>go-mutants</strong> is feature-rich (threshold, git-based diff mode, sharding, outcome
               cache, JSON/HTML) but pre-release at the time of writing.
             </li>
           </ul>
@@ -333,13 +333,28 @@ export default function ComparisonPage() {
         </div>
 
         <div id="incremental-vs-diff">
-          <h2 className="text-2xl font-semibold mb-3">Incremental runs vs diff-only runs</h2>
+          <h2 className="text-2xl font-semibold mb-3">Incremental execution vs git diff</h2>
           <p className="mb-3 text-muted-foreground">
-            Diff-based modes (Gremlins <code className="bg-muted px-1 py-0.5 rounded">--diff</code>,
-            go-mutants <code className="bg-muted px-1 py-0.5 rounded">--changed</code>) are fast
-            because they skip everything outside the diff, so their score describes the change, not
-            the codebase. Gooze reuses stored results for unchanged files and re-tests the rest, so
-            the score after a one-file change is still the score for the whole project.
+            Both approaches test only what changed. They differ in how they find it and what the
+            score means afterwards.
+          </p>
+          <ul className="mb-3 list-disc pl-5 space-y-2 text-muted-foreground">
+            <li>
+              <strong>Git diff</strong> (Gremlins <code className="bg-muted px-1 py-0.5 rounded">--diff</code>,
+              go-mutants <code className="bg-muted px-1 py-0.5 rounded">--changed</code>): compare
+              against a base branch or commit and mutate only the changed lines. Needs git history
+              and the right base ref, and the score describes the change, not the codebase.
+            </li>
+            <li>
+              <strong>Incremental execution</strong> (Gooze): hash every file and its test file,
+              re-test only what changed since the stored reports, and reuse the rest. No git, base
+              ref, or fetch depth needed, uncommitted edits count, and the score after a one-file
+              change is still the score for the whole project.
+            </li>
+          </ul>
+          <p className="mb-3 text-muted-foreground">
+            The trade-off is granularity: Gooze re-tests a whole changed file, a diff mode only the
+            changed lines.
           </p>
           <p className="text-muted-foreground">
             A file is re-tested when it, its <code className="bg-muted px-1 py-0.5 rounded">_test.go</code>,
@@ -353,7 +368,7 @@ export default function ComparisonPage() {
         <div id="limitations">
           <h2 className="text-2xl font-semibold mb-3">What Gooze doesn&apos;t do (yet)</h2>
           <p className="text-muted-foreground">
-            Threshold flag, git-diff mode, custom mutators, and a custom test runner are not
+            A threshold flag, custom mutator plugins, and a custom test runner are not
             supported in v1.1.0. Workarounds and status are on the{" "}
             <Link href="/docs/roadmap#limitations" className="underline underline-offset-4">Roadmap</Link>.
           </p>

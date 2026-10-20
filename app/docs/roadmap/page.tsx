@@ -11,12 +11,6 @@ const limitations = [
     workaround: { text: "a three-line score gate step", href: "/docs/ci/github#gate" },
   },
   {
-    id: "diff",
-    title: "No git-diff mode",
-    detail: "Mutations can't be limited to the lines a PR changed. The cache skips unchanged files, so a PR re-tests only the files it touched.",
-    workaround: { text: "incremental runs with a shared baseline", href: "/docs/ci/sharing-reports" },
-  },
-  {
     id: "custom-mutators",
     title: "No custom mutator plugins",
     detail: "Only the built-in operators run, and there is no plugin API. Adding an operator to Gooze itself is one small function; caching, sharding, and reporting don't change.",
@@ -110,12 +104,6 @@ export default function RoadmapPage() {
               <input type="checkbox" readOnly disabled className="mt-1" />
               <span className="text-muted-foreground">
                 <span className="font-medium text-foreground">Score threshold</span>: a built-in flag that fails the run below a minimum mutation score
-              </span>
-            </label>
-            <label className="flex items-start gap-3">
-              <input type="checkbox" readOnly disabled className="mt-1" />
-              <span className="text-muted-foreground">
-                <span className="font-medium text-foreground">Git-diff mode</span>: mutate only lines changed since a branch or commit
               </span>
             </label>
             <label className="flex items-start gap-3">
