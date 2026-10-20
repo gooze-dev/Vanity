@@ -85,11 +85,11 @@ export const metadata: Metadata = {
     type: "website",
   },
   twitter: {
+    // No twitter:site/creator — there is no @gooze_dev X account to attribute
+    // to. The large-image card still renders from the title/description/image.
     card: "summary_large_image",
     title: "Gooze: Advanced Mutation Testing for Golang",
     description: siteDescription,
-    site: "@gooze_dev",
-    creator: "@gooze_dev",
     images: [
       {
         url: "https://gooze.dev/og-image.png",
