@@ -1,8 +1,7 @@
 import type * as React from "react"
 import { docsMetadata } from "@/lib/docs-meta"
 import Link from "next/link"
-import { ArrowRight, CircleCheck, CircleDashed } from "lucide-react"
-import { DOCS_FACTS_VERSION } from "@/lib/version"
+import { ArrowRight, CircleCheck, CircleDashed, FlaskConical } from "lucide-react"
 
 // Stated plainly so readers (and search/AI summaries) don't have to guess.
 // Keep in sync with the comparison page when a limitation is lifted.
@@ -42,6 +41,12 @@ const limitations = [
     detail: "Gooze runs go test on the package that owns each mutated file; plugging in your own test command is planned.",
   },
   {
+    id: "agents",
+    title: "Codex and opencode",
+    detail: "Support for Codex and opencode is on the way: their setups exist and are being verified with each agent.",
+    workaround: { text: "the Claude Code plugin", href: "/docs/claude-code" },
+  },
+  {
     id: "json",
     title: "JSON and HTML reports",
     detail: "Results are YAML files plus _index.yaml; JSON and HTML output are on the way.",
@@ -53,6 +58,8 @@ type Item = {
   title: string
   detail: React.ReactNode
   shipped?: boolean
+  /** Shipped but still changing; shows a Beta badge. */
+  beta?: boolean
   href?: string
 }
 
@@ -337,10 +344,19 @@ const themes: Theme[] = [
         href: "/docs/editor-support",
       },
       {
-        title: "AI coding agents",
-        detail: "Gooze results after every edit in Claude Code, Codex and opencode, plus a Claude Code plugin that sets a project up and runs the kill-survivors loop.",
+        title: "Claude Code",
+        detail: "A plugin that sets a project up, runs the kill-survivors loop, adds gooze to existing CI, and shows mutation results after every edit.",
         shipped: true,
-        href: "/docs/editor-support#ai-agents",
+        beta: true,
+        href: "/docs/claude-code",
+      },
+      {
+        title: "Codex",
+        detail: "Mutation results after every Codex edit through a post-edit hook. The hook exists in goozels; support lands once it's verified with Codex.",
+      },
+      {
+        title: "opencode",
+        detail: "Mutation results after every opencode edit through a plugin for opencode 1.x and 2.x. The plugins exist in goozels; support lands once they're verified with opencode.",
       },
     ],
   },
@@ -378,7 +394,7 @@ const themes: Theme[] = [
         title: "Config validation",
         detail: (
           <>
-            Clear errors for invalid values in <code>gooze.yaml</code> and warnings for unknown keys, so every setting takes effect as written. Out-of-range values (such as <code>run.parallel: 0</code>) are rejected since v1.2.0; goozels already flags unknown keys in the editor.
+            Clear errors for invalid values in <code>gooze.yaml</code> and warnings for unknown keys, so every setting takes effect as written. Out-of-range values (such as <code>run.parallel: 0</code>) are already rejected, and goozels flags unknown keys in the editor.
           </>
         ),
       },
@@ -399,7 +415,16 @@ const shippedCount = allItems.filter((item) => item.shipped).length
 const plannedCount = allItems.length - shippedCount
 const percent = Math.round((shippedCount / allItems.length) * 100)
 
-function Status({ shipped }: { shipped?: boolean }) {
+function Status({ shipped, beta }: { shipped?: boolean; beta?: boolean }) {
+  if (beta) {
+    return (
+      <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-destructive/10 px-2 py-0.5 text-xs font-medium text-destructive">
+        <FlaskConical className="size-3" aria-hidden />
+        Beta
+      </span>
+    )
+  }
+
   return shipped ? (
     <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[color:var(--gooze-green)]/15 px-2 py-0.5 text-xs font-medium text-[color:var(--gooze-green)]">
       <CircleCheck className="size-3" aria-hidden />
@@ -424,7 +449,7 @@ function Card({ item }: { item: Item }) {
     >
       <div className="flex items-start justify-between gap-3">
         <h3 className="text-base font-semibold leading-snug text-foreground">{item.title}</h3>
-        <Status shipped={item.shipped} />
+        <Status shipped={item.shipped} beta={item.beta} />
       </div>
       <p className="text-sm leading-relaxed text-muted-foreground [&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.8125rem] [&_code]:text-foreground">
         {item.detail}
@@ -504,7 +529,7 @@ export default function RoadmapPage() {
       })}
 
       <div id="limitations">
-        <h2>Coming next (as of {DOCS_FACTS_VERSION})</h2>
+        <h2>Coming next</h2>
         <p className="text-sm text-muted-foreground">
           Features on the way, and what to use until they land.
         </p>
