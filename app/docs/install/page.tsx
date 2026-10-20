@@ -73,6 +73,11 @@ export default function InstallPage() {
           <p>
             This downloads Gooze and puts the binary in your Go bin directory.
           </p>
+          <p>
+            Gooze needs Go 1.27.3 to build. On an older Go, let Go fetch the toolchain
+            for the install; your project keeps its own Go version:
+          </p>
+          <CodeBlock lang="bash" code="GOTOOLCHAIN=auto go install gooze.dev/pkg/gooze@latest" />
         </div>
 
         <div id="verify">
