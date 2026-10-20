@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build && node scripts/llms-full.mjs",
+    "build": "next build && node scripts/llms-full.mjs && node scripts/strip-source-maps.mjs",
     "start": "next start",
     "lint": "eslint",
     "seo:audit": "node scripts/seo-audit.mjs"
