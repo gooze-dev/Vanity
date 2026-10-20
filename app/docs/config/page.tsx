@@ -14,46 +14,46 @@ export const metadata = docsMetadata("/docs/config")
 export default function ConfigPage() {
   return (
     <section>
-      <h1 className="text-4xl font-bold tracking-tight mb-4">Configuration (gooze.yaml)</h1>
+      <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Configuration (gooze.yaml)</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        Gooze reads config from a file named <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code>.
+        Gooze reads config from a file named <code>gooze.yaml</code>.
         This helps you keep the same settings in your repo and in CI.
       </p>
 
-      <div className="space-y-12">
+      <div>
         <div id="create">
-          <h2 className="text-2xl font-semibold mb-3">Create a starter config</h2>
-          <p className="mb-3 text-muted-foreground">
-            This command creates a starter <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code> in the current directory.
+          <h2>Create a starter config</h2>
+          <p>
+            This command creates a starter <code>gooze.yaml</code> in the current directory.
           </p>
           <CodeBlock lang="bash" code="gooze config init" />
         </div>
 
         <div id="load">
-          <h2 className="text-2xl font-semibold mb-3">How config is loaded</h2>
-          <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
-            <li>File name: <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code></li>
+          <h2>How config is loaded</h2>
+          <ul>
+            <li>File name: <code>gooze.yaml</code></li>
             <li>Location: the directory you run Gooze from</li>
             <li>
-              Environment variables: prefix <code className="bg-muted px-1 py-0.5 rounded">GOOZE_</code>
-              (use <code className="bg-muted px-1 py-0.5 rounded">_</code> instead of <code className="bg-muted px-1 py-0.5 rounded">-</code> and <code className="bg-muted px-1 py-0.5 rounded">.</code>)
+              Environment variables: prefix <code>GOOZE_</code>
+              (use <code>_</code> instead of <code>-</code> and <code>.</code>)
             </li>
           </ul>
-          <p className="mt-4 text-muted-foreground">
-            Example: the flag <code className="bg-muted px-1 py-0.5 rounded">--no-cache</code> can be set via <code className="bg-muted px-1 py-0.5 rounded">GOOZE_NO_CACHE=true</code>.
+          <p>
+            Example: the flag <code>--no-cache</code> can be set via <code>GOOZE_NO_CACHE=true</code>.
           </p>
         </div>
 
         <div id="env">
-          <h2 className="text-2xl font-semibold mb-3">Environment variables</h2>
-          <p className="text-muted-foreground">
+          <h2>Environment variables</h2>
+          <p>
             Gooze can read settings from environment variables.
-            The names are derived from config keys by prefixing <code className="bg-muted px-1 py-0.5 rounded">GOOZE_</code>, uppercasing,
-            and replacing <code className="bg-muted px-1 py-0.5 rounded">.</code> and <code className="bg-muted px-1 py-0.5 rounded">-</code> with <code className="bg-muted px-1 py-0.5 rounded">_</code>.
+            The names are derived from config keys by prefixing <code>GOOZE_</code>, uppercasing,
+            and replacing <code>.</code> and <code>-</code> with <code>_</code>.
           </p>
-          <p className="mt-3 text-muted-foreground">
+          <p>
             Typical precedence is: CLI flags -&gt; env vars -&gt; config file -&gt; defaults.
-            For logging, <code className="bg-muted px-1 py-0.5 rounded">--verbose</code> and <code className="bg-muted px-1 py-0.5 rounded">--log-output</code> override env/config.
+            For logging, <code>--verbose</code> and <code>--log-output</code> override env/config.
           </p>
 
           <div className="mt-4 rounded border">
@@ -67,39 +67,39 @@ export default function ConfigPage() {
               <TableBody className="text-muted-foreground">
                 <TableRow>
                   <TableCell>
-                    <code className="bg-muted px-1 py-0.5 rounded">GOOZE_OUTPUT</code>
+                    <code>GOOZE_OUTPUT</code>
                   </TableCell>
                   <TableCell>Reports output directory</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
-                    <code className="bg-muted px-1 py-0.5 rounded">GOOZE_NO_CACHE</code>
+                    <code>GOOZE_NO_CACHE</code>
                   </TableCell>
                   <TableCell>Disable incremental cache when true</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
-                    <code className="bg-muted px-1 py-0.5 rounded">GOOZE_PATHS_EXCLUDE</code>
+                    <code>GOOZE_PATHS_EXCLUDE</code>
                   </TableCell>
                   <TableCell>Exclude patterns (comma-separated)</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
-                    <code className="bg-muted px-1 py-0.5 rounded">GOOZE_RUN_PARALLEL</code>
+                    <code>GOOZE_RUN_PARALLEL</code>
                   </TableCell>
                   <TableCell>
-                    Worker count for <code className="bg-muted px-1 py-0.5 rounded">run</code>
+                    Worker count for <code>run</code>
                   </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
-                    <code className="bg-muted px-1 py-0.5 rounded">GOOZE_RUN_MUTATION_TIMEOUT</code>
+                    <code>GOOZE_RUN_MUTATION_TIMEOUT</code>
                   </TableCell>
                   <TableCell>Per-mutation timeout (seconds)</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
-                    <code className="bg-muted px-1 py-0.5 rounded">GOOZE_RUN_COVERAGE_PROFILE</code>
+                    <code>GOOZE_RUN_COVERAGE_PROFILE</code>
                   </TableCell>
                   <TableCell>
                     Path to a Go coverage profile; skips mutations on uncovered lines (default empty)
@@ -107,19 +107,19 @@ export default function ConfigPage() {
                 </TableRow>
                 <TableRow>
                   <TableCell>
-                    <code className="bg-muted px-1 py-0.5 rounded">GOOZE_LOG_FILENAME</code>
+                    <code>GOOZE_LOG_FILENAME</code>
                   </TableCell>
                   <TableCell>Log file path</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
-                    <code className="bg-muted px-1 py-0.5 rounded">GOOZE_LOG_VERBOSE</code>
+                    <code>GOOZE_LOG_VERBOSE</code>
                   </TableCell>
                   <TableCell>Force verbose logging when true</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
-                    <code className="bg-muted px-1 py-0.5 rounded">GOOZE_LOG_LEVEL</code>
+                    <code>GOOZE_LOG_LEVEL</code>
                   </TableCell>
                   <TableCell>Log level (for example: debug, info, warn, error)</TableCell>
                 </TableRow>
@@ -147,8 +147,8 @@ gooze run ./...`}
         </div>
 
         <div id="example">
-          <h2 className="text-2xl font-semibold mb-3">A common config example</h2>
-          <p className="mb-3 text-muted-foreground">
+          <h2>A common config example</h2>
+          <p>
             This example does:
             (1) sets output dir, (2) excludes vendor/examples, (3) sets parallel workers, (4) enables verbose logs.
           </p>
@@ -181,8 +181,8 @@ logging:
         </div>
 
         <div id="cli-vs-config">
-          <h2 className="text-2xl font-semibold mb-3">CLI flags vs config</h2>
-          <p className="text-muted-foreground">
+          <h2>CLI flags vs config</h2>
+          <p>
             In most tools, CLI flags override config.
             If you see surprising behavior, print help and compare:
           </p>

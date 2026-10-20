@@ -8,48 +8,48 @@ export const metadata = docsMetadata("/docs/usage/ui-modes")
 export default function UIModesPage() {
   return (
     <section>
-      <h1 className="text-4xl font-bold tracking-tight mb-4">UI modes</h1>
+      <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">UI modes</h1>
       <p className="text-lg text-muted-foreground mb-8">
         Gooze selects its UI based on whether output is a TTY (interactive) or NOT (non-TTY, e.g. CI or redirected output).
       </p>
 
-      <div className="space-y-6">
+      <div>
         <div>
-          <h2 className="text-2xl font-semibold mb-3">TTY (interactive)</h2>
-          <p className="text-muted-foreground">
+          <h2>TTY (interactive)</h2>
+          <p>
             When running in a terminal, Gooze uses an interactive TUI.
           </p>
 
           <div className="mt-4">
             <p className="text-muted-foreground mb-2">Common keys in the viewer:</p>
-            <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
+            <ul>
               <li>
-                <code className="bg-muted px-1 py-0.5 rounded">↑/↓</code> or <code className="bg-muted px-1 py-0.5 rounded">j/k</code> to move
+                <code>↑/↓</code> or <code>j/k</code> to move
               </li>
               <li>
-                <code className="bg-muted px-1 py-0.5 rounded">/</code> to filter
+                <code>/</code> to filter
               </li>
               <li>
-                <code className="bg-muted px-1 py-0.5 rounded">enter</code> / <code className="bg-muted px-1 py-0.5 rounded">space</code> to toggle the diff
+                <code>enter</code> / <code>space</code> to toggle the diff
               </li>
               <li>
-                <code className="bg-muted px-1 py-0.5 rounded">q</code> to quit
+                <code>q</code> to quit
               </li>
             </ul>
-            <p className="mt-3 text-sm text-muted-foreground">
-              More details: <Link href="/docs/cli/report#view" className="underline underline-offset-4">gooze report view</Link>.
+            <p className="text-sm text-muted-foreground">
+              More details: <Link href="/docs/cli/report#view">gooze report view</Link>.
             </p>
           </div>
         </div>
 
         <div>
-          <h2 className="text-2xl font-semibold mb-3">NOT TTY (simple/CI)</h2>
-          <p className="mb-3 text-muted-foreground">
+          <h2>NOT TTY (simple/CI)</h2>
+          <p>
             When output is redirected (or in CI), Gooze uses a simple UI.
           </p>
           <CodeBlock lang="bash" code={"gooze run ./... | cat"} />
 
-          <p className="mt-3 text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             This example forces non-interactive mode by piping output.
             It is useful when you want stable CI logs.
           </p>

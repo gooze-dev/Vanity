@@ -43,7 +43,7 @@ export default function DocsLayout({
             <div className="mx-auto flex w-full max-w-4xl gap-10 xl:max-w-6xl">
               <div className="min-w-0 flex-1 space-y-8">
                 <DocsToc collapsible className="xl:hidden" />
-                <article id="docs-content" className="space-y-8">
+                <article id="docs-content" className="typeset typeset-docs">
                   {children}
                 </article>
                 <DocsPager />

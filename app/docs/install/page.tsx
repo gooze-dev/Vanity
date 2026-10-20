@@ -6,65 +6,65 @@ export const metadata = docsMetadata("/docs/install")
 export default function InstallPage() {
   return (
     <section>
-      <h1 className="text-4xl font-bold tracking-tight mb-4">Installation</h1>
+      <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Installation</h1>
       <p className="text-lg text-muted-foreground mb-8">
         Install Gooze with Go, then verify it works.
       </p>
 
-      <div className="space-y-12">
+      <div>
         <div id="requirements">
-          <h2 className="text-2xl font-semibold mb-3">What you need</h2>
-          <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
+          <h2>What you need</h2>
+          <ul>
             <li>Go installed on your machine.</li>
-            <li>A Go project with a <code className="bg-muted px-1 py-0.5 rounded">go.mod</code> file.</li>
+            <li>A Go project with a <code>go.mod</code> file.</li>
           </ul>
-          <p className="mt-4 text-muted-foreground">
+          <p>
             Note: Gooze itself is built with a specific Go version.
             If you see install/build errors, first try updating Go.
           </p>
         </div>
 
         <div id="install">
-          <h2 className="text-2xl font-semibold mb-3">Install Gooze</h2>
+          <h2>Install Gooze</h2>
           <CodeBlock lang="bash" code="go install gooze.dev/pkg/gooze@latest" />
-          <p className="mt-3 text-muted-foreground">
+          <p>
             This downloads Gooze and puts the binary in your Go bin directory.
           </p>
         </div>
 
         <div id="verify">
-          <h2 className="text-2xl font-semibold mb-3">Verify the install</h2>
+          <h2>Verify the install</h2>
           <CodeBlock lang="bash" code="gooze version" />
-          <p className="mt-3 text-muted-foreground">
+          <p>
             Use this output when you report bugs.
           </p>
         </div>
 
           <div id="path">
-            <h2 className="text-2xl font-semibold mb-3">If you get &quot;command not found&quot;</h2>
-          <p className="mb-3 text-muted-foreground">
+            <h2>If you get &quot;command not found&quot;</h2>
+          <p>
             Go installs binaries into your Go bin dir.
-            Often it is <code className="bg-muted px-1 py-0.5 rounded">$(go env GOPATH)/bin</code>.
-            Make sure this directory is in your <code className="bg-muted px-1 py-0.5 rounded">PATH</code>.
+            Often it is <code>$(go env GOPATH)/bin</code>.
+            Make sure this directory is in your <code>PATH</code>.
           </p>
             <CodeBlock lang="bash" code='echo "$(go env GOPATH)/bin"' />
         </div>
 
         <div id="tty">
-          <h2 className="text-2xl font-semibold mb-3">Interactive vs CI output</h2>
-          <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
+          <h2>Interactive vs CI output</h2>
+          <ul>
             <li>In a terminal (TTY), Gooze shows an interactive UI.</li>
             <li>In CI (or when output is redirected), Gooze prints plain text.</li>
           </ul>
         </div>
 
         <div id="logs">
-          <h2 className="text-2xl font-semibold mb-3">Logs</h2>
-          <p className="text-muted-foreground">
-            If something looks wrong, run with <code className="bg-muted px-1 py-0.5 rounded">--verbose</code>.
-            Then check the log file (often <code className="bg-muted px-1 py-0.5 rounded">.gooze.log</code>).
+          <h2>Logs</h2>
+          <p>
+            If something looks wrong, run with <code>--verbose</code>.
+            Then check the log file (often <code>.gooze.log</code>).
           </p>
-          <div className="mt-3">
+          <div>
             <CodeBlock lang="bash" code="gooze run --verbose ./..." />
           </div>
         </div>
