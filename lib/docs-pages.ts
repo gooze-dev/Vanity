@@ -168,6 +168,16 @@ export const docsPages: DocsPage[] = [
     keywords: ["editor support","goozels lsp","language server protocol","vscode extension","neovim integration","inline results","goozels check","claude code","claude plugin","codex","opencode","ai coding agents"],
   },
   {
+    href: "/docs/claude-code",
+    title: "Claude Code",
+    seoTitle:
+      "Go Mutation Testing in Claude Code (gooze plugin) · Gooze",
+    section: "Using gooze",
+    description:
+      "Install the gooze plugin for Claude Code: project setup with /gooze:init, the kill-survivors loop, CI setup, and mutation results after every edit.",
+    keywords: ["claude code","claude plugin","ai coding agent","vibe coding","/gooze:init","mutation testing skill","post-edit hook","code review","ci setup"],
+  },
+  {
     href: "/docs/ci/github",
     title: "GitHub Actions",
     seoTitle:
