@@ -1,6 +1,7 @@
 import { docsMetadata } from "@/lib/docs-meta"
 import Link from "next/link"
 
+import { CodeBlock } from "@/components/code-block"
 import { GoozeLogo } from "@/components/gooze-logo"
 import { GoozePrimaryCtaButton } from "@/components/gooze-cta-button"
 import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item"
@@ -80,6 +81,21 @@ export default function DocsPage() {
           <h2>Get started</h2>
           <p>
             Install Gooze, preview what will be mutated, run mutation testing, then view the latest report.
+            The whole flow is three commands:
+          </p>
+
+          <CodeBlock
+            lang="bash"
+            code={`go install gooze.dev/pkg/gooze@latest   # install the CLI
+gooze run ./...                         # run mutation testing
+gooze report view                       # read the report`}
+          />
+          <p className="text-sm text-muted-foreground mb-4">
+            For faster runs, pass a coverage profile — see the{" "}
+            <Link href="/docs/quick-start" className="underline underline-offset-4">
+              Quick start
+            </Link>
+            .
           </p>
 
           <GoozePrimaryCtaButton asChild>
