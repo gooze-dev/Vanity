@@ -10,7 +10,7 @@ on: [push, pull_request]
 jobs:
   gooze:
     runs-on: ubuntu-latest
-    container: golang:1.26       # official Go image: go is already installed
+    container: golang:1.27       # official Go image: go is already installed
     steps:
       - uses: actions/checkout@v4
       - run: go install gooze.dev/pkg/gooze@latest
@@ -19,7 +19,7 @@ jobs:
 const sharded = `jobs:
   test:
     runs-on: ubuntu-latest
-    container: golang:1.26
+    container: golang:1.27
     strategy:
       matrix:
         shard: [0, 1, 2]
@@ -41,7 +41,7 @@ const sharded = `jobs:
   merge:
     needs: test
     runs-on: ubuntu-latest
-    container: golang:1.26
+    container: golang:1.27
     steps:
       - run: go install gooze.dev/pkg/gooze@latest
 
@@ -69,7 +69,7 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: golang:1.26
+    container: golang:1.27
     strategy:
       matrix:
         shard: [0, 1, 2]
@@ -94,7 +94,7 @@ jobs:
   merge:
     needs: test
     runs-on: ubuntu-latest
-    container: golang:1.26
+    container: golang:1.27
     steps:
       - run: go install gooze.dev/pkg/gooze@latest
 

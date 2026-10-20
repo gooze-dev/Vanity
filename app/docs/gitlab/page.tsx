@@ -4,14 +4,14 @@ import Link from "next/link"
 import { CodeBlock } from "@/components/code-block"
 
 const simple = `# .gitlab-ci.yml
-image: golang:1.26          # official Go image: go is already installed
+image: golang:1.27          # official Go image: go is already installed
 
 mutation-testing:
   script:
     - go install gooze.dev/pkg/gooze@latest
     - gooze run ./...`
 
-const sharded = `image: golang:1.26
+const sharded = `image: golang:1.27
 
 stages: [test, merge]
 
@@ -33,7 +33,7 @@ merge:
     - go install gooze.dev/pkg/gooze@latest
     - gooze report merge`
 
-const cached = `image: golang:1.26
+const cached = `image: golang:1.27
 
 stages: [test, merge]
 
