@@ -3,13 +3,93 @@ import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 import { BookOpen } from "lucide-react"
 
 export const metadata = docsMetadata("/docs/usage/incremental-runs")
 
+// Cache state per developer action — a table engines can extract to answer
+// "when does Gooze re-run?". Matches the invalidation rules documented below.
+const cacheRows = [
+  {
+    action: "No changes since the last run",
+    state: "Hit",
+    behavior: "Reuses stored results; the run is near-instant.",
+  },
+  {
+    action: "Edit a source file",
+    state: "Partial miss",
+    behavior: "Re-tests that file; reuses every other file.",
+  },
+  {
+    action: "Edit its _test.go file",
+    state: "Partial miss",
+    behavior: "Re-tests the associated source file.",
+  },
+  {
+    action: "Upgrade Gooze (mutators change)",
+    state: "Full miss",
+    behavior: "Re-tests everything, since prior results may differ.",
+  },
+  {
+    action: "gooze run --no-cache",
+    state: "Bypass",
+    behavior: "Ignores stored results and re-tests everything.",
+  },
+  {
+    action: "Delete the reports directory",
+    state: "Reset",
+    behavior: "Rebuilds a fresh baseline from scratch.",
+  },
+]
+
+const faqs = [
+  {
+    q: "How does Gooze speed up mutation testing?",
+    a: "Gooze caches results per file and, on the next run, re-tests only files whose source, test file, or mutators changed — everything else is reused, so repeat runs are fast.",
+  },
+  {
+    q: "How do I disable the Gooze cache?",
+    a: "Pass --no-cache for a one-off full re-run, or set GOOZE_NO_CACHE=true in the environment.",
+  },
+  {
+    q: "Where does Gooze store its incremental cache?",
+    a: "In the reports directory (default .gooze-reports), alongside the YAML reports. Change it with -o/--output.",
+  },
+  {
+    q: "How do I clear or reset the Gooze cache?",
+    a: "Delete the reports directory (for example rm -rf .gooze-reports); Gooze rebuilds it on the next run.",
+  },
+  {
+    q: "Why did Gooze finish instantly and skip my mutations?",
+    a: "A full cache hit: nothing the cache tracks (source, test files, mutators) changed since the last run, so Gooze reused the previous results instead of re-running them.",
+  },
+]
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+}
+
 export default function IncrementalRunsPage() {
   return (
     <section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Incremental runs</h1>
       <p className="text-lg text-muted-foreground mb-8">
         Gooze caches mutation results and skips unchanged files on subsequent runs. Use{" "}
@@ -72,6 +152,30 @@ export default function IncrementalRunsPage() {
           </p>
         </div>
 
+        <div id="cache-matrix">
+          <h2>Cache states at a glance</h2>
+          <div className="mt-3 rounded border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Action</TableHead>
+                  <TableHead>Cache</TableHead>
+                  <TableHead>Behavior</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="text-muted-foreground">
+                {cacheRows.map((r) => (
+                  <TableRow key={r.action}>
+                    <TableCell className="align-top">{r.action}</TableCell>
+                    <TableCell className="align-top whitespace-nowrap">{r.state}</TableCell>
+                    <TableCell className="align-top">{r.behavior}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+
         <div id="no-cache">
           <h2>Force a full re-run</h2>
           <p>
@@ -88,6 +192,16 @@ export default function IncrementalRunsPage() {
             registry before the run and push the updated one after:{" "}
             <Link href="/docs/ci/sharing-reports">Sharing reports (OCI)</Link>.
           </p>
+        </div>
+
+        <div id="faq">
+          <h2>FAQ</h2>
+          {faqs.map((f) => (
+            <div key={f.q}>
+              <h3>{f.q}</h3>
+              <p>{f.a}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

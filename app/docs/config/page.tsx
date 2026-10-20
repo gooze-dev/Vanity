@@ -11,9 +11,48 @@ import {
 
 export const metadata = docsMetadata("/docs/config")
 
+// Visible Q&A + matching FAQPage JSON-LD. Facts verified against the gooze
+// config schema (pkg/config/schema.go).
+const faqs = [
+  {
+    q: "How do I configure Gooze?",
+    a: "Put a gooze.yaml in your project root; run gooze config init to generate a starter file. Every key can also be set with a GOOZE_* environment variable or a CLI flag.",
+  },
+  {
+    q: "What is the configuration precedence in Gooze?",
+    a: "CLI flags override environment variables, environment variables override gooze.yaml, and gooze.yaml overrides the built-in defaults.",
+  },
+  {
+    q: "How do I turn a gooze.yaml key into an environment variable?",
+    a: "Add the GOOZE_ prefix, uppercase the key, and replace dots and hyphens with underscores. For example, paths.exclude becomes GOOZE_PATHS_EXCLUDE and run.parallel becomes GOOZE_RUN_PARALLEL.",
+  },
+  {
+    q: "How do I exclude vendor or mock files?",
+    a: "List regular-expression patterns under paths.exclude in gooze.yaml, or pass -x/--exclude on the CLI (repeat the flag for more than one pattern).",
+  },
+  {
+    q: "Why is my logging configuration being ignored?",
+    a: "The --verbose and --log-output CLI flags take precedence over the file and environment logging settings, so a flag on the command line overrides what is in gooze.yaml.",
+  },
+]
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+}
+
 export default function ConfigPage() {
   return (
     <section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Configuration (gooze.yaml)</h1>
       <p className="text-lg text-muted-foreground mb-8">
         Gooze reads config from a file named <code>gooze.yaml</code>.
@@ -52,8 +91,45 @@ export default function ConfigPage() {
             and replacing <code>.</code> and <code>-</code> with <code>_</code>.
           </p>
           <p>
-            Typical precedence is: CLI flags -&gt; env vars -&gt; config file -&gt; defaults.
-            For logging, <code>--verbose</code> and <code>--log-output</code> override env/config.
+            When the same setting comes from more than one place, higher
+            precedence wins:
+          </p>
+          <div className="mt-3 rounded border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Precedence</TableHead>
+                  <TableHead>Source</TableHead>
+                  <TableHead>Example</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="text-muted-foreground">
+                <TableRow>
+                  <TableCell>1 (highest)</TableCell>
+                  <TableCell>CLI flag</TableCell>
+                  <TableCell><code>gooze run --no-cache ./...</code></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>2</TableCell>
+                  <TableCell>Environment variable</TableCell>
+                  <TableCell><code>GOOZE_NO_CACHE=true</code></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>3</TableCell>
+                  <TableCell><code>gooze.yaml</code></TableCell>
+                  <TableCell><code>no-cache: true</code></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>4 (lowest)</TableCell>
+                  <TableCell>Built-in default</TableCell>
+                  <TableCell>cache enabled</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+          <p className="mt-3">
+            For logging, the <code>--verbose</code> and <code>--log-output</code>{" "}
+            flags override the env/config settings.
           </p>
 
           <div className="mt-4 rounded border">
@@ -171,39 +247,36 @@ gooze run ./...`}
         </div>
 
         <div id="example">
-          <h2>A common config example</h2>
+          <h2>Complete gooze.yaml reference</h2>
           <p>
-            This example does:
-            (1) sets output dir, (2) excludes vendor/examples, (3) sets parallel workers, (4) enables verbose logs.
+            Every supported key, with its default value. All keys are optional —
+            Gooze falls back to these defaults when a key is omitted.
           </p>
           <CodeBlock
             lang="yaml"
             code={`# gooze.yaml
-output: .gooze-reports
-no-cache: false
-
-run:
-  parallel: 1
-  # Per-mutation timeout in seconds (also --mutation-timeout).
-  mutation_timeout: 120
-  # Skip mutations on lines not covered by an existing Go coverage profile.
-  # Generate it first: go test -coverprofile=coverage.out ./...
-  # Default empty (disabled).
-  coverage_profile: coverage.out
+version: 1                    # config schema version
+output: .gooze-reports        # where reports and the incremental cache live
+no-cache: false               # set true to force a full re-run
 
 paths:
-  exclude:
+  exclude:                    # regex patterns of files to skip
     - '^vendor/'
     - '^examples/'
 
+run:
+  parallel: 1                 # concurrent mutation workers
+  mutation_timeout: 120       # per-mutation timeout, in seconds
+  coverage_profile: ''        # e.g. coverage.out to skip uncovered lines
+
 log:
-  verbose: true
   filename: .gooze.log
-  level: info
-  max_size: 10
-  max_backups: 3
-  max_age: 28
-  compress: true
+  level: info                 # debug | info | warn | error
+  verbose: false              # overridden by --verbose
+  max_size: 10                # MiB before the log rotates
+  max_backups: 3              # rotated files to keep
+  max_age: 28                 # days to keep rotated logs
+  compress: true              # gzip rotated logs
 `}
           />
         </div>
@@ -218,6 +291,16 @@ log:
             <CodeBlock lang="bash" code="gooze --help" />
             <CodeBlock lang="bash" code="gooze run --help" />
           </div>
+        </div>
+
+        <div id="faq">
+          <h2>FAQ</h2>
+          {faqs.map((f) => (
+            <div key={f.q}>
+              <h3>{f.q}</h3>
+              <p>{f.a}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
