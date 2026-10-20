@@ -8,6 +8,7 @@ import {
   CodeBlockTitle,
 } from "@/components/ui/code-block"
 import { highlightCode } from "@/lib/highlighter"
+import { cn } from "@/lib/utils"
 
 type CodeBlockProps = {
   code: string
@@ -43,6 +44,19 @@ export async function CodeBlock({
   const raw = code.trimEnd()
   const lines = raw.split("\n")
   const highlighted = (await highlightCode(raw, lang)) ?? lines
+
+  // One-line commands: a compact row with the copy button always visible,
+  // instead of a padded block whose button only shows on hover.
+  if (lines.length === 1 && !title && !lineNumbers) {
+    return (
+      <CodeBlockRoot className={cn("flex-row items-center", className)}>
+        <CodeBlockContent className="min-w-0 flex-auto py-3">
+          <CodeBlockLine>{highlighted[0]}</CodeBlockLine>
+        </CodeBlockContent>
+        <CodeBlockCopyButton value={raw} className="me-2 shrink-0" />
+      </CodeBlockRoot>
+    )
+  }
 
   return (
     <CodeBlockRoot className={className}>
