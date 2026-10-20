@@ -205,7 +205,11 @@ const faqs = [
   },
   {
     q: "Is gooze only for large projects?",
-    a: "No. The workflow is the same three commands for a small project and a large monorepo: gooze run, gooze report view, and, when you shard in CI, gooze report merge. Sharding and OCI baselines are opt-in for when a codebase outgrows a single job.",
+    a: "No. Gooze outperforms from a tiny project to microservices and large monorepos with the same three commands: gooze run, gooze report view, and, when you shard in CI, gooze report merge. Sharding and OCI baselines are opt-in for when a codebase outgrows a single job.",
+  },
+  {
+    q: "Does gooze work for microservices?",
+    a: "Yes. Run gooze in each service's own CI job; the per-file cache keeps every run short, and `gooze report push` and `pull` share each service's baseline through any OCI registry, so teammates and CI start from the same results.",
   },
   {
     q: "Is gooze good for TDD?",
@@ -275,11 +279,11 @@ export default function ComparisonPage() {
           <h2>In short</h2>
           <ul>
             <li>
-              <strong>Gooze</strong> keeps the same three commands
+              <strong>Gooze</strong> outperforms from a tiny project to microservices and large
+              monorepos, with the same three commands
               (<code>run</code>,{" "}
               <code>report view</code>,{" "}
-              <code>report merge</code>) from a weekend
-              project to a large monorepo. Its per-file cache re-tests only what you changed, so
+              <code>report merge</code>) at every size. Its per-file cache re-tests only what you changed, so
               local TDD loops stay fast, and every run still reports a score for the whole
               codebase, not just the diff. Sharding, a shared OCI baseline, a TUI viewer,
               editor integration, and a{" "}
