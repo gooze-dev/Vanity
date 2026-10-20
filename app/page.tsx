@@ -79,7 +79,7 @@ export default async function Home() {
             </GoozeOutlineCtaButton>
           </div>
 
-          <div className="w-full min-w-0 max-w-md text-left">
+          <div className="min-w-0 max-w-full text-left">
             <CodeBlock code="go install gooze.dev/pkg/gooze@latest" lang="bash" />
           </div>
         </div>
