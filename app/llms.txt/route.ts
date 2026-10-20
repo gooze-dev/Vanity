@@ -11,7 +11,7 @@ export const dynamic = "force-static";
 const facts = `**Key facts (gooze v1.1.0):**
 
 - Install: \`go install gooze.dev/pkg/gooze@latest\`. Run: \`gooze run ./...\`. View: \`gooze report view\`.
-- Config file: yes. \`gooze.yaml\` in the repo (generate with \`gooze config init\`); every key also has a GOOZE_* env var and a CLI flag.
+- Config file: yes. \`gooze.yaml\` in the repo (generate with \`gooze config init\`); every key also has a GOOZE_* env var, and the common ones a CLI flag.
 - Default mutation operators: arithmetic, comparison, logical, boolean, numbers, unary.
 - Ignore code: \`-x/--exclude <regex>\` for files, \`//gooze:ignore [mutators]\` for a file, function, or line.
 - Changed-code-only testing: yes, by incremental execution instead of git diff. A file is re-tested only when its source, its _test.go, or the mutators changed (content hashes; no git, base ref, or history needed; uncommitted edits count). Other results are reused, so every run reports a whole-codebase score (not a diff-only score). Granularity is per file. Changes in other files don't invalidate the cache; run \`--no-cache\` periodically.

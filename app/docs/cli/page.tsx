@@ -46,15 +46,16 @@ export default function CliPage() {
               <code>-x, --exclude &lt;regex&gt;</code>: exclude files by regex (you can repeat this)
             </li>
             <li>
-              <code>--coverage-profile &lt;file&gt;</code>: skip mutations on lines not covered by an existing Go coverage profile (<code>run</code> only)
-            </li>
-            <li>
               <code>-v, --verbose</code>: write extra debug logs
             </li>
             <li>
               <code>--log-output &lt;path&gt;</code>: write logs to a specific file
             </li>
           </ul>
+          <p>
+            Flags that only apply to one command, such as <code>--coverage-profile</code>, are listed on that
+            command&apos;s page (see <Link href="/docs/cli/run#flags">gooze run</Link>).
+          </p>
           <p>
             Tip: flags can change between versions.
             If you are unsure, run <code>gooze --help</code> or <code>gooze run --help</code>.
