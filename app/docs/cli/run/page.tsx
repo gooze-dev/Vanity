@@ -309,7 +309,7 @@ gooze run -s 2/3 ./...`}
               <Link href="/docs/reports">Reports</Link>
             </Button>
             <Button asChild variant="outline">
-              <Link href="/docs/cli/report/view">gooze report view</Link>
+              <Link href="/docs/cli/report#view">gooze report view</Link>
             </Button>
           </div>
         </div>
