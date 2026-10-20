@@ -164,8 +164,8 @@ export const docsPages: DocsPage[] = [
     navTitle: "Editor support",
     section: "Using gooze",
     description:
-      "Integrate mutation testing results directly into your IDE. Configure the goozels language server for real-time Go metrics in VSCode, Neovim, and more.",
-    keywords: ["editor support","goozels lsp","language server protocol","vscode extension","neovim integration","inline results"],
+      "Integrate mutation testing results directly into your IDE, the command line and AI coding agents. Configure the goozels language server for real-time Go metrics in VSCode, Neovim, and more, and the gooze plugin for Claude Code, Codex and opencode.",
+    keywords: ["editor support","goozels lsp","language server protocol","vscode extension","neovim integration","inline results","goozels check","claude code","claude plugin","codex","opencode","ai coding agents"],
   },
   {
     href: "/docs/ci/github",
