@@ -15,7 +15,13 @@ const RELEASES_API =
   "https://api.github.com/repos/gooze-dev/gooze/releases/latest";
 
 // Last known-good version; bump when the API is expected to be unavailable.
-const FALLBACK_VERSION = "1.1.0";
+const FALLBACK_VERSION = "1.2.0";
+
+// The Gooze release the docs' factual claims (roadmap limitations, comparison
+// table, llms.txt key facts) were last checked against. Unlike
+// getSoftwareVersion it is not fetched: bump it by hand only after re-checking
+// those claims, so the pages never say "as of" a release nobody verified.
+export const DOCS_FACTS_VERSION = "v1.2.0";
 
 const FETCH_TIMEOUT_MS = 4000;
 
