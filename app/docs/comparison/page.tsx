@@ -105,7 +105,7 @@ const rows: Row[] = [
   {
     feature: "Ignore code with comments",
     gooze: ["yes", "//gooze:ignore, per file/func/line/mutator"],
-    gremlins: ["partial", "file regex only (--exclude-files)"],
+    gremlins: ["no", "file regex only (--exclude-files)"],
     goMutesting: ["partial", "checksum blacklist"],
     avito: ["yes", "mutator-disable-* directives"],
     goMutants: ["unknown", ""],

@@ -115,7 +115,7 @@ export default function CliRunPage() {
         <div id="flags">
           <h2>Flags</h2>
           <p>
-            Every flag can also be set in <code>gooze.yaml</code> under its config key, or
+            Every flag with a config key can also be set in <code>gooze.yaml</code> under that key, or
             through the matching <code>GOOZE_*</code> environment variable. Gooze reads{" "}
             <code>gooze.yaml</code> from the current directory; there is no{" "}
             <code>--config</code> flag. See <Link href="/docs/config">Configuration</Link> for precedence.

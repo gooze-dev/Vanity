@@ -330,7 +330,7 @@ export const docsFlags: DocsFlag[] = [
   },
   {
     flag: "--no-cache",
-    command: "gooze run",
+    command: "global",
     href: "/docs/cli/run#cache",
     description: "Disable the incremental cache and re-test every mutation.",
   },

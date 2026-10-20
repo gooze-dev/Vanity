@@ -81,7 +81,7 @@ export default function ConfigPage() {
                   <TableCell>
                     <code>GOOZE_PATHS_EXCLUDE</code>
                   </TableCell>
-                  <TableCell>Exclude patterns (comma-separated)</TableCell>
+                  <TableCell>Exclude patterns (space-separated)</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
@@ -123,6 +123,30 @@ export default function ConfigPage() {
                   </TableCell>
                   <TableCell>Log level (for example: debug, info, warn, error)</TableCell>
                 </TableRow>
+                <TableRow>
+                  <TableCell>
+                    <code>GOOZE_LOG_MAX_SIZE</code>
+                  </TableCell>
+                  <TableCell>Max log size in MiB before rotation (default 10)</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
+                    <code>GOOZE_LOG_MAX_BACKUPS</code>
+                  </TableCell>
+                  <TableCell>Number of rotated log files to keep (default 3)</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
+                    <code>GOOZE_LOG_MAX_AGE</code>
+                  </TableCell>
+                  <TableCell>Days to keep rotated logs (default 28)</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
+                    <code>GOOZE_LOG_COMPRESS</code>
+                  </TableCell>
+                  <TableCell>Gzip rotated logs (default true)</TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </div>
@@ -139,7 +163,7 @@ gooze run ./...`}
             <CodeBlock
               lang="bash"
               code={`# Example: exclude vendor and mock files
-export GOOZE_PATHS_EXCLUDE='^vendor/,^mock_'
+export GOOZE_PATHS_EXCLUDE='^vendor/ ^mock_'
 
 gooze run ./...`}
             />
@@ -160,8 +184,7 @@ no-cache: false
 
 run:
   parallel: 1
-  # Some versions support a timeout flag/config.
-  # Check: gooze run --help
+  # Per-mutation timeout in seconds (also --mutation-timeout).
   mutation_timeout: 120
   # Skip mutations on lines not covered by an existing Go coverage profile.
   # Generate it first: go test -coverprofile=coverage.out ./...
@@ -173,9 +196,14 @@ paths:
     - '^vendor/'
     - '^examples/'
 
-logging:
-  verbose: false
-  output: .gooze.log
+log:
+  verbose: true
+  filename: .gooze.log
+  level: info
+  max_size: 10
+  max_backups: 3
+  max_age: 28
+  compress: true
 `}
           />
         </div>
