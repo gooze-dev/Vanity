@@ -176,7 +176,7 @@ export default function CiPage() {
           <h2>Fail the build below a score (quality gate)</h2>
           <p>
             Gooze has no threshold flag yet: survivors never change its exit code. Add this
-            step %s. It reads the{" "}
+            step after the gooze run (in the merge job, after <code>gooze report merge</code>, when you shard). It reads the{" "}
             <Link href="/docs/usage/results#score">mutation score</Link>{" "}
             from the <code>Mutation score: NN.NN% (...)</code> line of{" "}
             <code>gooze report view</code> and fails when it is below{" "}
