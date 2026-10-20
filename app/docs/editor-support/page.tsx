@@ -38,8 +38,9 @@ export default function EditorSupportPage() {
               <code>gooze.yaml</code> config.
             </li>
             <li>
-              <strong>▶ gooze run</strong>, <strong>gooze run --estimate</strong>, and
-              <strong> 📊 gooze report</strong> code lenses at the top of every Go file.
+              <strong>gooze: run package</strong>, <strong>gooze: estimate</strong>, and
+              <strong> gooze: report</strong> code lenses at the top of every Go file,
+              scoped to that file&apos;s package.
             </li>
             <li>
               Mutation scores from your reports shown inline after a run, and a
@@ -134,19 +135,23 @@ export default function EditorSupportPage() {
           <h2>Command line</h2>
           <p>
             <code>goozels check</code> prints the same diagnostics without an editor,
-            one per line, and nothing for clean files:
+            one per line, showing each surviving mutant&apos;s original and mutated code:
           </p>
           <CodeBlock
             lang="bash"
-            code={`$ goozels check calc/calc.go gooze.yaml
-calc/calc.go:1:1: warning: gooze: 2/16 mutants survived — score 87.50%
-calc/calc.go:10:2: warning: gooze: surviving comparison mutant — tests still pass with: if n <= lo {
-gooze.yaml:13:1: error: missing a space after ":"; gooze will ignore this whole file and use its defaults`}
+            code={`$ goozels check calc.go gooze.yaml
+calc.go:1:1: warning: gooze: score 87.50% — 14 killed, 2 survived
+calc.go:10:2: warning: gooze: surviving comparison mutant — tests still pass with \`if n < lo {\` → \`if n <= lo {\`
+calc.go:13:2: warning: gooze: surviving comparison mutant — tests still pass with \`if n > hi {\` → \`if n >= hi {\`
+gooze.yaml:1:1: error: missing a space after ":"; gooze will ignore this whole file and use its defaults`}
           />
           <p>
             Checking a <code>_test.go</code> file also reports the source files it
-            tests. Run it from your project root, or pass <code>-workdir DIR</code>{" "}
-            to say where <code>.gooze-reports</code> lives.
+            tests. When a file changed since gooze last ran, goozels says so and prints
+            the rerun command instead of pointing at lines that moved. It finds the
+            workspace by walking up to <code>.gooze-reports</code>;{" "}
+            <code>-max N</code> caps the output. It exits 1 when it reports an error
+            (such as a gooze.yaml that gooze would ignore), so it also works in CI.
           </p>
         </div>
 
@@ -166,15 +171,44 @@ gooze.yaml:13:1: error: missing a space after ":"; gooze will ignore this whole 
             code={`/plugin marketplace add gooze-dev/claude-plugin
 /plugin install gooze@gooze`}
           />
+          <p>Then run <code>/gooze:init</code> once in your project. The plugin adds:</p>
+          <ul>
+            <li>
+              <code>/gooze:init</code>: writes <code>gooze.yaml</code>, adds a short,
+              versioned gooze guide to <code>CLAUDE.md</code> and/or{" "}
+              <code>AGENTS.md</code>, and allows the gooze commands, asking before
+              each change.
+            </li>
+            <li>
+              <code>/gooze:mutation-testing</code>: the run, read, kill-survivors loop.
+            </li>
+            <li>
+              <code>/gooze:ci-setup</code>: adds gooze to the Makefile or CI files
+              your repo already has (GitHub Actions, GitLab CI, …); it never creates
+              new ones.
+            </li>
+            <li>
+              A post-edit hook that uses goozels, and a session check that says when a
+              tool or the guide is out of date.
+            </li>
+          </ul>
           <p>
-            It adds a <code>/gooze:mutation-testing</code> skill that teaches Claude
-            the run, read, kill-survivors loop, and a post-edit hook that uses
-            goozels. Keep the official <code>gopls-lsp</code> plugin enabled for Go
-            code intelligence. See{" "}
+            Keep the official <code>gopls-lsp</code> plugin enabled for Go code
+            intelligence. See{" "}
             <a href={CLAUDE_PLUGIN_REPO} target="_blank" rel="noopener noreferrer" className={LINK}>
               gooze-dev/claude-plugin
             </a>
             .
+          </p>
+
+          <h3>Code review</h3>
+          <p>
+            Claude Code&apos;s built-in <code>/code-review</code> follows{" "}
+            <code>CLAUDE.md</code>, so the guide from <code>/gooze:init</code> makes
+            reviews run gooze on the changed packages and report surviving mutants as
+            test gaps (allow the gooze commands so the review isn&apos;t stopped by
+            prompts). For pull requests, run gooze in CI and give the reviewer its
+            report; the managed Code Review service doesn&apos;t run code.
           </p>
 
           <h3>Codex</h3>
