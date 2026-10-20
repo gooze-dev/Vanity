@@ -1,8 +1,8 @@
+import Link from "next/link"
 import { docsMetadata } from "@/lib/docs-meta"
 import { CodeBlock } from "@/components/code-block"
 
 const GITHUB_REPO = "https://github.com/gooze-dev/goozels"
-const CLAUDE_PLUGIN_REPO = "https://github.com/gooze-dev/claude-plugin"
 const LINK = "text-[color:var(--gooze-teal)] hover:underline"
 
 export const metadata = docsMetadata("/docs/editor-support")
@@ -194,53 +194,19 @@ gooze.yaml:1:1: error: missing a space after ":"; gooze will ignore this whole f
           </p>
 
           <h3>Claude Code</h3>
-          <p>Install the gooze plugin from its marketplace, in a Claude Code session:</p>
-          <CodeBlock
-            lang="text"
-            code={`/plugin marketplace add gooze-dev/claude-plugin
-/plugin install gooze@gooze`}
-          />
-          <p>Then run <code>/gooze:init</code> once in your project. The plugin adds:</p>
-          <ul>
-            <li>
-              <code>/gooze:init</code>: writes <code>gooze.yaml</code>, adds a short,
-              versioned gooze guide to <code>CLAUDE.md</code> and/or{" "}
-              <code>AGENTS.md</code>, and allows the gooze commands, asking before
-              each change.
-            </li>
-            <li>
-              <code>/gooze:mutation-testing</code>: the run, read, kill-survivors loop.
-            </li>
-            <li>
-              <code>/gooze:ci-setup</code>: adds gooze to the Makefile or CI files
-              your repo already has (GitHub Actions, GitLab CI, …); it never creates
-              new ones.
-            </li>
-            <li>
-              A post-edit hook that uses goozels, and a session check that says when a
-              tool or the guide is out of date.
-            </li>
-          </ul>
           <p>
-            Keep the official <code>gopls-lsp</code> plugin enabled for Go code
-            intelligence. See{" "}
-            <a href={CLAUDE_PLUGIN_REPO} target="_blank" rel="noopener noreferrer" className={LINK}>
-              gooze-dev/claude-plugin
-            </a>
+            Install the gooze plugin, which sets a project up, runs the
+            kill-survivors loop and uses goozels for results after every edit. See{" "}
+            <Link href="/docs/claude-code" className={LINK}>
+              Claude Code
+            </Link>
             .
           </p>
 
-          <h3>Code review</h3>
-          <p>
-            Claude Code&apos;s built-in <code>/code-review</code> follows{" "}
-            <code>CLAUDE.md</code>, so the guide from <code>/gooze:init</code> makes
-            reviews run gooze on the changed packages and report surviving mutants as
-            test gaps (allow the gooze commands so the review isn&apos;t stopped by
-            prompts). For pull requests, run gooze in CI and give the reviewer its
-            report; the managed Code Review service doesn&apos;t run code.
-          </p>
-
           <h3>Codex</h3>
+          <p className="text-sm text-muted-foreground">
+            Not yet verified with Codex; support is on the way.
+          </p>
           <p>
             Copy{" "}
             <a href={`${GITHUB_REPO}/blob/main/editors/codex/hooks.json`} target="_blank" rel="noopener noreferrer" className={LINK}>
@@ -256,6 +222,9 @@ gooze.yaml:1:1: error: missing a space after ":"; gooze will ignore this whole f
           </p>
 
           <h3>opencode</h3>
+          <p className="text-sm text-muted-foreground">
+            Not yet verified with opencode; support is on the way.
+          </p>
           <p>
             Copy the plugin for your version to{" "}
             <code>.opencode/plugins/goozels.ts</code>:{" "}
