@@ -16,7 +16,7 @@ const facts = `**Key facts (gooze ${DOCS_FACTS_VERSION}):**
 - Default mutation operators: arithmetic, comparison, logical, boolean, numbers, unary.
 - Ignore code: \`-x/--exclude <regex>\` for files, \`//gooze:ignore [mutators]\` for a file, function, or line.
 - Changed-code-only testing: yes, by incremental execution instead of git diff. A file is re-tested only when its source, its _test.go, or the mutators changed (content hashes; no git, base ref, or history needed; uncommitted edits count). Other results are reused, so every run reports a whole-codebase score (not a diff-only score): \`Mutation score: 87.50% (14 killed, 2 survived; 16 cached, 0 tested)\`. Granularity is per file. Changes in other files don't invalidate the cache; run \`--no-cache\` periodically.
-- Same workflow from small projects to large monorepos; fast TDD feedback because only changed files re-run.
+- Outperforms from tiny projects to microservices and large monorepos with the same workflow: fast TDD feedback because only changed files re-run, one CI job per service with a shared OCI baseline, and sharding when a monorepo outgrows one job.
 - Sharding: \`gooze run -s INDEX/TOTAL\` per CI job (each prints the score of its shard), then \`gooze report merge\` (the full score).
 - Shared baseline: \`gooze report push|pull <oci-ref>\` stores the reports dir in any OCI registry (e.g. GHCR).
 - Coverage gate: \`--coverage-profile coverage.out\` skips mutations on uncovered lines (status not_covered).

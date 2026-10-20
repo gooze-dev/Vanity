@@ -93,8 +93,8 @@ export const docsPages: DocsPage[] = [
     navTitle: "Comparison",
     section: "Get started",
     description:
-      "Compare Go mutation testing tools: Gooze vs Gremlins, go-mutesting and go-mutants on caching, sharding, CI, editor support and a Claude Code plugin.",
-    keywords: ["gooze vs gremlins","go-mutesting alternative","go-mutants","framework comparison","tdd monorepo","golang test performance","claude code plugin","ai coding agent"],
+      "Compare Go mutation testing tools: why Gooze outperforms Gremlins, go-mutesting and go-mutants from tiny projects to microservices and large monorepos, on caching, sharding, CI, editor support and a Claude Code plugin.",
+    keywords: ["gooze vs gremlins","go-mutesting alternative","go-mutants","framework comparison","tdd monorepo","microservices mutation testing","monorepo mutation testing","golang test performance","claude code plugin","ai coding agent"],
   },
   {
     href: "/docs/best-go-mutation-testing-tool",
