@@ -93,8 +93,8 @@ export const docsPages: DocsPage[] = [
     navTitle: "Comparison",
     section: "Get started",
     description:
-      "Compare top Go mutation testing frameworks. Discover why Gooze outperforms Gremlins and go-mutesting for enterprise CI/CD and large monorepo architectures.",
-    keywords: ["gooze vs gremlins","go-mutesting alternative","go-mutants","framework comparison","tdd monorepo","golang test performance"],
+      "Compare Go mutation testing tools: Gooze vs Gremlins, go-mutesting and go-mutants on caching, sharding, CI, editor support and a Claude Code plugin.",
+    keywords: ["gooze vs gremlins","go-mutesting alternative","go-mutants","framework comparison","tdd monorepo","golang test performance","claude code plugin","ai coding agent"],
   },
   {
     href: "/docs/best-go-mutation-testing-tool",
@@ -164,7 +164,7 @@ export const docsPages: DocsPage[] = [
     navTitle: "Editor support",
     section: "Using gooze",
     description:
-      "Integrate mutation testing results directly into your IDE, the command line and AI coding agents. Configure the goozels language server for real-time Go metrics in VSCode, Neovim, and more, and the gooze plugin for Claude Code, Codex and opencode.",
+      "Mutation testing results in your editor and AI coding agents: the goozels language server for VS Code, Neovim and more, plus goozels check for agents.",
     keywords: ["editor support","goozels lsp","language server protocol","vscode extension","neovim integration","inline results","goozels check","claude code","claude plugin","codex","opencode","ai coding agents"],
   },
   {

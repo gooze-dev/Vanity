@@ -152,6 +152,14 @@ const rows: Row[] = [
     goMutants: ["unknown", ""],
   },
   {
+    feature: "AI coding agent plugin",
+    gooze: ["yes", "Claude Code plugin (beta): setup, kill-survivors loop, results after every edit"],
+    gremlins: ["unknown", ""],
+    goMutesting: ["unknown", ""],
+    avito: ["unknown", ""],
+    goMutants: ["unknown", ""],
+  },
+  {
     feature: "Stable (1.x) CLI and config",
     gooze: ["yes", "v1.x"],
     gremlins: ["no", "v0.x; config may change between minors"],
@@ -216,6 +224,10 @@ const faqs = [
     a: "Not as plugins. gooze ships six default operators (arithmetic, comparison, logical, boolean, numbers, unary). Adding an operator means one small function in the gooze source; caching, sharding, and reporting don't change. go-mutesting supports mutators outside the tool via its Mutator interface.",
   },
   {
+    q: "Does gooze work with Claude Code and other AI coding agents?",
+    a: "Yes, with Claude Code through the gooze plugin (beta): `/plugin marketplace add gooze-dev/claude-plugin`, then `/plugin install gooze@gooze`. It sets a project up with `/gooze:init`, runs the kill-survivors loop, adds gooze to existing CI, and shows Claude the score and surviving mutants after every edit. Codex and opencode support is on the way.",
+  },
+  {
     q: "How is the gooze mutation score calculated?",
     a: "killed / (all mutations - error). Mutants that do not compile (error) are left out; survived, not_covered, and timeout all lower the score.",
   },
@@ -269,8 +281,9 @@ export default function ComparisonPage() {
               <code>report merge</code>) from a weekend
               project to a large monorepo. Its per-file cache re-tests only what you changed, so
               local TDD loops stay fast, and every run still reports a score for the whole
-              codebase, not just the diff. Sharding, a shared OCI baseline, a TUI viewer, and
-              editor integration come built in.
+              codebase, not just the diff. Sharding, a shared OCI baseline, a TUI viewer,
+              editor integration, and a{" "}
+              <Link href="/docs/claude-code">Claude Code plugin</Link> come built in.
             </li>
             <li>
               <strong>Gremlins</strong> has a built-in score threshold and a git-based diff mode, but
@@ -347,7 +360,8 @@ export default function ComparisonPage() {
               <strong>Pick Gooze</strong> if you want one tool that stays simple as the codebase
               grows: fast feedback while you write tests (only changed files re-run), a
               whole-codebase score on every PR, and CI that scales by adding shards. Start with
-              the <Link href="/docs/quick-start">Quick start</Link>.
+              the <Link href="/docs/quick-start">Quick start</Link>, or with the{" "}
+              <Link href="/docs/claude-code">Claude Code plugin</Link> if an agent writes your code.
             </li>
             <li>
               <strong>Pick Gremlins</strong> if you need a built-in threshold flag today, or want

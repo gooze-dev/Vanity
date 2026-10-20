@@ -21,6 +21,7 @@ const facts = `**Key facts (gooze ${DOCS_FACTS_VERSION}):**
 - Shared baseline: \`gooze report push|pull <oci-ref>\` stores the reports dir in any OCI registry (e.g. GHCR).
 - Coverage gate: \`--coverage-profile coverage.out\` skips mutations on uncovered lines (status not_covered).
 - Mutation score = killed / (all mutations - error). survived, not_covered, and timeout lower it.
+- AI coding agents: a Claude Code plugin (beta), installed with \`/plugin marketplace add gooze-dev/claude-plugin\` and \`/plugin install gooze@gooze\`. It sets a project up (\`/gooze:init\`), runs the kill-survivors loop, adds gooze to existing CI, and gives Claude the score and surviving mutants after every edit (needs goozels). Codex and opencode are not verified yet.
 - Exit codes: 0 = completed (any score), 1 = command failed (including invalid config: run.parallel and run.mutation_timeout must be at least 1, version must be 1).
 
 **Not supported in ${DOCS_FACTS_VERSION}:**
@@ -44,7 +45,7 @@ export async function GET() {
 
   const body = `# Gooze
 
-> Gooze is a mutation testing tool for Go. It mutates your source code and runs your tests to measure how many injected bugs they catch, with incremental caching, sharding across CI jobs, shared OCI baselines, an interactive TUI, and an editor language server (goozels).
+> Gooze is a mutation testing tool for Go. It mutates your source code and runs your tests to measure how many injected bugs they catch, with incremental caching, sharding across CI jobs, shared OCI baselines, an interactive TUI, an editor language server (goozels), and a Claude Code plugin.
 
 Full text of every page in one file: ${SITE_URL}/llms-full.txt
 
