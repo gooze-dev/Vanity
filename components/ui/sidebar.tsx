@@ -17,11 +17,6 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet"
 import { Skeleton } from "@/components/ui/skeleton"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
 import { PanelLeftIcon } from "lucide-react"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
@@ -501,12 +496,15 @@ function SidebarMenuButton({
 }: React.ComponentProps<"button"> & {
   asChild?: boolean
   isActive?: boolean
-  tooltip?: string | React.ComponentProps<typeof TooltipContent>
+  tooltip?: string
 } & VariantProps<typeof sidebarMenuButtonVariants>) {
   const Comp = asChild ? Slot.Root : "button"
   const { isMobile, state } = useSidebar()
 
-  const button = (
+  // A native title instead of a Radix tooltip: the label only matters when
+  // the sidebar is collapsed to icons, and the tooltip stack (Popper,
+  // floating-ui) cost ~20 KB gzip of JS on every page.
+  return (
     <Comp
       data-slot="sidebar-menu-button"
       data-sidebar="menu-button"
@@ -514,31 +512,10 @@ function SidebarMenuButton({
       // Only set when true: the data-active: variant matches the attribute
       // existing at all, so data-active="false" would style every item.
       data-active={isActive || undefined}
+      title={tooltip && state === "collapsed" && !isMobile ? tooltip : undefined}
       className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
       {...props}
     />
-  )
-
-  if (!tooltip) {
-    return button
-  }
-
-  if (typeof tooltip === "string") {
-    tooltip = {
-      children: tooltip,
-    }
-  }
-
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>{button}</TooltipTrigger>
-      <TooltipContent
-        side="right"
-        align="center"
-        hidden={state !== "collapsed" || isMobile}
-        {...tooltip}
-      />
-    </Tooltip>
   )
 }
 
