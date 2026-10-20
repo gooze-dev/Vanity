@@ -2,6 +2,7 @@ import type * as React from "react"
 import { docsMetadata } from "@/lib/docs-meta"
 import Link from "next/link"
 import { ArrowRight, CircleCheck, CircleDashed } from "lucide-react"
+import { DOCS_FACTS_VERSION } from "@/lib/version"
 
 // Stated plainly so readers (and search/AI summaries) don't have to guess.
 // Keep in sync with the comparison page when a limitation is lifted.
@@ -335,6 +336,12 @@ const themes: Theme[] = [
         shipped: true,
         href: "/docs/editor-support",
       },
+      {
+        title: "AI coding agents",
+        detail: "Gooze results after every edit in Claude Code, Codex and opencode, plus a Claude Code plugin that sets a project up and runs the kill-survivors loop.",
+        shipped: true,
+        href: "/docs/editor-support#ai-agents",
+      },
     ],
   },
   {
@@ -371,7 +378,7 @@ const themes: Theme[] = [
         title: "Config validation",
         detail: (
           <>
-            Clear errors for invalid values in <code>gooze.yaml</code> and warnings for unknown keys, so every setting takes effect as written.
+            Clear errors for invalid values in <code>gooze.yaml</code> and warnings for unknown keys, so every setting takes effect as written. Out-of-range values (such as <code>run.parallel: 0</code>) are rejected since v1.2.0; goozels already flags unknown keys in the editor.
           </>
         ),
       },
@@ -497,7 +504,7 @@ export default function RoadmapPage() {
       })}
 
       <div id="limitations">
-        <h2>Coming next (as of v1.1.0)</h2>
+        <h2>Coming next (as of {DOCS_FACTS_VERSION})</h2>
         <p className="text-sm text-muted-foreground">
           Features on the way, and what to use until they land.
         </p>
