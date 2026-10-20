@@ -125,8 +125,8 @@ gooze report push ghcr.io/your-org/your-repo/gooze-reports:main`}
               <code className="bg-muted px-1 py-0.5 rounded">GOOZE_REGISTRY_USERNAME</code> without{" "}
               <code className="bg-muted px-1 py-0.5 rounded">GOOZE_REGISTRY_PASSWORD</code> is an error;{" "}
               <code className="bg-muted px-1 py-0.5 rounded">GOOZE_REGISTRY_PASSWORD</code> alone is sent as a bearer token. See{" "}
-              <Link href="/docs/ci" className="underline underline-offset-4">CI / GitHub Actions</Link>{" "}
-              for a full workflow.
+              <Link href="/docs/ci/sharing-reports" className="underline underline-offset-4">Sharing reports (OCI)</Link>{" "}
+              for the full baseline workflow.
             </p>
           </div>
         </div>

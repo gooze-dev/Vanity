@@ -4,6 +4,37 @@ import Link from "next/link"
 import { GoozeLogo } from "@/components/gooze-logo"
 import { GoozePrimaryCtaButton } from "@/components/gooze-cta-button"
 
+// One row of cards per sidebar section, pointing at the most-used pages.
+const sections = [
+  {
+    id: "using",
+    title: "Using gooze",
+    cards: [
+      { title: "Reading results", href: "/docs/usage/results", desc: "Statuses, survivors, and what to do next." },
+      { title: "Ignoring code", href: "/docs/usage/ignoring-code", desc: "Use -x and //gooze:ignore to skip." },
+      { title: "Incremental runs", href: "/docs/usage/incremental-runs", desc: "Re-test only what changed." },
+    ],
+  },
+  {
+    id: "ci",
+    title: "CI & teams",
+    cards: [
+      { title: "GitHub Actions", href: "/docs/ci/github", desc: "From a one-liner to a cached pipeline." },
+      { title: "Sharding and merging", href: "/docs/ci/sharding", desc: "Split a run across parallel jobs." },
+      { title: "Sharing reports (OCI)", href: "/docs/ci/sharing-reports", desc: "One baseline for CI and teammates." },
+    ],
+  },
+  {
+    id: "reference",
+    title: "Reference",
+    cards: [
+      { title: "CLI reference", href: "/docs/cli", desc: "Every command and flag." },
+      { title: "Configuration", href: "/docs/config", desc: "gooze.yaml, env vars, and precedence." },
+      { title: "Mutation operators", href: "/docs/mutations", desc: "What gooze changes in your code." },
+    ],
+  },
+]
+
 export const metadata = docsMetadata("/docs")
 
 export default function DocsPage() {
@@ -55,59 +86,23 @@ export default function DocsPage() {
           </GoozePrimaryCtaButton>
         </div>
 
-        <div id="features">
-          <h2 className="text-2xl font-semibold mb-4">Features</h2>
-          <div className="grid gap-4 md:grid-cols-3">
-            <Link
-              href="/docs/features/bypass-mutation"
-              className="rounded-lg border bg-card p-5 hover:bg-muted/50 hover:border-[color:var(--gooze-teal)] transition-colors"
-            >
-              <div className="font-semibold mb-1">Bypass mutation</div>
-              <div className="text-sm text-muted-foreground">Use -x and //gooze:ignore to skip.</div>
-            </Link>
-            <Link
-              href="/docs/features/incremental-execution"
-              className="rounded-lg border bg-card p-5 hover:bg-muted/50 hover:border-[color:var(--gooze-teal)] transition-colors"
-            >
-              <div className="font-semibold mb-1">Incremental execution</div>
-              <div className="text-sm text-muted-foreground">Output (-o), reports, and OCI storage.</div>
-            </Link>
-            <Link
-              href="/docs/features/ui-modes"
-              className="rounded-lg border bg-card p-5 hover:bg-muted/50 hover:border-[color:var(--gooze-teal)] transition-colors"
-            >
-              <div className="font-semibold mb-1">UI modes</div>
-              <div className="text-sm text-muted-foreground">Interactive terminal and CI output.</div>
-            </Link>
+        {sections.map((section) => (
+          <div key={section.id} id={section.id}>
+            <h2 className="text-2xl font-semibold mb-4">{section.title}</h2>
+            <div className="grid gap-4 md:grid-cols-3">
+              {section.cards.map((card) => (
+                <Link
+                  key={card.href}
+                  href={card.href}
+                  className="rounded-lg border bg-card p-5 hover:bg-muted/50 hover:border-[color:var(--gooze-teal)] transition-colors"
+                >
+                  <div className="font-semibold mb-1">{card.title}</div>
+                  <div className="text-sm text-muted-foreground">{card.desc}</div>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-
-        <div id="reference">
-          <h2 className="text-2xl font-semibold mb-4">Reference</h2>
-          <div className="grid gap-4 md:grid-cols-3">
-            <Link
-              href="/docs/reports"
-              className="rounded-lg border bg-card p-5 hover:bg-muted/50 hover:border-[color:var(--gooze-teal)] transition-colors"
-            >
-              <div className="font-semibold mb-1">Reports</div>
-              <div className="text-sm text-muted-foreground">Where output goes and what files mean.</div>
-            </Link>
-            <Link
-              href="/docs/mutations"
-              className="rounded-lg border bg-card p-5 hover:bg-muted/50 hover:border-[color:var(--gooze-teal)] transition-colors"
-            >
-              <div className="font-semibold mb-1">Mutations</div>
-              <div className="text-sm text-muted-foreground">Statuses, types, and what to do next.</div>
-            </Link>
-            <Link
-              href="/docs/troubleshooting"
-              className="rounded-lg border bg-card p-5 hover:bg-muted/50 hover:border-[color:var(--gooze-teal)] transition-colors"
-            >
-              <div className="font-semibold mb-1">Troubleshooting</div>
-              <div className="text-sm text-muted-foreground">Common gotchas and quick fixes.</div>
-            </Link>
-          </div>
-        </div>
+        ))}
       </div>
     </section>
   )

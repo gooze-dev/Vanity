@@ -74,41 +74,15 @@ export const metadata = docsMetadata("/docs/mutations")
 export default function MutationsPage() {
   return (
     <section>
-      <h1 className="text-4xl font-bold tracking-tight mb-4">Mutations</h1>
+      <h1 className="text-4xl font-bold tracking-tight mb-4">Mutation operators</h1>
       <p className="text-lg text-muted-foreground mb-8">
         A mutation is a tiny change in your code.
         Gooze applies one mutation and runs tests to see if tests notice.
+        For what each result status means, see{" "}
+        <Link href="/docs/usage/results" className="underline underline-offset-4">Reading results</Link>.
       </p>
 
       <div className="space-y-12">
-        <div id="statuses">
-          <h2 className="text-2xl font-semibold mb-3">Statuses</h2>
-          <p className="mb-3 text-muted-foreground">
-            Each mutation ends in a status.
-            Simple meaning:
-          </p>
-          <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
-            <li>
-              <strong>Killed</strong>: tests failed for the mutation (usually good)
-            </li>
-            <li>
-              <strong>Survived</strong>: tests still passed (usually means weak/missing assertion)
-            </li>
-            <li>
-              <strong>Not covered</strong>: the mutated line is not covered by the coverage profile
-              passed with <code className="bg-muted px-1 py-0.5 rounded">--coverage-profile</code>, so
-              Gooze skipped its tests. It counts as a survivor (it lowers the score) but is tallied
-              separately.
-            </li>
-            <li>
-              <strong>Timeout</strong>: the tests exceeded <code className="bg-muted px-1 py-0.5 rounded">--mutation-timeout</code> (default 120 seconds)
-            </li>
-            <li>
-              <strong>Error</strong>: the mutant did not compile; excluded from the score
-            </li>
-          </ul>
-        </div>
-
         <div id="types">
           <h2 className="text-2xl font-semibold mb-3">Mutation types</h2>
           <p className="mb-3 text-muted-foreground">
@@ -151,25 +125,8 @@ export default function MutationsPage() {
 
           <p className="mt-3 text-muted-foreground">
             Skip a line or block with the{" "}
-            <Link href="/docs/features/bypass-mutation" className="underline underline-offset-4">bypass annotation</Link>.
+            <Link href="/docs/usage/ignoring-code" className="underline underline-offset-4">{"//gooze:ignore"} directive</Link>.
           </p>
-        </div>
-
-        <div id="what-to-do">
-          <h2 className="text-2xl font-semibold mb-3">What to do when you see a survivor</h2>
-          <p className="mb-3 text-muted-foreground">
-            A survivor is a hint.
-            It usually means: your tests do not check this behavior.
-          </p>
-          <ol className="list-decimal pl-5 space-y-2 text-muted-foreground">
-            <li>Open the diff in <code className="bg-muted px-1 py-0.5 rounded">gooze report view</code>.</li>
-            <li>Ask: what behavior changed?</li>
-            <li>Add a test that would fail if this behavior changes.</li>
-            <li>Run Gooze again and see if it is killed now.</li>
-          </ol>
-          <div className="mt-4">
-            <CodeBlock lang="bash" code="gooze report view" />
-          </div>
         </div>
 
         <div id="learn">
@@ -179,7 +136,7 @@ export default function MutationsPage() {
               <Link href="/docs/mutation-testing">Mutation testing basics</Link>
             </Button>
             <Button asChild variant="outline">
-              <Link href="/docs/reports">Reports</Link>
+              <Link href="/docs/usage/results">Reading results</Link>
             </Button>
             <Button asChild variant="outline">
               <Link href="/docs/troubleshooting">Troubleshooting</Link>

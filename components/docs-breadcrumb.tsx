@@ -12,71 +12,30 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { getDocsTrail, getSectionLanding, navTitle } from "@/lib/docs-pages"
 import { cn } from "@/lib/utils"
-
-const featureTitles: Record<string, string> = {
-  "bypass-mutation": "Bypass mutation",
-  "incremental-execution": "Incremental execution",
-  "ui-modes": "UI modes",
-}
-
-const sectionTitles: Record<string, string> = {
-  "quick-start": "Quick start",
-  install: "Installation",
-  "mutation-testing": "Mutation testing",
-  cli: "CLI",
-  config: "Configuration",
-  reports: "Reports",
-  mutations: "Mutations",
-  "editor-support": "Editor support",
-  troubleshooting: "Troubleshooting",
-  ci: "GitHub Actions",
-  gitlab: "GitLab CI",
-}
-
-const cliCommandTitles: Record<string, string> = {
-  run: "run",
-  report: "report",
-  config: "config",
-  version: "version",
-}
 
 type Crumb = {
   label: string
   href?: string
 }
 
-function titleFromSlug(slug: string) {
-  return slug
-    .split("-")
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ")
-}
-
-function buildCrumbs(parts: string[]): Crumb[] {
-  const section = parts[1]
+// Home > Documentation > Section > parents... > page, from the docs registry.
+function buildCrumbs(pathname: string): Crumb[] {
   const crumbs: Crumb[] = [
     { label: "Home", href: "/" },
     { label: "Documentation", href: "/docs" },
   ]
 
-  if (section === "features" && parts[2]) {
-    crumbs.push(
-      { label: "Features", href: "/docs#features" },
-      { label: featureTitles[parts[2]] ?? titleFromSlug(parts[2]) },
-    )
-  } else if (section && parts.length >= 3) {
-    crumbs.push(
-      { label: sectionTitles[section] ?? titleFromSlug(section), href: `/docs/${section}` },
-      {
-        label:
-          section === "cli"
-            ? cliCommandTitles[parts[2]] ?? titleFromSlug(parts[2])
-            : titleFromSlug(parts[2]),
-      },
-    )
-  } else if (section) {
-    crumbs.push({ label: sectionTitles[section] ?? titleFromSlug(section) })
+  const trail = getDocsTrail(pathname)
+  if (trail.length && trail[trail.length - 1].href !== "/docs") {
+    const section = trail[0].section
+    const landing = getSectionLanding(section)?.href
+    // Only link the section when its landing page isn't the next crumb anyway.
+    crumbs.push({ label: section, href: landing !== trail[0].href ? landing : undefined })
+    for (const page of trail) {
+      crumbs.push({ label: navTitle(page), href: page.href })
+    }
   }
 
   const last = crumbs[crumbs.length - 1]
@@ -86,13 +45,13 @@ function buildCrumbs(parts: string[]): Crumb[] {
 
 export function DocsBreadcrumb() {
   const pathname = usePathname() || "/docs"
-  const parts = pathname.split("?")[0].split("#")[0].split("/").filter(Boolean)
+  const path = pathname.split("?")[0].split("#")[0].replace(/\/$/, "")
 
-  if (parts[0] !== "docs") {
+  if (!path.startsWith("/docs")) {
     return null
   }
 
-  const crumbs = buildCrumbs(parts)
+  const crumbs = buildCrumbs(path)
   const firstVisible = Math.max(0, crumbs.length - 2)
 
   return (

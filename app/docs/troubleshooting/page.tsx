@@ -1,4 +1,6 @@
 import { docsMetadata } from "@/lib/docs-meta"
+import Link from "next/link"
+
 import { CodeBlock } from "@/components/code-block"
 
 export const metadata = docsMetadata("/docs/troubleshooting")
@@ -50,29 +52,19 @@ export default function TroubleshootingPage() {
         </div>
 
         <div id="statuses">
-          <h2 className="text-2xl font-semibold mb-3">Statuses you will see</h2>
-          <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
-            <li><code className="bg-muted px-1 py-0.5 rounded">killed</code>: the package tests failed for the mutation.</li>
-            <li><code className="bg-muted px-1 py-0.5 rounded">survived</code>: the package tests still passed.</li>
-            <li>
-              <code className="bg-muted px-1 py-0.5 rounded">not_covered</code>: the mutated line is uncovered in the{" "}
-              <code className="bg-muted px-1 py-0.5 rounded">--coverage-profile</code>, so its tests were not run; counts as a survivor.
-            </li>
-            <li><code className="bg-muted px-1 py-0.5 rounded">timeout</code>: the tests exceeded <code className="bg-muted px-1 py-0.5 rounded">--mutation-timeout</code>.</li>
-            <li><code className="bg-muted px-1 py-0.5 rounded">error</code>: the mutant did not compile; excluded from the score.</li>
-          </ul>
-          <p className="mt-4 text-muted-foreground">
-            A missing test file does not skip anything: Gooze runs the sibling{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">&lt;name&gt;_test.go</code> if it exists, otherwise any{" "}
-            <code className="bg-muted px-1 py-0.5 rounded">*_test.go</code> in the same package. If the package has no test file at all,
-            the mutation is reported as <strong>survived</strong>.
+          <h2 className="text-2xl font-semibold mb-3">Not sure what a status means</h2>
+          <p className="text-muted-foreground">
+            Killed, survived, not covered, timeout, and error are explained in{" "}
+            <Link href="/docs/usage/results#statuses" className="underline underline-offset-4">Reading results</Link>.
           </p>
         </div>
 
         <div id="stale">
           <h2 className="text-2xl font-semibold mb-3">Reports look stale</h2>
           <p className="mb-3 text-muted-foreground">
-            If you suspect cached results are reused, force a full re-run:
+            If you suspect cached results are reused
+            (see <Link href="/docs/usage/incremental-runs" className="underline underline-offset-4">Incremental runs</Link>),
+            force a full re-run:
           </p>
           <CodeBlock lang="bash" code="gooze run --no-cache ./..." />
         </div>
@@ -80,7 +72,8 @@ export default function TroubleshootingPage() {
         <div id="shards">
           <h2 className="text-2xl font-semibold mb-3">Shards not showing up in view</h2>
           <p className="mb-3 text-muted-foreground">
-            If you ran with <code className="bg-muted px-1 py-0.5 rounded">-s INDEX/TOTAL</code>, you need to merge before viewing:
+            If you ran with <code className="bg-muted px-1 py-0.5 rounded">-s INDEX/TOTAL</code>, you need to merge before viewing
+            (see <Link href="/docs/ci/sharding" className="underline underline-offset-4">Sharding and merging</Link>):
           </p>
           <CodeBlock lang="bash" code="gooze report merge" />
           <div className="mt-2">

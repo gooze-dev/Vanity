@@ -23,6 +23,7 @@ import {
 type NavLeaf = {
   title: string
   url: string
+  isActive?: boolean
 }
 
 type NavSubItem = NavLeaf & {
@@ -66,7 +67,7 @@ function NavSub({ item }: { item: NavSubItem }) {
           <SidebarMenuSub>
             {item.items.map((leaf) => (
               <SidebarMenuSubItem key={leaf.title}>
-                <SidebarMenuSubButton asChild size="sm">
+                <SidebarMenuSubButton asChild size="sm" isActive={leaf.isActive}>
                   <a href={leaf.url}>
                     <span>{leaf.title}</span>
                   </a>

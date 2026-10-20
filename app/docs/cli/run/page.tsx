@@ -236,7 +236,8 @@ export default function CliRunPage() {
         <div id="cache">
           <h2 className="text-2xl font-semibold mb-3">Caching / incremental runs</h2>
           <p className="mb-3 text-muted-foreground">
-            Gooze can reuse stored reports if nothing changed.
+            Gooze can reuse stored reports if nothing changed
+            (see <Link href="/docs/usage/incremental-runs" className="underline underline-offset-4">Incremental runs</Link>).
             To force a full re-run:
           </p>
           <CodeBlock lang="bash" code="gooze run --no-cache ./..." />
@@ -282,7 +283,8 @@ gooze run --coverage-profile coverage.out ./...`}
         <div id="shard">
           <h2 className="text-2xl font-semibold mb-3">Sharding (CI)</h2>
           <p className="mb-3 text-muted-foreground">
-            Sharding splits the work across jobs.
+            Sharding splits the work across jobs
+            (walkthrough: <Link href="/docs/ci/sharding" className="underline underline-offset-4">Sharding and merging</Link>).
             Example with 3 jobs:
           </p>
           <CodeBlock
@@ -306,7 +308,7 @@ gooze run -s 2/3 ./...`}
           <h2 className="text-2xl font-semibold mb-3">Next</h2>
           <div className="flex flex-wrap gap-3">
             <Button asChild variant="outline">
-              <Link href="/docs/reports">Reports</Link>
+              <Link href="/docs/usage/results">Reading results</Link>
             </Button>
             <Button asChild variant="outline">
               <Link href="/docs/cli/report#view">gooze report view</Link>
