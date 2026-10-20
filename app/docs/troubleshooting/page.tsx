@@ -64,9 +64,29 @@ export default function TroubleshootingPage() {
           <p>
             If you suspect cached results are reused
             (see <Link href="/docs/usage/incremental-runs">Incremental runs</Link>),
-            force a full re-run:
+            check which files are cached (the <code>CACHE</code> column of{" "}
+            <code>gooze run --estimate</code>) or force a full re-run:
           </p>
           <CodeBlock lang="bash" code="gooze run --no-cache ./..." />
+        </div>
+
+        <div id="no-reports">
+          <h2>&quot;no reports directory&quot; or &quot;no reports ... match&quot;</h2>
+          <p>
+            <code>gooze report view</code> reads the reports directory set by <code>-o</code>
+            (default <code>.gooze-reports</code>). If it does not exist, run{" "}
+            <code>gooze run</code> first or pass <code>-o</code> with the right directory:
+          </p>
+          <CodeBlock
+            lang="text"
+            code="Error: no reports directory at .gooze-reports; run `gooze run` first, or pass -o with the reports directory"
+          />
+          <p>
+            Path arguments are module-relative, like <code>gooze run</code>&apos;s (
+            <code>./...</code>, <code>./pkg/...</code>, <code>./pkg</code>,{" "}
+            <code>./pkg/file.go</code>). When none matches a report, view exits 1 with{" "}
+            <code>no reports in .gooze-reports match ...</code>.
+          </p>
         </div>
 
         <div id="shards">

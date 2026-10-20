@@ -55,10 +55,22 @@ export default function ResultsPage() {
         <div id="view">
           <h2>Open the results</h2>
           <p>
-            After a run, open the viewer. It reads the reports directory and shows every mutation
-            with its diff.
+            After a run, view the reports. Gooze reads the reports directory and prints a per-file
+            score table, one line per survivor, and the mutation score:
           </p>
           <CodeBlock lang="bash" code="gooze report view" />
+          <CodeBlock
+            lang="text"
+            code={`Survivors (2):
+calc.go:10: survived (comparison): if n < lo { -> if n <= lo {
+calc.go:13: survived (comparison): if n > hi { -> if n >= hi {
+
+Mutation score: 87.50% (14 killed, 2 survived)`}
+          />
+          <p>
+            Pass paths (<code>./internal/domain/...</code>, <code>calc.go</code>) to narrow it to
+            some files, or <code>--all</code> to list every mutation with its diff.
+          </p>
           <p className="text-sm text-muted-foreground">
             Keys and flags: <Link href="/docs/cli/report#view">gooze report view</Link>.
             File layout: <Link href="/docs/reports">Report format</Link>.
@@ -119,9 +131,12 @@ export default function ResultsPage() {
             </li>
             <li>
               <code>gooze run</code>,{" "}
-              <code>gooze report merge</code>, and a non-interactive{" "}
+              <code>gooze report merge</code>, and{" "}
               <code>gooze report view</code> print it as{" "}
-              <code>Mutation score: NN.NN%</code>. To fail CI
+              <code>Mutation score: NN.NN%</code> followed by a breakdown, for example{" "}
+              <code>(14 killed, 2 survived)</code>. <code>gooze run</code> scores every result
+              in its scope, cached and tested, and adds how many were which:{" "}
+              <code>(14 killed, 2 survived; 16 cached, 0 tested)</code>. To fail CI
               below a minimum, see{" "}
               <Link href="/docs/ci/github#gate">the score gate</Link>.
             </li>
@@ -142,7 +157,10 @@ export default function ResultsPage() {
             It usually means: your tests do not check this behavior.
           </p>
           <ol>
-            <li>Open the diff in <code>gooze report view</code>.</li>
+            <li>
+              Find it in <code>gooze report view</code> (file, line, original and mutated code), or
+              open its full diff with <code>gooze report view --all</code>.
+            </li>
             <li>
               Ask: what behavior changed? Each{" "}
               <Link href="/docs/mutations">mutation operator</Link>{" "}

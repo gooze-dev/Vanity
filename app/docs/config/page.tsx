@@ -197,7 +197,10 @@ export default function ConfigPage() {
                   <TableCell>
                     <code>GOOZE_LOG_LEVEL</code>
                   </TableCell>
-                  <TableCell>Log level (for example: debug, info, warn, error)</TableCell>
+                  <TableCell>
+                    Log level: debug, info, warn or error, or a numeric slog level (-4 debug, 0 info, 4
+                    warn, 8 error); default info
+                  </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
@@ -279,6 +282,20 @@ log:
   compress: true              # gzip rotated logs
 `}
           />
+        </div>
+
+        <div id="validation">
+          <h2>Validation</h2>
+          <p>
+            <code>gooze run</code> checks the values before it starts and exits with an error for
+            any out of range:
+          </p>
+          <ul>
+            <li><code>run.parallel</code> must be at least 1</li>
+            <li><code>run.mutation_timeout</code> must be at least 1 (seconds)</li>
+            <li><code>version</code> must be 1</li>
+          </ul>
+          <CodeBlock lang="text" code="Error: invalid run.parallel: 0 is out of range: must be at least 1" />
         </div>
 
         <div id="cli-vs-config">

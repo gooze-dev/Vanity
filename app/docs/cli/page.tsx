@@ -69,6 +69,10 @@ export default function CliPage() {
             <li><code>1</code>: the command failed (bad flag or config, build or I/O error, registry error, interrupted).</li>
           </ul>
           <p>
+            Errors print as <code>Error: ...</code>; the command&apos;s usage text follows only for
+            flag and argument errors, not for runtime errors.
+          </p>
+          <p>
             Survivors never change the exit code, and there is no threshold flag yet. To fail a
             build below a minimum score, use the{" "}
             <Link href="/docs/ci/github#gate">score gate step</Link>.

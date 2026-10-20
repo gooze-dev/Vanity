@@ -16,17 +16,21 @@ export default function CliVersionPage() {
           <h2>Usage</h2>
           <CodeBlock lang="bash" code="gooze version" />
           <p>
-            The command takes no flags and prints one line: the gooze version
-            and the Go version it was built with.
+            The command takes no flags and prints one line on stdout: the module
+            version and the Go version the binary was built with.
           </p>
         </div>
 
         <div id="output">
           <h2>Example output</h2>
-          <CodeBlock lang="text" code={`gooze v1.1.1 (go1.27.3)`} />
+          <CodeBlock
+            lang="text"
+            code="gooze v1.2.0 (go1.27.3)"
+          />
           <p>
-            The version comes from the module build info, so a binary installed
-            with <code>go install …@latest</code> reports that release&apos;s tag.
+            The version comes from the Go build info, so a binary built from a
+            local checkout instead of <code>go install ...@vX.Y.Z</code> shows{" "}
+            <code>(devel)</code> in its place.
           </p>
         </div>
 
@@ -50,7 +54,7 @@ export default function CliVersionPage() {
           <CodeBlock
             lang="bash"
             code={`gooze version
-gooze version | grep -q 'v1.1.1' || { echo 'unexpected gooze version'; exit 1; }`}
+gooze version | grep -q 'gooze v1.2.0 ' || { echo 'unexpected gooze version'; exit 1; }`}
           />
         </div>
       </div>

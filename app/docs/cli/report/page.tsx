@@ -35,17 +35,64 @@ export default function CliReportPage() {
         <div id="view">
           <h2>gooze report view</h2>
           <p>
-            Loads reports from the output directory and displays results.
+            Loads reports from the output directory and prints a per-file score table, one line
+            per mutation that counts against the score, and the mutation score.
           </p>
 
           <h3>Usage</h3>
-          <CodeBlock lang="bash" code="gooze report view" />
+          <CodeBlock lang="bash" code="gooze report view [paths...]" />
           <p>
             If you used a custom output dir, pass it:
           </p>
           <CodeBlock lang="bash" code="gooze report view -o DIR" />
 
-          <h3>What you can do</h3>
+          <h3>Example output</h3>
+          <CodeBlock
+            lang="text"
+            code={` PATH          │ MUTATIONS │ KILLED │ SURVIVED │ NOT COVERED │  SCORE
+───────────────┼───────────┼────────┼──────────┼─────────────┼────────
+ calc.go       │        16 │     14 │        2 │           0 │ 87.50%
+───────────────┼───────────┼────────┼──────────┼─────────────┼────────
+ TOTAL FILES 1 │        16 │     14 │        2 │           0 │ 87.50%
+
+Survivors (2):
+calc.go:10: survived (comparison): if n < lo { -> if n <= lo {
+calc.go:13: survived (comparison): if n > hi { -> if n >= hi {
+
+Mutation score: 87.50% (14 killed, 2 survived)`}
+          />
+          <p>
+            Each survivor line reads <code>path:line: status (mutagen): original -&gt; mutated</code>.
+            Survived, not covered, timed out and skipped mutations are listed; with none, view
+            prints <code>No survivors.</code> The output is the same in a TTY and in CI.
+          </p>
+
+          <h3>Paths</h3>
+          <p>
+            Paths limit the output to matching source files and read like{" "}
+            <Link href="/docs/cli/run#usage">gooze run</Link> arguments, relative to the module root:
+          </p>
+          <ul>
+            <li><code>./...</code>: every file (the default)</li>
+            <li><code>./pkg/...</code>: files under <code>pkg</code>, recursively</li>
+            <li><code>./pkg</code>: files directly in <code>pkg</code></li>
+            <li><code>./pkg/file.go</code>: a single file</li>
+          </ul>
+          <CodeBlock lang="bash" code="gooze report view ./internal/domain/..." />
+          <p>
+            If no report matches, view exits 1 with{" "}
+            <code>no reports in .gooze-reports match ./internal/domain/...</code>. If the reports
+            directory does not exist, it names the directory and suggests running{" "}
+            <code>gooze run</code> first or passing <code>-o</code>.
+          </p>
+
+          <h3>Every mutation (--all)</h3>
+          <p>
+            <code>--all</code> lists every mutation with its status and diff instead of the
+            summary. It takes the same paths:
+          </p>
+          <CodeBlock lang="bash" code="gooze report view --all ./cmd/run.go" />
+          <p>In a TTY, <code>--all</code> opens an interactive list where you can:</p>
           <ul>
             <li>See the mutation score</li>
             <li>Scroll results by file/type/status</li>
@@ -56,7 +103,7 @@ export default function CliReportPage() {
             </li>
           </ul>
 
-          <h3>Keybindings (TTY)</h3>
+          <h3>Keybindings (TTY, --all)</h3>
           <ul>
             <li><code>↑/k</code>, <code>↓/j</code>: move</li>
             <li><code>g</code> / <code>G</code>: top / bottom</li>
@@ -64,13 +111,11 @@ export default function CliReportPage() {
             <li><code>enter</code> / <code>space</code>: toggle diff</li>
             <li><code>q</code>: quit</li>
           </ul>
-
-          <h3>Non-TTY behavior (CI)</h3>
           <p>
-            When not interactive, view prints results linearly.
-            Example:
+            When not interactive (for example in CI or piped), <code>--all</code> prints every
+            mutation linearly, with diffs for the ones not killed:
           </p>
-          <CodeBlock lang="bash" code="gooze report view | cat" />
+          <CodeBlock lang="bash" code="gooze report view --all | cat" />
         </div>
 
         <div id="push">
@@ -196,7 +241,7 @@ gooze report merge
 gooze report view`}
           />
           <p>
-            This example splits work into 4 jobs, then merges, then opens the viewer.
+            This example splits work into 4 jobs, then merges, then prints the full score and survivors.
           </p>
 
           <h3>Notes</h3>

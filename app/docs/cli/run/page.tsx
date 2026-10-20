@@ -25,13 +25,13 @@ type RunFlag = {
 const runFlags: RunFlag[] = [
   {
     flag: "--estimate",
-    description: "List source files and applicable mutation counts without running tests.",
+    description: "List source files, applicable mutation counts and cached files without running tests.",
     defaultValue: "false",
   },
   {
     flag: "--parallel",
     alias: "-p",
-    description: "Number of parallel workers for mutation testing.",
+    description: "Number of parallel workers for mutation testing (at least 1).",
     defaultValue: "1",
     configKey: "run.parallel",
   },
@@ -42,7 +42,7 @@ const runFlags: RunFlag[] = [
   },
   {
     flag: "--mutation-timeout",
-    description: "Timeout in seconds for testing one mutation; a mutation that exceeds it is reported as timeout.",
+    description: "Timeout in seconds for testing one mutation (at least 1); a mutation that exceeds it is reported as timeout.",
     defaultValue: "120",
     configKey: "run.mutation_timeout",
   },
@@ -189,6 +189,15 @@ export default function CliRunPage() {
             </li>
             <li>Writes results into the reports directory.</li>
           </ol>
+          <p>
+            It ends with the mutation score of every result in scope, cached and tested, with a
+            breakdown:
+          </p>
+          <CodeBlock lang="text" code="Mutation score: 87.50% (14 killed, 2 survived; 16 cached, 0 tested)" />
+          <p className="text-sm text-muted-foreground">
+            With <code>--no-cache</code> it scores only what it tested; a sharded run scores its
+            shard (<code>gooze report merge</code> gives the full score).
+          </p>
         </div>
 
         <div id="estimate">
@@ -202,8 +211,19 @@ export default function CliRunPage() {
           <CodeBlock lang="bash" code="gooze run --estimate ./internal/domain/..." />
           <p className="text-sm text-muted-foreground">
             In a TTY you get an interactive, filterable list; in CI you get a table with
-            per-file mutation counts.
+            per-file mutation counts. Files whose stored reports are still valid are marked in a{" "}
+            <code>CACHE</code> column; they will not be re-tested:
           </p>
+          <CodeBlock
+            lang="text"
+            code={` PATH          │ MUTATIONS │   CACHE
+───────────────┼───────────┼───────────
+ calc.go       │    16     │ cached
+───────────────┼───────────┼───────────
+ TOTAL FILES 1 │    16     │ 16 CACHED
+
+16 of 16 mutations are in cached files and will not be re-tested; use --no-cache to re-test everything.`}
+          />
         </div>
 
         <div id="parallel">
@@ -213,7 +233,9 @@ export default function CliRunPage() {
           </p>
           <CodeBlock lang="bash" code="gooze run -p 4 ./..." />
           <p>
-            This example runs up to 4 mutations at the same time.
+            This example runs up to 4 mutations at the same time. The value must be at least 1:{" "}
+            <code>run.parallel: 0</code> fails with{" "}
+            <code>invalid run.parallel: 0 is out of range: must be at least 1</code>.
           </p>
         </div>
 
@@ -222,7 +244,8 @@ export default function CliRunPage() {
           <p>
             The tests for each mutation must finish within{" "}
             <code>--mutation-timeout</code> seconds (default 120). A mutation
-            whose tests exceed it is reported as <code>timeout</code>.
+            whose tests exceed it is reported as <code>timeout</code>. The timeout must be at
+            least 1 second; <code>0</code> is an error, not &quot;no timeout&quot;.
           </p>
           <CodeBlock lang="bash" code="gooze run --mutation-timeout 300 ./..." />
           <p>
