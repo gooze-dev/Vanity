@@ -45,8 +45,12 @@ gooze report view`}
         <div id="notes" className="scroll-mt-20">
           <h2 className="text-2xl font-semibold mb-3">Notes</h2>
           <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
-            <li>If there are no shard directories, merge just rebuilds the index.</li>
-            <li>Merging keeps existing base reports, so caching can still work.</li>
+            <li>If there are no shard directories, merge just rebuilds the index and prints the score.</li>
+            <li>
+              Shard reports replace base reports for the same source file; base reports for files
+              no shard re-tested are kept, so caching can still work.
+            </li>
+            <li>When merge runs inside the checkout, base reports for files that no longer exist are dropped.</li>
           </ul>
         </div>
       </div>

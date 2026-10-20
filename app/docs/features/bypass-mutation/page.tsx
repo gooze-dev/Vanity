@@ -28,7 +28,10 @@ export default function BypassMutationPage() {
           </p>
           <CodeBlock lang="bash" code="gooze run -x '^vendor/' -x '^mock_' ./..." />
           <p className="mt-3 text-sm text-muted-foreground">
-            The regex matches either the full path or the base filename.
+            The regex matches the path relative to the working directory (so{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">^vendor/</code> works), the absolute path, or the base filename.{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">vendor/</code>, <code className="bg-muted px-1 py-0.5 rounded">testdata/</code>, directories starting with{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">.</code> or <code className="bg-muted px-1 py-0.5 rounded">_</code>, and nested modules are skipped automatically.
           </p>
         </div>
 
@@ -42,6 +45,9 @@ export default function BypassMutationPage() {
           </p>
           <p className="mb-3 text-muted-foreground">
             Optionally target specific mutagens: <code className="bg-muted px-1 py-0.5 rounded">{"//gooze:ignore arithmetic,comparison"}</code>.
+            Names may be separated by commas or spaces. The keyword must be exactly{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">gooze:ignore</code> followed by whitespace or the end of the comment
+            (<code className="bg-muted px-1 py-0.5 rounded">gooze:ignored</code> is not a directive).
           </p>
           <CodeBlock
             lang="go"
@@ -90,7 +96,9 @@ func isOk(x int) bool {
             <div>
               <h3 className="text-lg font-semibold mb-2">Example: ignore one line</h3>
               <p className="mb-2 text-muted-foreground">
-                Put it at the end of the line.
+                Put it at the end of the line, or on its own comment line directly above it.
+                A directive on its own line applies to the first code line after its comment
+                group, even if more comment lines follow.
               </p>
               <CodeBlock
                 lang="go"

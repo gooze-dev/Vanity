@@ -31,7 +31,10 @@ export default function CliReportViewPage() {
             <li>See the mutation score</li>
             <li>Scroll results by file/type/status</li>
             <li>Filter by id/file/type/status</li>
-            <li>Open a diff for survived mutations</li>
+            <li>
+              Open a diff for any mutation that was not killed (<code className="bg-muted px-1 py-0.5 rounded">survived</code>,{" "}
+              <code className="bg-muted px-1 py-0.5 rounded">not_covered</code>, <code className="bg-muted px-1 py-0.5 rounded">timeout</code>, <code className="bg-muted px-1 py-0.5 rounded">error</code>)
+            </li>
           </ul>
         </div>
 

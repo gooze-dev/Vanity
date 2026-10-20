@@ -28,6 +28,9 @@ export default function IncrementalExecutionPage() {
           </h2>
           <p className="mb-3 text-muted-foreground">
             Choose where reports are written. This is also where the incremental cache lives.
+            Cache entries are keyed on the project-relative path, so a baseline pulled from a
+            registry matches on another machine or CI runner. Re-testing a changed file replaces
+            its previous reports.
           </p>
           <CodeBlock lang="bash" code="gooze run -o .gooze-reports ./..." />
           <p className="mt-3 text-sm text-muted-foreground">

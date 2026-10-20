@@ -56,7 +56,7 @@ export default function RoadmapPage() {
             <label className="flex items-start gap-3">
               <input type="checkbox" checked readOnly disabled className="mt-1" />
               <span className="text-muted-foreground">
-                Run only matching <code className="bg-muted px-1 py-0.5 rounded">*_test.go</code> files for each mutated source file
+                Run the tests of the package that owns each mutated source file
               </span>
             </label>
             <label className="flex items-start gap-3">

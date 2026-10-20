@@ -69,6 +69,8 @@ gooze report view`}
           <h2 className="text-2xl font-semibold mb-3">Cache behavior (incremental runs)</h2>
           <p className="mb-3 text-muted-foreground">
             Gooze can reuse stored reports for unchanged sources.
+            Reports are keyed on the project-relative path, so a baseline from another machine or CI
+            runner is reused as-is, and re-testing a changed file replaces its previous reports.
             If you want to force a full re-run:
           </p>
           <CodeBlock lang="bash" code="gooze run --no-cache ./..." />
