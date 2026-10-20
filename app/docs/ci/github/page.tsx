@@ -118,7 +118,7 @@ const gate = `      # Fail the job when the mutation score is below MIN_SCORE (p
         env:
           MIN_SCORE: "60"
         run: |
-          score=$(gooze report view | sed -n 's/^Mutation score: \\([0-9.]*\\)%$/\\1/p' | tail -1)
+          score=$(gooze report view | sed -n 's/^Mutation score: \\([0-9.]*\\)%.*$/\\1/p' | tail -1)
           echo "Mutation score: \${score}% (minimum \${MIN_SCORE}%)"
           awk -v s="$score" -v m="$MIN_SCORE" 'BEGIN { exit !(s != "" && s >= m) }'`
 
@@ -178,7 +178,8 @@ export default function CiPage() {
             Gooze has no threshold flag yet: survivors never change its exit code. Add this
             step %s. It reads the{" "}
             <Link href="/docs/usage/results#score">mutation score</Link>{" "}
-            from the non-interactive output and fails when it is below{" "}
+            from the <code>Mutation score: NN.NN% (...)</code> line of{" "}
+            <code>gooze report view</code> and fails when it is below{" "}
             <code>MIN_SCORE</code>.
           </p>
           <CodeBlock lang="yaml" code={gate} />

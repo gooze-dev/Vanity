@@ -123,8 +123,8 @@ export const docsPages: DocsPage[] = [
       "Optimize Speed with Incremental Runs · Gooze",
     section: "Using gooze",
     description:
-      "Re-test only what changed. Configure Gooze caching to process git diffs incrementally, drastically reducing total CI cycle time for large Go applications.",
-    keywords: ["incremental testing","fast ci","cache results","git diff","modified code","no-cache flag"],
+      "Re-test only what changed. Gooze caches results per file by content hash and scores cached and tested results together, cutting CI time for large Go apps.",
+    keywords: ["incremental testing","fast ci","cache results","git diff","modified code","no-cache flag","cached score"],
   },
   {
     href: "/docs/usage/ui-modes",
@@ -205,8 +205,8 @@ export const docsPages: DocsPage[] = [
     section: "Reference",
     parent: "/docs/cli",
     description:
-      "Execute Go mutation testing. Master CLI arguments for parallelism, sharding, test execution timeouts, and the --coverage-profile gate.",
-    keywords: ["gooze run","execute tests","parallelism","timeout control","coverage-profile","unkilled mutants"],
+      "Execute Go mutation testing. Master CLI arguments for parallelism, sharding, timeouts, the --estimate cache preview, and the --coverage-profile gate.",
+    keywords: ["gooze run","execute tests","parallelism","timeout control","coverage-profile","unkilled mutants","estimate"],
   },
   {
     href: "/docs/cli/report",
@@ -216,8 +216,8 @@ export const docsPages: DocsPage[] = [
     section: "Reference",
     parent: "/docs/cli",
     description:
-      "Interact with Gooze mutation reports. View metrics in the terminal TUI, merge sharded test runs, and manage OCI artifact uploads for team visibility.",
-    keywords: ["report view","tui","oci artifacts","merge shards","report push","test results","golang mutation score"],
+      "Interact with Gooze mutation reports. View per-file scores and survivors, browse every mutant in the TUI, merge sharded runs, and manage OCI artifact uploads.",
+    keywords: ["report view","survivors","per-file score","tui","oci artifacts","merge shards","report push","test results","golang mutation score"],
   },
   {
     href: "/docs/cli/config",
@@ -238,8 +238,8 @@ export const docsPages: DocsPage[] = [
     section: "Reference",
     parent: "/docs/cli",
     description:
-      "Verify your installed Gooze CLI version, build date, and git commit. Essential for accurate bug reporting and pinning CI/CD dependency versions.",
-    keywords: ["gooze version","release build","commit hash","pin dependency","ci environment"],
+      "Verify your installed Gooze CLI version and the Go toolchain it was built with. Essential for accurate bug reporting and pinning CI/CD dependency versions.",
+    keywords: ["gooze version","release build","go version","pin dependency","ci environment"],
   },
   {
     href: "/docs/config",
@@ -249,7 +249,7 @@ export const docsPages: DocsPage[] = [
     navTitle: "Configuration",
     section: "Reference",
     description:
-      "Learn how to configure Gooze using the gooze.yaml file, environment variables (GOOZE_*), and CLI flags. Understand precedence rules and valid schemas.",
+      "Learn how to configure Gooze using the gooze.yaml file, environment variables (GOOZE_*), and CLI flags. Understand precedence rules, value bounds, and schemas.",
     keywords: ["gooze.yaml","configuration syntax","environment variables","settings precedence","coverage_profile definition"],
   },
   {
@@ -313,7 +313,7 @@ export const docsFlags: DocsFlag[] = [
     flag: "--estimate",
     command: "gooze run",
     href: "/docs/cli/run#estimate",
-    description: "Preview files and applicable mutation counts without running tests.",
+    description: "Preview files, applicable mutation counts and cached files without running tests.",
   },
   {
     flag: "--parallel",
@@ -347,6 +347,13 @@ export const docsFlags: DocsFlag[] = [
     command: "gooze run",
     href: "/docs/cli/run#shard",
     description: "Run a shard of mutations in the form INDEX/TOTAL for distributed runs.",
+  },
+  // gooze report view
+  {
+    flag: "--all",
+    command: "gooze report view",
+    href: "/docs/cli/report#view",
+    description: "List every mutation with its status and diff instead of the per-file summary.",
   },
   // global flags
   {

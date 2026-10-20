@@ -52,11 +52,21 @@ export default function IncrementalRunsPage() {
             <li>it has no stored reports yet,</li>
             <li>its content changed,</li>
             <li>its test file (<code>&lt;name&gt;_test.go</code>) changed, or</li>
-            <li>the mutators that produced its reports changed (a Gooze upgrade).</li>
+            <li>
+              the mutators that produced its reports changed (a Gooze upgrade; for example v1.2.0
+              re-tests reports from version 1 of the <code>comparison</code> mutator).
+            </li>
           </ul>
           <p>
             Everything else is reused, and reports for deleted files are dropped, so the mutation
-            score always covers the whole codebase, not only the files that were re-tested.
+            score always covers the whole codebase, not only the files that were re-tested. The
+            score line of <code>gooze run</code> counts cached and tested results in its scope
+            and says how many were which:
+          </p>
+          <CodeBlock lang="text" code="Mutation score: 87.50% (14 killed, 2 survived; 16 cached, 0 tested)" />
+          <p>
+            <code>gooze run --estimate</code> marks the files that will be served from the cache
+            in a <code>CACHE</code> column, with an <code>N CACHED</code> total.
           </p>
           <p>
             Changes are detected from file contents, not from git: no base branch, commit, or
@@ -79,6 +89,9 @@ export default function IncrementalRunsPage() {
             environment), ignore the cache for one run:
           </p>
           <CodeBlock lang="bash" code="gooze run --no-cache ./..." />
+          <p className="text-sm text-muted-foreground">
+            With <code>--no-cache</code> the score covers only what that run tested.
+          </p>
         </div>
 
         <div id="share">

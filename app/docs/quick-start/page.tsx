@@ -78,7 +78,7 @@ export default function QuickStartPage() {
             <code>-o/--output</code>).
           </p>
 
-          <p>View the last run:</p>
+          <p>View the last run (per-file scores, survivors, and the mutation score):</p>
           <CodeBlock lang="bash" code="gooze report view" />
 
           <p className="mt-5 mb-3 text-muted-foreground">
@@ -87,7 +87,8 @@ export default function QuickStartPage() {
           <CodeBlock lang="bash" code="gooze report view -o .gooze-reports" />
 
           <p>
-            In the interactive UI:
+            To browse every mutation with its diff, run{" "}
+            <code>gooze report view --all</code>. In the interactive UI:
             <code className="ml-2">/</code> to filter,
             <code className="ml-2">enter</code> to open the diff,
             and <code className="ml-2">q</code> to quit.

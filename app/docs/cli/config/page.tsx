@@ -41,6 +41,12 @@ export default function CliConfigPage() {
             This writes <code>gooze.yaml</code> and stops.
             It does not run mutation testing.
           </p>
+          <CodeBlock lang="text" code="Wrote the default configuration to gooze.yaml" />
+          <p>
+            It never overwrites an existing file: if <code>gooze.yaml</code> is already there it
+            exits 1 with{" "}
+            <code>gooze.yaml already exists; edit it or remove it first</code>.
+          </p>
 
           <h3>Next step</h3>
           <p>After you have config, run:</p>

@@ -205,7 +205,7 @@ const faqs = [
   },
   {
     q: "Can gooze fail CI when the mutation score drops below a threshold?",
-    a: "Not with a built-in flag yet (as of " + DOCS_FACTS_VERSION + "). gooze prints `Mutation score: NN.NN%` in non-interactive output, and a three-line shell step compares it to a minimum and fails the job. The GitHub Actions and GitLab CI guides include it.",
+    a: "Not with a built-in flag yet (as of " + DOCS_FACTS_VERSION + "). gooze prints `Mutation score: NN.NN%` followed by a breakdown, and a three-line shell step compares it to a minimum and fails the job. The GitHub Actions and GitLab CI guides include it.",
   },
   {
     q: "Does gooze only test changed code?",

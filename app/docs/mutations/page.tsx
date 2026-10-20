@@ -19,7 +19,7 @@ const mutationTypes = [
     name: "comparison",
     ops: "< > <= >= == !=",
     desc: "Swaps a relational operator. Great at exposing untested boundaries (off-by-one) and branches that are never taken in tests.",
-    rule: "each operator becomes every other comparison operator (>= shown; also >, <=, ==, !=)",
+    rule: "each operator becomes every other comparison operator (>= shown; also >, <=, ==, !=), except the one equivalent mutant when an operand is \"\" or 0 compared with len(...) or cap(...): len(s) == 0 never becomes len(s) <= 0, which behaves the same. This is version 2 of the mutator (since v1.2.0); reports from version 1 are re-tested on upgrade.",
     example: `- if a < b {
 + if a >= b {`,
     survives: "a boundary or the two branches of this condition aren't both exercised.",

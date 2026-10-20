@@ -324,7 +324,7 @@ const themes: Theme[] = [
         title: "Interactive viewer",
         detail: (
           <>
-            A TUI with diffs for every mutant, via <code>gooze report view</code>.
+            A TUI with diffs for every mutant, via <code>gooze report view --all</code>.
           </>
         ),
         shipped: true,
