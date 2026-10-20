@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local SEO sprint scratch notes (not part of the product)
+/todo.md
+/refactor-plan.md
