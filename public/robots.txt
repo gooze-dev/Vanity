@@ -1,6 +1,36 @@
 User-agent: *
 Allow: /
 
+# Explicitly welcome AI answering/search crawlers (future-proofs inclusion if a
+# broad disallow is ever added to User-agent: *). These fetch pages to answer
+# user questions and cite sources.
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
 Sitemap: https://gooze.dev/sitemap.xml
 
 # LLM-friendly docs: https://gooze.dev/llms.txt (index) and

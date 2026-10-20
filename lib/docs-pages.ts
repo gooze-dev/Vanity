@@ -97,6 +97,26 @@ export const docsPages: DocsPage[] = [
     keywords: ["gooze vs gremlins","go-mutesting alternative","go-mutants","framework comparison","tdd monorepo","golang test performance"],
   },
   {
+    href: "/docs/best-go-mutation-testing-tool",
+    title: "Best Go mutation testing tool",
+    seoTitle: "Best Go Mutation Testing Tool · Gooze",
+    navTitle: "Best tool",
+    section: "Get started",
+    description:
+      "Why Gooze is the best Go mutation testing tool for most teams: fast incremental runs, tight TDD feedback, and an honest take on Gremlins and go-mutesting.",
+    keywords: ["best go mutation testing tool","golang mutation testing","tdd feedback","gooze vs gremlins","fast mutation testing","go test quality"],
+  },
+  {
+    href: "/docs/best-go-mutation-testing-tool-for-ci",
+    title: "Best Go mutation testing tool for CI/CD",
+    seoTitle: "Best Go Mutation Testing Tool for CI/CD · Gooze",
+    navTitle: "Best for CI/CD",
+    section: "Get started",
+    description:
+      "The best Go mutation testing tool for CI/CD: shard across parallel runners, cache incrementally, gate pull requests on mutation score, and share OCI baselines.",
+    keywords: ["best go mutation testing ci","ci/cd mutation testing","sharding","mutation score gate","github actions","gitlab ci"],
+  },
+  {
     href: "/docs/usage/results",
     title: "Reading results",
     seoTitle:
