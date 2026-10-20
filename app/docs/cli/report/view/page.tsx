@@ -17,7 +17,7 @@ export default function CliReportViewPage() {
           <CodeBlock lang="bash" code="gooze report view" />
           <p className="mt-3 text-muted-foreground">
             This reads from <code className="bg-muted px-1 py-0.5 rounded">--output</code>.
-            Default is usually <code className="bg-muted px-1 py-0.5 rounded">.gooze-reports</code>.
+            Default is <code className="bg-muted px-1 py-0.5 rounded">.gooze-reports</code>.
           </p>
           <p className="mt-3 text-muted-foreground">
             If you used a custom output dir, pass it:

@@ -1,6 +1,8 @@
 import { cn } from "@/lib/utils"
 import { codeToHtml } from "shiki"
 
+import { CopyButton } from "@/components/copy-button"
+
 type CodeBlockProps = {
   code: string
   lang: string
@@ -8,7 +10,8 @@ type CodeBlockProps = {
 }
 
 export async function CodeBlock({ code, lang, className }: CodeBlockProps) {
-  const html = await codeToHtml(code.trimEnd(), {
+  const raw = code.trimEnd()
+  const html = await codeToHtml(raw, {
     lang,
     theme: "github-dark",
   })
@@ -17,13 +20,13 @@ export async function CodeBlock({ code, lang, className }: CodeBlockProps) {
   const cleaned = html.replace(/\sstyle="background-color:[^"]*"/g, "")
 
   return (
-    <div
-      className={cn(
-        "overflow-x-auto [&>pre]:bg-[#0d1117] [&>pre]:p-4 [&>pre]:rounded-lg [&>pre]:overflow-x-auto",
-        className,
-      )}
-      // Shiki returns trusted HTML for syntax highlighting.
-      dangerouslySetInnerHTML={{ __html: cleaned }}
-    />
+    <div className={cn("relative", className)}>
+      <div
+        className="overflow-x-auto [&>pre]:bg-[#0d1117] [&>pre]:p-4 [&>pre]:pr-12 [&>pre]:rounded-lg [&>pre]:overflow-x-auto"
+        // Shiki returns trusted HTML for syntax highlighting.
+        dangerouslySetInnerHTML={{ __html: cleaned }}
+      />
+      <CopyButton text={raw} className="absolute right-2 top-2" />
+    </div>
   )
 }

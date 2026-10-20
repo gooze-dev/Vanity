@@ -37,6 +37,15 @@ function flagEntry(flag: DocsFlag): SearchEntry {
   }
 }
 
+function subscribeNoop() {
+  return () => {}
+}
+
+function isMacPlatform() {
+  const nav = navigator as Navigator & { userAgentData?: { platform?: string } }
+  return /mac/i.test(nav.userAgentData?.platform ?? nav.platform ?? "")
+}
+
 const allEntries: SearchEntry[] = [
   ...docsPages.map(pageEntry),
   ...docsFlags.map(flagEntry),
@@ -90,6 +99,7 @@ export function DocsSearch() {
   const [active, setActive] = React.useState(0)
 
   const results = React.useMemo(() => search(query), [query])
+  const isMac = React.useSyncExternalStore(subscribeNoop, isMacPlatform, () => true)
 
   React.useEffect(() => {
     setActive(0)
@@ -143,7 +153,7 @@ export function DocsSearch() {
           <Search className="h-4 w-4 shrink-0" />
           <span className="hidden flex-1 truncate whitespace-nowrap text-left lg:block">Search</span>
           <kbd className="pointer-events-none hidden items-center gap-0.5 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground lg:inline-flex">
-            <span className="text-xs">⌘</span>K
+            {isMac ? <span className="text-xs">⌘</span> : <span>Ctrl</span>}K
           </kbd>
         </button>
       </Dialog.Trigger>

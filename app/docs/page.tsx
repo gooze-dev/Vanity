@@ -77,7 +77,7 @@ export default function DocsPage() {
               className="rounded-lg border bg-card p-5 hover:bg-muted/50 hover:border-[color:var(--gooze-teal)] transition-colors"
             >
               <div className="font-semibold mb-1">UI modes</div>
-              <div className="text-sm text-muted-foreground">TTY vs NOT TTY behavior.</div>
+              <div className="text-sm text-muted-foreground">Interactive terminal and CI output.</div>
             </Link>
           </div>
         </div>
