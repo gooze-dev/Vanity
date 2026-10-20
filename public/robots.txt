@@ -1,3 +1,7 @@
 User-agent: *
 Allow: /
+
 Sitemap: https://gooze.dev/sitemap.xml
+
+# LLM-friendly docs: https://gooze.dev/llms.txt (index) and
+# https://gooze.dev/llms-full.txt (full text)

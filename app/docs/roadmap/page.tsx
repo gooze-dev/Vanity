@@ -60,7 +60,7 @@ export default function RoadmapPage() {
           </ul>
           <p className="text-sm text-muted-foreground">
             How this compares with other tools:{" "}
-            <Link href="/docs/comparison">Gooze vs Gremlins vs go-mutesting</Link>.
+            <Link href="/docs/comparison">Gooze vs other Go mutation testing tools</Link>.
           </p>
         </div>
 
