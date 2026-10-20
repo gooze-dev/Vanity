@@ -15,7 +15,7 @@ export default function CliConfigPage() {
       </p>
 
       <div className="space-y-12">
-        <div id="usage" className="scroll-mt-20">
+        <div id="usage">
           <h2 className="text-2xl font-semibold mb-3">Usage</h2>
           <CodeBlock lang="bash" code="gooze config <subcommand>" />
           <p className="mt-3 text-muted-foreground">
@@ -23,7 +23,7 @@ export default function CliConfigPage() {
           </p>
         </div>
 
-        <div id="init" className="scroll-mt-20">
+        <div id="init">
           <h2 className="text-2xl font-semibold mb-3">gooze config init</h2>
           <p className="text-muted-foreground">
             Creates a starter <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code> in the current directory.

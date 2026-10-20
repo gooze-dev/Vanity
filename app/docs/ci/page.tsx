@@ -125,7 +125,7 @@ export default function CiPage() {
       </p>
 
       <div className="space-y-12">
-        <div id="simple" className="scroll-mt-20">
+        <div id="simple">
           <h2 className="text-2xl font-semibold mb-3">1. Simplest: checkout and run</h2>
           <p className="mb-3 text-muted-foreground">
             Install Gooze and run the whole suite. No registry, no caching — a good
@@ -134,7 +134,7 @@ export default function CiPage() {
           <CodeBlock lang="yaml" code={simple} />
         </div>
 
-        <div id="sharded" className="scroll-mt-20">
+        <div id="sharded">
           <h2 className="text-2xl font-semibold mb-3">2. Sharded: run in parallel</h2>
           <p className="mb-3 text-muted-foreground">
             Split the run across jobs with{" "}
@@ -147,7 +147,7 @@ export default function CiPage() {
           <CodeBlock lang="yaml" code={sharded} />
         </div>
 
-        <div id="cached" className="scroll-mt-20">
+        <div id="cached">
           <h2 className="text-2xl font-semibold mb-3">3. Sharded + cached baseline</h2>
           <p className="mb-3 text-muted-foreground">
             Add an OCI baseline so each run only re-tests changed files
@@ -162,7 +162,7 @@ export default function CiPage() {
           <CodeBlock lang="yaml" code={cached} />
         </div>
 
-        <div id="auth" className="scroll-mt-20">
+        <div id="auth">
           <h2 className="text-2xl font-semibold mb-3">Authentication</h2>
           <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
             <li>

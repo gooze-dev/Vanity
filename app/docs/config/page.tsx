@@ -21,7 +21,7 @@ export default function ConfigPage() {
       </p>
 
       <div className="space-y-12">
-        <div id="create" className="scroll-mt-20">
+        <div id="create">
           <h2 className="text-2xl font-semibold mb-3">Create a starter config</h2>
           <p className="mb-3 text-muted-foreground">
             This command creates a starter <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code> in the current directory.
@@ -29,7 +29,7 @@ export default function ConfigPage() {
           <CodeBlock lang="bash" code="gooze config init" />
         </div>
 
-        <div id="load" className="scroll-mt-20">
+        <div id="load">
           <h2 className="text-2xl font-semibold mb-3">How config is loaded</h2>
           <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
             <li>File name: <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code></li>
@@ -44,7 +44,7 @@ export default function ConfigPage() {
           </p>
         </div>
 
-        <div id="env" className="scroll-mt-20">
+        <div id="env">
           <h2 className="text-2xl font-semibold mb-3">Environment variables</h2>
           <p className="text-muted-foreground">
             Gooze can read settings from environment variables.
@@ -146,7 +146,7 @@ gooze run ./...`}
           </div>
         </div>
 
-        <div id="example" className="scroll-mt-20">
+        <div id="example">
           <h2 className="text-2xl font-semibold mb-3">A common config example</h2>
           <p className="mb-3 text-muted-foreground">
             This example does:
@@ -180,7 +180,7 @@ logging:
           />
         </div>
 
-        <div id="cli-vs-config" className="scroll-mt-20">
+        <div id="cli-vs-config">
           <h2 className="text-2xl font-semibold mb-3">CLI flags vs config</h2>
           <p className="text-muted-foreground">
             In most tools, CLI flags override config.

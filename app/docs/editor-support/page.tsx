@@ -24,7 +24,7 @@ export default function EditorSupportPage() {
       </p>
 
       <div className="space-y-12">
-        <div id="features" className="scroll-mt-20">
+        <div id="features">
           <h2 className="text-2xl font-semibold mb-3">What you get</h2>
           <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
             <li>
@@ -45,7 +45,7 @@ export default function EditorSupportPage() {
           </ul>
         </div>
 
-        <div id="requirements" className="scroll-mt-20">
+        <div id="requirements">
           <h2 className="text-2xl font-semibold mb-3">What you need</h2>
           <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
             <li>Go installed on your machine.</li>
@@ -62,7 +62,7 @@ export default function EditorSupportPage() {
           </p>
         </div>
 
-        <div id="install" className="scroll-mt-20">
+        <div id="install">
           <h2 className="text-2xl font-semibold mb-3">Install goozels</h2>
           <CodeBlock lang="bash" code="go install gooze.dev/pkg/goozels/cmd/goozels@latest" />
           <p className="mt-3 text-muted-foreground">
@@ -73,7 +73,7 @@ export default function EditorSupportPage() {
           </p>
         </div>
 
-        <div id="vscode" className="scroll-mt-20">
+        <div id="vscode">
           <h2 className="text-2xl font-semibold mb-3">VS Code</h2>
           <p className="mb-3 text-muted-foreground">
             Tell the Go extension to launch goozels instead of gopls (it proxies gopls for you):
@@ -88,7 +88,7 @@ export default function EditorSupportPage() {
           />
         </div>
 
-        <div id="neovim" className="scroll-mt-20">
+        <div id="neovim">
           <h2 className="text-2xl font-semibold mb-3">Neovim</h2>
           <p className="text-muted-foreground">
             Point your Go LSP config at the <code className="bg-muted px-1 py-0.5 rounded">goozels</code>{" "}
@@ -106,7 +106,7 @@ export default function EditorSupportPage() {
           </p>
         </div>
 
-        <div id="jetbrains" className="scroll-mt-20">
+        <div id="jetbrains">
           <h2 className="text-2xl font-semibold mb-3">JetBrains (GoLand / IntelliJ)</h2>
           <p className="text-muted-foreground">
             Register goozels through the LSP4IJ plugin. See{" "}

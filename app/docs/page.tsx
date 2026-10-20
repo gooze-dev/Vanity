@@ -44,7 +44,7 @@ export default function DocsPage() {
       </div>
 
       <div className="space-y-12">
-        <div id="get-started" className="scroll-mt-20">
+        <div id="get-started">
           <h2 className="text-2xl font-semibold mb-3">Get started</h2>
           <p className="mb-4 text-muted-foreground">
             Install Gooze, preview what will be mutated, run mutation testing, then view the latest report.
@@ -55,7 +55,7 @@ export default function DocsPage() {
           </GoozePrimaryCtaButton>
         </div>
 
-        <div id="features" className="scroll-mt-20">
+        <div id="features">
           <h2 className="text-2xl font-semibold mb-4">Features</h2>
           <div className="grid gap-4 md:grid-cols-3">
             <Link
@@ -82,7 +82,7 @@ export default function DocsPage() {
           </div>
         </div>
 
-        <div id="reference" className="scroll-mt-20">
+        <div id="reference">
           <h2 className="text-2xl font-semibold mb-4">Reference</h2>
           <div className="grid gap-4 md:grid-cols-3">
             <Link

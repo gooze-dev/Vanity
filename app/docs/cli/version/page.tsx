@@ -12,12 +12,12 @@ export default function CliVersionPage() {
       </p>
 
       <div className="space-y-12">
-        <div id="usage" className="scroll-mt-20">
+        <div id="usage">
           <h2 className="text-2xl font-semibold mb-3">Usage</h2>
           <CodeBlock lang="bash" code="gooze version" />
         </div>
 
-        <div id="why" className="scroll-mt-20">
+        <div id="why">
           <h2 className="text-2xl font-semibold mb-3">Why this matters</h2>
           <p className="text-muted-foreground">
             When you report a bug, include this output.

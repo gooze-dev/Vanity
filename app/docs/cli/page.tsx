@@ -21,7 +21,7 @@ export default function CliPage() {
       </p>
 
       <div className="space-y-12">
-        <div id="basic" className="scroll-mt-20">
+        <div id="basic">
           <h2 className="text-2xl font-semibold mb-3">Basic usage</h2>
           <CodeBlock lang="bash" code="gooze [global flags] <command> [command flags] [paths...]" />
           <p className="mt-3 text-muted-foreground">Most people start with:</p>
@@ -32,7 +32,7 @@ export default function CliPage() {
           </div>
         </div>
 
-        <div id="global-flags" className="scroll-mt-20">
+        <div id="global-flags">
           <h2 className="text-2xl font-semibold mb-3">Global flags</h2>
           <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
             <li>
@@ -60,7 +60,7 @@ export default function CliPage() {
           </p>
         </div>
 
-        <div id="commands" className="scroll-mt-20">
+        <div id="commands">
           <h2 className="text-2xl font-semibold mb-4">Commands</h2>
           <div className="grid gap-4 md:grid-cols-2">
             {commands.map((cmd) => (

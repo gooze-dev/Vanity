@@ -15,7 +15,7 @@ export default function CliReportPage() {
       </p>
 
       <div className="space-y-12">
-        <div id="usage" className="scroll-mt-20">
+        <div id="usage">
           <h2 className="text-2xl font-semibold mb-3">Usage</h2>
           <CodeBlock lang="bash" code="gooze report <subcommand> [flags]" />
           <p className="mt-3 text-muted-foreground">
@@ -32,7 +32,7 @@ export default function CliReportPage() {
           </p>
         </div>
 
-        <div id="view" className="scroll-mt-20">
+        <div id="view">
           <h2 className="text-2xl font-semibold mb-3">gooze report view</h2>
           <p className="text-muted-foreground">
             Loads reports from the output directory and displays results.
@@ -73,7 +73,7 @@ export default function CliReportPage() {
           <CodeBlock lang="bash" code="gooze report view | cat" />
         </div>
 
-        <div id="push" className="scroll-mt-20">
+        <div id="push">
           <h2 className="text-2xl font-semibold mb-3">gooze report push</h2>
           <p className="text-muted-foreground">
             Packages the reports directory and pushes it to an OCI registry as an artifact.
@@ -103,7 +103,7 @@ export default function CliReportPage() {
             </li>
           </ul>
 
-          <div id="auth" className="scroll-mt-20">
+          <div id="auth">
             <h3 className="text-xl font-medium mt-6 mb-2">Authentication</h3>
             <p className="mb-3 text-muted-foreground">
               For registries that require login, set{" "}
@@ -131,7 +131,7 @@ gooze report push ghcr.io/your-org/your-repo/gooze-reports:main`}
           </div>
         </div>
 
-        <div id="pull" className="scroll-mt-20">
+        <div id="pull">
           <h2 className="text-2xl font-semibold mb-3">gooze report pull</h2>
           <p className="text-muted-foreground">
             Pulls reports from an OCI registry and extracts them into the reports directory.
@@ -169,7 +169,7 @@ gooze report push ghcr.io/your-org/your-repo/gooze-reports:main`}
           </p>
         </div>
 
-        <div id="merge" className="scroll-mt-20">
+        <div id="merge">
           <h2 className="text-2xl font-semibold mb-3">gooze report merge</h2>
           <p className="text-muted-foreground">
             Merges sharded reports (from <code className="bg-muted px-1 py-0.5 rounded">shard_*</code> folders) into the base output dir.
