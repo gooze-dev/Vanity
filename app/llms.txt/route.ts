@@ -12,7 +12,8 @@ const facts = `## Key facts (gooze v1.1.0)
 - Config file: yes. \`gooze.yaml\` in the repo (generate with \`gooze config init\`); every key also has a GOOZE_* env var and a CLI flag.
 - Default mutation operators: arithmetic, comparison, logical, boolean, numbers, unary.
 - Ignore code: \`-x/--exclude <regex>\` for files, \`//gooze:ignore [mutators]\` for a file, function, or line.
-- Incremental: results are cached per file; only files whose content changed are re-tested. \`--no-cache\` forces a full run.
+- Incremental: a file is re-tested only when its source, its _test.go, or the mutators changed; other results are reused, so every run reports a whole-codebase score (not a diff-only score). Changes in other files don't invalidate the cache; run \`--no-cache\` periodically.
+- Same workflow from small projects to large monorepos; fast TDD feedback because only changed files re-run.
 - Sharding: \`gooze run -s INDEX/TOTAL\` per CI job, then \`gooze report merge\`.
 - Shared baseline: \`gooze report push|pull <oci-ref>\` stores the reports dir in any OCI registry (e.g. GHCR).
 - Coverage gate: \`--coverage-profile coverage.out\` skips mutations on uncovered lines (status not_covered).
@@ -23,7 +24,7 @@ const facts = `## Key facts (gooze v1.1.0)
 
 - No built-in score threshold flag; a documented 3-line CI step fails the build below a minimum score (${SITE_URL}/docs/ci/github/#gate).
 - No git-diff mode limiting mutations to changed lines (file-level cache instead).
-- No custom mutators / plugin API.
+- No plugin API for custom mutators (adding one means a small function in the gooze source).
 - No custom test runner command (go-mutesting --exec equivalent).
 - No JSON or HTML report (YAML report files + _index.yaml).
 `;

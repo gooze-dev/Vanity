@@ -75,12 +75,12 @@ export const docsPages: DocsPage[] = [
   },
   {
     href: "/docs/comparison",
-    title: "Gooze vs Gremlins vs go-mutesting",
+    title: "Gooze vs Gremlins vs go-mutesting vs go-mutants",
     navTitle: "Comparison",
     section: "Get started",
     description:
-      "Feature-by-feature comparison of Go mutation testing tools: config files, CI score thresholds, git-diff mode, caching, sharding, custom mutators, and what Gooze doesn't do yet.",
-    keywords: ["comparison", "vs", "alternatives", "gremlins", "go-mutesting", "avito", "threshold", "diff", "custom mutators", "faq"],
+      "Feature-by-feature comparison of Go mutation testing tools: incremental vs diff-only runs, TDD feedback, CI score thresholds, sharding, config files, custom mutators, and what Gooze doesn't do yet.",
+    keywords: ["comparison", "vs", "alternatives", "gremlins", "go-mutesting", "go-mutants", "gomutants", "avito", "threshold", "diff", "incremental", "tdd", "monorepo", "custom mutators", "faq"],
   },
 
   // Using gooze

@@ -18,8 +18,8 @@ const limitations = [
   },
   {
     id: "custom-mutators",
-    title: "No custom mutators",
-    detail: "Only the built-in operators run; there is no plugin API for domain-specific ones.",
+    title: "No custom mutator plugins",
+    detail: "Only the built-in operators run, and there is no plugin API. Adding an operator to Gooze itself is one small function; caching, sharding, and reporting don't change.",
     workaround: { text: "the built-in operators", href: "/docs/mutations" },
   },
   {

@@ -38,6 +38,30 @@ export default function IncrementalRunsPage() {
           </p>
         </div>
 
+        <div id="invalidation">
+          <h2 className="text-2xl font-semibold mb-3">When a file is re-tested</h2>
+          <p className="mb-3 text-muted-foreground">
+            On each run Gooze compares every source file against the stored reports and re-tests it when:
+          </p>
+          <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
+            <li>it has no stored reports yet,</li>
+            <li>its content changed,</li>
+            <li>its test file (<code className="bg-muted px-1 py-0.5 rounded">&lt;name&gt;_test.go</code>) changed, or</li>
+            <li>the mutators that produced its reports changed (a Gooze upgrade).</li>
+          </ul>
+          <p className="mt-3 text-muted-foreground">
+            Everything else is reused, and reports for deleted files are dropped, so the mutation
+            score always covers the whole codebase, not only the files that were re-tested.
+          </p>
+          <p className="mt-3 text-muted-foreground">
+            What the cache does not see: changes in <em>other</em> files that a file&apos;s tests
+            depend on (a helper in another file, a shared test fixture, testdata, a dependency bump).
+            Those can leave a cached result out of date. Run a full pass with{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">--no-cache</code> on a schedule (for
+            example nightly on main) to refresh the baseline.
+          </p>
+        </div>
+
         <div id="no-cache">
           <h2 className="text-2xl font-semibold mb-3">Force a full re-run</h2>
           <p className="mb-3 text-muted-foreground">
