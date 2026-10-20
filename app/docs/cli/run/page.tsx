@@ -3,8 +3,89 @@ import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
 import { Button } from "@/components/ui/button"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 export const metadata = docsMetadata("/docs/cli/run")
+
+type RunFlag = {
+  flag: string
+  alias?: string
+  description: string
+  defaultValue?: string
+  configKey?: string
+}
+
+const runFlags: RunFlag[] = [
+  {
+    flag: "--estimate",
+    description: "List source files and applicable mutation counts without running tests.",
+    defaultValue: "false",
+  },
+  {
+    flag: "--parallel",
+    alias: "-p",
+    description: "Number of parallel workers for mutation testing.",
+    defaultValue: "1",
+    configKey: "run.parallel",
+  },
+  {
+    flag: "--shard",
+    alias: "-s",
+    description: "Shard index and total shard count in the format INDEX/TOTAL (for example 0/3).",
+  },
+  {
+    flag: "--mutation-timeout",
+    description: "Timeout in seconds for testing one mutation; a mutation that exceeds it is reported as timeout.",
+    defaultValue: "120",
+    configKey: "run.mutation_timeout",
+  },
+  {
+    flag: "--coverage-profile",
+    description:
+      "Path to a Go coverage profile; mutations on uncovered lines are reported as not_covered without running tests.",
+    defaultValue: "empty (disabled)",
+    configKey: "run.coverage_profile",
+  },
+  {
+    flag: "--exclude",
+    alias: "-x",
+    description: "Exclude files matching a regex (can be repeated).",
+    configKey: "paths.exclude",
+  },
+  {
+    flag: "--output",
+    alias: "-o",
+    description: "Output directory for mutation testing reports.",
+    defaultValue: ".gooze-reports",
+    configKey: "output",
+  },
+  {
+    flag: "--no-cache",
+    description: "Disable cached incremental runs (re-test everything).",
+    defaultValue: "false",
+    configKey: "no-cache",
+  },
+  {
+    flag: "--verbose",
+    alias: "-v",
+    description: "Enable verbose logging.",
+    defaultValue: "false",
+    configKey: "log.verbose",
+  },
+  {
+    flag: "--log-output",
+    description: "Path to the log output file.",
+    defaultValue: ".gooze.log",
+    configKey: "log.filename",
+  },
+]
 
 export default function CliRunPage() {
   return (
@@ -29,6 +110,71 @@ export default function CliRunPage() {
             <code className="bg-muted px-1 py-0.5 rounded">.</code> or <code className="bg-muted px-1 py-0.5 rounded">_</code>, and nested modules (directories with their own{" "}
             <code className="bg-muted px-1 py-0.5 rounded">go.mod</code>).
           </p>
+        </div>
+
+        <div id="flags" className="scroll-mt-20">
+          <h2 className="text-2xl font-semibold mb-3">Flags</h2>
+          <p className="mb-4 text-muted-foreground">
+            Every flag can also be set in <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code> under its config key, or
+            through the matching <code className="bg-muted px-1 py-0.5 rounded">GOOZE_*</code> environment variable. Gooze reads{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code> from the current directory; there is no{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">--config</code> flag. See <Link href="/docs/config" className="underline underline-offset-4 hover:text-foreground">Configuration</Link> for precedence.
+          </p>
+          <ul className="space-y-3 md:hidden">
+            {runFlags.map((row) => (
+              <li key={row.flag} className="rounded-lg border p-4 text-sm">
+                <div className="flex flex-wrap items-center gap-1 font-mono">
+                  <code className="bg-muted px-1 py-0.5 rounded">{row.flag}</code>
+                  {row.alias && (
+                    <>
+                      <span className="text-muted-foreground">,</span>
+                      <code className="bg-muted px-1 py-0.5 rounded">{row.alias}</code>
+                    </>
+                  )}
+                </div>
+                <p className="mt-2 text-muted-foreground">{row.description}</p>
+                <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                  <dt>Default</dt>
+                  <dd>{row.defaultValue ? <code className="bg-muted px-1 py-0.5 rounded">{row.defaultValue}</code> : "—"}</dd>
+                  <dt>Config key</dt>
+                  <dd>{row.configKey ? <code className="bg-muted px-1 py-0.5 rounded">{row.configKey}</code> : "—"}</dd>
+                </dl>
+              </li>
+            ))}
+          </ul>
+          <div className="hidden overflow-x-auto rounded border md:block">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Flag</TableHead>
+                  <TableHead>Description</TableHead>
+                  <TableHead>Default</TableHead>
+                  <TableHead>Config key</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="text-muted-foreground">
+                {runFlags.map((row) => (
+                  <TableRow key={row.flag}>
+                    <TableCell className="whitespace-nowrap">
+                      <code className="bg-muted px-1 py-0.5 rounded">{row.flag}</code>
+                      {row.alias && (
+                        <>
+                          , <code className="bg-muted px-1 py-0.5 rounded">{row.alias}</code>
+                        </>
+                      )}
+                    </TableCell>
+                    <TableCell className="min-w-64">{row.description}</TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      {row.defaultValue ? <code className="bg-muted px-1 py-0.5 rounded">{row.defaultValue}</code> : "—"}
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      {row.configKey ? <code className="bg-muted px-1 py-0.5 rounded">{row.configKey}</code> : "—"}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
 
         <div id="what" className="scroll-mt-20">
@@ -74,13 +220,15 @@ export default function CliRunPage() {
         <div id="timeout" className="scroll-mt-20">
           <h2 className="text-2xl font-semibold mb-3">Timeouts</h2>
           <p className="mb-3 text-muted-foreground">
-            Gooze stops a mutation test if it takes too long.
-            In some versions you can configure this with a flag.
-            Check your version with <code className="bg-muted px-1 py-0.5 rounded">gooze run --help</code>.
+            The tests for each mutation must finish within{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">--mutation-timeout</code> seconds (default 120). A mutation
+            whose tests exceed it is reported as <code className="bg-muted px-1 py-0.5 rounded">timeout</code>.
           </p>
-          <CodeBlock lang="bash" code="gooze run --help" />
+          <CodeBlock lang="bash" code="gooze run --mutation-timeout 300 ./..." />
           <p className="mt-4 text-muted-foreground">
-            If you see many suspicious failures, run verbose and inspect logs:
+            You can also set it via <code className="bg-muted px-1 py-0.5 rounded">run.mutation_timeout</code> in{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">gooze.yaml</code> or <code className="bg-muted px-1 py-0.5 rounded">GOOZE_RUN_MUTATION_TIMEOUT</code>.
+            If you see many unexpected timeouts, run verbose and inspect the logs:
           </p>
           <CodeBlock lang="bash" code="gooze run --verbose ./..." />
         </div>

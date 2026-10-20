@@ -54,7 +54,7 @@ export const docsPages: DocsPage[] = [
   },
   {
     href: "/docs/mutation-testing",
-    title: "What is mutation testing?",
+    title: "Mutation testing basics",
     section: "Get started",
     description:
       "Learn how mutation testing works, what a mutation score means, and why it reveals gaps that code coverage misses.",

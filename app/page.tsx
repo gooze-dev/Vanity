@@ -13,8 +13,8 @@ import { CodeBlock } from "@/components/code-block";
 export default async function Home() {
   return (
     <div className="flex min-h-screen flex-col">
-      {/* Hero Section - Full Height */}
-      <section className="relative flex min-h-screen flex-col items-center justify-center px-4">
+      {/* Hero Section */}
+      <section className="relative flex flex-col items-center justify-center px-4 pb-20 pt-32 md:pt-36">
         {/* Floating Nav */}
         <div className="absolute top-8 right-8 z-10 flex items-center gap-4">
           <Link
@@ -39,8 +39,8 @@ export default async function Home() {
         </div>
 
         {/* Hero Content */}
-        <div className="flex max-w-[980px] flex-col items-center gap-8 text-center">
-          <h1 className="text-6xl font-extrabold leading-tight md:text-8xl lg:text-9xl">
+        <div className="flex w-full max-w-[980px] flex-col items-center gap-8 text-center">
+          <h1 className="text-6xl font-extrabold leading-tight md:text-8xl">
             <GoozeLogo className="text-inherit" />
           </h1>
           <p className="max-w-[750px] text-xl text-muted-foreground sm:text-2xl">
@@ -71,11 +71,10 @@ export default async function Home() {
               </Link>
             </GoozeOutlineCtaButton>
           </div>
-        </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="h-8 w-0.5 rounded-full bg-gradient-to-b from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] opacity-60" />
+          <div className="w-full min-w-0 max-w-md text-left">
+            <CodeBlock code="go install gooze.dev/pkg/gooze@latest" lang="bash" />
+          </div>
         </div>
       </section>
 

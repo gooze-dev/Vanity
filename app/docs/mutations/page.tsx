@@ -95,22 +95,18 @@ export default function MutationsPage() {
               <strong>Survived</strong>: tests still passed (usually means weak/missing assertion)
             </li>
             <li>
-              <strong>Skipped</strong>: Gooze did not run it
-            </li>
-            <li>
               <strong>Not covered</strong>: the mutated line is not covered by the coverage profile
               passed with <code className="bg-muted px-1 py-0.5 rounded">--coverage-profile</code>, so
               Gooze skipped its tests. It counts as a survivor (it lowers the score) but is tallied
               separately.
             </li>
             <li>
-              <strong>Error</strong>: the mutant did not compile, or Gooze had an unexpected error
+              <strong>Timeout</strong>: the tests exceeded <code className="bg-muted px-1 py-0.5 rounded">--mutation-timeout</code> (default 120 seconds)
+            </li>
+            <li>
+              <strong>Error</strong>: the mutant did not compile; excluded from the score
             </li>
           </ul>
-          <p className="mt-4 text-muted-foreground">
-            About timeouts: different Gooze versions can show timeouts differently.
-            If you see many suspicious kills, check logs and try <code className="bg-muted px-1 py-0.5 rounded">--verbose</code>.
-          </p>
         </div>
 
         <div id="types" className="scroll-mt-20">

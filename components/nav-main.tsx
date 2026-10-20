@@ -83,7 +83,7 @@ function NavSub({ item }: { item: NavSubItem }) {
 export function NavMain({ items }: { items: NavGroup[] }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel>Docs</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible

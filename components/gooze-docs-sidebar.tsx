@@ -54,7 +54,7 @@ function getNavMain(pathname: string) {
         { title: "Overview", url: "/docs" },
         { title: "Quick start", url: "/docs/quick-start" },
         { title: "Installation", url: "/docs/install" },
-        { title: "What is mutation testing?", url: "/docs/mutation-testing" },
+        { title: "Mutation testing basics", url: "/docs/mutation-testing" },
       ],
     },
     {
@@ -145,7 +145,7 @@ export function GoozeDocsSidebar({
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={navMain} />
+        <NavMain key={pathname} items={navMain} />
       </SidebarContent>
       
       <SidebarRail />

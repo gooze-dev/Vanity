@@ -87,7 +87,7 @@ export default function QuickStartPage() {
           <CodeBlock lang="bash" code="gooze report view -o .gooze-reports" />
 
           <p className="mt-6 text-muted-foreground">
-            In the interactive UI you can usually:
+            In the interactive UI:
             <code className="bg-muted px-1 py-0.5 rounded ml-2">/</code> to filter,
             <code className="bg-muted px-1 py-0.5 rounded ml-2">enter</code> to open the diff,
             and <code className="bg-muted px-1 py-0.5 rounded ml-2">q</code> to quit.

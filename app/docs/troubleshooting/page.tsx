@@ -22,8 +22,9 @@ export default function TroubleshootingPage() {
             Sometimes it is not (timeouts, flaky tests, setup problems).
           </p>
           <p className="mt-4 text-muted-foreground">
-            Gooze versions can report timeouts differently.
-            If you suspect timeouts, run verbose and check logs:
+            Timeouts are not kills: a mutation whose tests exceed{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">--mutation-timeout</code> (default 120 seconds) is reported with status{" "}
+            <code className="bg-muted px-1 py-0.5 rounded">timeout</code>. If kills still look suspicious, run verbose and check the logs:
           </p>
           <div className="mt-3">
             <CodeBlock lang="bash" code="gooze run --verbose ./..." />
@@ -34,7 +35,7 @@ export default function TroubleshootingPage() {
           <h2 className="text-2xl font-semibold mb-3">Gooze finds 0 files / 0 mutations</h2>
           <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
             <li>Run from the module root (where <code className="bg-muted px-1 py-0.5 rounded">go.mod</code> is).</li>
-            <li>Try <code className="bg-muted px-1 py-0.5 rounded">gooze run --estimate ./...</code> and verify paths.</li>
+            <li>Preview what Gooze sees (below) and verify the paths.</li>
             <li>Check your exclude regex rules. You can exclude everything by mistake.</li>
             <li>
               <code className="bg-muted px-1 py-0.5 rounded">vendor/</code>, <code className="bg-muted px-1 py-0.5 rounded">testdata/</code>, directories starting with{" "}
@@ -48,11 +49,20 @@ export default function TroubleshootingPage() {
           </div>
         </div>
 
-        <div id="skipped" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mb-3">“Skipped” mutations</h2>
-          <p className="text-muted-foreground">
-            <strong>Skipped</strong> usually means Gooze did not run the mutation.
-            Note that a missing test file does not skip anything: Gooze runs the sibling{" "}
+        <div id="statuses" className="scroll-mt-20">
+          <h2 className="text-2xl font-semibold mb-3">Statuses you will see</h2>
+          <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
+            <li><code className="bg-muted px-1 py-0.5 rounded">killed</code>: the package tests failed for the mutation.</li>
+            <li><code className="bg-muted px-1 py-0.5 rounded">survived</code>: the package tests still passed.</li>
+            <li>
+              <code className="bg-muted px-1 py-0.5 rounded">not_covered</code>: the mutated line is uncovered in the{" "}
+              <code className="bg-muted px-1 py-0.5 rounded">--coverage-profile</code>, so its tests were not run; counts as a survivor.
+            </li>
+            <li><code className="bg-muted px-1 py-0.5 rounded">timeout</code>: the tests exceeded <code className="bg-muted px-1 py-0.5 rounded">--mutation-timeout</code>.</li>
+            <li><code className="bg-muted px-1 py-0.5 rounded">error</code>: the mutant did not compile; excluded from the score.</li>
+          </ul>
+          <p className="mt-4 text-muted-foreground">
+            A missing test file does not skip anything: Gooze runs the sibling{" "}
             <code className="bg-muted px-1 py-0.5 rounded">&lt;name&gt;_test.go</code> if it exists, otherwise any{" "}
             <code className="bg-muted px-1 py-0.5 rounded">*_test.go</code> in the same package. If the package has no test file at all,
             the mutation is reported as <strong>survived</strong>.

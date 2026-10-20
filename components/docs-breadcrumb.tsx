@@ -1,5 +1,6 @@
 "use client"
 
+import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -11,6 +12,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { cn } from "@/lib/utils"
 
 const featureTitles: Record<string, string> = {
   "bypass-mutation": "Bypass mutation",
@@ -47,6 +49,11 @@ const cliCommandTitles: Record<string, string> = {
 // CLI commands that are groups with their own subcommand pages.
 const cliGroups = new Set(["report", "config"])
 
+type Crumb = {
+  label: string
+  href?: string
+}
+
 function titleFromSlug(slug: string) {
   return slug
     .split("-")
@@ -54,126 +61,86 @@ function titleFromSlug(slug: string) {
     .join(" ")
 }
 
+function buildCrumbs(parts: string[]): Crumb[] {
+  const section = parts[1]
+  const crumbs: Crumb[] = [
+    { label: "Home", href: "/" },
+    { label: "Documentation", href: "/docs" },
+  ]
+
+  if (section === "features" && parts[2]) {
+    crumbs.push(
+      { label: "Features", href: "/docs#features" },
+      { label: featureTitles[parts[2]] ?? titleFromSlug(parts[2]) },
+    )
+  } else if (section === "cli" && parts.length >= 4 && cliGroups.has(parts[2])) {
+    crumbs.push(
+      { label: sectionTitles.cli, href: "/docs/cli" },
+      { label: cliCommandTitles[parts[2]] ?? titleFromSlug(parts[2]), href: `/docs/cli/${parts[2]}` },
+      { label: cliCommandTitles[parts[3]] ?? titleFromSlug(parts[3]) },
+    )
+  } else if (section && parts.length >= 3) {
+    crumbs.push(
+      { label: sectionTitles[section] ?? titleFromSlug(section), href: `/docs/${section}` },
+      {
+        label:
+          section === "cli"
+            ? cliCommandTitles[parts[2]] ?? titleFromSlug(parts[2])
+            : titleFromSlug(parts[2]),
+      },
+    )
+  } else if (section) {
+    crumbs.push({ label: sectionTitles[section] ?? titleFromSlug(section) })
+  }
+
+  const last = crumbs[crumbs.length - 1]
+  delete last.href
+  return crumbs
+}
+
 export function DocsBreadcrumb() {
   const pathname = usePathname() || "/docs"
   const parts = pathname.split("?")[0].split("#")[0].split("/").filter(Boolean)
 
-  // Common:
-  // /docs
-  // /docs/<section>
-  // /docs/features/<slug>
-  // /docs/cli/<command>
-  const isDocs = parts[0] === "docs"
-  const section = parts[1]
-  const featureSlug = parts[2]
-
-  if (!isDocs) {
+  if (parts[0] !== "docs") {
     return null
   }
 
-  const onDocsHome = parts.length === 1
+  const crumbs = buildCrumbs(parts)
+  const firstVisible = Math.max(0, crumbs.length - 2)
 
   return (
-    <Breadcrumb>
-      <BreadcrumbList>
-        <BreadcrumbItem className="hidden md:block">
-          <BreadcrumbLink asChild>
-            <Link href="/" className="transition-colors hover:text-[color:var(--gooze-teal)]">
-              Home
-            </Link>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-
-        <BreadcrumbSeparator className="hidden md:block" />
-
-        <BreadcrumbItem>
-          {onDocsHome ? (
-            <BreadcrumbPage>Documentation</BreadcrumbPage>
-          ) : (
-            <BreadcrumbLink asChild>
-              <Link href="/docs" className="transition-colors hover:text-[color:var(--gooze-teal)]">
-                Documentation
-              </Link>
-            </BreadcrumbLink>
-          )}
-        </BreadcrumbItem>
-
-        {section === "features" && featureSlug ? (
-          <>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link href="/docs#features" className="transition-colors hover:text-[color:var(--gooze-teal)]">
-                  Features
-                </Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{featureTitles[featureSlug] ?? titleFromSlug(featureSlug)}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </>
-        ) : section === "cli" && parts.length >= 4 && cliGroups.has(parts[2]) ? (
-          <>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link
-                  href="/docs/cli"
-                  className="transition-colors hover:text-[color:var(--gooze-teal)]"
-                >
-                  {sectionTitles.cli}
-                </Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link
-                  href={`/docs/cli/${parts[2]}`}
-                  className="transition-colors hover:text-[color:var(--gooze-teal)]"
-                >
-                  {cliCommandTitles[parts[2]] ?? titleFromSlug(parts[2])}
-                </Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>
-                {cliCommandTitles[parts[3]] ?? titleFromSlug(parts[3])}
-              </BreadcrumbPage>
-            </BreadcrumbItem>
-          </>
-        ) : section && parts.length >= 3 ? (
-          <>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link
-                  href={`/docs/${section}`}
-                  className="transition-colors hover:text-[color:var(--gooze-teal)]"
-                >
-                  {sectionTitles[section] ?? titleFromSlug(section)}
-                </Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>
-                {section === "cli" && parts[2]
-                  ? cliCommandTitles[parts[2]] ?? titleFromSlug(parts[2])
-                  : titleFromSlug(parts[2])}
-              </BreadcrumbPage>
-            </BreadcrumbItem>
-          </>
-        ) : section ? (
-          <>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{sectionTitles[section] ?? titleFromSlug(section)}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </>
-        ) : null}
+    <Breadcrumb className="min-w-0">
+      <BreadcrumbList className="flex-nowrap">
+        {crumbs.map((crumb, index) => {
+          const collapsed = index < firstVisible
+          return (
+            <React.Fragment key={`${index}:${crumb.label}`}>
+              {index > 0 && (
+                <BreadcrumbSeparator className={cn(index <= firstVisible && "hidden md:inline-flex")} />
+              )}
+              <BreadcrumbItem
+                className={cn(
+                  index === crumbs.length - 1 ? "shrink-0" : "min-w-0",
+                  collapsed && "hidden md:inline-flex",
+                )}
+              >
+                {crumb.href ? (
+                  <BreadcrumbLink asChild>
+                    <Link
+                      href={crumb.href}
+                      className="truncate transition-colors hover:text-[color:var(--gooze-teal)]"
+                    >
+                      {crumb.label}
+                    </Link>
+                  </BreadcrumbLink>
+                ) : (
+                  <BreadcrumbPage className="truncate">{crumb.label}</BreadcrumbPage>
+                )}
+              </BreadcrumbItem>
+            </React.Fragment>
+          )
+        })}
       </BreadcrumbList>
     </Breadcrumb>
   )

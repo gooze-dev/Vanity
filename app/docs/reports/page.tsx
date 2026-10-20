@@ -15,7 +15,7 @@ export default function ReportsPage() {
         <div id="where" className="scroll-mt-20">
           <h2 className="text-2xl font-semibold mb-3">Where reports are stored</h2>
           <p className="mb-3 text-muted-foreground">
-            Default output directory is usually <code className="bg-muted px-1 py-0.5 rounded">.gooze-reports/</code>.
+            Default output directory is <code className="bg-muted px-1 py-0.5 rounded">.gooze-reports/</code>.
             You can change it with <code className="bg-muted px-1 py-0.5 rounded">-o/--output</code>.
           </p>
           <CodeBlock lang="bash" code="gooze run -o .gooze-reports ./..." />
