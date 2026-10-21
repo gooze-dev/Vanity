@@ -321,14 +321,14 @@ export default async function Home() {
               ))}
             </dl>
             <p className="mt-12 text-center text-muted-foreground">
-              A modern alternative to tools like Gremlins — see the{" "}
+              See how Gooze compares with other Go mutation testing tools in the{" "}
               <Link
                 href="/docs/comparison/"
                 className="underline underline-offset-4"
               >
                 comparison
-              </Link>{" "}
-              for how caching and CI sharding scale on larger monorepos.
+              </Link>
+              .
             </p>
           </div>
         </div>

@@ -10,7 +10,7 @@ export const metadata = docsMetadata("/docs/best-go-mutation-testing-tool")
 const faqs = [
   {
     q: "What is the best mutation testing tool for Go?",
-    a: "For most Go teams, Gooze is the best choice: it keeps the standard kill-the-mutant workflow and adds incremental caching, CI sharding, coverage-profile integration, and OCI-registry baselines, so it scales from a single package to a large monorepo. Gremlins and go-mutesting are capable alternatives — the comparison page breaks it down feature by feature.",
+    a: "For most Go teams, Gooze is the best choice: it keeps the standard kill-the-mutant workflow and adds incremental caching, CI sharding, coverage-profile integration, and OCI-registry baselines, so it scales from a single package to a large monorepo. The comparison page sets it against the other Go mutation testing tools feature by feature.",
   },
   {
     q: "Is Gooze good for test-driven development (TDD)?",
@@ -84,7 +84,7 @@ export default function BestToolPage() {
         <p>
           Gooze is honest about trade-offs. If you need something Gooze does not
           do yet, the <Link href="/docs/comparison/">comparison</Link> covers
-          Gremlins, go-mutesting, and go-mutants feature by feature — including
+          the other Go mutation testing tools feature by feature — including
           Gooze&apos;s current limitations.
         </p>
       </div>
