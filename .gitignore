@@ -43,3 +43,6 @@ next-env.d.ts
 # local SEO sprint scratch notes (not part of the product)
 /todo.md
 /refactor-plan.md
+
+# gooze reports from recording examples/calc
+/examples/calc/.gooze-reports/

@@ -1,0 +1,2 @@
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792567702, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-goozels-check (gooze v1.2.0, goozels v0.2.0, go1.27.3)"}
+[0.010602, "o", "calc.go:1:1: warning: gooze: score 84.62% — 11 killed, 2 survived\r\ncalc.go:10:2: warning: gooze: surviving comparison mutant — tests still pass with `if n < lo {` → `if n <= lo {`\r\ncalc.go:13:2: warning: gooze: surviving comparison mutant — tests still pass with `if n > hi {` → `if n >= hi {`\r\n"]

@@ -1,3 +1,4 @@
+import type * as React from "react"
 import { ChevronDown } from "lucide-react"
 
 import { slugify } from "@/lib/heading-id"
@@ -7,7 +8,33 @@ export interface Faq {
   a: string
 }
 
-// Answers use `backticks` for commands and flags; show them as code.
+const LINK = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g
+
+// Plain text with [label](https://…) links rendered as external links.
+function withLinks(text: string, key: number) {
+  const parts: React.ReactNode[] = []
+  let last = 0
+  for (const match of text.matchAll(LINK)) {
+    parts.push(text.slice(last, match.index))
+    parts.push(
+      <a
+        key={`${key}-${match.index}`}
+        href={match[2]}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="underline underline-offset-4 hover:text-foreground"
+      >
+        {match[1]}
+      </a>,
+    )
+    last = match.index + match[0].length
+  }
+  parts.push(text.slice(last))
+  return parts
+}
+
+// Answers use `backticks` for commands and flags (shown as code) and
+// [label](https://…) for external links.
 export function withCode(text: string) {
   return text.split("`").map((part, i) =>
     i % 2 ? (
@@ -15,9 +42,14 @@ export function withCode(text: string) {
         {part}
       </code>
     ) : (
-      part
+      withLinks(part, i)
     ),
   )
+}
+
+// The same text without markup, for structured data.
+function plain(text: string) {
+  return text.replaceAll("`", "").replace(LINK, "$1")
 }
 
 // FAQ block at the end of a docs page. Native <details> keeps every answer in
@@ -53,16 +85,16 @@ export function FaqList({ faqs, className = "bg-muted/40" }: { faqs: Faq[]; clas
   )
 }
 
-// FAQPage structured data from the same array the page renders. Backticks are
-// display markup, so strip them from the plain-text answer.
+// FAQPage structured data from the same array the page renders. Backticks and
+// links are display markup, so strip them from the plain-text answer.
 export function faqPageJsonLd(faqs: Faq[]) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     mainEntity: faqs.map((faq) => ({
       "@type": "Question",
-      name: faq.q.replaceAll("`", ""),
-      acceptedAnswer: { "@type": "Answer", text: faq.a.replaceAll("`", "") },
+      name: plain(faq.q),
+      acceptedAnswer: { "@type": "Answer", text: plain(faq.a) },
     })),
   }
 }

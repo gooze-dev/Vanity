@@ -1,0 +1,2 @@
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792567698, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-first-run (gooze v1.2.0, goozels v0.2.0, go1.27.3)"}
+[3.678972, "o", "Mutation score: 84.62% (11 killed, 2 survived; 0 cached, 13 tested)\r\n"]
