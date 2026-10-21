@@ -144,3 +144,31 @@ Mutation score: 100.00% (13 killed, 0 survived; 13 cached, 0 tested)
   numbers, logical, unary) use a second small example and say so.
 - Avoid a `Clamp`-style function for this story: there `if n < lo { return lo }` mutated to
   `n <= lo` is an equivalent mutant (same result when `n == lo`) and no test can kill it.
+
+## Narrowed runs: diff mode, `--run`, `--mutagens`
+
+`scripts/record-narrowed-casts.sh` records these in `/tmp/calc`.
+
+- Diff mode (`calc-diff-*`, `diff-*`): a git repo whose `main` has the starting tests and a
+  full run as the baseline (84.62%); the branch `boundary-tests` adds the two boundary tests.
+  `gooze run --diff main` tests all 13 mutations (the test file changed) and scores
+  `100.00% (13 killed, 0 survived; 0 cached, 13 tested; changed lines since main)` into
+  `.gooze-reports/run/`; the main reports stay at 84.62% until `gooze report merge`.
+- One function at a time (`calc-func-*`): calc grows a second function below `InRange`
+  (lines 10 and 13 don't move), whose test kills all 10 of its mutants (8 arithmetic,
+  2 numbers):
+
+```go
+// Percent returns part as a whole percentage of total, rounded down.
+// It expects total > 0.
+func Percent(part, total int) int {
+	return part * 100 / total
+}
+```
+
+  A full run is `91.30% (21 killed, 2 survived; 0 cached, 23 tested)`. With the lower bound case
+  added, `gooze run --run '^InRange$'` is `92.31% (12 killed, 1 survived; 0 cached, 13 tested;
+  functions matching ^InRange$)`; with both, 100%. After `gooze report merge`, `calc.go` is
+  partial (13 results, because the test file changed) until the next full run (23 tested, 100%).
+  `goozels check calc.go` then starts with `gooze: partly tested (functions matching ^InRange$)
+  — score 100.00% — 13 killed; rerun the whole file: gooze run .` (`calc-func-goozels-check`).

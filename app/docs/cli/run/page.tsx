@@ -38,6 +38,19 @@ const runFlags: RunFlag[] = [
     configKey: "run.diff",
   },
   {
+    flag: "--run",
+    description:
+      "Mutate only functions whose name matches this Go regular expression, like `go test -run` (`Name`, and `Type.Name` for methods; unanchored). Flag only. Not with `--shard`.",
+    defaultValue: "empty (all functions)",
+  },
+  {
+    flag: "--mutagens",
+    description:
+      "Generate only these mutagens: comma-separated or repeated, any case (`arithmetic`, `boolean`, `numbers`, `comparison`, `logical`, `unary`). Env: `GOOZE_RUN_MUTAGENS`.",
+    defaultValue: "empty (all six)",
+    configKey: "run.mutagens",
+  },
+  {
     flag: "--parallel",
     alias: "-p",
     description: "Number of parallel workers for mutation testing (at least `1`).",
@@ -210,9 +223,8 @@ export default function CliRunPage() {
           <Recording name="calc-cached-run" title="Recorded last line of a gooze run with nothing changed" />
           <p className="text-sm text-muted-foreground">
             With <code>--no-cache</code> it scores only what it tested; a sharded run scores its
-            shard (<code>gooze report merge</code> gives the full score). With{" "}
-            <a href="#diff"><code>--diff</code></a> it prints two scores: the changed lines, then
-            every file in scope.
+            shard (<code>gooze report merge</code> gives the full score). A{" "}
+            <a href="#narrowed">narrowed run</a> scores only its selection.
           </p>
         </div>
 
@@ -237,11 +249,10 @@ export default function CliRunPage() {
           <Recording name="calc-cached-estimate" title="Recorded gooze run --estimate with everything cached" />
         </div>
 
-        {/* TODO(version): diff mode arrives in the next gooze release; drop this note once DOCS_FACTS_VERSION includes it. */}
         <div id="diff">
           <h2>Changed lines only (--diff)</h2>
           <p>
-            Mutate only the lines changed against a git ref (next Gooze release):
+            Mutate only the lines changed against a git ref:
           </p>
           <CodeBlock lang="bash" code="gooze run --diff origin/main ./..." />
           <ul>
@@ -260,12 +271,99 @@ export default function CliRunPage() {
               code doesn&apos;t change.
             </li>
             <li>
-              The run ends with two lines: <code>Mutation score</code> for the changed lines, then{" "}
-              <code>Total mutation score</code> for every file in scope.
+              It is a <a href="#narrowed">narrowed run</a>: its score covers the changed lines
+              only, and its reports go to <code>.gooze-reports/run/</code>.
             </li>
           </ul>
           <p>
             Guide: <Link href="/docs/usage/diff-mode">Changed lines only (git diff mode)</Link>.
+          </p>
+        </div>
+
+        <div id="run">
+          <h2>Some functions only (--run)</h2>
+          <p>
+            Mutate only the functions whose name matches a Go regular expression:
+          </p>
+          <CodeBlock lang="bash" code="gooze run --run '^InRange$' ./..." />
+          <ul>
+            <li>
+              Like <code>go test -run</code>, the pattern isn&apos;t anchored; write{" "}
+              <code>^Name$</code> for an exact match. It is matched against the function each
+              mutation is in: <code>Name</code>, and for a method also <code>Type.Name</code>{" "}
+              (pointer, value and generic receivers; <code>Gen[T]</code> is matched as{" "}
+              <code>Gen.Name</code>).
+            </li>
+            <li>
+              Code in a closure belongs to its enclosing function. Package-level code matches no
+              pattern.
+            </li>
+            <li>Each mutant still runs the full test suite of its package.</li>
+            <li>
+              Flag only, no config key. It works with <code>--estimate</code>, which then prints{" "}
+              <code>Only functions matching REGEX.</code> first.
+            </li>
+            <li>
+              With <code>--shard</code> it exits <code>1</code>:{" "}
+              <code>--run can&apos;t be combined with --shard: a function-level run is small, so run it in one job</code>.
+              A pattern that doesn&apos;t compile exits <code>1</code> with{" "}
+              <code>invalid --run pattern ...</code>.
+            </li>
+          </ul>
+          <Recording name="calc-func-run" title="Recorded last lines of gooze run --run '^InRange$'" />
+          <p>
+            Guide: <Link href="/docs/usage/single-function">One function at a time</Link>.
+          </p>
+        </div>
+
+        <div id="mutagens">
+          <h2>Some mutagens only (--mutagens)</h2>
+          <p>
+            Generate only the listed <Link href="/docs/mutations">mutagens</Link>. Names are case-insensitive, comma-separated or with the flag repeated:
+          </p>
+          <CodeBlock
+            lang="bash"
+            code={`gooze run --mutagens comparison,boolean ./...
+gooze run --mutagens comparison --mutagens boolean ./...`}
+          />
+          <p>
+            Valid names are the six mutagens Gooze runs. Any other name exits <code>1</code>:
+          </p>
+          <Recording name="run-unknown-mutagen" title="Recorded gooze run --mutagens with an unknown name" />
+          <p>
+            Also config key <code>run.mutagens</code> (a list; empty means all six) and{" "}
+            <code>GOOZE_RUN_MUTAGENS</code>. A configured value narrows every run.
+          </p>
+        </div>
+
+        <div id="narrowed">
+          <h2>Narrowed runs and run/</h2>
+          <p>
+            A run with <code>--diff</code>, <code>--run</code> or <code>--mutagens</code> is a
+            narrowed run:
+          </p>
+          <ul>
+            <li>
+              It writes its reports to a fresh <code>&lt;output&gt;/run/</code> (
+              <code>run/shard_N</code> when sharded) and never changes the main reports.
+            </li>
+            <li>
+              It uses the main reports as its cache: an unchanged file is skipped (
+              <code>--no-cache</code> tests it anyway).
+            </li>
+            <li>
+              Its score covers only the selection and names it at the end of the line, followed by
+              where its reports are.
+            </li>
+            <li>
+              <code>gooze report view -o .gooze-reports/run</code> shows its results;{" "}
+              <Link href="/docs/cli/report#merge"><code>gooze report merge</code></Link> folds
+              them into the main reports.
+            </li>
+          </ul>
+          <Recording name="calc-diff-run" title="Recorded last lines of gooze run --diff main on the calc branch" />
+          <p>
+            Details: <Link href="/docs/usage/single-function#run-dir">the run directory</Link>.
           </p>
         </div>
 

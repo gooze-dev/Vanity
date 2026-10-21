@@ -73,8 +73,7 @@ const diff = `image: golang:1.27
 
 stages: [test, merge]
 
-# Run merge request pipelines (they set CI_MERGE_REQUEST_TARGET_BRANCH_NAME)
-# and pipelines for the default branch.
+# Run merge request pipelines and pipelines for the default branch.
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -84,45 +83,54 @@ variables:
   REPORTS_REF: "$CI_REGISTRY_IMAGE/gooze-reports:main"
   GOOZE_REGISTRY_USERNAME: "gitlab-ci-token"
   GOOZE_REGISTRY_PASSWORD: "$CI_JOB_TOKEN"
-  GIT_DEPTH: 0               # full history, so gooze finds the merge base
 
 default:
   before_script:
     - go install gooze.dev/pkg/gooze@latest
-    # Fetch the target branch, which may be missing. BASE stays empty outside
-    # merge requests; before_script and script share one shell.
-    - |
-      BASE=""
-      if [ -n "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" ]; then
-        git fetch origin "+refs/heads/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME:refs/remotes/origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
-        BASE="origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
-      fi
 
+# Merge requests: one job that mutates only the changed lines.
+diff:
+  stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    GIT_DEPTH: 0             # full history, so gooze finds the merge base
+    MIN_SCORE: "60"
+  script:
+    # The target branch may not be fetched yet.
+    - git fetch origin "+refs/heads/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME:refs/remotes/origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    # Reports go to .gooze-reports/run; nothing is pushed.
+    - gooze run --diff "origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" ./...
+    - |
+      score=$(gooze report view -o .gooze-reports/run | sed -n 's/^Mutation score: \\([0-9.]*\\)%.*$/\\1/p' | tail -1)
+      echo "Mutation score: \${score}% (minimum \${MIN_SCORE}%)"
+      awk -v s="$score" -v m="$MIN_SCORE" 'BEGIN { exit !(s != "" && s >= m) }'
+
+# The default branch: the sharded full run, which publishes the baseline.
 test:
   stage: test
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   parallel: 3
   script:
     - gooze report pull "$REPORTS_REF" || echo "no baseline yet"
-    # --diff="" turns diff mode off, so main tests everything.
-    - gooze run --diff="$BASE" -s "$((CI_NODE_INDEX - 1))/$CI_NODE_TOTAL" ./...
+    - gooze run -s "$((CI_NODE_INDEX - 1))/$CI_NODE_TOTAL" ./...
   artifacts:
     paths:
       - .gooze-reports/
 
 merge:
   stage: merge
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   dependencies: [test]
   variables:
     MIN_SCORE: "60"
   script:
     - gooze report merge
+    - gooze report push "$REPORTS_REF"
     - |
-      if [ "$CI_COMMIT_BRANCH" = "main" ]; then
-        gooze report push "$REPORTS_REF"
-      fi
-    # In a merge request, gate on the score of the changed lines.
-    - |
-      score=$(gooze report view \${BASE:+--diff "$BASE"} | sed -n 's/^Mutation score: \\([0-9.]*\\)%.*$/\\1/p' | tail -1)
+      score=$(gooze report view | sed -n 's/^Mutation score: \\([0-9.]*\\)%.*$/\\1/p' | tail -1)
       echo "Mutation score: \${score}% (minimum \${MIN_SCORE}%)"
       awk -v s="$score" -v m="$MIN_SCORE" 'BEGIN { exit !(s != "" && s >= m) }'`
 
@@ -223,23 +231,22 @@ export default function GitlabPage() {
           <CodeBlock lang="yaml" code={cached} />
         </div>
 
-        {/* TODO(version): --diff arrives in the next gooze release. */}
         <div id="diff">
           <h2>4. Merge requests: only the changed lines</h2>
           <p>
             A merge request that changes three lines of a large file still re-tests that whole
-            file. With <Link href="/docs/usage/diff-mode">diff mode</Link> (next Gooze release),
+            file. With <Link href="/docs/usage/diff-mode">diff mode</Link>,
             merge requests mutate only the lines they change against the target branch, while{" "}
-            <code>main</code> keeps a full run and publishes the baseline. This is the cached
-            pipeline with diff mode and the gate:
+            <code>main</code> keeps the sharded full run and publishes the baseline. This is the
+            cached pipeline with a diff job and the gate:
           </p>
           <CodeBlock lang="yaml" code={diff} />
           <ul>
             <li>
-              <code>CI_MERGE_REQUEST_TARGET_BRANCH_NAME</code> is set only in merge request
-              pipelines, so the <code>workflow</code> rules run those instead of branch
-              pipelines. On <code>main</code>, <code>BASE</code> stays empty and{" "}
-              <code>--diff=&quot;&quot;</code> runs everything.
+              The <code>workflow</code> rules run merge request pipelines instead of branch
+              pipelines, plus pipelines for the default branch. The job rules pick the{" "}
+              <code>diff</code> job for merge requests and the sharded full run for the default
+              branch.
             </li>
             <li>
               New GitLab projects fetch a shallow clone (<code>20</code> commits), and the target
@@ -249,10 +256,14 @@ export default function GitlabPage() {
               unknown ref or no merge base.
             </li>
             <li>
-              Every shard computes the same changes, and the merge keeps them. In the merge job,{" "}
-              <code>gooze report view --diff</code> prints the score of the changed lines, so the
-              gate checks the merge request&apos;s own code. The merge job runs in the checkout,
-              which <code>--diff</code> needs.
+              The <code>diff</code> job runs without shards. A diff run is small, and gating a
+              sharded diff run on the score of the changed lines isn&apos;t supported yet.
+            </li>
+            <li>
+              A diff run writes its reports to <code>.gooze-reports/run/</code>, and its score
+              covers the changed lines only. The gate reads that score with{" "}
+              <code>gooze report view -o .gooze-reports/run</code>, so it checks the merge
+              request&apos;s own code. Only the default branch pushes the baseline.
             </li>
             <li>
               Diff mode needs git. The <code>golang</code> image includes it; a minimal image

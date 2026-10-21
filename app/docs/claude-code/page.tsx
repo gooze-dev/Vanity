@@ -117,6 +117,40 @@ go install gooze.dev/pkg/goozels/cmd/goozels@latest`}
           </ul>
         </div>
 
+        <div id="one-function">
+          <h2>One function at a time</h2>
+          <p>
+            When Claude kills the survivors of one function, a full run tests every mutant of the
+            package on each try. When gooze has{" "}
+            <Link href="/docs/usage/single-function" className={LINK}>
+              <code>--run</code>
+            </Link>
+            , <code>/gooze:mutation-testing</code> uses a shorter loop. It checks that{" "}
+            <code>gooze run --help</code> lists the flag first:
+          </p>
+          <ol>
+            <li>
+              Preview with <code>gooze run --estimate --run &apos;^InRange$&apos; ./...</code>.
+            </li>
+            <li>
+              Write a test, run <code>gooze run --run &apos;^InRange$&apos; ./...</code>, and read
+              the survivors with <code>gooze report view -o .gooze-reports/run</code>. Repeat.
+            </li>
+            <li>
+              When the function is done, <code>gooze report merge</code> adds the results to the
+              main reports.
+            </li>
+          </ol>
+          <p>
+            Ask for it in plain words: &ldquo;Kill the surviving mutants in{" "}
+            <code>InRange</code> only.&rdquo; Until the merge, the results after an edit come
+            from the main reports, because goozels doesn&apos;t read <code>run/</code>. The
+            skill reports a <code>--run</code> score as the function&apos;s score, not the
+            package&apos;s, and <code>/gooze:ci-setup</code> doesn&apos;t put <code>--run</code>{" "}
+            or <code>--mutagens</code> in CI.
+          </p>
+        </div>
+
         <div id="after-edits">
           <h2>What Claude sees after an edit</h2>
           <p>

@@ -15,7 +15,7 @@ const faqs = [
   },
   {
     q: "Is Gooze good for test-driven development (TDD)?",
-    a: "Yes. Gooze re-tests only files whose source, test, or mutators changed, so repeat runs stay short enough for an edit-run loop. You quickly see whether a new test kills the mutations in the code you just wrote.",
+    a: "Yes. Gooze re-tests only files whose source, test, or mutators changed, so repeat runs stay short enough for an edit-run loop. To test one function, `gooze run --run '^Name$'` mutates only that function, and `--mutagens` picks the mutation types. You quickly see whether a new test kills the mutations in the code you just wrote.",
   },
   {
     q: "How is mutation testing different from code coverage?",
@@ -57,6 +57,12 @@ export default function BestToolPage() {
             <Link href="/docs/usage/incremental-runs/">incremental runs</Link>.
           </li>
           <li>
+            <strong>One function at a time.</strong> <code>--run</code> mutates only the
+            functions a regex matches, like <code>go test -run</code>, and{" "}
+            <code>--mutagens</code> only some mutation types; see{" "}
+            <Link href="/docs/usage/single-function/">one function at a time</Link>.
+          </li>
+          <li>
             <strong>Scales in CI.</strong> Shard across parallel jobs with{" "}
             <code>-s INDEX/TOTAL</code> and merge the results; see{" "}
             <Link href="/docs/ci/github/">GitHub Actions</Link>.
@@ -69,6 +75,11 @@ export default function BestToolPage() {
           <li>
             <strong>Shares baselines.</strong> Push and pull the reports
             directory to any OCI registry so teams reuse one baseline.
+          </li>
+          <li>
+            <strong>Results in your editor.</strong> The goozels language server marks
+            surviving mutants in the file and runs one function from a code lens; see{" "}
+            <Link href="/docs/editor-support/">editor support</Link>.
           </li>
         </ul>
       </div>

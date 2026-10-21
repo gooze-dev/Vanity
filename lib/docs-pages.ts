@@ -118,6 +118,17 @@ export const docsPages: DocsPage[] = [
     keywords: ["git diff","diff mode","changed lines","pull request","merge base","base branch","--diff","run.diff","fetch-depth"],
   },
   {
+    href: "/docs/usage/single-function",
+    title: "One function at a time (--run and --mutagens)",
+    seoTitle:
+      "Mutate One Function or Mutagen at a Time (--run, --mutagens) · Gooze",
+    navTitle: "One function at a time",
+    section: "Guides",
+    description:
+      "Kill the survivors of one Go function in a short loop with gooze run --run and --mutagens, without touching the project report until you merge.",
+    keywords: ["--run","--mutagens","single function","one function","function filter","run.mutagens","narrowed run","run directory","report merge","kill survivors"],
+  },
+  {
     href: "/docs/usage/ignoring-code",
     title: "Ignoring code",
     seoTitle:
@@ -227,7 +238,7 @@ export const docsPages: DocsPage[] = [
     section: "Reference",
     parent: "/docs/cli",
     description:
-      "Run Go mutation testing with gooze run: flags for parallelism, sharding, timeouts, the --estimate cache preview, and the --coverage-profile gate.",
+      "Run Go mutation testing with gooze run: flags for parallelism, sharding, timeouts, the --estimate cache preview, --diff, --run, --mutagens and the --coverage-profile gate.",
     keywords: ["gooze run","execute tests","parallelism","timeout control","coverage-profile","unkilled mutants","estimate"],
   },
   {
@@ -375,6 +386,18 @@ export const docsFlags: DocsFlag[] = [
     description: "Mutate only lines changed against a git ref (merge base with HEAD, compared with the working tree).",
   },
   {
+    flag: "--run",
+    command: "gooze run",
+    href: "/docs/cli/run#run",
+    description: "Mutate only functions matching a Go regular expression (Name, or Type.Name for methods), like go test -run.",
+  },
+  {
+    flag: "--mutagens",
+    command: "gooze run",
+    href: "/docs/cli/run#mutagens",
+    description: "Generate only the listed mutagens (comma-separated or repeated).",
+  },
+  {
     flag: "--parallel",
     alias: "-p",
     command: "gooze run",
@@ -413,12 +436,6 @@ export const docsFlags: DocsFlag[] = [
     command: "gooze report view",
     href: "/docs/cli/report#view",
     description: "List every mutation with its status and diff instead of the per-file summary.",
-  },
-  {
-    flag: "--diff",
-    command: "gooze report view",
-    href: "/docs/cli/report#view-diff",
-    description: "Show the score and survivors of the lines changed against a git ref only.",
   },
   // global flags
   {

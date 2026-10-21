@@ -9,7 +9,7 @@ export const metadata = docsMetadata("/docs/best-go-mutation-testing-tool-for-ci
 const faqs = [
   {
     q: "What is the best Go mutation testing tool for CI/CD?",
-    a: "Gooze is built for CI/CD: shard a run across parallel jobs with `-s INDEX/TOTAL` and merge with `gooze report merge`, cache results so only changed files re-run, skip uncovered lines via a coverage profile, and share one baseline across jobs through an OCI registry.",
+    a: "Gooze is built for CI/CD: shard a run across parallel jobs with `-s INDEX/TOTAL` and merge with `gooze report merge`, cache results so only changed files re-run, mutate only the lines a pull request changes with `--diff`, skip uncovered lines via a coverage profile, and share one baseline across jobs through an OCI registry.",
   },
   {
     q: "How do I keep mutation testing fast enough for CI?",
@@ -58,6 +58,12 @@ export default function BestToolForCiPage() {
             <strong>Incremental cache.</strong> Persist the reports directory
             between runs so unchanged files are reused; see{" "}
             <Link href="/docs/usage/incremental-runs/">incremental runs</Link>.
+          </li>
+          <li>
+            <strong>Pull request runs.</strong> <code>gooze run --diff origin/main</code>{" "}
+            mutates only the lines a pull request changes and scores them on their own, while{" "}
+            <code>main</code> keeps the whole-codebase score; see{" "}
+            <Link href="/docs/usage/diff-mode/">diff mode</Link>.
           </li>
           <li>
             <strong>Coverage gate.</strong> <code>--coverage-profile</code>{" "}

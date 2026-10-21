@@ -162,6 +162,12 @@ export default function MutationsPage() {
           </p>
 
           <p>
+            To run only some of the six types, pass{" "}
+            <Link href="/docs/usage/single-function#mutagens"><code>--mutagens</code></Link>,
+            for example <code>gooze run --mutagens comparison ./...</code>.
+          </p>
+
+          <p>
             Skip a line or block with the{" "}
             <Link href="/docs/usage/ignoring-code"><code>{"//gooze:ignore"}</code> directive</Link>.
           </p>

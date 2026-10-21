@@ -79,18 +79,16 @@ export default function CliReportPage() {
             <code>gooze run</code> first or passing <code>-o</code>.
           </p>
 
-          {/* TODO(version): --diff arrives in the next gooze release. */}
-          <div id="view-diff">
-            <h3>Changed lines only (--diff)</h3>
+          <div id="view-run">
+            <h3>Results of a narrowed run</h3>
             <p>
-              <code>--diff REF</code> (next Gooze release) limits the score and the survivors to
-              the lines changed against a git ref, computed the same way as{" "}
-              <Link href="/docs/cli/run#diff"><code>gooze run --diff</code></Link>. It reads the
-              stored reports, so use it to gate a sharded CI run after{" "}
-              <Link href="#merge"><code>gooze report merge</code></Link>. It needs git on{" "}
-              <code>PATH</code>, the checkout, and the base ref in the clone.
+              A run with <code>--diff</code>, <code>--run</code> or <code>--mutagens</code>{" "}
+              writes its reports to <code>.gooze-reports/run/</code>, and{" "}
+              <code>view</code> without <code>-o</code> doesn&apos;t read them: it skips
+              subdirectories. Point <code>-o</code> at the run to see its score and survivors:
             </p>
-            <CodeBlock lang="bash" code="gooze report view --diff origin/main" />
+            <CodeBlock lang="bash" code="gooze report view -o .gooze-reports/run" />
+            <Recording name="calc-func-run-view" title="Recorded gooze report view -o .gooze-reports/run after a --run run" />
           </div>
 
           <h3>Every mutation (--all)</h3>
@@ -224,7 +222,9 @@ gooze report push ghcr.io/your-org/your-repo/gooze-reports:main`}
         <div id="merge">
           <h2>gooze report merge</h2>
           <p>
-            Merges sharded reports (from <code>shard_*</code> folders) into the base output directory.
+            Merges sharded reports (from <code>shard_*</code> folders) into the base output
+            directory. It also folds in the reports of a narrowed run
+            (<code>run/</code> and <code>run/shard_*</code>) and removes <code>run/</code>.
           </p>
 
           <h3>Usage</h3>
@@ -233,7 +233,9 @@ gooze report push ghcr.io/your-org/your-repo/gooze-reports:main`}
           <h3>When you need this</h3>
           <p>
             If you run <code>gooze run -s INDEX/TOTAL</code>, Gooze writes into shard folders.
-            You merge them before running <code>gooze report view</code>.
+            You merge them before running <code>gooze report view</code>. After a run with{" "}
+            <code>--diff</code>, <code>--run</code> or <code>--mutagens</code>, merge to add its
+            results to the main reports before you read the project score.
           </p>
 
           <h3>Example</h3>
@@ -259,8 +261,12 @@ gooze report view`}
               no shard re-tested are kept, so caching can still work.
             </li>
             <li>
-              Shard reports from a <code>--diff</code> run keep the information about which lines
-              they cover.
+              Reports in <code>run/</code> (and <code>run/shard_*</code>) are folded in after the
+              shards. For a file unchanged since the main reports (same source and test file
+              hashes), they replace only the matching mutations, and the file stays complete. For
+              a changed or new file, they replace all of the file&apos;s results; if the run tested
+              only part of the file, it is marked partial, and the next full{" "}
+              <code>gooze run</code> re-tests it in full. Then <code>run/</code> is removed.
             </li>
             <li>When <code>merge</code> runs inside the checkout, base reports for files that no longer exist are dropped.</li>
           </ul>
