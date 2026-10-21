@@ -93,8 +93,8 @@ export const docsPages: DocsPage[] = [
     navTitle: "Comparison",
     section: "Get started",
     description:
-      "Compare Go mutation testing tools: why Gooze outperforms Gremlins, go-mutesting and go-mutants from tiny projects to microservices and large monorepos, on caching, sharding, CI, editor support and a Claude Code plugin.",
-    keywords: ["gooze vs gremlins","go-mutesting alternative","go-mutants","framework comparison","tdd monorepo","microservices mutation testing","monorepo mutation testing","golang test performance","claude code plugin","ai coding agent"],
+      "Compare Go mutation testing tools side by side on caching, sharding, CI, editor support and a Claude Code plugin, from tiny projects to microservices and large monorepos.",
+    keywords: ["go mutation testing comparison","mutation testing tools","framework comparison","tdd monorepo","microservices mutation testing","monorepo mutation testing","golang test performance","claude code plugin","ai coding agent"],
   },
   {
     href: "/docs/best-go-mutation-testing-tool",
@@ -103,8 +103,8 @@ export const docsPages: DocsPage[] = [
     navTitle: "Best tool",
     section: "Get started",
     description:
-      "Why Gooze is the best Go mutation testing tool for most teams: fast incremental runs, tight TDD feedback, and an honest take on Gremlins and go-mutesting.",
-    keywords: ["best go mutation testing tool","golang mutation testing","tdd feedback","gooze vs gremlins","fast mutation testing","go test quality"],
+      "Why Gooze is the best Go mutation testing tool for most teams: fast incremental runs, tight TDD feedback, and an honest comparison with other Go tools.",
+    keywords: ["best go mutation testing tool","golang mutation testing","tdd feedback","go mutation testing comparison","fast mutation testing","go test quality"],
   },
   {
     href: "/docs/best-go-mutation-testing-tool-for-ci",

@@ -91,8 +91,8 @@
   },
   "/docs/comparison/": {
     "title": "Gooze vs Gremlins vs go-mutesting vs go-mutants",
-    "description": "Compare Go mutation testing tools. See why Gooze outperforms Gremlins and go-mutesting from tiny projects to microservices and large monorepos.",
-    "keywords": "gooze vs gremlins, go-mutesting alternative, go-mutants, framework comparison, tdd monorepo, microservices mutation testing, monorepo mutation testing, golang test performance",
+    "description": "Compare Go mutation testing tools side by side on caching, sharding, CI and editor support, from tiny projects to microservices and large monorepos.",
+    "keywords": "go mutation testing comparison, mutation testing tools, framework comparison, tdd monorepo, microservices mutation testing, monorepo mutation testing, golang test performance",
     "robots": "index, follow"
   },
   "/docs/config/": {
