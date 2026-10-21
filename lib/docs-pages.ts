@@ -147,6 +147,17 @@ export const docsPages: DocsPage[] = [
     keywords: ["gitlab ci","pipeline","parallel jobs","sharding","quality gate","minimum score","go testing"],
   },
   {
+    href: "/docs/ci/cloud-build",
+    title: "Google Cloud Build",
+    navTitle: "Cloud Build",
+    seoTitle:
+      "Google Cloud Build for Go Mutation Testing · Gooze",
+    section: "CI/CD",
+    description:
+      "Run Gooze in Google Cloud Build: add it to cloudbuild.yaml, keep a report baseline in Artifact Registry so pull requests re-test only changed files, and gate on a minimum mutation score.",
+    keywords: ["google cloud build","cloudbuild.yaml","artifact registry","gcp","pipeline","pull request","quality gate","incremental cache","go mutation testing"],
+  },
+  {
     href: "/docs/ci/sharding",
     title: "Sharding and merging",
     seoTitle:

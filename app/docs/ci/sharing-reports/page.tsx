@@ -218,7 +218,8 @@ gooze report push ghcr.io/org/repo/gooze-reports:main   # publish updated`}
             overwrite it. With shards, every shard pulls, and only the merge job pushes. Full
             pipelines:{" "}
             <Link href="/docs/ci/github#cached">GitHub Actions</Link>,{" "}
-            <Link href="/docs/ci/gitlab#cached">GitLab CI</Link>.
+            <Link href="/docs/ci/gitlab#cached">GitLab CI</Link>,{" "}
+            <Link href="/docs/ci/cloud-build#cached">Google Cloud Build</Link>.
           </p>
         </div>
 
@@ -301,9 +302,10 @@ gooze report push ghcr.io/org/repo/gooze-reports:main   # publish updated`}
           </ul>
           <p className="text-sm text-muted-foreground">
             Platform-specific credentials (<code>GITHUB_TOKEN</code>,{" "}
-            <code>CI_JOB_TOKEN</code>) are covered on the{" "}
-            <Link href="/docs/ci/github#auth">GitHub</Link> and{" "}
-            <Link href="/docs/ci/gitlab#auth">GitLab</Link> pages.
+            <code>CI_JOB_TOKEN</code>, an Artifact Registry access token) are covered on the{" "}
+            <Link href="/docs/ci/github#auth">GitHub</Link>,{" "}
+            <Link href="/docs/ci/gitlab#auth">GitLab</Link> and{" "}
+            <Link href="/docs/ci/cloud-build#cached">Cloud Build</Link> pages.
           </p>
         </div>
 
