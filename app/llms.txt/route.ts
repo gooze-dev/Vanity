@@ -11,6 +11,7 @@ export const dynamic = "force-static";
 // section is a list of links.
 const facts = `**Key facts (gooze ${DOCS_FACTS_VERSION}):**
 
+- Name: Gooze is Go + ooze, after the mutagen ooze in Teenage Mutant Ninja Turtles (https://turtlepedia.fandom.com/wiki/Mutagen). It mutates your code to see if your tests notice.
 - Install: \`go install gooze.dev/pkg/gooze@latest\`. Run: \`gooze run ./...\`. View: \`gooze report view [paths...]\` (per-file scores, one line per survivor, and the score; \`--all\` lists every mutation with its diff).
 - Config file: yes. \`gooze.yaml\` in the repo (generate with \`gooze config init\`); every key also has a GOOZE_* env var, and the common ones a CLI flag.
 - Default mutation operators: arithmetic, comparison, logical, boolean, numbers, unary.

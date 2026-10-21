@@ -1,6 +1,7 @@
 import { docsMetadata } from "@/lib/docs-meta"
 import Link from "next/link"
 import { CodeBlock } from "@/components/code-block"
+import { TerminalCast } from "@/components/terminal-cast"
 
 export const metadata = docsMetadata("/docs/quick-start")
 
@@ -83,14 +84,7 @@ export default function QuickStartPage() {
             Before running any tests, see which files Gooze will mutate and how many mutations apply:
           </p>
           <CodeBlock lang="bash" code="gooze run --estimate ./..." />
-          <CodeBlock
-            lang="text"
-            code={` PATH          │ MUTATIONS 
-───────────────┼───────────
- calc.go       │    13     
-───────────────┼───────────
- TOTAL FILES 1 │    13     `}
-          />
+          <TerminalCast src="/casts/calc-estimate.cast" title="Recorded output of gooze run --estimate for the calc package" />
           <p className="mt-4 mb-3 text-muted-foreground">
             Exclude files with a regex (repeat the flag as needed):
           </p>
@@ -107,10 +101,7 @@ export default function QuickStartPage() {
             The last line is the mutation score:
           </p>
           <CodeBlock lang="bash" code="gooze run ./..." />
-          <CodeBlock
-            lang="text"
-            code="Mutation score: 84.62% (11 killed, 2 survived; 0 cached, 13 tested)"
-          />
+          <TerminalCast src="/casts/calc-first-run.cast" title="Recorded last line of the first gooze run on calc" />
           <p>
             Two mutants survived: Gooze changed the code and every test still passed.
           </p>
@@ -123,20 +114,7 @@ export default function QuickStartPage() {
             <code>-o/--output</code>). To see which mutants survived, view the last run:
           </p>
           <CodeBlock lang="bash" code="gooze report view" />
-          <CodeBlock
-            lang="text"
-            code={` PATH          │ MUTATIONS │ KILLED │ SURVIVED │ NOT COVERED │  SCORE 
-───────────────┼───────────┼────────┼──────────┼─────────────┼────────
- calc.go       │        13 │     11 │        2 │           0 │ 84.62% 
-───────────────┼───────────┼────────┼──────────┼─────────────┼────────
- TOTAL FILES 1 │        13 │     11 │        2 │           0 │ 84.62% 
-
-Survivors (2):
-calc.go:10: survived (comparison): if n < lo { -> if n <= lo {
-calc.go:13: survived (comparison): if n > hi { -> if n >= hi {
-
-Mutation score: 84.62% (11 killed, 2 survived)`}
-          />
+          <TerminalCast src="/casts/calc-report-view.cast" title="Recorded output of gooze report view after the first run" />
           <p>
             No test calls <code>InRange</code> with <code>n</code> equal to <code>lo</code> or{" "}
             <code>hi</code>, so <code>&lt;</code> and <code>&lt;=</code> (and <code>&gt;</code>{" "}
@@ -165,22 +143,16 @@ Mutation score: 84.62% (11 killed, 2 survived)`}
             code={`		{0, 0, 10, true},  // lower bound is inside
 		{10, 0, 10, true}, // upper bound is inside`}
           />
-          <p>Run Gooze again. Both mutants are killed now:</p>
-          <CodeBlock
-            lang="text"
-            code="Mutation score: 100.00% (13 killed, 0 survived; 0 cached, 13 tested)"
-          />
+          <p>Run Gooze again and view the report. Both mutants are killed now:</p>
+          <TerminalCast src="/casts/calc-fixed-run.cast" title="Recorded run and report after adding the boundary tests" />
         </div>
 
         <div id="rerun">
           <h2>Run it again</h2>
           <p>
-            Gooze caches results per file. Run it again without changes and nothing is re-tested:
+            Gooze caches results per file. Run it again without changes and nothing is re-tested; <code>--estimate</code> shows the same:
           </p>
-          <CodeBlock
-            lang="text"
-            code="Mutation score: 100.00% (13 killed, 0 survived; 13 cached, 0 tested)"
-          />
+          <TerminalCast src="/casts/calc-cached-run.cast" title="Recorded cached run and estimate" />
           <p className="text-sm text-muted-foreground">
             What triggers a re-test: <Link href="/docs/usage/incremental-runs">Incremental runs</Link>.
           </p>

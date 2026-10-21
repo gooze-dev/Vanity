@@ -24,7 +24,16 @@ export default function DocsPage() {
       <p className="text-lg text-muted-foreground mb-10">
         Your tests pass, but would they fail if the code were wrong? Gooze is mutation testing for
         Go: it makes small changes to your source, runs your tests against each one and shows you
-        the changes they miss.
+        the changes they miss. The name is Go + ooze, after the{" "}
+        <a
+          href="https://turtlepedia.fandom.com/wiki/Mutagen"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-4"
+        >
+          mutagen
+        </a>{" "}
+        that mutates the turtles in Teenage Mutant Ninja Turtles.
       </p>
 
       <div className="rounded-lg border bg-card p-5 mb-12">

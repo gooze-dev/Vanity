@@ -1,0 +1,3 @@
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792567702, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-fixed-run (gooze v1.2.0, goozels v0.2.0, go1.27.3)"}
+[3.321411, "o", "Mutation score: 100.00% (13 killed, 0 survived; 0 cached, 13 tested)\r\n"]
+[3.330672, "o", " PATH          │ MUTATIONS │ KILLED │ SURVIVED │ NOT COVERED │   SCORE \r\n───────────────┼───────────┼────────┼──────────┼─────────────┼─────────\r\n calc.go       │        13 │     13 │        0 │           0 │ 100.00% \r\n───────────────┼───────────┼────────┼──────────┼─────────────┼─────────\r\n TOTAL FILES 1 │        13 │     13 │        0 │           0 │ 100.00% \r\n\r\nNo survivors.\r\n\r\nMutation score: 100.00% (13 killed, 0 survived)\r\n"]

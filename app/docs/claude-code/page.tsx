@@ -130,7 +130,8 @@ go install gooze.dev/pkg/goozels/cmd/goozels@latest`}
             code={`gooze results from the last run:
 calc.go:1:1: warning: gooze: score 84.62% — 11 killed, 2 survived
 calc.go:10:2: warning: gooze: surviving comparison mutant — tests still pass with \`if n < lo {\` → \`if n <= lo {\`
-calc.go:13:2: warning: gooze: surviving comparison mutant — tests still pass with \`if n > hi {\` → \`if n >= hi {\``}
+calc.go:13:2: warning: gooze: surviving comparison mutant — tests still pass with \`if n > hi {\` → \`if n >= hi {\`
+gooze: a mutant that cannot change behavior (an equivalent mutant) can be skipped with //gooze:ignore <mutagen> on its line`}
           />
           <p>
             Both survivors point at the bound checks: no test calls <code>InRange</code> with{" "}

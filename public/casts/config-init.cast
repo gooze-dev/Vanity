@@ -1,0 +1,3 @@
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792567706, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "config-init (gooze v1.2.0, goozels v0.2.0, go1.27.3)"}
+[0.01753, "o", "Wrote the default configuration to gooze.yaml\r\n"]
+[0.027866, "o", "Error: gooze.yaml already exists; edit it or remove it first\r\n"]

@@ -30,6 +30,10 @@ const faqs = [
     a: "Gooze is an open-source mutation testing tool for Go (Golang) that measures the quality of your test suite by injecting small, deliberate bugs (mutations) into your code and checking whether your tests catch them.",
   },
   {
+    q: "Why is it called Gooze?",
+    a: "Go + ooze. The name comes from the [mutagen ooze](https://turtlepedia.fandom.com/wiki/Mutagen) in Teenage Mutant Ninja Turtles: Gooze mutates your code to see if your tests notice.",
+  },
+  {
     q: "Why use Gooze for Go mutation testing?",
     a: "Gooze is built for CI/CD. It has an incremental cache that re-tests only changed files, sharding across parallel CI runners, coverage-profile support that skips tests for uncovered lines, and OCI registry support to share baseline reports across teams.",
   },

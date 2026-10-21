@@ -13,6 +13,7 @@
     "seo:audit": "node scripts/seo-audit.mjs"
   },
   "dependencies": {
+    "asciinema-player": "3.17.0",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.5.0",
     "lucide-react": "^0.563.0",
