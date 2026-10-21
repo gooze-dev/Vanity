@@ -60,12 +60,14 @@ export default function EditorSupportPage() {
             </li>
             <li>
               Key/value completion, hover, and validation for your{" "}
-              <code>gooze.yaml</code> config.
+              <code>gooze.yaml</code> config, including the items of lists with fixed values,
+              such as <code>run.mutagens</code>.
             </li>
             <li>
               <strong>gooze: run package</strong>, <strong>gooze: estimate</strong>, and
               <strong> gooze: report</strong> code lenses at the top of every Go file,
-              scoped to that file&apos;s package.
+              scoped to that file&apos;s package, and a <strong>gooze: run function</strong>{" "}
+              lens above each function and method.
             </li>
             <li>
               Mutation scores from your reports shown inline after a run, and a
@@ -154,6 +156,42 @@ export default function EditorSupportPage() {
               <code>editors/jetbrains.md</code>
             </a>
             .
+          </p>
+        </div>
+
+        <div id="function-runs">
+          <h2>Run one function</h2>
+          <p>
+            While you write tests for one function, re-testing its whole package on every try is
+            slow. The <strong>gooze: run function</strong> lens above a function or method runs{" "}
+            <Link href="/docs/usage/single-function" className={LINK}>
+              <code>gooze run --run</code>
+            </Link>{" "}
+            with a pattern that matches only it (<code>^InRange$</code>, or{" "}
+            <code>^Parser\.Parse$</code> for a method) on its package. goozels shows the lens only
+            when <code>gooze run --help</code> lists <code>--run</code>, and never in{" "}
+            <code>_test.go</code> files.
+          </p>
+          <p>
+            A function run writes its reports to <code>.gooze-reports/run/</code>, which goozels
+            doesn&apos;t read, so the markers in your file don&apos;t change yet. goozels shows the
+            run&apos;s score with a <strong>Merge into reports</strong> button. The button runs{" "}
+            <Link href="/docs/cli/report" className={LINK}>
+              <code>gooze report merge</code>
+            </Link>{" "}
+            and refreshes the markers. If the run re-tested nothing (the function hasn&apos;t
+            changed since the last run, or has nothing to mutate), goozels says so and gives the{" "}
+            <code>--no-cache</code> command that tests it again.
+          </p>
+          <p>
+            After the merge, the file summary says the file is partly tested and names what was
+            tested, until a full run of the package. For <code>calc.go</code>, after{" "}
+            <code>InRange</code> is tested on its own and merged:
+          </p>
+          <Recording name="calc-func-goozels-check" title="Recorded goozels check calc.go after a merged function run" />
+          <p>
+            Runs with <code>--diff</code> or <code>--mutagens</code> show the same summary after a
+            merge, naming the changed lines or the mutagens instead.
           </p>
         </div>
 

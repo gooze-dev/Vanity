@@ -170,3 +170,5 @@ func Percent(part, total int) int {
   added, `gooze run --run '^InRange$'` is `92.31% (12 killed, 1 survived; 0 cached, 13 tested;
   functions matching ^InRange$)`; with both, 100%. After `gooze report merge`, `calc.go` is
   partial (13 results, because the test file changed) until the next full run (23 tested, 100%).
+  `goozels check calc.go` then starts with `gooze: partly tested (functions matching ^InRange$)
+  — score 100.00% — 13 killed; rerun the whole file: gooze run .` (`calc-func-goozels-check`).

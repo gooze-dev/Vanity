@@ -1,2 +1,2 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792581073, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "run-unknown-mutagen (gooze v1.2.1-0.20261021104757-d45e71426c9a, goozels v0.2.1-0.20261021074934-182f51a116d4, go1.27.3)"}
-[0.011724, "o", "Running with 1 worker(s) (shard 0/1)\r\nError: unknown mutagen \"conditional\"; gooze runs arithmetic, boolean, numbers, comparison, logical, unary\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792584403, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "run-unknown-mutagen (gooze v1.2.1-0.20261021115114-86623fdd7984, goozels v0.2.1-0.20261021120153-07a44ccf3b7c, go1.27.3)"}
+[0.008546, "o", "Running with 1 worker(s) (shard 0/1)\r\nError: unknown mutagen \"conditional\"; gooze runs arithmetic, boolean, numbers, comparison, logical, unary\r\n"]

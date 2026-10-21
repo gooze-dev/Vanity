@@ -57,6 +57,22 @@ const rows: Row[] = [
     goMutants: ["yes", "git diff against a ref (`--changed`)"],
   },
   {
+    feature: "Mutate only some functions",
+    gooze: ["yes", "`--run REGEX`, like `go test -run`"],
+    gremlins: ["no", "file regex only (`--exclude-files`)"],
+    goMutesting: ["unknown", ""],
+    avito: ["partial", "skip one with `// mutator-disable-func`"],
+    goMutants: ["no", "file globs only (`--include`, `--exclude`)"],
+  },
+  {
+    feature: "Pick the mutators for one run",
+    gooze: ["yes", "`--mutagens` or `run.mutagens`"],
+    gremlins: ["yes", "one flag per mutator, or `mutants.<name>.enabled`"],
+    goMutesting: ["unknown", ""],
+    avito: ["partial", "per-line comments only"],
+    goMutants: ["yes", "`--operator`, `--profile`"],
+  },
+  {
     feature: "Incremental cache between runs",
     gooze: ["yes", "per-file, reused on any machine"],
     gremlins: ["unknown", ""],
@@ -146,7 +162,7 @@ const rows: Row[] = [
   },
   {
     feature: "Results in your editor",
-    gooze: ["yes", "goozels language server"],
+    gooze: ["yes", "goozels language server: survivor markers, run-function lens"],
     gremlins: ["unknown", ""],
     goMutesting: ["unknown", ""],
     avito: ["unknown", ""],
@@ -230,7 +246,7 @@ const faqs = [
   },
   {
     q: "Is Gooze good for TDD?",
-    a: "Yes. Results are cached per file, so after you edit a file or its test only that file is re-tested and the rest of the report is reused. The feedback loop stays short without losing the whole-codebase score.",
+    a: "Yes. Results are cached per file, so after you edit a file or its test only that file is re-tested and the rest of the report is reused. The feedback loop stays short without losing the whole-codebase score. To test one function, `gooze run --run '^Name$'` mutates only that function, and the goozels code lens runs it from the editor.",
   },
   {
     q: "Can Gooze fail CI when the mutation score drops below a threshold?",
@@ -296,8 +312,9 @@ export default function ComparisonPage() {
               monorepos. Its per-file cache re-tests only what you changed, so
               local TDD loops stay fast, and every run still reports a score for the whole
               codebase, not just the diff; a git diff mode narrows pull request runs
-              to the changed lines. Sharding, a shared OCI baseline, a TUI viewer,
-              editor integration, and a{" "}
+              to the changed lines, and <code>--run</code> and <code>--mutagens</code> narrow a
+              run to some functions or mutation types. Sharding, a shared OCI baseline, a TUI
+              viewer, editor integration, and a{" "}
               <Link href="/docs/claude-code">Claude Code plugin</Link> come built in.
             </li>
             <li>

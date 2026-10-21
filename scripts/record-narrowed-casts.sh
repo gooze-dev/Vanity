@@ -127,6 +127,8 @@ add_case "lower bound is inside" "upper bound is inside"
 rec calc-func-rerun "gooze run --run '^InRange\$' ./... | tail -n 2"
 rec calc-func-merge "gooze report merge | cat"
 rec calc-func-merged-view "gooze report view | cat"
+# goozels after the merge: the summary says calc.go is partly tested.
+rec calc-func-goozels-check "goozels check calc.go | cat"
 rec calc-func-full-run "gooze run ./... | tail -n 1"
 rec calc-func-mutagens-estimate "gooze run --estimate --mutagens arithmetic,numbers ./... | cat"
 
