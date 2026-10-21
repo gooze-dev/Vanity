@@ -38,10 +38,11 @@ export default function BestToolForCiPage() {
         Best Go mutation testing tool for CI/CD
       </h1>
       <p className="text-lg text-muted-foreground mb-8">
-        For CI/CD, <strong>Gooze</strong> is the best fit: it shards across
-        parallel runners, caches results so only changed files re-run, gates
-        pull requests on the mutation score, and shares one baseline across jobs
-        through an OCI registry.
+        You want mutation testing in your pipeline without making every job
+        slow. For CI/CD, <strong>Gooze</strong> fits well: it shards across
+        parallel runners, caches results so only changed files re-run, can gate
+        pull requests on the mutation score with a short shell step, and shares
+        one baseline across jobs through an OCI registry.
       </p>
 
       <div id="pipeline">

@@ -1,4 +1,5 @@
 import { docsMetadata } from "@/lib/docs-meta"
+import Link from "next/link"
 import { CodeBlock } from "@/components/code-block"
 
 export const metadata = docsMetadata("/docs/quick-start")
@@ -44,20 +45,23 @@ export default function QuickStartPage() {
       />
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Quick start</h1>
       <p className="text-lg text-muted-foreground mb-6">
-        Install Gooze, preview what will be mutated, run mutation testing, then view reports.
+        Your tests pass, but would they fail if the code were wrong? In a few minutes you&apos;ll
+        install Gooze, run it on a small package, find the tests that are missing and add them.
+      </p>
+      <p>
+        The example is a package <code>calc</code> with one function, <code>InRange(n, lo, hi)</code>,
+        which reports whether <code>n</code> is inside <code>[lo, hi]</code>. Its tests check{" "}
+        <code>5</code>, <code>-3</code> and <code>42</code> against the range <code>0</code> to{" "}
+        <code>10</code>. They pass. Run the same commands on your own module.
       </p>
 
       <div>
         <div id="installation">
           <h2>Installation</h2>
           <p>
-            Install the latest <code>gooze</code> binary to your Go bin directory:
+            Install the latest <code>gooze</code> binary to your Go bin directory, then check that it runs:
           </p>
           <CodeBlock lang="bash" code="go install gooze.dev/pkg/gooze@latest" />
-          <p>
-            This downloads and installs Gooze.
-            Then verify the install:
-          </p>
           <CodeBlock lang="bash" code="gooze version" />
         </div>
 
@@ -76,9 +80,17 @@ export default function QuickStartPage() {
         <div id="estimate">
           <h2>Preview files and mutation counts</h2>
           <p>
-            See which files will be mutated and how many mutations apply, without running tests.
+            Before running any tests, see which files Gooze will mutate and how many mutations apply:
           </p>
           <CodeBlock lang="bash" code="gooze run --estimate ./..." />
+          <CodeBlock
+            lang="text"
+            code={` PATH          │ MUTATIONS 
+───────────────┼───────────
+ calc.go       │    13     
+───────────────┼───────────
+ TOTAL FILES 1 │    13     `}
+          />
           <p className="mt-4 mb-3 text-muted-foreground">
             Exclude files with a regex (repeat the flag as needed):
           </p>
@@ -90,35 +102,49 @@ export default function QuickStartPage() {
 
         <div id="run">
           <h2>Run mutation testing</h2>
-          <p>Run mutation testing on the target paths.</p>
+          <p>
+            Now run it. Gooze applies each of the 13 mutations and runs the package tests against it.
+            The last line is the mutation score:
+          </p>
           <CodeBlock lang="bash" code="gooze run ./..." />
-
-          <h3>Make it faster</h3>
+          <CodeBlock
+            lang="text"
+            code="Mutation score: 84.62% (11 killed, 2 survived; 0 cached, 13 tested)"
+          />
           <p>
-            Run multiple workers in parallel:
+            Two mutants survived: Gooze changed the code and every test still passed.
           </p>
-          <CodeBlock lang="bash" code="gooze run -p 4 ./..." />
-
-          <h3>Force a full re-run</h3>
-          <p>
-            To ignore cached results and re-test everything:
-          </p>
-          <CodeBlock lang="bash" code="gooze run --no-cache ./..." />
         </div>
 
         <div id="view">
           <h2>Reports</h2>
           <p>
-            By default, Gooze writes mutation reports to{" "}
-            <code>.gooze-reports</code> (override with{" "}
-            <code>-o/--output</code>).
+            Gooze writes reports to <code>.gooze-reports</code> (override with{" "}
+            <code>-o/--output</code>). To see which mutants survived, view the last run:
+          </p>
+          <CodeBlock lang="bash" code="gooze report view" />
+          <CodeBlock
+            lang="text"
+            code={` PATH          │ MUTATIONS │ KILLED │ SURVIVED │ NOT COVERED │  SCORE 
+───────────────┼───────────┼────────┼──────────┼─────────────┼────────
+ calc.go       │        13 │     11 │        2 │           0 │ 84.62% 
+───────────────┼───────────┼────────┼──────────┼─────────────┼────────
+ TOTAL FILES 1 │        13 │     11 │        2 │           0 │ 84.62% 
+
+Survivors (2):
+calc.go:10: survived (comparison): if n < lo { -> if n <= lo {
+calc.go:13: survived (comparison): if n > hi { -> if n >= hi {
+
+Mutation score: 84.62% (11 killed, 2 survived)`}
+          />
+          <p>
+            No test calls <code>InRange</code> with <code>n</code> equal to <code>lo</code> or{" "}
+            <code>hi</code>, so <code>&lt;</code> and <code>&lt;=</code> (and <code>&gt;</code>{" "}
+            and <code>&gt;=</code>) give the same answers for every input the tests use.
           </p>
 
-          <p>View the last run (per-file scores, survivors, and the mutation score):</p>
-          <CodeBlock lang="bash" code="gooze report view" />
-
           <p className="mt-5 mb-3 text-muted-foreground">
-            Or point <code>report view</code> at an explicit directory:
+            Point <code>report view</code> at another directory with <code>-o</code>:
           </p>
           <CodeBlock lang="bash" code="gooze report view -o .gooze-reports" />
 
@@ -129,6 +155,56 @@ export default function QuickStartPage() {
             <code className="ml-2">enter</code> to open the diff,
             and <code className="ml-2">q</code> to quit.
           </p>
+        </div>
+
+        <div id="fix">
+          <h2>Kill the survivors</h2>
+          <p>Add the two boundary cases to the test table in <code>calc_test.go</code>:</p>
+          <CodeBlock
+            lang="go"
+            code={`		{0, 0, 10, true},  // lower bound is inside
+		{10, 0, 10, true}, // upper bound is inside`}
+          />
+          <p>Run Gooze again. Both mutants are killed now:</p>
+          <CodeBlock
+            lang="text"
+            code="Mutation score: 100.00% (13 killed, 0 survived; 0 cached, 13 tested)"
+          />
+        </div>
+
+        <div id="rerun">
+          <h2>Run it again</h2>
+          <p>
+            Gooze caches results per file. Run it again without changes and nothing is re-tested:
+          </p>
+          <CodeBlock
+            lang="text"
+            code="Mutation score: 100.00% (13 killed, 0 survived; 13 cached, 0 tested)"
+          />
+          <p className="text-sm text-muted-foreground">
+            What triggers a re-test: <Link href="/docs/usage/incremental-runs">Incremental runs</Link>.
+          </p>
+
+          <h3>Make it faster</h3>
+          <p>
+            Run multiple workers in parallel:
+          </p>
+          <CodeBlock lang="bash" code="gooze run -p 4 ./..." />
+          <p>
+            Or pass a coverage profile, so mutations on uncovered lines are reported as{" "}
+            <code>not_covered</code> without running tests:
+          </p>
+          <CodeBlock
+            lang="bash"
+            code={`go test -coverprofile=coverage.out ./...
+gooze run --coverage-profile coverage.out ./...`}
+          />
+
+          <h3>Force a full re-run</h3>
+          <p>
+            To ignore cached results and re-test everything:
+          </p>
+          <CodeBlock lang="bash" code="gooze run --no-cache ./..." />
         </div>
 
         <div id="ci">

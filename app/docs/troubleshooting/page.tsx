@@ -10,7 +10,8 @@ export default function TroubleshootingPage() {
     <section>
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Troubleshooting</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        Common problems and simple things to try.
+        A score that looks wrong, a run that finds nothing, or a report you can&apos;t open:
+        find the symptom below and the thing to try.
       </p>
 
       <div>

@@ -158,13 +158,13 @@ export const docsPages: DocsPage[] = [
   },
   {
     href: "/docs/ci/sharing-reports",
-    title: "Sharing reports (OCI)",
+    title: "Report artifacts",
     seoTitle:
-      "Sharing Reports via OCI Registries · Gooze",
+      "Mutation Report Artifacts in OCI Registries · Gooze",
     section: "CI/CD",
     description:
-      "Push and pull Gooze mutation reports to OCI registries like GHCR, so CI pipelines and every teammate start from one shared baseline.",
-    keywords: ["oci registry","ghcr","push reports","pull reports","test baseline","ci artifacts","authentication"],
+      "Share Gooze mutation reports through an OCI registry like GHCR, so CI and teammates start from one baseline. What OCI is, tags, digests, and why a registry.",
+    keywords: ["oci registry","oci artifact","ghcr","gitlab container registry","push reports","pull reports","test baseline","ci artifacts","authentication","oras"],
   },
   {
     href: "/docs/editor-support",

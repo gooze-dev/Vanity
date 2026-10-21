@@ -10,8 +10,9 @@ export default function CliConfigPage() {
     <section>
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">gooze config</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        Manage Gooze configuration. Today the only subcommand is <code>init</code>,
-        which generates a starter config file.
+        You&apos;re setting up Gooze in a repo and want a config file to start from.{" "}
+        <code>gooze config</code> manages configuration; today the only subcommand is{" "}
+        <code>init</code>, which generates a starter config file.
       </p>
 
       <div>

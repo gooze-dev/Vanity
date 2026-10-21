@@ -443,7 +443,8 @@ export default function RoadmapPage() {
     <section>
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Roadmap</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        What&apos;s shipped, what&apos;s coming next, and what to use in the meantime.
+        Missing a feature you need? Check whether it has shipped, whether it&apos;s coming
+        next, and what to use in the meantime.
       </p>
 
       <div className="not-typeset rounded-2xl border bg-card p-5">

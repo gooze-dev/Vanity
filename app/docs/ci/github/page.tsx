@@ -159,32 +159,46 @@ export default function CiPage() {
       />
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">GitHub Actions</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        Three workflows, from a one-liner to a sharded, cached pipeline, plus a step that
-        fails the build below a mutation score. Pick the one that matches how much you want
-        to optimize.
+        Your mutation score is good on your machine, and you want every push to keep it
+        that way. Start with the one-job workflow, then add shards when the run gets slow, a
+        shared baseline so unchanged files are skipped, and a gate that fails the build
+        below a score.
       </p>
 
       <div>
         <div id="simple">
           <h2>1. Simplest: checkout and run</h2>
           <p>
-            Install Gooze and run the whole suite. No registry, no caching. A good
-            starting point.
+            Install Gooze and run the whole suite. No registry, no caching. For the{" "}
+            <Link href="/docs/quick-start"><code>calc</code></Link> package from the quick
+            start, the job log ends with the same line you saw locally:
           </p>
           <CodeBlock lang="yaml" code={simple} />
+          <CodeBlock
+            lang="text"
+            code="Mutation score: 84.62% (11 killed, 2 survived; 0 cached, 13 tested)"
+          />
+          <p>
+            The job passes even with those two survivors, because survivors don&apos;t change
+            Gooze&apos;s exit code. The <a href="#gate">quality gate</a> below fixes that. First,
+            a bigger module needs the run split up.
+          </p>
         </div>
 
         <div id="sharded">
           <h2>2. Sharded: run in parallel</h2>
           <p>
-            Split the run across jobs with{" "}
-            <code>-s INDEX/TOTAL</code> to cut wall-clock
-            time. Each job tests its own slice and uploads its reports; a final{" "}
+            When one job takes too long, split the run across jobs with{" "}
+            <code>-s INDEX/TOTAL</code>. Each job tests its own slice and uploads its reports; a final{" "}
             <code>merge</code> job downloads them all and
             combines them with{" "}
             <Link href="/docs/cli/report#merge"><code>gooze report merge</code></Link>.
           </p>
           <CodeBlock lang="yaml" code={sharded} />
+          <p>
+            Every push still re-tests every file, even the ones nobody touched. A shared
+            baseline removes that work.
+          </p>
         </div>
 
         <div id="cached">
@@ -192,6 +206,8 @@ export default function CiPage() {
           <p>
             Add an OCI baseline so each run only re-tests changed files
             (<Link href="/docs/usage/incremental-runs">incremental runs</Link>).
+            If a push doesn&apos;t touch <code>calc.go</code> or its tests, its 13 mutations
+            come from the cache instead of being tested again.
             Every shard pulls the <code>:main</code> baseline
             for the cache, then hands its reports to the merge job as an artifact; shards never push
             to the registry. The merge job combines them with{" "}
@@ -213,6 +229,12 @@ export default function CiPage() {
             <code>MIN_SCORE</code>.
           </p>
           <CodeBlock lang="yaml" code={gate} />
+          <p>
+            With <code>MIN_SCORE: &quot;60&quot;</code>, the <code>calc</code> run at{" "}
+            <code>84.62%</code> passes. Raise the minimum to <code>90</code> and the same run
+            fails until you add the two boundary tests that bring it to{" "}
+            <code>100.00%</code>.
+          </p>
           <p className="text-sm text-muted-foreground">
             With sharding, gate only in the merge job: a single shard&apos;s score covers only its slice.
             A missing score (no reports) also fails the step.

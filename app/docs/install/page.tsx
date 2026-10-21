@@ -1,6 +1,7 @@
 import { docsMetadata } from "@/lib/docs-meta"
 import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 import { CodeBlock } from "@/components/code-block"
+import Link from "next/link"
 
 export const metadata = docsMetadata("/docs/install")
 
@@ -44,7 +45,8 @@ export default function InstallPage() {
       />
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Installation</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        Install Gooze with Go, then verify it works.
+        Gooze is one Go binary. Install it with <code>go install</code>, check that it runs, and
+        you&apos;re ready for your first mutation run.
       </p>
 
       <div>
@@ -64,7 +66,8 @@ export default function InstallPage() {
           <h2>Install Gooze</h2>
           <CodeBlock lang="bash" code="go install gooze.dev/pkg/gooze@latest" />
           <p>
-            This downloads Gooze and puts the binary in your Go bin directory.
+            Go downloads and builds Gooze and puts the <code>gooze</code> binary in your Go bin
+            directory.
           </p>
           <p>
             Gooze needs Go 1.27.3 to build. On an older Go, let Go fetch the toolchain
@@ -77,18 +80,19 @@ export default function InstallPage() {
           <h2>Verify the install</h2>
           <CodeBlock lang="bash" code="gooze version" />
           <p>
-            Use this output when you report bugs.
+            It prints the gooze version and the Go version it was built with. Include this output
+            when you report a bug.
           </p>
         </div>
 
-          <div id="path">
-            <h2>If you get &quot;command not found&quot;</h2>
+        <div id="path">
+          <h2>If you get &quot;command not found&quot;</h2>
           <p>
-            Go installs binaries into your Go bin directory,
-            usually <code>$(go env GOPATH)/bin</code>.
-            Make sure this directory is on your <code>PATH</code>.
+            If your shell answers <code>gooze: command not found</code>, the Go bin directory
+            (usually <code>$(go env GOPATH)/bin</code>) isn&apos;t on your <code>PATH</code>.
+            Print it and add it to <code>PATH</code>:
           </p>
-            <CodeBlock lang="bash" code='echo "$(go env GOPATH)/bin"' />
+          <CodeBlock lang="bash" code='echo "$(go env GOPATH)/bin"' />
         </div>
 
         <div id="tty">
@@ -102,7 +106,7 @@ export default function InstallPage() {
         <div id="logs">
           <h2>Logs</h2>
           <p>
-            If something looks wrong, run with <code>--verbose</code>.
+            If a run looks wrong, run it again with <code>--verbose</code>.
             Then check the log file (<code>.gooze.log</code> by default; set another path
             with <code>--log-output</code>).
           </p>
@@ -112,6 +116,11 @@ export default function InstallPage() {
         </div>
 
         <DocsFaq faqs={faqs} />
+
+        <p>
+          Gooze is installed. Next, run it on a module and find the tests you&apos;re missing in
+          the <Link href="/docs/quick-start">Quick start</Link>.
+        </p>
       </div>
     </section>
   )

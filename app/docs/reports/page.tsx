@@ -10,7 +10,8 @@ export default function ReportsPage() {
     <section>
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Report format</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        Gooze writes reports after a run. The reports are also used as a cache for incremental runs.
+        You want to know what a run leaves on disk, for example to cache it in CI. Gooze writes
+        reports after a run, and the reports are also used as a cache for incremental runs.
       </p>
 
       <div>

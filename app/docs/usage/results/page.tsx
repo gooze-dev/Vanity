@@ -40,8 +40,9 @@ export default function ResultsPage() {
       />
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Reading results</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        Every mutation ends in one status. The statuses decide your mutation score and tell you
-        where your tests are weak.
+        Your run ended with <code>Mutation score: 84.62%</code>. Which mutants survived, and what
+        should you change? Every mutation ends in one status. The statuses decide your mutation
+        score and point to where your tests are weak.
       </p>
 
       <div>
@@ -49,19 +50,27 @@ export default function ResultsPage() {
           <h2>Open the results</h2>
           <p>
             After a run, view the reports. Gooze reads the reports directory and prints a per-file
-            score table, one line per survivor, and the mutation score:
+            score table, one line per survivor, and the mutation score. For the <code>calc</code>{" "}
+            package from the <Link href="/docs/quick-start">Quick start</Link>:
           </p>
           <CodeBlock lang="bash" code="gooze report view" />
           <CodeBlock
             lang="text"
-            code={`Survivors (2):
+            code={` PATH          │ MUTATIONS │ KILLED │ SURVIVED │ NOT COVERED │  SCORE 
+───────────────┼───────────┼────────┼──────────┼─────────────┼────────
+ calc.go       │        13 │     11 │        2 │           0 │ 84.62% 
+───────────────┼───────────┼────────┼──────────┼─────────────┼────────
+ TOTAL FILES 1 │        13 │     11 │        2 │           0 │ 84.62% 
+
+Survivors (2):
 calc.go:10: survived (comparison): if n < lo { -> if n <= lo {
 calc.go:13: survived (comparison): if n > hi { -> if n >= hi {
 
-Mutation score: 87.50% (14 killed, 2 survived)`}
+Mutation score: 84.62% (11 killed, 2 survived)`}
           />
           <p>
-            Pass paths (<code>./internal/domain/...</code>, <code>calc.go</code>) to narrow it to
+            Each survivor line gives the file, the line, the mutation operator, and the original and
+            mutated code. Pass paths (<code>./internal/domain/...</code>, <code>calc.go</code>) to narrow it to
             some files, or <code>--all</code> to list every mutation with its diff.
           </p>
           <p className="text-sm text-muted-foreground">
@@ -127,9 +136,9 @@ Mutation score: 87.50% (14 killed, 2 survived)`}
               <code>gooze report merge</code>, and{" "}
               <code>gooze report view</code> print it as{" "}
               <code>Mutation score: NN.NN%</code> followed by a breakdown, for example{" "}
-              <code>(14 killed, 2 survived)</code>. <code>gooze run</code> scores every result
+              <code>(11 killed, 2 survived)</code>. <code>gooze run</code> scores every result
               in its scope, cached and tested, and adds how many were which:{" "}
-              <code>(14 killed, 2 survived; 16 cached, 0 tested)</code>. To fail CI
+              <code>(11 killed, 2 survived; 0 cached, 13 tested)</code>. To fail CI
               below a minimum, see{" "}
               <Link href="/docs/ci/github#gate">the score gate</Link>.
             </li>
@@ -146,8 +155,10 @@ Mutation score: 87.50% (14 killed, 2 survived)`}
         <div id="survivors">
           <h2>What to do when you see a survivor</h2>
           <p>
-            A survivor is a hint.
-            It usually means: your tests do not check this behavior.
+            A survivor is a hint: usually your tests don&apos;t check this behavior. For{" "}
+            <code>calc.go:10</code>, no test calls <code>InRange</code> with <code>n</code> equal
+            to <code>lo</code>, so <code>&lt;</code> and <code>&lt;=</code> give the same answers
+            for every input the tests use.
           </p>
           <ol>
             <li>
@@ -159,9 +170,16 @@ Mutation score: 87.50% (14 killed, 2 survived)`}
               <Link href="/docs/mutations">mutation operator</Link>{" "}
               explains what a survivor of its kind usually means.
             </li>
-            <li>Add a test that would fail if this behavior changes.</li>
-            <li>Run Gooze again and see if it is killed now.</li>
+            <li>
+              Add a test that would fail if this behavior changes. Here, the two cases on the
+              bounds: <code>{"{0, 0, 10, true}"}</code> and <code>{"{10, 0, 10, true}"}</code>.
+            </li>
+            <li>Run Gooze again and check that it&apos;s killed now:</li>
           </ol>
+          <CodeBlock
+            lang="text"
+            code="Mutation score: 100.00% (13 killed, 0 survived; 0 cached, 13 tested)"
+          />
           <p>
             If the code should not be tested (generated code, debug helpers), skip it
             instead: see <Link href="/docs/usage/ignoring-code">Ignoring code</Link>.

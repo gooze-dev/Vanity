@@ -116,24 +116,32 @@ export default function GitlabPage() {
       />
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">GitLab CI</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        The same three setups as the{" "}
-        <Link href="/docs/ci/github">GitHub Actions</Link> guide,
-        written for <code>.gitlab-ci.yml</code>.
+        You want every merge request to keep your mutation score. These are the same three
+        setups as the{" "}
+        <Link href="/docs/ci/github">GitHub Actions</Link> guide, written for{" "}
+        <code>.gitlab-ci.yml</code>: one job, then shards, then a shared baseline, plus a gate.
       </p>
 
       <div>
         <div id="simple">
           <h2>1. Simplest: run</h2>
           <p>
-            Install Gooze and run the whole suite. No registry, no caching.
+            Install Gooze and run the whole suite. No registry, no caching. For the{" "}
+            <Link href="/docs/quick-start"><code>calc</code></Link> package, the job log ends
+            with the line you saw locally, and the job passes, because survivors don&apos;t
+            change the exit code:
           </p>
           <CodeBlock lang="yaml" code={simple} />
+          <CodeBlock
+            lang="text"
+            code="Mutation score: 84.62% (11 killed, 2 survived; 0 cached, 13 tested)"
+          />
         </div>
 
         <div id="sharded">
           <h2>2. Sharded: run in parallel</h2>
           <p>
-            <code>parallel: 3</code> fans the job out;
+            When one job takes too long, <code>parallel: 3</code> fans it out;
             each instance tests its slice with{" "}
             <code>-s INDEX/TOTAL</code> and saves its
             reports as an artifact. The <code>merge</code>{" "}
@@ -150,7 +158,8 @@ export default function GitlabPage() {
             for the cache (<Link href="/docs/usage/incremental-runs">incremental runs</Link>),
             then hands its reports to the merge job as an artifact; shards never push to the
             registry. The merge job combines them and, <strong>only on <code>main</code></strong>, publishes the
-            single merged baseline back to <code>:main</code>.
+            single merged baseline back to <code>:main</code>. Files that didn&apos;t change,
+            such as an untouched <code>calc.go</code>, come from the cache.
           </p>
           <CodeBlock lang="yaml" code={cached} />
         </div>
@@ -166,6 +175,11 @@ export default function GitlabPage() {
             <code>MIN_SCORE</code>.
           </p>
           <CodeBlock lang="yaml" code={gate} />
+          <p>
+            The <code>calc</code> run at <code>84.62%</code> passes a minimum of{" "}
+            <code>60</code> and fails a minimum of <code>90</code>, until the two boundary
+            tests bring it to <code>100.00%</code>.
+          </p>
           <p className="text-sm text-muted-foreground">
             With sharding, gate only in the merge job: a single shard&apos;s score covers only its slice.
             A missing score (no reports) also fails the step.

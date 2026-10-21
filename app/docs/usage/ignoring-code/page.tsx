@@ -10,7 +10,9 @@ export default function IgnoringCodePage() {
     <section>
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Ignoring code</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        Skip mutations when you already know certain paths or regions shouldn&apos;t be touched.
+        Sometimes a run reports mutants in code you don&apos;t want to test: vendored or generated
+        files, mocks, debug helpers. Skip those paths or regions, so the survivors that remain point
+        to tests you should write.
       </p>
 
       <Alert>

@@ -17,9 +17,10 @@ export default function ClaudeCodePage() {
         <a href={PLUGIN_REPO} target="_blank" rel="noopener noreferrer" className={LINK}>
           gooze plugin
         </a>{" "}
-        for Claude Code sets a Go project up for mutation testing, teaches Claude the
-        run, read, kill-survivors loop, and shows Claude the mutation score and every
-        surviving mutant right after it edits a file.
+        for Claude Code is for the moment Claude writes tests that pass but don&apos;t catch
+        much. It sets a Go project up for mutation testing, teaches Claude the run, read,
+        kill-survivors loop, and shows Claude the mutation score and every surviving mutant
+        right after it edits a file.
       </p>
 
       <div>
@@ -119,14 +120,26 @@ go install gooze.dev/pkg/goozels/cmd/goozels@latest`}
           <h2>What Claude sees after an edit</h2>
           <p>
             With goozels installed, a hook adds the edited file&apos;s results to
-            Claude&apos;s context, without blocking the edit:
+            Claude&apos;s context, without blocking the edit. After the first run of the{" "}
+            <Link href="/docs/quick-start" className={LINK}><code>calc</code></Link> package,
+            an edit of <code>calc.go</code> or <code>calc_test.go</code> gives Claude the{" "}
+            <code>goozels check</code> output under a one-line header:
           </p>
           <CodeBlock
             lang="text"
             code={`gooze results from the last run:
-calc.go:1:1: warning: gooze: score 87.50% — 14 killed, 2 survived
+calc.go:1:1: warning: gooze: score 84.62% — 11 killed, 2 survived
 calc.go:10:2: warning: gooze: surviving comparison mutant — tests still pass with \`if n < lo {\` → \`if n <= lo {\`
 calc.go:13:2: warning: gooze: surviving comparison mutant — tests still pass with \`if n > hi {\` → \`if n >= hi {\``}
+          />
+          <p>
+            Both survivors point at the bound checks: no test calls <code>InRange</code> with{" "}
+            <code>n</code> equal to <code>lo</code> or <code>hi</code>. Once Claude adds those
+            two boundary tests and reruns gooze, the score line reads:
+          </p>
+          <CodeBlock
+            lang="text"
+            code="Mutation score: 100.00% (13 killed, 0 survived; 0 cached, 13 tested)"
           />
           <p>
             When the file changed since gooze last ran, the results say so and give the

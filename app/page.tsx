@@ -38,7 +38,7 @@ const faqs = [
   },
   {
     q: "Our coverage is high but bugs still reach production. How does Gooze help?",
-    a: "High line coverage only proves your code was executed, not that your assertions check the result. Gooze injects deliberate faults into your code and checks that your tests fail. A survived mutant shows code your tests run but don't check.",
+    a: "High line coverage only proves your code was executed, not that your assertions check the result. Gooze injects deliberate faults into your code and checks that your tests fail. A survived mutant shows code your tests run but don't check. For example, tests for a range check can run every line without trying a value exactly on a bound, and Gooze reports `if n < lo {` -> `if n <= lo {` as survived.",
   },
   {
     q: "Mutation testing is slow. Will it block our CI/CD pipeline?",
@@ -194,9 +194,15 @@ export default async function Home() {
 
             {/* Mutation Example */}
             <div className="rounded-lg  p-6 text-center mb-12">
-              <h3 className="text-lg font-semibold mb-2">Here’s an example mutation</h3>
+              <h3 className="text-lg font-semibold mb-2">A mutant your tests miss</h3>
               <p className="text-sm text-muted-foreground mb-4">
-                One common mutation changes a comparison operator (like <code className="px-1.5 py-0.5 rounded bg-muted text-xs">&gt;</code> → <code className="px-1.5 py-0.5 rounded bg-muted text-xs">&gt;=</code>).
+                <code className="px-1.5 py-0.5 rounded bg-muted text-xs">InRange(n, lo, hi)</code> checks
+                that <code className="px-1.5 py-0.5 rounded bg-muted text-xs">n</code> is inside{" "}
+                <code className="px-1.5 py-0.5 rounded bg-muted text-xs">[lo, hi]</code>. Its tests pass,
+                but none of them tries a value exactly on a bound. Gooze changes{" "}
+                <code className="px-1.5 py-0.5 rounded bg-muted text-xs">&lt;</code> to{" "}
+                <code className="px-1.5 py-0.5 rounded bg-muted text-xs">&lt;=</code>, the tests still
+                pass, and the report shows it:
               </p>
               <div className="overflow-hidden rounded-md border border-zinc-700 text-left">
                 <div className="flex items-center gap-2 bg-zinc-900 px-3 py-2">
@@ -205,24 +211,21 @@ export default async function Home() {
                   <span className="h-2.5 w-2.5 rounded-full bg-green-500" />
                 </div>
                 <div className="bg-black dark:bg-zinc-950 p-4 font-mono text-sm overflow-x-auto">
-                  <div className="space-y-1">
-                    <div className="text-zinc-500">gooze@linux:~/app $ gooze run ./...</div>
-                    <div className="text-zinc-500">--- a/balance.go</div>
-                    <div className="text-zinc-500">+++ b/balance.go</div>
-                    <div className="text-zinc-500">@@ function label(balance int) string @@</div>
-                    <div className="flex">
-                      <span className="text-red-500 mr-2">-</span>
-                      <span className="text-red-300">if balance &gt; 0 &#123;</span>
-                    </div>
-                    <div className="flex">
-                      <span className="text-green-500 mr-2">+</span>
-                      <span className="text-green-300">if balance &gt;= 0 &#123;</span>
-                    </div>
-                      <div className="text-zinc-300">    return &quot;positive&quot;</div>
-                    <div className="text-zinc-300">&#125;</div>
-                  </div>
+                  <div className="text-zinc-500">gooze@linux:~/calc $ gooze report view</div>
+                  <pre className="m-0 bg-transparent p-0 text-zinc-300">{`Survivors (2):
+calc.go:10: survived (comparison): if n < lo { -> if n <= lo {
+calc.go:13: survived (comparison): if n > hi { -> if n >= hi {
+
+Mutation score: 84.62% (11 killed, 2 survived)`}</pre>
                 </div>
               </div>
+              <p className="text-sm text-muted-foreground mt-4">
+                Two boundary tests,{" "}
+                <code className="px-1.5 py-0.5 rounded bg-muted text-xs">InRange(0, 0, 10)</code> and{" "}
+                <code className="px-1.5 py-0.5 rounded bg-muted text-xs">InRange(10, 0, 10)</code>, kill
+                both mutants, and the score goes to{" "}
+                <code className="px-1.5 py-0.5 rounded bg-muted text-xs">100.00%</code>.
+              </p>
             </div>
 
           </div>
@@ -246,7 +249,7 @@ export default async function Home() {
                 <div className="flex-1 min-w-0">
                   <h3 className="text-2xl font-bold mb-3">Install Gooze</h3>
                   <p className="text-muted-foreground mb-4">
-                      Install with a single command using the Go toolchain
+                    Install it with the Go toolchain.
                   </p>
                   <CodeBlock code="go install gooze.dev/pkg/gooze@latest" lang="bash" />
                 </div>
@@ -260,7 +263,7 @@ export default async function Home() {
                 <div className="flex-1 min-w-0">
                   <h3 className="text-2xl font-bold mb-3">Run Mutation Tests</h3>
                   <p className="text-muted-foreground mb-4">
-                    Run mutation testing across your codebase
+                    From your module root, Gooze mutates each file and runs its package&apos;s tests against every mutant.
                   </p>
                   <CodeBlock code="gooze run ./..." lang="bash" />
                 </div>
@@ -274,7 +277,7 @@ export default async function Home() {
                 <div className="flex-1 min-w-0">
                   <h3 className="text-2xl font-bold mb-3">View Results</h3>
                   <p className="text-muted-foreground mb-4">
-                      See per-file scores, surviving mutations and the mutation score
+                    See per-file scores, each surviving mutant with its file and line, and the mutation score.
                   </p>
                   <CodeBlock code="gooze report view" lang="bash" />
                 </div>

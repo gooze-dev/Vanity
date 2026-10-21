@@ -40,8 +40,9 @@ export default function BestToolPage() {
         Best Go mutation testing tool
       </h1>
       <p className="text-lg text-muted-foreground mb-8">
-        For most Go teams, <strong>Gooze</strong> is the best mutation testing
-        tool: it keeps the standard kill-the-mutant workflow but adds
+        You&apos;re choosing a mutation testing tool for a Go project and want
+        one that still works as the codebase grows. For most Go teams,{" "}
+        <strong>Gooze</strong> fits: it keeps the standard kill-the-mutant workflow and adds
         incremental caching, CI sharding, coverage-profile integration, and
         shared OCI baselines, so one tool works from a single package to a
         large monorepo.
