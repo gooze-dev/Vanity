@@ -14,12 +14,6 @@ const limitations = [
     workaround: { text: "a three-line score gate step", href: "/docs/ci/github#gate" },
   },
   {
-    id: "git-diff",
-    title: "Git diff mode",
-    detail: "Gooze already re-tests only the files that changed; narrowing a run to the lines a pull request touched is coming next.",
-    workaround: { text: "incremental runs", href: "/docs/usage/incremental-runs" },
-  },
-  {
     id: "custom-mutators",
     title: "Custom mutator plugins",
     detail: "Adding an operator to Gooze itself is one small function, and caching, sharding, and reporting work with it unchanged. A plugin API for your own operators is planned.",
@@ -56,6 +50,8 @@ const limitations = [
 ]
 
 type Item = {
+  /** Anchor kept for old links (for example a limitation that has shipped). */
+  id?: string
   title: string
   detail: React.ReactNode
   shipped?: boolean
@@ -78,10 +74,6 @@ const themes: Theme[] = [
       {
         title: "Score threshold",
         detail: "A built-in flag that fails the run below a minimum mutation score, with distinct exit codes for each outcome.",
-      },
-      {
-        title: "Git diff mode",
-        detail: "Mutate only the lines changed against a base ref, for fast pull request checks.",
       },
       {
         title: "Custom exec hook",
@@ -126,6 +118,19 @@ const themes: Theme[] = [
       {
         title: "Consistent config keys",
         detail: "One naming style for every key and flag, with the old names kept as deprecated aliases for a release.",
+      },
+      // TODO(version): name the release that ships diff mode.
+      {
+        id: "git-diff",
+        title: "Git diff mode",
+        detail: (
+          <>
+            Mutate only the lines changed against a base ref with <code>gooze run --diff</code>,
+            for pull request checks. Arrives in the next Gooze release.
+          </>
+        ),
+        shipped: true,
+        href: "/docs/usage/diff-mode",
       },
       {
         title: "Annotation skipping",
@@ -410,6 +415,7 @@ function Status({ shipped, beta }: { shipped?: boolean; beta?: boolean }) {
 function Card({ item }: { item: Item }) {
   return (
     <li
+      id={item.id}
       className={
         item.shipped
           ? "flex flex-col gap-2 rounded-xl border bg-card p-4"

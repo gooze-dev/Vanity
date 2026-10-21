@@ -102,6 +102,31 @@ gcloud builds triggers create github \\
   --branch-pattern='^main$' \\
   --build-config=cloudbuild.yaml`
 
+const diff = `steps:
+  # ...token step as above
+
+  # Builds clone one commit. Pull requests fetch history and the target
+  # branch, so gooze finds the merge base.
+  - id: history
+    name: gcr.io/cloud-builders/git
+    script: |
+      if [ -n "\${_PR_NUMBER:-}" ]; then
+        git fetch --unshallow origin "+refs/heads/\${_BASE_BRANCH}:refs/remotes/origin/\${_BASE_BRANCH}"
+      fi
+
+  - id: mutation
+    name: golang:1.27
+    script: |
+      set -e
+      # ...install and login, pull the baseline as above
+      # Pull requests test only their changed lines; main keeps a full run.
+      BASE=""
+      if [ -n "\${_PR_NUMBER:-}" ]; then BASE="origin/\${_BASE_BRANCH}"; fi
+      gooze run -p 8 --diff="$BASE" ./...
+      gooze report view \${BASE:+--diff "$BASE"}
+
+  # ...push-token and push steps as above`
+
 const gate = `  - id: mutation
     name: golang:1.27
     script: |
@@ -228,6 +253,42 @@ export default function CloudBuildPage() {
             <li>
               <strong>Pull requests.</strong> PR builds set <code>_PR_NUMBER</code>; the push
               step skips them and any branch other than <code>main</code>.
+            </li>
+          </ul>
+        </div>
+
+        {/* TODO(version): --diff arrives in the next gooze release. */}
+        <div id="diff">
+          <h2>4. Pull requests: only the changed lines</h2>
+          <p>
+            A pull request that changes three lines of a large file still re-tests that whole
+            file. With <Link href="/docs/usage/diff-mode">diff mode</Link> (next Gooze release),
+            pull request builds mutate only the lines they change against the target branch,
+            while builds of <code>main</code> keep a full run and push the baseline. These are
+            the changes to the cached build:
+          </p>
+          <CodeBlock lang="yaml" code={diff} />
+          <ul>
+            <li>
+              Cloud Build clones only the commit that started the build, so there is no merge
+              base and no <code>origin/main</code>. The <code>history</code> step fetches them,
+              the way Cloud Build&apos;s docs unshallow a clone. For a private repository, git
+              needs credentials for that fetch (Cloud Build&apos;s docs keep them in Secret
+              Manager).
+            </li>
+            <li>
+              Pull request triggers set <code>_PR_NUMBER</code> and <code>_BASE_BRANCH</code>,
+              the target branch. On <code>main</code>, <code>BASE</code> stays empty and{" "}
+              <code>--diff=&quot;&quot;</code> runs everything.
+            </li>
+            <li>
+              Both <code>gcr.io/cloud-builders/git</code> and the <code>golang</code> image
+              include git, which diff mode needs; a minimal image may not.
+            </li>
+            <li>
+              In a pull request, <code>gooze report view --diff</code> prints the score of the
+              changed lines. Call it the same way in the <a href="#gate">gate</a>, so a pull
+              request is gated on its own code.
             </li>
           </ul>
         </div>

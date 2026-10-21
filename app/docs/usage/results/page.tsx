@@ -126,7 +126,10 @@ export default function ResultsPage() {
               <code>Mutation score: NN.NN%</code> followed by a breakdown, for example{" "}
               <code>(11 killed, 2 survived)</code>. <code>gooze run</code> scores every result
               in its scope, cached and tested, and adds how many were which:{" "}
-              <code>(11 killed, 2 survived; 0 cached, 13 tested)</code>. To fail CI
+              <code>(11 killed, 2 survived; 0 cached, 13 tested)</code>. In{" "}
+              <Link href="/docs/usage/diff-mode#scores">diff mode</Link> (next Gooze release),{" "}
+              <code>Mutation score</code> covers only the changed lines, and a second{" "}
+              <code>Total mutation score</code> line covers every file in scope. To fail CI
               below a minimum, see{" "}
               <Link href="/docs/ci/github#gate">the score gate</Link>.
             </li>
