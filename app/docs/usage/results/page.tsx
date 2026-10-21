@@ -129,7 +129,7 @@ export default function ResultsPage() {
               <code>(11 killed, 2 survived; 0 cached, 13 tested)</code>. A run narrowed with{" "}
               <Link href="/docs/usage/diff-mode#scores"><code>--diff</code></Link>,{" "}
               <Link href="/docs/usage/single-function"><code>--run</code> or{" "}
-              <code>--mutagens</code></Link> (next Gooze release) scores only its selection and
+              <code>--mutagens</code></Link> scores only its selection and
               names it at the end, for example{" "}
               <code>(13 killed, 0 survived; 0 cached, 13 tested; changed lines since main)</code>.
               To fail CI

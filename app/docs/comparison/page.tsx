@@ -50,8 +50,7 @@ const rows: Row[] = [
   },
   {
     feature: "Test only changed code",
-    // TODO(version): --diff arrives in the release after DOCS_FACTS_VERSION.
-    gooze: ["yes", "incremental execution per file (no git needed), or changed lines against a ref (`--diff`, next release)"],
+    gooze: ["yes", "incremental execution per file (no git needed), or changed lines against a ref (`--diff`)"],
     gremlins: ["yes", "git diff against a ref (`--diff`)"],
     goMutesting: ["unknown", ""],
     avito: ["unknown", ""],
@@ -239,7 +238,7 @@ const faqs = [
   },
   {
     q: "Does Gooze only test changed code?",
-    a: "Yes. By default Gooze detects changes through incremental execution, without git: it hashes each file and its test file and re-tests only what changed since the stored reports. Results for the rest are reused, so the score covers the whole codebase. No base branch, commit, or git history is needed, and uncommitted edits count. Granularity is per file. Changes in other files don't invalidate cached results, so run `--no-cache` periodically. From the next release, `gooze run --diff REF` mutates only the lines changed against a git ref, and its score describes the change.",
+    a: "Yes. By default Gooze detects changes through incremental execution, without git: it hashes each file and its test file and re-tests only what changed since the stored reports. Results for the rest are reused, so the score covers the whole codebase. No base branch, commit, or git history is needed, and uncommitted edits count. Granularity is per file. Changes in other files don't invalidate cached results, so run `--no-cache` periodically. `gooze run --diff REF` mutates only the lines changed against a git ref, and its score describes the change.",
   },
   {
     q: "Can I write custom mutators for Gooze?",
@@ -296,7 +295,7 @@ export default function ComparisonPage() {
               <code>report merge</code>) from a tiny project to microservices and large
               monorepos. Its per-file cache re-tests only what you changed, so
               local TDD loops stay fast, and every run still reports a score for the whole
-              codebase, not just the diff; a git diff mode (next release) narrows pull request runs
+              codebase, not just the diff; a git diff mode narrows pull request runs
               to the changed lines. Sharding, a shared OCI baseline, a TUI viewer,
               editor integration, and a{" "}
               <Link href="/docs/claude-code">Claude Code plugin</Link> come built in.
@@ -399,9 +398,8 @@ export default function ComparisonPage() {
               <Link href="/docs/claude-code">Claude Code plugin</Link> if an agent writes your code.
             </li>
             <li>
-              {/* TODO(version): once Gooze --diff is released, the "exact lines a PR changed" reason no longer sets Gremlins apart. */}
-              <strong>Pick Gremlins</strong> if you need a built-in threshold flag today, or want
-              mutations limited to the exact lines a PR changed, and the module is small.
+              <strong>Pick Gremlins</strong> if you need a built-in threshold flag and the module
+              is small.
             </li>
             <li>
               <strong>Pick go-mutesting</strong> if you need a fully custom test runner or want to
@@ -419,7 +417,7 @@ export default function ComparisonPage() {
           <ul>
             <li>
               <strong>Git diff</strong> (Gremlins <code>--diff</code>,
-              go-mutants <code>--changed</code>, Gooze <code>--diff</code> from the next release): compare
+              go-mutants <code>--changed</code>, Gooze <code>--diff</code>): compare
               against a base branch or commit and mutate only the changed lines. Needs git history
               and the right base ref, and the score describes the change, not the codebase.
             </li>

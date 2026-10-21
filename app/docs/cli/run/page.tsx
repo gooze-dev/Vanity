@@ -249,11 +249,10 @@ export default function CliRunPage() {
           <Recording name="calc-cached-estimate" title="Recorded gooze run --estimate with everything cached" />
         </div>
 
-        {/* TODO(version): diff mode arrives in the next gooze release; drop this note once DOCS_FACTS_VERSION includes it. */}
         <div id="diff">
           <h2>Changed lines only (--diff)</h2>
           <p>
-            Mutate only the lines changed against a git ref (next Gooze release):
+            Mutate only the lines changed against a git ref:
           </p>
           <CodeBlock lang="bash" code="gooze run --diff origin/main ./..." />
           <ul>
@@ -281,12 +280,10 @@ export default function CliRunPage() {
           </p>
         </div>
 
-        {/* TODO(version): --run and --mutagens arrive in the next gooze release. */}
         <div id="run">
           <h2>Some functions only (--run)</h2>
           <p>
-            Mutate only the functions whose name matches a Go regular expression (next Gooze
-            release):
+            Mutate only the functions whose name matches a Go regular expression:
           </p>
           <CodeBlock lang="bash" code="gooze run --run '^InRange$' ./..." />
           <ul>
@@ -322,8 +319,7 @@ export default function CliRunPage() {
         <div id="mutagens">
           <h2>Some mutagens only (--mutagens)</h2>
           <p>
-            Generate only the listed <Link href="/docs/mutations">mutagens</Link> (next Gooze
-            release). Names are case-insensitive, comma-separated or with the flag repeated:
+            Generate only the listed <Link href="/docs/mutations">mutagens</Link>. Names are case-insensitive, comma-separated or with the flag repeated:
           </p>
           <CodeBlock
             lang="bash"
@@ -344,7 +340,7 @@ gooze run --mutagens comparison --mutagens boolean ./...`}
           <h2>Narrowed runs and run/</h2>
           <p>
             A run with <code>--diff</code>, <code>--run</code> or <code>--mutagens</code> is a
-            narrowed run (next Gooze release):
+            narrowed run:
           </p>
           <ul>
             <li>

@@ -49,10 +49,9 @@ export default function ReportsPage() {
               After a sharded run (<code>-s INDEX/TOTAL</code>), one{" "}
               <code>shard_INDEX/</code> subdirectory per shard until you merge
             </li>
-            {/* TODO(version): run/ arrives in the next gooze release. */}
             <li>
-              After a run with <code>--diff</code>, <code>--run</code> or <code>--mutagens</code>{" "}
-              (next Gooze release), a <code>run/</code> subdirectory (<code>run/shard_N/</code>{" "}
+              After a run with <code>--diff</code>, <code>--run</code> or <code>--mutagens</code>,
+              a <code>run/</code> subdirectory (<code>run/shard_N/</code>{" "}
               when sharded) with that run&apos;s reports and index, until{" "}
               <code>gooze report merge</code> folds it in. The main reports, the cache,{" "}
               <code>gooze report view</code> without <code>-o</code>, and goozels don&apos;t read
@@ -67,11 +66,10 @@ export default function ReportsPage() {
           </ul>
         </div>
 
-        {/* TODO(version): line and scope arrive in the next gooze release. */}
         <div id="fields">
           <h2>Line and scope fields</h2>
           <p>
-            From the next Gooze release, a report file has two more fields at the end:
+            A report file has two more fields at the end:
           </p>
           <ul>
             <li>

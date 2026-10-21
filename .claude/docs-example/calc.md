@@ -145,11 +145,9 @@ Mutation score: 100.00% (13 killed, 0 survived; 13 cached, 0 tested)
 - Avoid a `Clamp`-style function for this story: there `if n < lo { return lo }` mutated to
   `n <= lo` is an equivalent mutant (same result when `n == lo`) and no test can kill it.
 
-## Unreleased: diff mode, `--run`, `--mutagens`
+## Narrowed runs: diff mode, `--run`, `--mutagens`
 
-`scripts/record-unreleased-casts.sh` records these from a pre-release gooze build (the cast
-titles name its version) in `/tmp/calc`. Re-record them with the release build and move them
-into `record-casts.sh` when the features ship.
+`scripts/record-narrowed-casts.sh` records these in `/tmp/calc`.
 
 - Diff mode (`calc-diff-*`, `diff-*`): a git repo whose `main` has the starting tests and a
   full run as the baseline (84.62%); the branch `boundary-tests` adds the two boundary tests.

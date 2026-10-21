@@ -22,8 +22,7 @@ const limitations = [
   {
     id: "mutator-selection",
     title: "Mutator selection",
-    // TODO(version): name the release that ships --mutagens.
-    detail: "From the next release, `--mutagens` (or `run.mutagens`) picks among the six default mutagens. Turning on the three that are off by default (`branch`, `statement`, `loop`) is planned.",
+    detail: "`--mutagens` (or `run.mutagens`) picks among the six default mutagens. Turning on the three that are off by default (`branch`, `statement`, `loop`) is planned.",
     workaround: { text: "per-mutagen ignore directives", href: "/docs/usage/ignoring-code" },
   },
   {
@@ -84,7 +83,6 @@ const themes: Theme[] = [
           </>
         ),
       },
-      // TODO(version): name the release that ships --run.
       {
         id: "function-selection",
         title: "Function selection",
@@ -92,7 +90,7 @@ const themes: Theme[] = [
           <>
             Mutate only the functions or methods matching a regex with{" "}
             <code>gooze run --run</code>, into a separate <code>run/</code> directory that{" "}
-            <code>gooze report merge</code> folds in. Arrives in the next Gooze release.
+            <code>gooze report merge</code> folds in.
           </>
         ),
         shipped: true,
@@ -102,13 +100,12 @@ const themes: Theme[] = [
         title: "Custom mutator plugins",
         detail: "A plugin API for writing your own mutation operators outside the Gooze source.",
       },
-      // TODO(version): name the release that ships --mutagens.
       {
         title: "Mutator selection",
         detail: (
           <>
-            Picking among the six default mutagens with <code>--mutagens</code> or{" "}
-            <code>run.mutagens</code> arrives in the next Gooze release. Planned: turning on the
+            <code>--mutagens</code> or <code>run.mutagens</code> picks among the six default
+            mutagens. Planned: turning on the
             three that exist but are off by default. <code>branch</code> forces a condition true
             or false, inverts it, removes an <code>if</code> block (such as{" "}
             <code>{"if err != nil { return err }"}</code>) and removes switch cases;{" "}
@@ -142,14 +139,13 @@ const themes: Theme[] = [
         title: "Consistent config keys",
         detail: "One naming style for every key and flag, with the old names kept as deprecated aliases for a release.",
       },
-      // TODO(version): name the release that ships diff mode.
       {
         id: "git-diff",
         title: "Git diff mode",
         detail: (
           <>
             Mutate only the lines changed against a base ref with <code>gooze run --diff</code>,
-            for pull request checks. Arrives in the next Gooze release.
+            for pull request checks.
           </>
         ),
         shipped: true,

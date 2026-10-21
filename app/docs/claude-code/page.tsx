@@ -117,17 +117,16 @@ go install gooze.dev/pkg/goozels/cmd/goozels@latest`}
           </ul>
         </div>
 
-        {/* TODO(version): name the gooze release with --run and the plugin release whose skill uses it. */}
         <div id="one-function">
           <h2>One function at a time</h2>
           <p>
             When Claude kills the survivors of one function, a full run tests every mutant of the
-            package on each try. With a gooze release that has{" "}
+            package on each try. When gooze has{" "}
             <Link href="/docs/usage/single-function" className={LINK}>
               <code>--run</code>
-            </Link>{" "}
-            (the next one), the next plugin release teaches <code>/gooze:mutation-testing</code>{" "}
-            a shorter loop. It checks that <code>gooze run --help</code> lists the flag first:
+            </Link>
+            , <code>/gooze:mutation-testing</code> uses a shorter loop. It checks that{" "}
+            <code>gooze run --help</code> lists the flag first:
           </p>
           <ol>
             <li>

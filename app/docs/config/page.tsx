@@ -183,7 +183,7 @@ export default function ConfigPage() {
                   <TableCell>
                     Git ref for <Link href="/docs/usage/diff-mode">diff mode</Link>: mutate only lines
                     changed against it (default empty, off). Needs git on <code>PATH</code> and a git
-                    repository. Next Gooze release.
+                    repository.
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -194,7 +194,7 @@ export default function ConfigPage() {
                     Mutagens to run, comma-separated, for example <code>comparison,boolean</code>{" "}
                     (default empty, all six). A value makes every run a{" "}
                     <Link href="/docs/usage/single-function#run-dir">narrowed run</Link> that writes to{" "}
-                    <code>run/</code>. Next Gooze release.
+                    <code>run/</code>.
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -266,7 +266,6 @@ gooze run ./...`}
           </div>
         </div>
 
-        {/* TODO(version): run.diff and run.mutagens arrive in the next gooze release. */}
         <div id="example">
           <h2>Complete gooze.yaml reference</h2>
           <p>

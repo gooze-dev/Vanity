@@ -79,12 +79,11 @@ export default function CliReportPage() {
             <code>gooze run</code> first or passing <code>-o</code>.
           </p>
 
-          {/* TODO(version): the run/ directory arrives in the next gooze release. */}
           <div id="view-run">
             <h3>Results of a narrowed run</h3>
             <p>
-              A run with <code>--diff</code>, <code>--run</code> or <code>--mutagens</code> (next
-              Gooze release) writes its reports to <code>.gooze-reports/run/</code>, and{" "}
+              A run with <code>--diff</code>, <code>--run</code> or <code>--mutagens</code>{" "}
+              writes its reports to <code>.gooze-reports/run/</code>, and{" "}
               <code>view</code> without <code>-o</code> doesn&apos;t read them: it skips
               subdirectories. Point <code>-o</code> at the run to see its score and survivors:
             </p>
@@ -224,7 +223,7 @@ gooze report push ghcr.io/your-org/your-repo/gooze-reports:main`}
           <h2>gooze report merge</h2>
           <p>
             Merges sharded reports (from <code>shard_*</code> folders) into the base output
-            directory. From the next Gooze release it also folds in the reports of a narrowed run
+            directory. It also folds in the reports of a narrowed run
             (<code>run/</code> and <code>run/shard_*</code>) and removes <code>run/</code>.
           </p>
 
@@ -261,7 +260,6 @@ gooze report view`}
               Shard reports replace base reports for the same source file; base reports for files
               no shard re-tested are kept, so caching can still work.
             </li>
-            {/* TODO(version): merging run/ arrives in the next gooze release. */}
             <li>
               Reports in <code>run/</code> (and <code>run/shard_*</code>) are folded in after the
               shards. For a file unchanged since the main reports (same source and test file

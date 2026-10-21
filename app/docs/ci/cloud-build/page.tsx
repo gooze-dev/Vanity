@@ -262,12 +262,11 @@ export default function CloudBuildPage() {
           </ul>
         </div>
 
-        {/* TODO(version): --diff arrives in the next gooze release. */}
         <div id="diff">
           <h2>4. Pull requests: only the changed lines</h2>
           <p>
             A pull request that changes three lines of a large file still re-tests that whole
-            file. With <Link href="/docs/usage/diff-mode">diff mode</Link> (next Gooze release),
+            file. With <Link href="/docs/usage/diff-mode">diff mode</Link>,
             pull request builds mutate only the lines they change against the target branch,
             while builds of <code>main</code> keep a full run and push the baseline. These are
             the changes to the cached build:

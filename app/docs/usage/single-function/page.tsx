@@ -4,8 +4,6 @@ import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Info } from "lucide-react"
 
 export const metadata = docsMetadata("/docs/usage/single-function")
 
@@ -74,17 +72,6 @@ export default function SingleFunctionPage() {
         <code>--mutagens</code> only the mutagens you pick, and the results go to a separate
         directory, so the project report stays as it was until you merge them.
       </p>
-
-      {/* TODO(version): name the release that ships --run, --mutagens and the run/ directory, and bump DOCS_FACTS_VERSION. */}
-      <Alert>
-        <Info />
-        <AlertDescription>
-          <p>
-            <code>--run</code>, <code>--mutagens</code> and the <code>run/</code> directory arrive
-            in the next Gooze release. They are not in <code>v1.2.0</code>.
-          </p>
-        </AlertDescription>
-      </Alert>
 
       <div>
         <div id="start">

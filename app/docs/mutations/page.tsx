@@ -161,11 +161,10 @@ export default function MutationsPage() {
             removal) mutators; these are not part of the default set.
           </p>
 
-          {/* TODO(version): --mutagens arrives in the next gooze release. */}
           <p>
             To run only some of the six types, pass{" "}
-            <Link href="/docs/usage/single-function#mutagens"><code>--mutagens</code></Link>{" "}
-            (next Gooze release), for example <code>gooze run --mutagens comparison ./...</code>.
+            <Link href="/docs/usage/single-function#mutagens"><code>--mutagens</code></Link>,
+            for example <code>gooze run --mutagens comparison ./...</code>.
           </p>
 
           <p>

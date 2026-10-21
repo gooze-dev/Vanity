@@ -41,7 +41,7 @@ const cacheRows = [
     behavior: "Re-tests every file whose reports came from an older version of that mutator.",
   },
   {
-    action: "`gooze run` with `--diff`, `--run` or `--mutagens` (next release)",
+    action: "`gooze run` with `--diff`, `--run` or `--mutagens`",
     state: "Narrowed",
     behavior: "Tests only the selection in changed files and writes to `.gooze-reports/run/`; the main reports change only with `gooze report merge`.",
   },
@@ -118,7 +118,7 @@ export default function IncrementalRunsPage() {
             its previous reports. A narrowed run (
             <Link href="/docs/usage/diff-mode"><code>--diff</code></Link>,{" "}
             <Link href="/docs/usage/single-function"><code>--run</code>,{" "}
-            <code>--mutagens</code></Link>; next Gooze release) writes to <code>run/</code> inside
+            <code>--mutagens</code></Link>) writes to <code>run/</code> inside
             it instead, and the main reports stay as they were until{" "}
             <code>gooze report merge</code>.
           </p>
@@ -166,7 +166,7 @@ export default function IncrementalRunsPage() {
             history is needed, and uncommitted edits are picked up. See{" "}
             <Link href="/docs/comparison#incremental-vs-diff">incremental execution vs git diff</Link>.
             To mutate only the lines a branch changed, use{" "}
-            <Link href="/docs/usage/diff-mode">git diff mode</Link> (next Gooze release).
+            <Link href="/docs/usage/diff-mode">git diff mode</Link>.
           </p>
           <p>
             What the cache does not see: changes in <em>other</em> files that a file&apos;s tests

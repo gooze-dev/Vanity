@@ -1,18 +1,12 @@
 #!/usr/bin/env bash
-# Records the samples of gooze features that are not in a release yet:
-# git diff mode (--diff), --run, --mutagens, the run/ directory of narrowed
-# runs and gooze report merge folding it in. Same style as record-casts.sh;
-# see .claude/rules/tool-output.md.
+# Records the samples of narrowed runs: git diff mode (--diff), --run,
+# --mutagens, the run/ directory they write to, and gooze report merge folding
+# it in. Same style as record-casts.sh; see .claude/rules/tool-output.md.
 #
-# These casts come from a pre-release build, and their titles name its
-# version. When the feature ships, re-record them with the release build,
-# move these samples into record-casts.sh (which checks DOCS_FACTS_VERSION)
-# and delete this script.
+# Needs asciinema, git, and a gooze and goozels with --run, --mutagens and
+# --diff first on PATH:
 #
-# Needs asciinema, git, and a gooze and goozels build with --run, --mutagens
-# and --diff first on PATH:
-#
-#   PATH=/path/to/prerelease/bin:$PATH scripts/record-unreleased-casts.sh
+#   scripts/record-narrowed-casts.sh
 set -euo pipefail
 
 root="$(cd "$(dirname "$0")/.." && pwd)"
@@ -21,7 +15,7 @@ casts="$root/public/casts"
 work=/tmp/calc
 
 if ! gooze run --help | grep -q -- '--mutagens'; then
-  echo "gooze on PATH ($(gooze version)) has no --run/--mutagens; use a pre-release build" >&2
+  echo "gooze on PATH ($(gooze version)) has no --run/--mutagens" >&2
   exit 1
 fi
 gooze_version="$(gooze version)"
@@ -140,4 +134,4 @@ rec run-invalid-pattern "gooze run --run '(' ./... 2>&1 | cat"
 rec run-unknown-mutagen "gooze run --mutagens conditional ./... 2>&1 | cat"
 rec run-run-with-shard "gooze run --run '^InRange\$' -s 0/2 ./... 2>&1 | cat"
 
-echo "recorded the unreleased casts with $title"
+echo "recorded the narrowed-run casts with $title"

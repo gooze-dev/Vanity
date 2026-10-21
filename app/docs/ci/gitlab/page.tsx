@@ -231,12 +231,11 @@ export default function GitlabPage() {
           <CodeBlock lang="yaml" code={cached} />
         </div>
 
-        {/* TODO(version): --diff arrives in the next gooze release. */}
         <div id="diff">
           <h2>4. Merge requests: only the changed lines</h2>
           <p>
             A merge request that changes three lines of a large file still re-tests that whole
-            file. With <Link href="/docs/usage/diff-mode">diff mode</Link> (next Gooze release),
+            file. With <Link href="/docs/usage/diff-mode">diff mode</Link>,
             merge requests mutate only the lines they change against the target branch, while{" "}
             <code>main</code> keeps the sharded full run and publishes the baseline. This is the
             cached pipeline with a diff job and the gate:

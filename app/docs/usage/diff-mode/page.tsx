@@ -4,8 +4,6 @@ import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
 import { Recording } from "@/components/recording"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Info } from "lucide-react"
 
 export const metadata = docsMetadata("/docs/usage/diff-mode")
 
@@ -63,17 +61,6 @@ export default function DiffModePage() {
         mutates only the lines your branch changed, and the score tells you how well the tests
         check that change.
       </p>
-
-      {/* TODO(version): name the release once diff mode ships, and bump DOCS_FACTS_VERSION. */}
-      <Alert>
-        <Info />
-        <AlertDescription>
-          <p>
-            Diff mode arrives in the next Gooze release. It is not in{" "}
-            <code>v1.2.0</code>.
-          </p>
-        </AlertDescription>
-      </Alert>
 
       <div>
         <div id="prerequisites">
