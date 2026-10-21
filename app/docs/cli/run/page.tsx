@@ -31,6 +31,13 @@ const runFlags: RunFlag[] = [
     defaultValue: "false",
   },
   {
+    flag: "--diff",
+    description:
+      "Mutate only lines changed against a git ref (`REF`: branch, tag, SHA, `HEAD~3`). Needs git on `PATH` and a git repository. `--diff=\"\"` turns a configured value off. Env: `GOOZE_RUN_DIFF`.",
+    defaultValue: "empty (disabled)",
+    configKey: "run.diff",
+  },
+  {
     flag: "--parallel",
     alias: "-p",
     description: "Number of parallel workers for mutation testing (at least `1`).",
@@ -203,7 +210,9 @@ export default function CliRunPage() {
           <Recording name="calc-cached-run" title="Recorded last line of a gooze run with nothing changed" />
           <p className="text-sm text-muted-foreground">
             With <code>--no-cache</code> it scores only what it tested; a sharded run scores its
-            shard (<code>gooze report merge</code> gives the full score).
+            shard (<code>gooze report merge</code> gives the full score). With{" "}
+            <a href="#diff"><code>--diff</code></a> it prints two scores: the changed lines, then
+            every file in scope.
           </p>
         </div>
 
@@ -226,6 +235,38 @@ export default function CliRunPage() {
             they will not be re-tested:
           </p>
           <Recording name="calc-cached-estimate" title="Recorded gooze run --estimate with everything cached" />
+        </div>
+
+        {/* TODO(version): diff mode arrives in the next gooze release; drop this note once DOCS_FACTS_VERSION includes it. */}
+        <div id="diff">
+          <h2>Changed lines only (--diff)</h2>
+          <p>
+            Mutate only the lines changed against a git ref (next Gooze release):
+          </p>
+          <CodeBlock lang="bash" code="gooze run --diff origin/main ./..." />
+          <ul>
+            <li>
+              Gooze diffs from <code>git merge-base REF HEAD</code> to the working tree: committed,
+              staged and unstaged changes, plus untracked <code>.go</code> files git doesn&apos;t
+              ignore. A changed <code>_test.go</code> puts the source file it tests in scope in full.
+            </li>
+            <li>
+              It needs git on <code>PATH</code> and a git repository. Without either, or with an
+              unknown ref or no merge base, the run exits <code>1</code>.
+            </li>
+            <li>
+              Path arguments, <code>-x/--exclude</code>, <code>--shard</code>,{" "}
+              <code>--coverage-profile</code> and <code>--estimate</code> work with it. The exit
+              code doesn&apos;t change.
+            </li>
+            <li>
+              The run ends with two lines: <code>Mutation score</code> for the changed lines, then{" "}
+              <code>Total mutation score</code> for every file in scope.
+            </li>
+          </ul>
+          <p>
+            Guide: <Link href="/docs/usage/diff-mode">Changed lines only (git diff mode)</Link>.
+          </p>
         </div>
 
         <div id="parallel">

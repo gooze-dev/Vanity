@@ -107,6 +107,17 @@ export const docsPages: DocsPage[] = [
     keywords: ["incremental testing","fast ci","cache results","git diff","modified code","no-cache flag","cached score"],
   },
   {
+    href: "/docs/usage/diff-mode",
+    title: "Changed lines only (git diff mode)",
+    seoTitle:
+      "Mutate Only Changed Lines with Git Diff Mode · Gooze",
+    navTitle: "Git diff mode",
+    section: "Guides",
+    description:
+      "Mutate only the Go lines a branch or pull request changed with gooze run --diff, gate CI on the score of the change, and keep a full run on main.",
+    keywords: ["git diff","diff mode","changed lines","pull request","merge base","base branch","--diff","run.diff","fetch-depth"],
+  },
+  {
     href: "/docs/usage/ignoring-code",
     title: "Ignoring code",
     seoTitle:
@@ -358,6 +369,12 @@ export const docsFlags: DocsFlag[] = [
     description: "Preview files, applicable mutation counts and cached files without running tests.",
   },
   {
+    flag: "--diff",
+    command: "gooze run",
+    href: "/docs/cli/run#diff",
+    description: "Mutate only lines changed against a git ref (merge base with HEAD, compared with the working tree).",
+  },
+  {
     flag: "--parallel",
     alias: "-p",
     command: "gooze run",
@@ -396,6 +413,12 @@ export const docsFlags: DocsFlag[] = [
     command: "gooze report view",
     href: "/docs/cli/report#view",
     description: "List every mutation with its status and diff instead of the per-file summary.",
+  },
+  {
+    flag: "--diff",
+    command: "gooze report view",
+    href: "/docs/cli/report#view-diff",
+    description: "Show the score and survivors of the lines changed against a git ref only.",
   },
   // global flags
   {

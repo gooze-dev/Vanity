@@ -69,6 +69,63 @@ merge:
         gooze report push "$REPORTS_REF"
       fi`
 
+const diff = `image: golang:1.27
+
+stages: [test, merge]
+
+# Run merge request pipelines (they set CI_MERGE_REQUEST_TARGET_BRANCH_NAME)
+# and pipelines for the default branch.
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+variables:
+  REPORTS_REF: "$CI_REGISTRY_IMAGE/gooze-reports:main"
+  GOOZE_REGISTRY_USERNAME: "gitlab-ci-token"
+  GOOZE_REGISTRY_PASSWORD: "$CI_JOB_TOKEN"
+  GIT_DEPTH: 0               # full history, so gooze finds the merge base
+
+default:
+  before_script:
+    - go install gooze.dev/pkg/gooze@latest
+    # Fetch the target branch, which may be missing. BASE stays empty outside
+    # merge requests; before_script and script share one shell.
+    - |
+      BASE=""
+      if [ -n "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" ]; then
+        git fetch origin "+refs/heads/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME:refs/remotes/origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+        BASE="origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+      fi
+
+test:
+  stage: test
+  parallel: 3
+  script:
+    - gooze report pull "$REPORTS_REF" || echo "no baseline yet"
+    # --diff="" turns diff mode off, so main tests everything.
+    - gooze run --diff="$BASE" -s "$((CI_NODE_INDEX - 1))/$CI_NODE_TOTAL" ./...
+  artifacts:
+    paths:
+      - .gooze-reports/
+
+merge:
+  stage: merge
+  dependencies: [test]
+  variables:
+    MIN_SCORE: "60"
+  script:
+    - gooze report merge
+    - |
+      if [ "$CI_COMMIT_BRANCH" = "main" ]; then
+        gooze report push "$REPORTS_REF"
+      fi
+    # In a merge request, gate on the score of the changed lines.
+    - |
+      score=$(gooze report view \${BASE:+--diff "$BASE"} | sed -n 's/^Mutation score: \\([0-9.]*\\)%.*$/\\1/p' | tail -1)
+      echo "Mutation score: \${score}% (minimum \${MIN_SCORE}%)"
+      awk -v s="$score" -v m="$MIN_SCORE" 'BEGIN { exit !(s != "" && s >= m) }'`
+
 const gate = `merge:
   # ...after gooze report merge (or in the single job, after gooze run):
   variables:
@@ -97,6 +154,10 @@ const faqs = [
   {
     q: "How do I fail a merge request when the mutation score is too low?",
     a: "Add a short script step that reads `Mutation score` from `gooze report view` and fails the job below your minimum. Gooze has no built-in threshold flag. When you shard, gate in the merge job.",
+  },
+  {
+    q: "How do I test only the lines a merge request changed in GitLab CI?",
+    a: "In a merge request pipeline, set `GIT_DEPTH: 0`, fetch the target branch, and run `gooze run --diff \"origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME\" ./...`. Keep a full run on `main`, which pushes the baseline.",
   },
   {
     q: "Does Gooze post results as a GitLab merge-request note?",
@@ -160,6 +221,44 @@ export default function GitlabPage() {
             such as an untouched <code>calc.go</code>, come from the cache.
           </p>
           <CodeBlock lang="yaml" code={cached} />
+        </div>
+
+        {/* TODO(version): --diff arrives in the next gooze release. */}
+        <div id="diff">
+          <h2>4. Merge requests: only the changed lines</h2>
+          <p>
+            A merge request that changes three lines of a large file still re-tests that whole
+            file. With <Link href="/docs/usage/diff-mode">diff mode</Link> (next Gooze release),
+            merge requests mutate only the lines they change against the target branch, while{" "}
+            <code>main</code> keeps a full run and publishes the baseline. This is the cached
+            pipeline with diff mode and the gate:
+          </p>
+          <CodeBlock lang="yaml" code={diff} />
+          <ul>
+            <li>
+              <code>CI_MERGE_REQUEST_TARGET_BRANCH_NAME</code> is set only in merge request
+              pipelines, so the <code>workflow</code> rules run those instead of branch
+              pipelines. On <code>main</code>, <code>BASE</code> stays empty and{" "}
+              <code>--diff=&quot;&quot;</code> runs everything.
+            </li>
+            <li>
+              New GitLab projects fetch a shallow clone (<code>20</code> commits), and the target
+              branch may not be fetched.{" "}
+              <code>GIT_DEPTH: 0</code> and the <code>git fetch</code> line give Gooze the merge
+              base and <code>origin/main</code>; without them <code>--diff</code> stops with an
+              unknown ref or no merge base.
+            </li>
+            <li>
+              Every shard computes the same changes, and the merge keeps them. In the merge job,{" "}
+              <code>gooze report view --diff</code> prints the score of the changed lines, so the
+              gate checks the merge request&apos;s own code. The merge job runs in the checkout,
+              which <code>--diff</code> needs.
+            </li>
+            <li>
+              Diff mode needs git. The <code>golang</code> image includes it; a minimal image
+              may not.
+            </li>
+          </ul>
         </div>
 
         <div id="gate">

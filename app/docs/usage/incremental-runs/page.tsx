@@ -41,6 +41,11 @@ const cacheRows = [
     behavior: "Re-tests every file whose reports came from an older version of that mutator.",
   },
   {
+    action: "`gooze run --diff REF` (next release)",
+    state: "Partial miss",
+    behavior: "Tests only the changed lines of changed files; a later full run re-tests those files in full.",
+  },
+  {
     action: "`gooze run --no-cache`",
     state: "Bypass",
     behavior: "Ignores stored results and re-tests everything.",
@@ -110,7 +115,9 @@ export default function IncrementalRunsPage() {
             Choose where reports are written. This is also where the incremental cache lives.
             Cache entries are keyed on the project-relative path, so a baseline pulled from a
             registry matches on another machine or CI runner. Re-testing a changed file replaces
-            its previous reports.
+            its previous reports. A <Link href="/docs/usage/diff-mode">diff mode</Link> run
+            tests only the changed lines, and its reports remember that they cover part of the
+            file.
           </p>
           <CodeBlock lang="bash" code="gooze run -o .gooze-reports ./..." />
           <p className="text-sm text-muted-foreground">
@@ -134,7 +141,9 @@ export default function IncrementalRunsPage() {
           </ul>
           <p>
             Everything else is reused, and reports for deleted files are dropped, so the mutation
-            score always covers the whole codebase, not only the files that were re-tested. The
+            score covers the whole codebase, not only the files that were re-tested (in{" "}
+            <Link href="/docs/usage/diff-mode#scores">diff mode</Link>, the first score covers
+            only the changed lines). The
             score line of <code>gooze run</code> counts cached and tested results in its scope
             and says how many were which.
           </p>
@@ -153,6 +162,8 @@ export default function IncrementalRunsPage() {
             Changes are detected from file contents, not from git: no base branch, commit, or
             history is needed, and uncommitted edits are picked up. See{" "}
             <Link href="/docs/comparison#incremental-vs-diff">incremental execution vs git diff</Link>.
+            To mutate only the lines a branch changed, use{" "}
+            <Link href="/docs/usage/diff-mode">git diff mode</Link> (next Gooze release).
           </p>
           <p>
             What the cache does not see: changes in <em>other</em> files that a file&apos;s tests

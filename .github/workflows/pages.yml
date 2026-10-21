@@ -1,8 +1,12 @@
 name: Deploy to GitHub Pages
 
+# Publish only on a release tag (e.g. v1.3.0, matching the gooze release the
+# docs describe), so merging docs to main doesn't go live until that release.
+# workflow_dispatch redeploys by hand, e.g. for an urgent fix; the
+# github-pages environment limits it to main and v* tags.
 on:
   push:
-    branches: [main]
+    tags: ['v*']
   workflow_dispatch:
 
 permissions:

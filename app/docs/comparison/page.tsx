@@ -50,7 +50,8 @@ const rows: Row[] = [
   },
   {
     feature: "Test only changed code",
-    gooze: ["yes", "detected by incremental execution (content hashes); no git or base ref"],
+    // TODO(version): --diff arrives in the release after DOCS_FACTS_VERSION.
+    gooze: ["yes", "incremental execution per file (no git needed), or changed lines against a ref (`--diff`, next release)"],
     gremlins: ["yes", "git diff against a ref (`--diff`)"],
     goMutesting: ["unknown", ""],
     avito: ["unknown", ""],
@@ -238,7 +239,7 @@ const faqs = [
   },
   {
     q: "Does Gooze only test changed code?",
-    a: "Yes, and it doesn't need git. Gooze detects changes through incremental execution: it hashes each file and its test file and re-tests only what changed since the stored reports. Results for the rest are reused, so the score always covers the whole codebase. No base branch, commit, or git history is needed, and uncommitted edits count. Granularity is per file, not per changed line. Changes in other files don't invalidate cached results, so run `--no-cache` periodically.",
+    a: "Yes. By default Gooze detects changes through incremental execution, without git: it hashes each file and its test file and re-tests only what changed since the stored reports. Results for the rest are reused, so the score covers the whole codebase. No base branch, commit, or git history is needed, and uncommitted edits count. Granularity is per file. Changes in other files don't invalidate cached results, so run `--no-cache` periodically. From the next release, `gooze run --diff REF` mutates only the lines changed against a git ref, and its score describes the change.",
   },
   {
     q: "Can I write custom mutators for Gooze?",
@@ -295,7 +296,8 @@ export default function ComparisonPage() {
               <code>report merge</code>) from a tiny project to microservices and large
               monorepos. Its per-file cache re-tests only what you changed, so
               local TDD loops stay fast, and every run still reports a score for the whole
-              codebase, not just the diff. Sharding, a shared OCI baseline, a TUI viewer,
+              codebase, not just the diff; a git diff mode (next release) narrows pull request runs
+              to the changed lines. Sharding, a shared OCI baseline, a TUI viewer,
               editor integration, and a{" "}
               <Link href="/docs/claude-code">Claude Code plugin</Link> come built in.
             </li>
@@ -397,6 +399,7 @@ export default function ComparisonPage() {
               <Link href="/docs/claude-code">Claude Code plugin</Link> if an agent writes your code.
             </li>
             <li>
+              {/* TODO(version): once Gooze --diff is released, the "exact lines a PR changed" reason no longer sets Gremlins apart. */}
               <strong>Pick Gremlins</strong> if you need a built-in threshold flag today, or want
               mutations limited to the exact lines a PR changed, and the module is small.
             </li>
@@ -416,20 +419,22 @@ export default function ComparisonPage() {
           <ul>
             <li>
               <strong>Git diff</strong> (Gremlins <code>--diff</code>,
-              go-mutants <code>--changed</code>): compare
+              go-mutants <code>--changed</code>, Gooze <code>--diff</code> from the next release): compare
               against a base branch or commit and mutate only the changed lines. Needs git history
               and the right base ref, and the score describes the change, not the codebase.
             </li>
             <li>
-              <strong>Incremental execution</strong> (Gooze): hash every file and its test file,
+              <strong>Incremental execution</strong> (Gooze by default): hash every file and its test file,
               re-test only what changed since the stored reports, and reuse the rest. No git, base
               ref, or fetch depth needed, uncommitted edits count, and the score after a one-file
               change is still the score for the whole project.
             </li>
           </ul>
           <p>
-            The trade-off is granularity: Gooze re-tests a whole changed file, a diff mode only the
-            changed lines.
+            The trade-off is granularity: incremental execution re-tests a whole changed file, a
+            diff mode only the changed lines. Gooze combines them: a diff run reuses the cache for
+            unchanged files, and a later full run re-tests the files it tested only in part (see{" "}
+            <Link href="/docs/usage/diff-mode#cache">diff mode and the cache</Link>).
           </p>
           <p>
             A file is re-tested when it, its <code>_test.go</code>,

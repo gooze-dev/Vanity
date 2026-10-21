@@ -1,6 +1,7 @@
 import { docsMetadata } from "@/lib/docs-meta"
 import { Recording } from "@/components/recording"
 import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
+import Link from "next/link"
 import { CodeBlock } from "@/components/code-block"
 import {
   Table,
@@ -177,6 +178,16 @@ export default function ConfigPage() {
                 </TableRow>
                 <TableRow>
                   <TableCell>
+                    <code>GOOZE_RUN_DIFF</code>
+                  </TableCell>
+                  <TableCell>
+                    Git ref for <Link href="/docs/usage/diff-mode">diff mode</Link>: mutate only lines
+                    changed against it (default empty, off). Needs git on <code>PATH</code> and a git
+                    repository. Next Gooze release.
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
                     <code>GOOZE_LOG_FILENAME</code>
                   </TableCell>
                   <TableCell>Log file path</TableCell>
@@ -244,6 +255,7 @@ gooze run ./...`}
           </div>
         </div>
 
+        {/* TODO(version): run.diff arrives in the next gooze release. */}
         <div id="example">
           <h2>Complete gooze.yaml reference</h2>
           <p>
@@ -264,6 +276,7 @@ run:
   parallel: 1                 # concurrent mutation workers
   mutation_timeout: 120       # per-mutation timeout, in seconds
   coverage_profile: ''        # e.g. coverage.out to skip uncovered lines
+  diff: ''                    # git ref, e.g. origin/main: mutate only changed lines (needs git)
 
 log:
   filename: .gooze.log
