@@ -10,14 +10,6 @@ import { GoozeLogo } from "@/components/gooze-logo";
 import { LatestReleaseBadge } from "@/components/latest-release-badge";
 import { Github } from "lucide-react";
 import { CodeBlock } from "@/components/code-block";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { ClaudeCodeAnnouncement } from "@/components/agent-install";
 
 // Self-canonical for the homepage. The root layout no longer sets a default
@@ -25,31 +17,6 @@ import { ClaudeCodeAnnouncement } from "@/components/agent-install";
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
-
-// Core capabilities, surfaced as a table so answer engines can extract how
-// Gooze scales. Facts verified against the gooze CLI (v1.x).
-const capabilities = [
-  {
-    feature: "Incremental caching",
-    how: "Caches results in .gooze-reports/ and re-tests only files whose source, test, or mutators changed.",
-    benefit: "Repeat and CI runs stay fast — unchanged files are reused.",
-  },
-  {
-    feature: "Coverage-profile integration",
-    how: "Reads a go test -coverprofile file; mutations on uncovered lines are reported as not_covered without running.",
-    benefit: "Skips wasted work on code no test exercises.",
-  },
-  {
-    feature: "CI/CD sharding",
-    how: "gooze run -s INDEX/TOTAL splits a run across parallel jobs; gooze report merge recombines them.",
-    benefit: "Spread heavy mutation runs over many runners.",
-  },
-  {
-    feature: "OCI registry baselines",
-    how: "gooze report push / pull store the reports directory in any OCI registry (e.g. GHCR).",
-    benefit: "Share one baseline across CI jobs and teammates.",
-  },
-];
 
 // Q&As rendered visibly on the page AND emitted as FAQPage JSON-LD from the
 // same source, so the structured data always matches what people read. Wording
@@ -265,45 +232,6 @@ export default async function Home() {
               </div>
             </div>
 
-          </div>
-        </div>
-      </section>
-
-      {/* Core Capabilities */}
-      <section className="border-t py-24">
-        <div className="container mx-auto max-w-screen-xl px-4">
-          <div className="mx-auto max-w-4xl">
-            <h2 className="text-4xl font-bold tracking-tight text-center mb-6">
-              Core Capabilities
-            </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed text-center mb-10">
-              Gooze is engineered for real codebases and CI/CD, not just toy
-              examples.
-            </p>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Capability</TableHead>
-                  <TableHead>How Gooze handles it</TableHead>
-                  <TableHead>Benefit for teams</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {capabilities.map((c) => (
-                  <TableRow key={c.feature}>
-                    <TableCell className="font-medium whitespace-nowrap">
-                      {c.feature}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {c.how}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {c.benefit}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
           </div>
         </div>
       </section>
