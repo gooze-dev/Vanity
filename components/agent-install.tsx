@@ -20,13 +20,14 @@ function ClaudeCodeMark({ className }: { className?: string }) {
 
 // Launch-style pill above the hero logo announcing the Claude Code plugin. The
 // whole pill links to the Claude Code docs page, which has the install
-// commands; phones get a shorter label so it stays on one line.
+// commands; phones get a shorter label so it stays on one line. It glows
+// softly to draw the eye, and stays still for readers who reduce motion.
 export function ClaudeCodeAnnouncement({ className }: { className?: string }) {
   return (
     <Link
       href="/docs/claude-code"
       className={cn(
-        "group inline-flex max-w-full items-center gap-2 rounded-full border border-[#D97757]/40 bg-[#D97757]/10 py-1 pl-1.5 pr-3 text-sm text-foreground transition-colors hover:border-[#D97757]/70 hover:bg-[#D97757]/15",
+        "group inline-flex max-w-full animate-claude-glow motion-reduce:animate-none items-center gap-2 rounded-full border border-[#D97757]/40 bg-[#D97757]/10 py-1 pl-1.5 pr-3 text-sm text-foreground transition-colors hover:border-[#D97757]/70 hover:bg-[#D97757]/15",
         className,
       )}
     >
