@@ -28,20 +28,27 @@ export function DocsFaq({ faqs }: { faqs: Faq[] }) {
   return (
     <div id="faq">
       <h2>FAQ</h2>
-      <div data-slot="faq" className="divide-y rounded-lg border bg-muted/40">
-        {faqs.map((faq) => (
-          <details key={faq.q} id={`faq-${slugify(faq.q)}`} name="faq" className="group group/faq scroll-mt-20 px-5">
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 [&::-webkit-details-marker]:hidden">
-              <h3 className="m-0 flex-1 text-base font-medium leading-snug">{withCode(faq.q)}</h3>
-              <ChevronDown
-                aria-hidden
-                className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180"
-              />
-            </summary>
-            <p className="m-0 pb-4 leading-relaxed text-muted-foreground">{withCode(faq.a)}</p>
-          </details>
-        ))}
-      </div>
+      <FaqList faqs={faqs} />
+    </div>
+  )
+}
+
+// The card list itself, shared by docs pages and the landing page.
+export function FaqList({ faqs, className = "bg-muted/40" }: { faqs: Faq[]; className?: string }) {
+  return (
+    <div data-slot="faq" className={`divide-y rounded-lg border ${className}`}>
+      {faqs.map((faq) => (
+        <details key={faq.q} id={`faq-${slugify(faq.q)}`} name="faq" className="group group/faq scroll-mt-20 px-5">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 [&::-webkit-details-marker]:hidden">
+            <h3 className="m-0 flex-1 text-base font-medium leading-snug">{withCode(faq.q)}</h3>
+            <ChevronDown
+              aria-hidden
+              className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180"
+            />
+          </summary>
+          <p className="m-0 pb-4 leading-relaxed text-muted-foreground">{withCode(faq.a)}</p>
+        </details>
+      ))}
     </div>
   )
 }
