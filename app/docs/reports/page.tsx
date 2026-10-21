@@ -14,7 +14,7 @@ import {
 
 export const metadata = docsMetadata("/docs/reports")
 
-// Keys of the scope field of a report file (next release).
+// Keys of the scope field of a report file.
 const scopeKeys = [
   { key: "base", from: "--diff", meaning: "The merge base commit the changed lines were taken against." },
   { key: "lines", from: "--diff", meaning: "The tested line ranges, as start and end lines (inclusive)." },
