@@ -107,6 +107,7 @@ const urls = [...index.matchAll(/\]\((https:\/\/gooze\.dev\/docs[^)]*)\)/g)].map
 const parts = [
   "# Gooze documentation (full text)",
   `> Every page of ${SITE_URL}/docs in reading order. Index with key facts: ${SITE_URL}/llms.txt`,
+  `Logo: ${SITE_URL}/icon.svg (SVG). PNG on white, 180x180: ${SITE_URL}/apple-icon.png`,
 ]
 
 for (const url of urls) {

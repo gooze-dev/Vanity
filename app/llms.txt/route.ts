@@ -53,6 +53,8 @@ export async function GET() {
 
 Full text of every page in one file: ${SITE_URL}/llms-full.txt
 
+Logo: ${SITE_URL}/icon.svg (SVG, the G of the Gooze wordmark in green #7DBC23 and teal #4CB8B8, transparent background). PNG on white, 180x180: ${SITE_URL}/apple-icon.png. Favicon: ${SITE_URL}/favicon.ico
+
 ${facts}
 ${sections}
 `;
