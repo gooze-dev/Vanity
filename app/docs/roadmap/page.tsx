@@ -14,11 +14,6 @@ const limitations = [
     workaround: { text: "the built-in operators", href: "/docs/mutations" },
   },
   {
-    id: "mutator-selection",
-    title: "Off-by-default mutagens",
-    detail: "The `branch`, `statement` and `loop` mutagens exist but can't be turned on yet; `--mutagens` picks only among the six default ones. Turning them on is planned.",
-  },
-  {
     id: "build-tags",
     title: "Build tags",
     detail: "Passing `-tags` through to `go test` is planned, so files behind build constraints get mutated too.",
@@ -101,26 +96,28 @@ const themes: Theme[] = [
         title: "Mutagen selection",
         detail: (
           <>
-            Run only some of the six default mutagens with <code>--mutagens</code> or{" "}
-            <code>run.mutagens</code>.
+            Run only some mutagens, or add the ones that are off by default, with{" "}
+            <code>--mutagens</code> or <code>run.mutagens</code>.
           </>
         ),
         shipped: true,
         href: "/docs/usage/single-function#mutagens",
       },
       {
-        title: "Off-by-default mutagens",
+        id: "mutator-selection",
+        title: "Opt-in mutagens",
         detail: (
           <>
-            Turning on the three mutagens that exist but are off by default.{" "}
-            <code>branch</code> forces a condition true
-            or false, inverts it, removes an <code>if</code> block (such as{" "}
-            <code>{"if err != nil { return err }"}</code>) and removes switch cases;{" "}
-            <code>statement</code> deletes assignments, calls, <code>defer</code>,{" "}
-            <code>go</code> and channel sends; <code>loop</code> changes loop bounds and removes
-            loop bodies, <code>break</code> and <code>continue</code>.
+            <code>branch</code>, <code>statement</code> and <code>loop</code> run when named in{" "}
+            <code>--mutagens</code>. <code>branch</code> inverts and forces conditions and
+            removes <code>if</code> blocks (such as <code>{"if err != nil { return err }"}</code>)
+            and switch cases; <code>statement</code> deletes assignments, calls,{" "}
+            <code>defer</code>, <code>go</code> and channel sends; <code>loop</code> changes loop
+            bounds and removes loop bodies, <code>break</code> and <code>continue</code>.
           </>
         ),
+        shipped: true,
+        href: "/docs/mutations#opt-in",
       },
       {
         title: "Config path",
@@ -243,8 +240,8 @@ const themes: Theme[] = [
         title: "Default operators",
         detail: (
           <>
-            Comparison, arithmetic, logical, negation, numeric constant and nil check mutations,
-            in the six default mutagens.
+            Comparison, arithmetic, logical, negation, numeric constant, nil check, bitwise,
+            increment and compound assignment mutations, in the nine default mutagens.
           </>
         ),
         shipped: true,

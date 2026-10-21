@@ -2,6 +2,7 @@ import { docsMetadata } from "@/lib/docs-meta"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
+import { Recording } from "@/components/recording"
 import { withCode } from "@/components/docs-faq"
 import { Button } from "@/components/ui/button"
 import {
@@ -69,10 +70,53 @@ const mutationTypes = [
 + ok := flag`,
     survives: "no test checks the negation or sign here.",
   },
+  {
+    name: "bitwise",
+    ops: "`&` `|` `^` `&^` `<<` `>>`",
+    desc: "Swaps a binary bitwise operator. Finds masks, flags and shifts whose exact bits no test checks.",
+    rule: "`&` ↔ `|`, `^` → `&`, `&^` → `&`, `<<` ↔ `>>`; one mutant per operator. A type constraint such as `int | string` is never mutated.",
+    example: `- mode := perm & 0o755
++ mode := perm | 0o755`,
+    survives: "no test checks which bits this expression keeps or sets.",
+  },
+  {
+    name: "increment",
+    ops: "`++` `--`",
+    desc: "Turns an increment into a decrement and back. Catches counters and indexes whose direction is never asserted.",
+    rule: "`x++` ↔ `x--`, except in a `for` loop's post statement, where `i--` would only loop until the test times out",
+    example: `- retries++
++ retries--`,
+    survives: "no test checks the value this statement counts.",
+  },
+  {
+    name: "assignment",
+    ops: "`+=` `-=` `*=` `/=` `%=` `&=` `|=` `^=` `&^=` `<<=` `>>=`",
+    desc: "Changes a compound assignment. Shows totals and accumulators whose result no test pins down.",
+    rule: "the operator is swapped (`+=` ↔ `-=`, `*=` ↔ `/=`, `%=` → `*=`, `&=` ↔ `|=`, `^=` → `&=`, `&^=` → `&=`, `<<=` ↔ `>>=`) and `x op= y` becomes `x = y`. With a string literal on the right, only `x = y`. A `for` loop's post statement is left alone.",
+    example: `- total += price
++ total -= price`,
+    survives: "no test checks the accumulated value, or it only ever starts from zero.",
+  },
 ]
 
-// Every mutator, default status, and transformation — a compact matrix engines
-// can extract. The six defaults are detailed as cards below.
+// The mutagens that run only when selected, with what each one does.
+const optInTypes = [
+  {
+    name: "branch",
+    does: "Inverts an `if` condition and forces it `true` and `false`; removes an `if` block (such as `if err != nil { return err }`) and an `else` block; empties each `switch` case. A `for` condition is inverted and forced `false`, never `true`.",
+  },
+  {
+    name: "statement",
+    does: "Deletes an assignment, a call, a `defer`, a `go` statement or a channel send. A declaration with `:=` is kept, since its uses would not compile without it.",
+  },
+  {
+    name: "loop",
+    does: "Changes a loop boundary (`<` ↔ `<=`, `>` ↔ `>=`), empties a loop body, removes `break` and `continue`, and replaces a recursive call with `0`. A body is emptied only when a post statement or a `range` still ends the loop, `break` is removed only from a loop with a condition or a `range`, and a recursive call is replaced only in a function that returns one number.",
+  },
+]
+
+// Every mutator, default status, and transformation, a compact matrix engines
+// can extract. The nine defaults are detailed as cards below.
 const referenceRows = [
   { name: "arithmetic", ops: "`+` `-` `*` `/` `%`", rule: "each becomes every other arithmetic operator", def: "Default" },
   { name: "comparison", ops: "`<` `>` `<=` `>=` `==` `!=`", rule: "each becomes every other comparison operator", def: "Default" },
@@ -80,9 +124,12 @@ const referenceRows = [
   { name: "boolean", ops: "`true` `false`", rule: "`true` ↔ `false`", def: "Default" },
   { name: "numbers", ops: "int & float literals", rule: "literal → `0` and `1`", def: "Default" },
   { name: "unary", ops: "`-` `+` `!` `^`", rule: "`-x` ↔ `+x`; operator removed", def: "Default" },
-  { name: "branch", ops: "`if` / `switch` conditions", rule: "condition → `true` / `false`", def: "Off by default" },
-  { name: "statement", ops: "statements", rule: "delete a statement", def: "Off by default" },
-  { name: "loop", ops: "`for` / `range`", rule: "loop boundaries and body removal", def: "Off by default" },
+  { name: "bitwise", ops: "`&` `|` `^` `&^` `<<` `>>`", rule: "`&` ↔ `|`, `^` `&^` → `&`, `<<` ↔ `>>`", def: "Default" },
+  { name: "increment", ops: "`++` `--`", rule: "`x++` ↔ `x--`", def: "Default" },
+  { name: "assignment", ops: "`+=` `-=` `&=` …", rule: "operator swapped; `x op= y` → `x = y`", def: "Default" },
+  { name: "branch", ops: "`if` / `for` / `switch`", rule: "condition inverted or forced; block removed", def: "When selected" },
+  { name: "statement", ops: "statements", rule: "delete a statement", def: "When selected" },
+  { name: "loop", ops: "`for` / `range`", rule: "boundaries, body, `break` / `continue`", def: "When selected" },
 ]
 
 export const metadata = docsMetadata("/docs/mutations")
@@ -103,7 +150,7 @@ export default function MutationsPage() {
         <div id="types">
           <h2>Mutation types</h2>
           <p>
-            These six types run by default. Each one makes a single, mechanical change to
+            Nine types run by default, and three more run when you select them. Each one makes a single, mechanical change to
             one spot in your code, then your tests run against it. If the tests still pass,
             the mutation <strong>survived</strong>, which shows a gap in your tests. Each example below is
             shown as a diff: the <code>-</code> line is
@@ -153,18 +200,50 @@ export default function MutationsPage() {
             ))}
           </div>
 
-          <p>
-            The engine also contains <code>branch</code>{" "}
-            (replace a condition with <code>true</code>/<code>false</code>),{" "}
-            <code>statement</code> (delete a statement), and{" "}
-            <code>loop</code> (loop boundaries and body
-            removal) mutators; these are not part of the default set.
-          </p>
+          <div id="example">
+            <h3>Example: bits, counters and totals</h3>
+            <p>
+              A small package that clears permission bits and adds up file sizes gets a
+              mutant from each of <code>bitwise</code>, <code>increment</code> and{" "}
+              <code>assignment</code>, plus two from <code>numbers</code>:
+            </p>
+            <Recording name="perm-source" title="Recorded perm.go" />
+            <p>Its tests check the mask and the total, but never the count:</p>
+            <Recording name="perm-run" title="Recorded gooze run on perm" />
+            <Recording name="perm-view" title="Recorded gooze report view on perm" />
+          </div>
+
+          <div id="opt-in">
+            <h3>Mutagens you select</h3>
+            <p>
+              <code>branch</code>, <code>statement</code> and <code>loop</code> make larger
+              changes: they remove blocks and statements instead of swapping one operator.
+              Many of those changes don&apos;t compile in Go (a variable left unused, a function
+              left without a <code>return</code>), and those mutants count as{" "}
+              <code>error</code>, outside the score. Some make code wait forever, such as a
+              deleted <code>defer mu.Unlock()</code>, and those count as <code>timeout</code>. So
+              they run only when you name them:
+            </p>
+            <CodeBlock lang="bash" code="gooze run --mutagens branch,statement,loop ./..." />
+            <Recording name="calc-opt-in-mutagens" title="Recorded gooze run --mutagens branch,statement,loop on calc" />
+            <p>
+              Like any <Link href="/docs/usage/single-function#mutagens"><code>--mutagens</code></Link>{" "}
+              run, its reports go to <code>run/</code>, and <code>gooze report merge</code> folds
+              them into the main reports. What each one changes:
+            </p>
+            <ul>
+              {optInTypes.map((t) => (
+                <li key={t.name} id={t.name}>
+                  <code>{t.name}</code>: {withCode(t.does)}
+                </li>
+              ))}
+            </ul>
+          </div>
 
           <p>
-            To run only some of the six types, pass{" "}
-            <Link href="/docs/usage/single-function#mutagens"><code>--mutagens</code></Link>,
-            for example <code>gooze run --mutagens comparison ./...</code>.
+            To run only some types, or to add the ones you select, pass{" "}
+            <Link href="/docs/usage/single-function#mutagens"><code>--mutagens</code></Link>{" "}
+            with every type to run, for example <code>gooze run --mutagens comparison ./...</code>.
           </p>
 
           <p>

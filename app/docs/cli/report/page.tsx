@@ -73,7 +73,7 @@ export default function CliReportPage() {
           </ul>
           <CodeBlock lang="bash" code="gooze report view ./internal/domain/..." />
           <p>
-            If no report matches, <code>view</code> exits <code>1</code> with{" "}
+            If no report matches, <code>view</code> exits <code>6</code> with{" "}
             <code>no reports in .gooze-reports match ./internal/domain/...</code>. If the reports
             directory does not exist, it names the directory and suggests running{" "}
             <code>gooze run</code> first or passing <code>-o</code>.

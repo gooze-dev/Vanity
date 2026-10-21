@@ -41,7 +41,7 @@ const faqs = [
   },
   {
     q: "Which names does `--mutagens` accept?",
-    a: "The six mutagens Gooze runs: `arithmetic`, `boolean`, `numbers`, `comparison`, `logical` and `unary`, in any case. Separate them with commas or repeat the flag. Any other name exits with code `1`.",
+    a: "Every mutagen Gooze has, in any case: the nine that run by default (`arithmetic`, `boolean`, `numbers`, `comparison`, `logical`, `unary`, `bitwise`, `increment`, `assignment`) and the three that run only when named (`branch`, `statement`, `loop`). Separate them with commas or repeat the flag. Any other name exits with code `2`.",
   },
   {
     q: "Can I combine `--run` with `--shard`?",
@@ -242,7 +242,7 @@ export default function SingleFunctionPage() {
               <code>--mutagens</code> and <code>--diff</code>.
             </li>
           </ul>
-          <p>A pattern that doesn&apos;t compile exits with code <code>1</code>:</p>
+          <p>A pattern that doesn&apos;t compile exits with code <code>2</code>:</p>
           <Recording name="run-invalid-pattern" title="Recorded gooze run --run with an invalid pattern" />
           <p>
             <code>--run</code> with <code>--shard</code> is rejected: a run of a few functions
@@ -255,10 +255,13 @@ export default function SingleFunctionPage() {
           <h2>Only some mutagens (--mutagens)</h2>
           <p>
             <code>--mutagens</code> generates only the{" "}
-            <Link href="/docs/mutations">mutagens</Link> you list. The names are the six Gooze
-            runs (<code>arithmetic</code>, <code>boolean</code>, <code>numbers</code>,{" "}
-            <code>comparison</code>, <code>logical</code>, <code>unary</code>), in any case,
-            comma-separated or with the flag repeated. Only the arithmetic and numbers mutants of{" "}
+            <Link href="/docs/mutations">mutagens</Link> you list. The names are the nine that
+            run by default (<code>arithmetic</code>, <code>boolean</code>, <code>numbers</code>,{" "}
+            <code>comparison</code>, <code>logical</code>, <code>unary</code>,{" "}
+            <code>bitwise</code>, <code>increment</code>, <code>assignment</code>) and the three
+            that run only when you name them (<code>branch</code>, <code>statement</code>,{" "}
+            <code>loop</code>, see <Link href="/docs/mutations#opt-in">Mutagens you select</Link>),
+            in any case, comma-separated or with the flag repeated. Only the arithmetic and numbers mutants of{" "}
             <code>calc</code>, all of them in <code>Percent</code>:
           </p>
           <CodeBlock lang="bash" code="gooze run --estimate --mutagens arithmetic,numbers ./..." />
@@ -267,12 +270,12 @@ export default function SingleFunctionPage() {
             Nothing changed since the full run, so the 10 mutations are cached. Combine it with{" "}
             <code>--run</code> to narrow both ways, for example{" "}
             <code>--run &apos;^InRange$&apos; --mutagens comparison</code>. An unknown name exits
-            with code <code>1</code> and lists the valid ones:
+            with code <code>2</code> and lists the valid ones:
           </p>
           <Recording name="run-unknown-mutagen" title="Recorded gooze run --mutagens with an unknown name" />
           <p>
             Unlike <code>--run</code>, <code>--mutagens</code> also has a config key,{" "}
-            <code>run.mutagens</code> (a list, empty by default, which means all six), and the
+            <code>run.mutagens</code> (a list, empty by default, which means the nine defaults), and the
             environment variable <code>GOOZE_RUN_MUTAGENS</code>. A value there narrows every
             run, so every run writes to <code>run/</code> and none updates the main reports.
             Prefer the flag for one-off runs.

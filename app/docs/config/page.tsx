@@ -192,7 +192,8 @@ export default function ConfigPage() {
                   </TableCell>
                   <TableCell>
                     Mutagens to run, comma-separated, for example <code>comparison,boolean</code>{" "}
-                    (default empty, all six). A value makes every run a{" "}
+                    (default empty, the nine defaults; <code>branch</code>, <code>statement</code> and{" "}
+                    <code>loop</code> run only when listed). A value makes every run a{" "}
                     <Link href="/docs/usage/single-function#run-dir">narrowed run</Link> that writes to{" "}
                     <code>run/</code>.
                   </TableCell>
@@ -298,7 +299,7 @@ run:
   mutation_timeout: 120       # per-mutation timeout, in seconds
   coverage_profile: ''        # e.g. coverage.out to skip uncovered lines
   diff: ''                    # git ref, e.g. origin/main: mutate only changed lines (needs git)
-  mutagens: []                # e.g. [comparison, boolean]; empty runs all six
+  mutagens: []                # e.g. [comparison, boolean]; empty runs the nine defaults
 
 threshold:                    # minimum scores in percent; 0 is off; below one, exit code 3
   total: 0                    # the score of all mutations
