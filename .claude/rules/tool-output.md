@@ -53,22 +53,19 @@ Each sample is one `rec NAME "COMMAND"` line, which runs
 
 ## Show it on the page
 
-- **Tutorial steps** (the Quick start): show each step's output with `TerminalCast`
-  (`components/terminal-cast.tsx`) playing its recording, under the command's `CodeBlock`.
-  The player sizes itself to the recorded lines.
-- **Static output** (`CodeBlock lang="text"`, everywhere else): copy the text from
-  `node scripts/cast-text.mjs` (or `asciinema cat` in a terminal). You may strip
-  ANSI color codes and trailing spaces, and show a contiguous excerpt (for example the last
-  lines) with `...` on its own line where lines were left out. Never change a character inside a
-  line. Use the non-TTY form of a command (plain output, as in CI) when that's what the reader
-  will see.
-- **Interactive output** (the TUI, progress bars, anything that changes over time): embed the
-  `.cast` with `TerminalCast`, which wraps
-  [asciinema-player](https://docs.asciinema.org/manual/player/). Don't use GIFs or
-  screenshots of terminals. Set `poster` so the page shows a meaningful frame before playback,
-  and keep `idleTimeLimit` short.
-- Next to an important player, also show the key lines as static text, so they stay searchable
-  and readable without JavaScript.
+- Every tool output on a page is `<Recording name="…" title="…" />`
+  (`components/recording.tsx`). It reads `public/casts/<name>.cast` at build time, plays it
+  with asciinema-player (sized to the output), and puts the recorded text in the HTML for search
+  engines, find-in-page and readers without JavaScript. Never paste output into a `CodeBlock`.
+- Record one cast per sample. If a page shows only part of an output (the score line, the last
+  lines of a report), record exactly that command (`| tail -n 1`, `| tail -n 4`) instead of
+  cutting text.
+- Full-screen TUI recordings use `<Recording … tui />` and are recorded with `tui` lines in the
+  script (`scripts/record-tui.py` plays the terminal and presses the keys).
+- The landing page keeps its own styled terminal (no player there). Its text comes from
+  `recordingText(name)`, never typed.
+- Recordings keep a clear gap from the text and code blocks around them (`TerminalCast` has
+  `my-6`); don't remove it or squeeze a recording against a code block.
 - Real output keeps characters the writing rules ban in prose (goozels prints `—`).
 
 ## Keep it current

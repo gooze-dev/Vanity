@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { Recording } from "@/components/recording"
 
 import { docsMetadata } from "@/lib/docs-meta"
 import { CodeBlock } from "@/components/code-block"
@@ -122,26 +123,17 @@ go install gooze.dev/pkg/goozels/cmd/goozels@latest`}
             With goozels installed, a hook adds the edited file&apos;s results to
             Claude&apos;s context, without blocking the edit. After the first run of the{" "}
             <Link href="/docs/quick-start" className={LINK}><code>calc</code></Link> package,
-            an edit of <code>calc.go</code> or <code>calc_test.go</code> gives Claude the{" "}
-            <code>goozels check</code> output under a one-line header:
+            an edit of <code>calc.go</code> runs the hook below. Claude reads its{" "}
+            <code>additionalContext</code>: the <code>goozels check</code> output under a one-line
+            header, and a hint about mutants that can&apos;t change behavior:
           </p>
-          <CodeBlock
-            lang="text"
-            code={`gooze results from the last run:
-calc.go:1:1: warning: gooze: score 84.62% — 11 killed, 2 survived
-calc.go:10:2: warning: gooze: surviving comparison mutant — tests still pass with \`if n < lo {\` → \`if n <= lo {\`
-calc.go:13:2: warning: gooze: surviving comparison mutant — tests still pass with \`if n > hi {\` → \`if n >= hi {\`
-gooze: a mutant that cannot change behavior (an equivalent mutant) can be skipped with //gooze:ignore <mutagen> on its line`}
-          />
+          <Recording name="calc-hook-claude" title="Recorded output of the goozels Claude Code hook after an edit of calc.go" />
           <p>
             Both survivors point at the bound checks: no test calls <code>InRange</code> with{" "}
             <code>n</code> equal to <code>lo</code> or <code>hi</code>. Once Claude adds those
             two boundary tests and reruns gooze, the score line reads:
           </p>
-          <CodeBlock
-            lang="text"
-            code="Mutation score: 100.00% (13 killed, 0 survived; 0 cached, 13 tested)"
-          />
+          <Recording name="calc-fixed-run" title="Recorded last line of gooze run after adding the boundary tests" />
           <p>
             When the file changed since gooze last ran, the results say so and give the
             rerun command instead of pointing at lines that moved. Later edits of the

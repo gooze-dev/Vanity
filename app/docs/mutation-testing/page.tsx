@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { Recording } from "@/components/recording"
 import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 
 import { docsMetadata } from "@/lib/docs-meta"
@@ -104,13 +105,7 @@ export default function MutationTestingPage() {
             <code>n</code> equal to <code>lo</code>, so they still pass and the mutant survives.
             The same happens on the upper bound:
           </p>
-          <CodeBlock
-            lang="text"
-            code={`calc.go:10: survived (comparison): if n < lo { -> if n <= lo {
-calc.go:13: survived (comparison): if n > hi { -> if n >= hi {
-
-Mutation score: 84.62% (11 killed, 2 survived)`}
-          />
+          <Recording name="calc-survivors" title="Recorded last lines of gooze report view after the first run" />
           <p>The fix is two test cases exactly on the bounds:</p>
           <CodeBlock
             lang="go"
@@ -118,7 +113,7 @@ Mutation score: 84.62% (11 killed, 2 survived)`}
 		{10, 0, 10, true}, // upper bound is inside`}
           />
           <p>Now both mutants make a test fail, and the score reaches 100%:</p>
-          <CodeBlock lang="text" code="Mutation score: 100.00% (13 killed, 0 survived)" />
+          <Recording name="calc-fixed-score" title="Recorded score line of gooze report view after the fix" />
         </div>
       </div>
 

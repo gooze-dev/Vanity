@@ -1,4 +1,5 @@
 import { docsMetadata } from "@/lib/docs-meta"
+import { Recording } from "@/components/recording"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
@@ -194,12 +195,12 @@ export default function CliRunPage() {
             It ends with the mutation score of every result in scope, cached and tested, with a
             breakdown. The first run of the <code>calc</code> example tests all 13 mutations:
           </p>
-          <CodeBlock lang="text" code="Mutation score: 84.62% (11 killed, 2 survived; 0 cached, 13 tested)" />
+          <Recording name="calc-first-run" title="Recorded last line of the first gooze run on calc" />
           <p>
             Run it again without changes (here after the boundary tests were added) and every
             result comes from the cache:
           </p>
-          <CodeBlock lang="text" code="Mutation score: 100.00% (13 killed, 0 survived; 13 cached, 0 tested)" />
+          <Recording name="calc-cached-run" title="Recorded last line of a gooze run with nothing changed" />
           <p className="text-sm text-muted-foreground">
             With <code>--no-cache</code> it scores only what it tested; a sharded run scores its
             shard (<code>gooze report merge</code> gives the full score).
@@ -219,28 +220,12 @@ export default function CliRunPage() {
             In a TTY you get an interactive, filterable list; in CI you get a table with
             per-file mutation counts:
           </p>
-          <CodeBlock
-            lang="text"
-            code={` PATH          │ MUTATIONS
-───────────────┼───────────
- calc.go       │    13
-───────────────┼───────────
- TOTAL FILES 1 │    13`}
-          />
+          <Recording name="calc-estimate" title="Recorded gooze run --estimate before the first run" />
           <p className="text-sm text-muted-foreground">
             Files whose stored reports are still valid are marked in a <code>CACHE</code> column;
             they will not be re-tested:
           </p>
-          <CodeBlock
-            lang="text"
-            code={` PATH          │ MUTATIONS │   CACHE
-───────────────┼───────────┼───────────
- calc.go       │    13     │ cached
-───────────────┼───────────┼───────────
- TOTAL FILES 1 │    13     │ 13 CACHED
-
-13 of 13 mutations are in cached files and will not be re-tested; use --no-cache to re-test everything.`}
-          />
+          <Recording name="calc-cached-estimate" title="Recorded gooze run --estimate with everything cached" />
         </div>
 
         <div id="parallel">

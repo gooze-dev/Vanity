@@ -1,4 +1,5 @@
 import { docsMetadata } from "@/lib/docs-meta"
+import { Recording } from "@/components/recording"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
@@ -19,9 +20,15 @@ export default function UIModesPage() {
         <div>
           <h2>TTY (interactive)</h2>
           <p>
-            When running in a terminal, Gooze uses an interactive TUI. After a run, open every
-            mutation with its diff to see exactly what a survivor changed.
+            When running in a terminal, Gooze uses an interactive TUI. This is the first run of the{" "}
+            <code>calc</code> package from the Quick start:
           </p>
+          <Recording name="calc-first-run-tui" title="Recorded gooze run TUI on the calc package" tui />
+          <p>
+            After a run, open every mutation with its diff to see exactly what a survivor changed.
+            Here <code>gooze report view --all</code> moves to the first survivor and opens its diff:
+          </p>
+          <Recording name="calc-report-view-all-tui" title="Recorded gooze report view --all session opening a survivor's diff" tui />
 
           <div className="mt-4">
             <p className="text-muted-foreground mb-2">

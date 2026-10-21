@@ -1,4 +1,5 @@
 import { docsMetadata } from "@/lib/docs-meta"
+import { Recording } from "@/components/recording"
 import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 import Link from "next/link"
 
@@ -132,10 +133,7 @@ export default function GitlabPage() {
             change the exit code:
           </p>
           <CodeBlock lang="yaml" code={simple} />
-          <CodeBlock
-            lang="text"
-            code="Mutation score: 84.62% (11 killed, 2 survived; 0 cached, 13 tested)"
-          />
+          <Recording name="calc-first-run" title="Recorded last line of the first gooze run on calc" />
         </div>
 
         <div id="sharded">

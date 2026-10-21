@@ -1,0 +1,2 @@
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792568470, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "config-init-file (gooze v1.2.0, goozels v0.2.0, go1.27.3)"}
+[0.004505, "o", "log:\r\n    compress: true\r\n    filename: .gooze.log\r\n    level: info\r\n    max_age: 28\r\n    max_backups: 3\r\n    max_size: 10\r\n    verbose: false\r\nno-cache: false\r\noutput: .gooze-reports\r\npaths:\r\n    exclude: []\r\nrun:\r\n    coverage_profile: \"\"\r\n    mutation_timeout: 120\r\n    parallel: 1\r\nversion: 1\r\n"]

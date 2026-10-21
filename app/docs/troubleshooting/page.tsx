@@ -1,4 +1,5 @@
 import { docsMetadata } from "@/lib/docs-meta"
+import { Recording } from "@/components/recording"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
@@ -79,10 +80,7 @@ export default function TroubleshootingPage() {
             (default <code>.gooze-reports</code>). If it does not exist, run{" "}
             <code>gooze run</code> first or pass <code>-o</code> with the right directory:
           </p>
-          <CodeBlock
-            lang="text"
-            code="Error: no reports directory at .gooze-reports; run `gooze run` first, or pass -o with the reports directory"
-          />
+          <Recording name="report-view-no-reports" title="Recorded gooze report view with no reports directory" />
           <p>
             Path arguments are module-relative, like <code>gooze run</code>&apos;s (
             <code>./...</code>, <code>./pkg/...</code>, <code>./pkg</code>,{" "}

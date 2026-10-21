@@ -1,4 +1,5 @@
 import { docsMetadata } from "@/lib/docs-meta"
+import { Recording } from "@/components/recording"
 import { CodeBlock } from "@/components/code-block"
 
 export const metadata = docsMetadata("/docs/cli/version")
@@ -24,10 +25,7 @@ export default function CliVersionPage() {
 
         <div id="output">
           <h2>Example output</h2>
-          <CodeBlock
-            lang="text"
-            code="gooze v1.2.0 (go1.27.3)"
-          />
+          <Recording name="calc-version" title="Recorded gooze version" />
           <p>
             The version comes from the Go build info, so a binary built from a
             local checkout instead of <code>go install ...@vX.Y.Z</code> shows{" "}

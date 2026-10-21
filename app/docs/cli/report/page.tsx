@@ -1,4 +1,5 @@
 import { docsMetadata } from "@/lib/docs-meta"
+import { Recording } from "@/components/recording"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
@@ -52,20 +53,7 @@ export default function CliReportPage() {
             After the first run of the <code>calc</code> example, both bound checks in{" "}
             <code>calc.go</code> survive:
           </p>
-          <CodeBlock
-            lang="text"
-            code={` PATH          │ MUTATIONS │ KILLED │ SURVIVED │ NOT COVERED │  SCORE
-───────────────┼───────────┼────────┼──────────┼─────────────┼────────
- calc.go       │        13 │     11 │        2 │           0 │ 84.62%
-───────────────┼───────────┼────────┼──────────┼─────────────┼────────
- TOTAL FILES 1 │        13 │     11 │        2 │           0 │ 84.62%
-
-Survivors (2):
-calc.go:10: survived (comparison): if n < lo { -> if n <= lo {
-calc.go:13: survived (comparison): if n > hi { -> if n >= hi {
-
-Mutation score: 84.62% (11 killed, 2 survived)`}
-          />
+          <Recording name="calc-report-view" title="Recorded gooze report view after the first run" />
           <p>
             Each survivor line reads <code>path:line: status (mutagen): original -&gt; mutated</code>.
             Survived, not covered, timed out and skipped mutations are listed; with none, <code>view</code>

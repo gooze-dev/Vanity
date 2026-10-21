@@ -1,4 +1,5 @@
 import { docsMetadata } from "@/lib/docs-meta"
+import { Recording } from "@/components/recording"
 import { DocsFaq, faqPageJsonLd, withCode } from "@/components/docs-faq"
 import Link from "next/link"
 
@@ -142,21 +143,12 @@ export default function IncrementalRunsPage() {
             the boundary tests were added tested all 13 mutations, because the test file changed.
             Running again without changes tests nothing and still reports the full score:
           </p>
-          <CodeBlock lang="text" code="Mutation score: 100.00% (13 killed, 0 survived; 13 cached, 0 tested)" />
+          <Recording name="calc-cached-run" title="Recorded last line of a gooze run with nothing changed" />
           <p>
             To check before a run, <code>gooze run --estimate</code> marks the files that will be
             served from the cache in a <code>CACHE</code> column, with an <code>N CACHED</code> total:
           </p>
-          <CodeBlock
-            lang="text"
-            code={` PATH          │ MUTATIONS │   CACHE   
-───────────────┼───────────┼───────────
- calc.go       │    13     │ cached    
-───────────────┼───────────┼───────────
- TOTAL FILES 1 │    13     │ 13 CACHED 
-
-13 of 13 mutations are in cached files and will not be re-tested; use --no-cache to re-test everything.`}
-          />
+          <Recording name="calc-cached-estimate" title="Recorded gooze run --estimate with everything cached" />
           <p>
             Changes are detected from file contents, not from git: no base branch, commit, or
             history is needed, and uncommitted edits are picked up. See{" "}
