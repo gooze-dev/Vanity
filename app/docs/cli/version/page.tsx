@@ -37,7 +37,7 @@ export default function CliVersionPage() {
         <div id="why">
           <h2>Why this matters</h2>
           <p>
-            Include this output in every bug report — it lets the team reproduce
+            Include this output in every bug report: it lets the team reproduce
             your issue against the exact build you ran. It is also the quickest
             way to confirm an upgrade landed after{" "}
             <code>go install</code> or a binary swap.

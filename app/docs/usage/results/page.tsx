@@ -12,7 +12,7 @@ const faqs = [
   },
   {
     q: "What does a 'survived' mutation mean in Gooze?",
-    a: "A survived mutation means Gooze injected a bug but the package's tests still passed — usually a weak or missing assertion. Add a test that would fail on that behavior change.",
+    a: "A survived mutation means Gooze injected a bug but the package's tests still passed, usually because of a weak or missing assertion. Add a test that would fail on that behavior change.",
   },
   {
     q: "What does a 'killed' mutation mean?",
@@ -20,7 +20,7 @@ const faqs = [
   },
   {
     q: "What does a 'timeout' status mean in Gooze?",
-    a: "The mutant's tests exceeded --mutation-timeout (default 120 seconds). A timeout is not a kill — it lowers the mutation score like a survivor.",
+    a: "The mutant's tests exceeded --mutation-timeout (default 120 seconds). A timeout is not a kill; it lowers the mutation score like a survivor.",
   },
   {
     q: "How is the Gooze mutation score calculated?",

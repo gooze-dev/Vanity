@@ -26,7 +26,7 @@ const faqs = [
   },
   {
     q: "What does it mean when a mutant survives?",
-    a: "A survived mutant means a bug was injected into your code but your tests still passed — a gap in your assertions or missing coverage for that logic.",
+    a: "A survived mutant means a bug was injected into your code but your tests still passed, which points to a gap in your assertions or missing coverage for that logic.",
   },
   {
     q: "What does it mean when a mutant is killed?",
@@ -82,7 +82,7 @@ export default function MutationTestingPage() {
               </TableCell>
               <TableCell>
                 Read as a filter (<code>--coverage-profile</code>) to skip
-                untested lines — not trusted as a quality signal.
+                untested lines, not trusted as a quality signal.
               </TableCell>
             </TableRow>
             <TableRow>

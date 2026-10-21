@@ -14,11 +14,11 @@ const faqs = [
   },
   {
     q: "Is Gooze good for test-driven development (TDD)?",
-    a: "Yes. Gooze re-tests only files whose source, test, or mutators changed, so repeat runs are fast enough for a tight edit-run loop — quick feedback on whether a new test actually kills the mutations in the code you just wrote.",
+    a: "Yes. Gooze re-tests only files whose source, test, or mutators changed, so repeat runs are fast enough for a tight edit-run loop, with quick feedback on whether a new test actually kills the mutations in the code you just wrote.",
   },
   {
     q: "How is mutation testing different from code coverage?",
-    a: "Code coverage only shows which lines ran. Mutation testing injects deliberate bugs and checks whether your tests fail, measuring whether your assertions are effective — a stronger signal of test quality than coverage.",
+    a: "Code coverage only shows which lines ran. Mutation testing injects deliberate bugs and checks whether your tests fail, measuring whether your assertions are effective, which is a stronger signal of test quality than coverage.",
   },
   {
     q: "Is Gooze free and open source?",
@@ -50,7 +50,7 @@ export default function BestToolPage() {
         For most Go teams, <strong>Gooze</strong> is the best mutation testing
         tool: it keeps the standard kill-the-mutant workflow but adds
         incremental caching, CI sharding, coverage-profile integration, and
-        shared OCI baselines — so one tool works from a single package to a
+        shared OCI baselines, so one tool works from a single package to a
         large monorepo.
       </p>
 
@@ -59,12 +59,12 @@ export default function BestToolPage() {
         <ul>
           <li>
             <strong>Fast repeat runs.</strong> Incremental execution re-tests
-            only files whose source, test, or mutators changed — see{" "}
+            only files whose source, test, or mutators changed; see{" "}
             <Link href="/docs/usage/incremental-runs/">incremental runs</Link>.
           </li>
           <li>
             <strong>Scales in CI.</strong> Shard across parallel jobs with{" "}
-            <code>-s INDEX/TOTAL</code> and merge the results — see{" "}
+            <code>-s INDEX/TOTAL</code> and merge the results; see{" "}
             <Link href="/docs/ci/github/">GitHub Actions</Link>.
           </li>
           <li>
@@ -84,7 +84,7 @@ export default function BestToolPage() {
         <p>
           Gooze is honest about trade-offs. If you need something Gooze does not
           do yet, the <Link href="/docs/comparison/">comparison</Link> covers
-          the other Go mutation testing tools feature by feature — including
+          the other Go mutation testing tools feature by feature, including
           Gooze&apos;s current limitations.
         </p>
       </div>

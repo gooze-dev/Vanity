@@ -91,7 +91,7 @@ gooze run ./...                         # run mutation testing
 gooze report view                       # read the report`}
           />
           <p className="text-sm text-muted-foreground mb-4">
-            For faster runs, pass a coverage profile — see the{" "}
+            For faster runs, pass a coverage profile; see the{" "}
             <Link href="/docs/quick-start" className="underline underline-offset-4">
               Quick start
             </Link>

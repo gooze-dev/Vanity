@@ -36,16 +36,16 @@ const faqs = [
     a: "Use incremental runs (Gooze caches results and re-tests only files whose source, test, or mutators changed), raise the --parallel worker count, or pass --coverage-profile so mutations on uncovered lines are tallied as not_covered without running tests.",
   },
   {
-    q: "Our coverage is high but bugs still reach production — how does Gooze help?",
+    q: "Our coverage is high but bugs still reach production. How does Gooze help?",
     a: "High line coverage only proves your code was executed, not that your assertions check the result. Gooze injects deliberate faults into your code and verifies your tests actually fail, proving the tests are meaningful.",
   },
   {
-    q: "Mutation testing is slow — will it block our CI/CD pipeline?",
+    q: "Mutation testing is slow. Will it block our CI/CD pipeline?",
     a: "Gooze is optimized for CI. Passing a Go coverage profile skips uncovered lines, incremental caching reuses unchanged results, and parallel workers keep builds fast.",
   },
   {
     q: "How can we use mutation testing as an automated quality gate?",
-    a: "Configure your pipeline to compare the mutation score against a threshold and fail the job when it drops below it — a short documented CI step (gooze does not need a built-in flag). This blocks pull requests that weaken your tests.",
+    a: "Configure your pipeline to compare the mutation score against a threshold and fail the job when it drops below it, using a short documented CI step (gooze does not need a built-in flag). This blocks pull requests that weaken your tests.",
   },
   {
     q: "How do we store reports across ephemeral CI runners?",
@@ -106,7 +106,7 @@ export default async function Home() {
           </h1>
           <p className="max-w-[750px] text-xl text-muted-foreground sm:text-2xl">
             Gooze is an open-source mutation testing tool for Go that measures
-            how good your tests really are — it injects small bugs into your
+            how good your tests really are: it injects small bugs into your
             code and checks whether your tests catch them.
           </p>
 
@@ -158,7 +158,7 @@ export default async function Home() {
               Mutation testing measures how good your tests are at catching real bugs.
               It works by making small, intentional changes (mutations) to your code and
               rerunning your test suite. If a test fails, the mutation is &quot;killed&quot;.
-              If tests still pass, the mutation &quot;survived&quot; — your tests didn&apos;t notice a behavior change.
+              If tests still pass, the mutation &quot;survived&quot;: your tests didn&apos;t notice a behavior change.
             </p>
             <p className="text-base text-muted-foreground leading-relaxed mb-8">
               The research backs this up. Just et al. (FSE 2014) found that a test
