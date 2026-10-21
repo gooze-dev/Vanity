@@ -323,7 +323,7 @@ export default function ComparisonPage() {
               code coverage alone is not strongly correlated with test-suite
               effectiveness
             </a>
-            &nbsp;— which is the gap every tool here targets.
+            , which is the gap every tool here targets.
           </p>
         </div>
 

@@ -84,7 +84,7 @@ jobs:
       - name: Run shard \${{ matrix.shard }}
         run: gooze run -s \${{ matrix.shard }}/3 ./...
 
-      # Hand reports to the merge job via an artifact — no registry push here.
+      # Hand reports to the merge job via an artifact; no registry push here.
       - name: Upload shard reports
         uses: actions/upload-artifact@v4
         with:
@@ -125,7 +125,7 @@ const gate = `      # Fail the job when the mutation score is below MIN_SCORE (p
 const faqs = [
   {
     q: "How do I run Gooze mutation tests in GitHub Actions?",
-    a: "In a golang:1.27 container, install the CLI with go install gooze.dev/pkg/gooze@latest and run gooze run ./... There is no dedicated action — the plain go install step is the supported approach.",
+    a: "In a golang:1.27 container, install the CLI with go install gooze.dev/pkg/gooze@latest and run gooze run ./... There is no dedicated action; the plain go install step is the supported approach.",
   },
   {
     q: "How do I shard Gooze across multiple GitHub Actions runners?",
@@ -175,7 +175,7 @@ export default function CiPage() {
         <div id="simple">
           <h2>1. Simplest: checkout and run</h2>
           <p>
-            Install Gooze and run the whole suite. No registry, no caching — a good
+            Install Gooze and run the whole suite. No registry, no caching. A good
             starting point.
           </p>
           <CodeBlock lang="yaml" code={simple} />
@@ -200,7 +200,7 @@ export default function CiPage() {
             Add an OCI baseline so each run only re-tests changed files
             (<Link href="/docs/usage/incremental-runs">incremental runs</Link>).
             Every shard pulls the <code>:main</code> baseline
-            for the cache, then hands its reports to the merge job as an artifact — shards never push
+            for the cache, then hands its reports to the merge job as an artifact; shards never push
             to the registry. The merge job combines them with{" "}
             <Link href="/docs/cli/report#merge">gooze report merge</Link>{" "}
             and, <strong>only on main</strong>, publishes the single merged baseline back to{" "}
@@ -231,7 +231,7 @@ export default function CiPage() {
           <ul>
             <li>
               <code>GOOZE_REGISTRY_USERNAME</code> /{" "}
-              <code>GOOZE_REGISTRY_PASSWORD</code> — the
+              <code>GOOZE_REGISTRY_PASSWORD</code>. The
               password may be a token/PAT (for GHCR use{" "}
               <code>GITHUB_TOKEN</code>).
             </li>

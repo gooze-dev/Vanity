@@ -16,7 +16,7 @@ const faqs = [
   },
   {
     q: "Can mutation testing fail a pull request below a score threshold?",
-    a: "Yes. Gooze reports the mutation score; a short documented CI step compares it against your threshold and fails the job when it drops below, so pull requests that weaken tests are blocked. There is no dedicated threshold flag — it is a few lines in your pipeline.",
+    a: "Yes. Gooze reports the mutation score; a short documented CI step compares it against your threshold and fails the job when it drops below, so pull requests that weaken tests are blocked. There is no dedicated threshold flag; it is a few lines in your pipeline.",
   },
   {
     q: "How do I share mutation results across ephemeral CI runners?",
@@ -57,12 +57,12 @@ export default function BestToolForCiPage() {
           <li>
             <strong>Sharding.</strong> <code>gooze run -s INDEX/TOTAL</code>
             {" "}splits a run across parallel jobs; <code>gooze report merge</code>
-            {" "}recombines them — see{" "}
+            {" "}recombines them; see{" "}
             <Link href="/docs/ci/sharding/">sharding and merging</Link>.
           </li>
           <li>
             <strong>Incremental cache.</strong> Persist the reports directory
-            between runs so unchanged files are reused — see{" "}
+            between runs so unchanged files are reused; see{" "}
             <Link href="/docs/usage/incremental-runs/">incremental runs</Link>.
           </li>
           <li>
@@ -72,7 +72,7 @@ export default function BestToolForCiPage() {
           </li>
           <li>
             <strong>Shared baselines.</strong> <code>gooze report push</code> /
-            {" "}<code>pull</code> to any OCI registry — see{" "}
+            {" "}<code>pull</code> to any OCI registry; see{" "}
             <Link href="/docs/ci/sharing-reports/">sharing reports</Link>.
           </li>
         </ul>

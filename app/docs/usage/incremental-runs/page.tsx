@@ -53,7 +53,7 @@ const cacheRows = [
 const faqs = [
   {
     q: "How does Gooze speed up mutation testing?",
-    a: "Gooze caches results per file and, on the next run, re-tests only files whose source, test file, or mutators changed — everything else is reused, so repeat runs are fast.",
+    a: "Gooze caches results per file and, on the next run, re-tests only files whose source, test file, or mutators changed; everything else is reused, so repeat runs are fast.",
   },
   {
     q: "How do I disable the Gooze cache?",

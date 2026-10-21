@@ -103,7 +103,7 @@ export default function MutationsPage() {
           <p>
             These six types run by default. Each one makes a single, mechanical change to
             one spot in your code, then your tests run against it. If the tests still pass,
-            the mutation <strong>survived</strong> — a gap in coverage. Each example below is
+            the mutation <strong>survived</strong>, which shows a gap in coverage. Each example below is
             shown as a diff: the <code>-</code> line is
             your code, the <code>+</code> line is what
             Gooze runs instead.
@@ -137,7 +137,7 @@ export default function MutationsPage() {
               <div key={t.name} id={t.name}>
                 <h3>
                   <code>{t.name}</code>{" "}
-                  <span className="text-sm font-normal text-muted-foreground">— {t.ops}</span>
+                  <span className="text-sm font-normal text-muted-foreground">{t.ops}</span>
                 </h3>
                 <p className="mt-1 mb-1 text-muted-foreground">{t.desc}</p>
                 <p className="mb-2 text-sm text-muted-foreground">

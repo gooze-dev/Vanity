@@ -252,7 +252,7 @@ gooze run ./...`}
         <div id="example">
           <h2>Complete gooze.yaml reference</h2>
           <p>
-            Every supported key, with its default value. All keys are optional —
+            Every supported key, with its default value. All keys are optional:
             Gooze falls back to these defaults when a key is omitted.
           </p>
           <CodeBlock

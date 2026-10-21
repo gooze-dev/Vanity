@@ -154,7 +154,7 @@ Mutation score: 87.50% (14 killed, 2 survived)`}
               For registries that require login, set{" "}
               <code>GOOZE_REGISTRY_USERNAME</code> and{" "}
               <code>GOOZE_REGISTRY_PASSWORD</code>. The
-              password may be a token/PAT — for GHCR, use your GitHub username with a PAT (or{" "}
+              password may be a token/PAT. For GHCR, use your GitHub username with a PAT (or{" "}
               <code>GITHUB_TOKEN</code> in CI). The same
               variables apply to <Link href="#pull">pull</Link>.
             </p>

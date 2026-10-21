@@ -155,7 +155,7 @@ export default function GitlabPage() {
           <p>
             Each shard pulls the <code>:main</code> baseline
             for the cache (<Link href="/docs/usage/incremental-runs">incremental runs</Link>),
-            then hands its reports to the merge job as an artifact — shards never push to the
+            then hands its reports to the merge job as an artifact; shards never push to the
             registry. The merge job combines them and, <strong>only on main</strong>, publishes the
             single merged baseline back to <code>:main</code>.
           </p>
