@@ -42,6 +42,37 @@ When rules conflict, follow this order:
 - Don't add an intro or a conclusion just so a section feels complete.
 - Correct grammar always. Don't imitate broken English, an accent or slang.
 
+## Tell it as a story
+
+Docs should be enjoyable to read from top to bottom, not only to search. Tell each page as a
+short story about a reader with a real problem, while staying plain, accurate and free of
+marketing (the rules above still win).
+
+- **Start from the reader's situation.** Open with the problem or moment that brings someone
+  here, in one or two sentences: "Your coverage is 90%, but a bug in a bound check still
+  reached production." Then show how Gooze helps. Don't open with a definition list.
+- **Problem, action, result.** Each section moves the reader one step: what's wrong or what
+  they want, what they run or change, what they see. Show the result (output, report line,
+  score change) right after the step that causes it.
+- **One running example.** Use the same small `calc` package across pages: the bound check
+  `if n < lo {` that survives as `if n <= lo {`, the test that kills it, the score going up.
+  New pages reuse it (same file names, line numbers and output) instead of inventing new
+  code, so the docs read like one continuous story. Use another example only when `calc`
+  can't show the feature, and keep it as small.
+- **Connect the steps.** End a section with why the next one matters, in one sentence, when it
+  isn't obvious ("Running everything again is slow, so the next run only re-tests what
+  changed."). Link to the next page the same way, not with "see also" lists.
+- **Talk to the reader.** Use "you" for the reader and "Gooze" for the tool. Write what the
+  reader does and sees, not what "the user" or "one" does.
+- **Show before and after.** A failing or weak test next to the fixed one, a surviving mutant
+  next to the test that kills it, a slow run next to the cached one. Real output only.
+- **Keep the pace.** Short paragraphs, one idea each. Put long option lists and edge cases in
+  tables or the reference pages, so they don't stop the story.
+- **No fiction or filler.** No invented people, companies, quotes or numbers, no jokes, no
+  "imagine a world where". The story is the reader's own workflow with real commands and
+  output. Reference pages (flag tables, config keys) stay as plain reference; a one-line
+  situation at the top is enough there.
+
 ## Never
 
 - **Em dashes or en dashes (`—`, `–`) in prose.** Use a period, comma, colon, semicolon,
