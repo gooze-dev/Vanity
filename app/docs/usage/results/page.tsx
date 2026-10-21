@@ -8,7 +8,7 @@ export const metadata = docsMetadata("/docs/usage/results")
 const faqs = [
   {
     q: "How do I view my Gooze mutation results?",
-    a: "Run gooze report view. It reads the reports directory and shows every mutation with its diff in an interactive viewer (plain text in CI).",
+    a: "Run gooze report view. It reads the reports directory and prints a per-file score table, one line per survivor, and the mutation score. Add --all to list every mutation with its diff (an interactive list in a TTY, plain text in CI).",
   },
   {
     q: "What does a 'survived' mutation mean in Gooze?",
@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     q: "How is the Gooze mutation score calculated?",
-    a: "score = killed / (all mutations − error). Only killed counts in your favour; survived, not_covered, and timeout lower it; error mutants (that did not compile) are excluded.",
+    a: "score = killed / (all mutations - error). Only killed counts in your favor; survived, not_covered, and timeout lower it; error mutants (that did not compile) are excluded.",
   },
 ]
 
@@ -120,7 +120,7 @@ Mutation score: 87.50% (14 killed, 2 survived)`}
           <CodeBlock lang="text" code="score = killed / (all mutations - error)" />
           <ul>
             <li>
-              Only <code>killed</code> counts in your favour.{" "}
+              Only <code>killed</code> counts in your favor.{" "}
               <code>survived</code>,{" "}
               <code>not_covered</code>, and{" "}
               <code>timeout</code> all lower the score.
@@ -170,7 +170,7 @@ Mutation score: 87.50% (14 killed, 2 survived)`}
             <li>Run Gooze again and see if it is killed now.</li>
           </ol>
           <p>
-            If the code genuinely should not be tested (generated code, debug helpers), skip it
+            If the code should not be tested (generated code, debug helpers), skip it
             instead: see <Link href="/docs/usage/ignoring-code">Ignoring code</Link>.
           </p>
         </div>

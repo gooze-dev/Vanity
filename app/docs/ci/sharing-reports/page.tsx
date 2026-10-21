@@ -18,8 +18,8 @@ export default function SharingReportsPage() {
         <div id="push-pull">
           <h2>Push and pull</h2>
           <p>
-            Gooze does the packaging and transfer itself &mdash; no{" "}
-            <code>tar</code> or external tooling required.
+            Gooze does the packaging and transfer itself; you don&apos;t need{" "}
+            <code>tar</code> or other tools.
           </p>
           <CodeBlock
             lang="bash"
@@ -62,7 +62,7 @@ gooze report push ghcr.io/org/repo/gooze-reports:main   # publish updated`}
           <ul>
             <li>
               <code>GOOZE_REGISTRY_USERNAME</code> /{" "}
-              <code>GOOZE_REGISTRY_PASSWORD</code> &mdash; the
+              <code>GOOZE_REGISTRY_PASSWORD</code>. The
               password may be a token/PAT.
             </li>
             <li>

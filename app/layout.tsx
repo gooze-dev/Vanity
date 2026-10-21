@@ -20,12 +20,12 @@ const oxanium = Oxanium({
 });
 
 const siteDescription =
-  "Gooze evaluates the true quality of your Go tests by introducing controlled mutations. Find hidden bugs, enforce CI gates, and eliminate coverage blind spots.";
+  "Gooze is a mutation testing tool for Go. It injects small bugs into your code and checks whether your tests catch them, to find weak tests coverage misses.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gooze.dev"),
   title: {
-    default: "Gooze: Advanced Mutation Testing for Golang",
+    default: "Gooze: Mutation Testing for Go (Golang)",
     template: "%s · Gooze",
   },
   description: siteDescription,
@@ -33,10 +33,9 @@ export const metadata: Metadata = {
   category: "Developer Tools",
   keywords: [
     "go mutation testing",
-    "golang testing framework",
+    "golang mutation testing",
     "mutation score",
     "test suite quality",
-    "go mutesting alternative",
     "ast mutation",
     "claude code plugin",
   ],
@@ -63,7 +62,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Gooze: Advanced Mutation Testing for Golang",
+    title: "Gooze: Mutation Testing for Go (Golang)",
     description: siteDescription,
     url: "https://gooze.dev/",
     siteName: "Gooze",
@@ -72,7 +71,7 @@ export const metadata: Metadata = {
         url: "https://gooze.dev/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Gooze - Mutation testing for Go",
+        alt: "Gooze: mutation testing for Go",
         type: "image/png",
       },
     ],
@@ -83,12 +82,12 @@ export const metadata: Metadata = {
     // No twitter:site/creator — there is no @gooze_dev X account to attribute
     // to. The large-image card still renders from the title/description/image.
     card: "summary_large_image",
-    title: "Gooze: Advanced Mutation Testing for Golang",
+    title: "Gooze: Mutation Testing for Go (Golang)",
     description: siteDescription,
     images: [
       {
         url: "https://gooze.dev/og-image.png",
-        alt: "Gooze - Mutation testing for Go",
+        alt: "Gooze: mutation testing for Go",
       },
     ],
   },
@@ -120,7 +119,7 @@ const buildJsonLd = (softwareVersion: string) => ({
         "//gooze:ignore directives",
         "Interactive TUI report viewer",
         "Editor integration via the goozels language server",
-        "Claude Code plugin (beta) with mutation results after every edit",
+        "Claude Code plugin (beta) with mutation results after each Go file edit",
       ],
       offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     },

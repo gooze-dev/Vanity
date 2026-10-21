@@ -10,7 +10,7 @@ export default function UIModesPage() {
     <section>
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">UI modes</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        Gooze selects its UI based on whether output is a TTY (interactive) or NOT (non-TTY, e.g. CI or redirected output).
+        Gooze picks its UI based on whether output is a TTY (interactive) or not (for example CI or redirected output).
       </p>
 
       <div>
@@ -45,7 +45,7 @@ export default function UIModesPage() {
         </div>
 
         <div>
-          <h2>NOT TTY (simple/CI)</h2>
+          <h2>Non-TTY (simple/CI)</h2>
           <p>
             When output is redirected (or in CI), Gooze uses a simple UI.
           </p>

@@ -42,7 +42,7 @@ export default function CliReportPage() {
           <h3>Usage</h3>
           <CodeBlock lang="bash" code="gooze report view [paths...]" />
           <p>
-            If you used a custom output dir, pass it:
+            If you used a custom output directory, pass it:
           </p>
           <CodeBlock lang="bash" code="gooze report view -o DIR" />
 
@@ -128,7 +128,7 @@ Mutation score: 87.50% (14 killed, 2 survived)`}
           <h3>Usage</h3>
           <CodeBlock lang="bash" code="gooze report push <reference>" />
           <p>
-            The reference must include a tag (digest references are rejected), and the reports dir
+            The reference must include a tag (digest references are rejected), and the reports directory
             must exist and contain files. Symlinks inside it are skipped.
           </p>
 
@@ -154,7 +154,7 @@ Mutation score: 87.50% (14 killed, 2 survived)`}
               For registries that require login, set{" "}
               <code>GOOZE_REGISTRY_USERNAME</code> and{" "}
               <code>GOOZE_REGISTRY_PASSWORD</code>. The
-              password may be a token/PAT. For GHCR, use your GitHub username with a PAT (or{" "}
+              password may be a token or PAT. For GHCR, use your GitHub username with a PAT (or{" "}
               <code>GITHUB_TOKEN</code> in CI). The same
               variables apply to <Link href="#pull">pull</Link>.
             </p>
@@ -186,9 +186,9 @@ gooze report push ghcr.io/your-org/your-repo/gooze-reports:main`}
           <h3>Usage</h3>
           <CodeBlock lang="bash" code="gooze report pull <reference>" />
           <p>
-            The reference must include a tag. Extracting into the current directory
+            The reference must include a tag or a digest. Extracting into the current directory
             (<code>-o .</code>) works, file modes are preserved, and pulling an artifact that was not
-            pushed by Gooze fails with a clear error.
+            pushed by Gooze fails with an error saying it is not a gooze reports artifact.
           </p>
 
           <h3>Example</h3>
@@ -217,7 +217,7 @@ gooze report push ghcr.io/your-org/your-repo/gooze-reports:main`}
         <div id="merge">
           <h2>gooze report merge</h2>
           <p>
-            Merges sharded reports (from <code>shard_*</code> folders) into the base output dir.
+            Merges sharded reports (from <code>shard_*</code> folders) into the base output directory.
           </p>
 
           <h3>Usage</h3>

@@ -11,15 +11,15 @@ import { CodeBlock } from "@/components/code-block";
 const GITHUB_REPO = "https://github.com/gooze-dev/gooze";
 const IMPORT_PREFIX = "gooze.dev/pkg/gooze";
 
-const TITLE = "pkg/gooze - Core Go Mutation Testing Module";
+const TITLE = "pkg/gooze: Go Mutation Testing CLI and Module";
 const DESCRIPTION =
-  "Import the core Gooze Go module into your projects. Access the programmatic API for measuring test efficacy and integrating AST mutation into custom pipelines.";
+  "Install the Gooze CLI from its Go import path. Its public packages read reports, parse //gooze:ignore directives, and list mutagens and config keys.";
 const KEYWORDS = [
   "pkg/gooze",
   "go module import",
   "golang api",
-  "programmatic testing",
-  "ast mutation core",
+  "go mutation testing",
+  "gooze reports",
   "integrate gooze",
 ];
 
@@ -76,7 +76,7 @@ export default async function VanityPage() {
             </div>
             <CodeBlock code={`go install ${IMPORT_PREFIX}@latest`} lang="bash" />
             <p className="text-sm text-muted-foreground">
-              This vanity import path redirects to the official Git repository
+              This vanity import path points to the official Git repository.
             </p>
           </div>
 

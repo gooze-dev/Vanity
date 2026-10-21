@@ -12,7 +12,7 @@ const faqs = [
   },
   {
     q: "What are the prerequisites for installing Gooze?",
-    a: "Go 1.27 or newer and a Go module with a go.mod file. Gooze runs on Linux, macOS, and Windows.",
+    a: "Go 1.27.3 or newer and a Go module with a go.mod file. Gooze runs on Linux, macOS, and Windows.",
   },
   {
     q: "How do I verify Gooze is installed correctly?",
@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     q: "How do I update Gooze to the latest version?",
-    a: "Run go install gooze.dev/pkg/gooze@latest again; it fetches and builds the newest release over the old binary.",
+    a: "Run go install gooze.dev/pkg/gooze@latest again. It fetches and builds the newest release over the old binary.",
   },
   {
     q: "How do I uninstall Gooze?",
@@ -58,7 +58,7 @@ export default function InstallPage() {
         <div id="requirements">
           <h2>What you need</h2>
           <ul>
-            <li><strong>Go 1.27 or newer</strong> (Gooze is built with Go 1.27).</li>
+            <li><strong>Go 1.27.3 or newer</strong> to build Gooze.</li>
             <li>A Go module with a <code>go.mod</code> file.</li>
             <li>Linux, macOS, or Windows.</li>
           </ul>
@@ -91,9 +91,9 @@ export default function InstallPage() {
           <div id="path">
             <h2>If you get &quot;command not found&quot;</h2>
           <p>
-            Go installs binaries into your Go bin dir.
-            Often it is <code>$(go env GOPATH)/bin</code>.
-            Make sure this directory is in your <code>PATH</code>.
+            Go installs binaries into your Go bin directory,
+            usually <code>$(go env GOPATH)/bin</code>.
+            Make sure this directory is on your <code>PATH</code>.
           </p>
             <CodeBlock lang="bash" code='echo "$(go env GOPATH)/bin"' />
         </div>
@@ -110,7 +110,8 @@ export default function InstallPage() {
           <h2>Logs</h2>
           <p>
             If something looks wrong, run with <code>--verbose</code>.
-            Then check the log file (often <code>.gooze.log</code>).
+            Then check the log file (<code>.gooze.log</code> by default; set another path
+            with <code>--log-output</code>).
           </p>
           <div>
             <CodeBlock lang="bash" code="gooze run --verbose ./..." />

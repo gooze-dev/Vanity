@@ -84,7 +84,7 @@ export default function TroubleshootingPage() {
           <p>
             Path arguments are module-relative, like <code>gooze run</code>&apos;s (
             <code>./...</code>, <code>./pkg/...</code>, <code>./pkg</code>,{" "}
-            <code>./pkg/file.go</code>). When none matches a report, view exits 1 with{" "}
+            <code>./pkg/file.go</code>). When no report matches, view exits 1 with{" "}
             <code>no reports in .gooze-reports match ...</code>.
           </p>
         </div>

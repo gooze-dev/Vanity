@@ -30,7 +30,7 @@ const howToJsonLd = {
     {
       "@type": "HowToStep",
       name: "View the report",
-      text: "Run gooze report view to open the interactive report and inspect killed and surviving mutations.",
+      text: "Run gooze report view to see per-file scores, surviving mutations and the mutation score.",
     },
   ],
 }
@@ -42,7 +42,7 @@ export default function QuickStartPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
       />
-      <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Quick Start</h1>
+      <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Quick start</h1>
       <p className="text-lg text-muted-foreground mb-6">
         Install Gooze, preview what will be mutated, run mutation testing, then view reports.
       </p>
@@ -55,8 +55,8 @@ export default function QuickStartPage() {
           </p>
           <CodeBlock lang="bash" code="go install gooze.dev/pkg/gooze@latest" />
           <p>
-            This command downloads Gooze and installs it.
-            Next, verify:
+            This downloads and installs Gooze.
+            Then verify the install:
           </p>
           <CodeBlock lang="bash" code="gooze version" />
         </div>
@@ -64,8 +64,8 @@ export default function QuickStartPage() {
         <div id="init">
           <h2>(Optional) Create a config file</h2>
           <p>
-            Gooze can read <code>gooze.yaml</code>.
-            This is useful in CI and for shared settings.
+            Gooze reads settings from <code>gooze.yaml</code>.
+            This is useful in CI and for settings your team shares.
           </p>
           <CodeBlock lang="bash" code="gooze config init" />
           <p className="text-sm text-muted-foreground">
@@ -76,21 +76,21 @@ export default function QuickStartPage() {
         <div id="estimate">
           <h2>Preview files and mutation counts</h2>
           <p>
-            Preview which files will be mutated and how many mutations apply, without running tests.
+            See which files will be mutated and how many mutations apply, without running tests.
           </p>
           <CodeBlock lang="bash" code="gooze run --estimate ./..." />
           <p className="mt-4 mb-3 text-muted-foreground">
-            Exclude directories/files using regex (repeat the flag as needed):
+            Exclude files with a regex (repeat the flag as needed):
           </p>
           <CodeBlock lang="bash" code="gooze run --estimate -x '^vendor/' -x '^internal/mocks/' ./..." />
           <p className="text-sm text-muted-foreground">
-            If you get 0 mutations, first check you are running from your module root (where <code>go.mod</code> is).
+            If you get 0 mutations, first check that you&apos;re running from your module root (where <code>go.mod</code> is).
           </p>
         </div>
 
         <div id="run">
           <h2>Run mutation testing</h2>
-          <p>Execute mutation testing across the target paths.</p>
+          <p>Run mutation testing on the target paths.</p>
           <CodeBlock lang="bash" code="gooze run ./..." />
 
           <h3>Make it faster</h3>
@@ -101,7 +101,7 @@ export default function QuickStartPage() {
 
           <h3>Force a full re-run</h3>
           <p>
-            If you suspect cached results are reused:
+            To ignore cached results and re-test everything:
           </p>
           <CodeBlock lang="bash" code="gooze run --no-cache ./..." />
         </div>

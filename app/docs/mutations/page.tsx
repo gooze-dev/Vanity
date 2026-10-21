@@ -26,7 +26,7 @@ const mutationTypes = [
   {
     name: "comparison",
     ops: "< > <= >= == !=",
-    desc: "Swaps a relational operator. Great at exposing untested boundaries (off-by-one) and branches that are never taken in tests.",
+    desc: "Swaps a relational operator. Exposes untested boundaries (off-by-one) and branches that are never taken in tests.",
     rule: "each operator becomes every other comparison operator (>= shown; also >, <=, ==, !=), except the one equivalent mutant when an operand is \"\" or 0 compared with len(...) or cap(...): len(s) == 0 never becomes len(s) <= 0, which behaves the same. This is version 2 of the mutator (since v1.2.0); reports from version 1 are re-tested on upgrade.",
     example: `- if a < b {
 + if a >= b {`,
@@ -63,10 +63,10 @@ const mutationTypes = [
     name: "unary",
     ops: "- + ! ^",
     desc: "Flips a sign or drops a negation. Catches missing checks on negation, sign, and bitwise complement.",
-    rule: "-x becomes +x (and vice versa); ! and ^ are removed",
+    rule: "-x becomes +x (and vice versa); each unary operator (-, +, !, ^) is also removed",
     example: `- ok := !flag
 + ok := flag`,
-    survives: "the negation/sign here isn't checked by a test.",
+    survives: "no test checks the negation or sign here.",
   },
 ]
 
@@ -78,7 +78,7 @@ const referenceRows = [
   { name: "logical", ops: "&& ||", rule: "&& ↔ ||", def: "Default" },
   { name: "boolean", ops: "true false", rule: "true ↔ false", def: "Default" },
   { name: "numbers", ops: "int & float literals", rule: "literal → 0 and 1", def: "Default" },
-  { name: "unary", ops: "- + ! ^", rule: "-x ↔ +x; ! and ^ removed", def: "Default" },
+  { name: "unary", ops: "- + ! ^", rule: "-x ↔ +x; operator removed", def: "Default" },
   { name: "branch", ops: "if / switch conditions", rule: "condition → true / false", def: "Off by default" },
   { name: "statement", ops: "statements", rule: "delete a statement", def: "Off by default" },
   { name: "loop", ops: "for / range", rule: "loop boundaries and body removal", def: "Off by default" },
@@ -92,7 +92,7 @@ export default function MutationsPage() {
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Mutation operators</h1>
       <p className="text-lg text-muted-foreground mb-8">
         A mutation is a tiny change in your code.
-        Gooze applies one mutation and runs tests to see if tests notice.
+        Gooze applies one mutation and runs your tests to see if they notice.
         For what each result status means, see{" "}
         <Link href="/docs/usage/results">Reading results</Link>.
       </p>
@@ -103,7 +103,7 @@ export default function MutationsPage() {
           <p>
             These six types run by default. Each one makes a single, mechanical change to
             one spot in your code, then your tests run against it. If the tests still pass,
-            the mutation <strong>survived</strong>, which shows a gap in coverage. Each example below is
+            the mutation <strong>survived</strong>, which shows a gap in your tests. Each example below is
             shown as a diff: the <code>-</code> line is
             your code, the <code>+</code> line is what
             Gooze runs instead.

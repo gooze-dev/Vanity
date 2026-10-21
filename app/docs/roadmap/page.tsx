@@ -86,7 +86,7 @@ const themes: Theme[] = [
         title: "Custom exec hook",
         detail: (
           <>
-            Run your own test command, like go-mutesting&apos;s <code>--exec</code>.
+            Run your own test command instead of <code>go test</code>.
           </>
         ),
       },

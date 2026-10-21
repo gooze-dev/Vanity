@@ -34,7 +34,7 @@ export function ClaudeCodeAnnouncement({ className }: { className?: string }) {
       <span className="rounded-full bg-[#D97757] px-2 py-0.5 text-xs font-semibold text-white">New</span>
       <span className="truncate">
         <span className="hidden sm:inline">Protect your vibe coding with the </span>
-        Claude Code plugin<span className="hidden sm:inline"> for gooze</span>
+        Claude Code plugin<span className="hidden sm:inline"> for Gooze</span>
       </span>
       {/* The roadmap's Beta pill, on the page background: a red tint alone
           blends into the orange pill in light mode. */}

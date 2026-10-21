@@ -41,11 +41,11 @@ export default function IgnoringCodePage() {
 
         <div>
           <h2>
-            Annotation skipping <code>{"//gooze:ignore"}</code>
+            Skip code with <code>{"//gooze:ignore"}</code>
           </h2>
           <p>
             Place <code>{"//gooze:ignore"}</code> to skip generating mutations for a file,
-            a function/method, or a single line.
+            a function or method, or a single line.
           </p>
           <p>
             Optionally target specific mutagens: <code>{"//gooze:ignore arithmetic,comparison"}</code>.
@@ -68,7 +68,7 @@ func main() {
             <div>
               <h3>Example: ignore the whole file</h3>
               <p>
-                Put the directive near the top of the file.
+                Put the directive above the <code>package</code> clause.
               </p>
               <CodeBlock
                 lang="go"

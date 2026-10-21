@@ -12,11 +12,11 @@ const faqs = [
   },
   {
     q: "How do I keep mutation testing fast enough for CI?",
-    a: "Combine three levers: pass a Go coverage profile so uncovered lines are tallied as not_covered without running, cache the reports directory between runs for incremental execution, and raise --parallel. For big suites, shard across runners.",
+    a: "Combine three levers: pass a Go coverage profile so mutations on uncovered lines are reported as not_covered without running, cache the reports directory between runs for incremental execution, and raise --parallel. For big suites, shard across runners.",
   },
   {
     q: "Can mutation testing fail a pull request below a score threshold?",
-    a: "Yes. Gooze reports the mutation score; a short documented CI step compares it against your threshold and fails the job when it drops below, so pull requests that weaken tests are blocked. There is no dedicated threshold flag; it is a few lines in your pipeline.",
+    a: "Yes. Gooze reports the mutation score; a short documented CI step compares it against your threshold and fails the job when it drops below, so pull requests that weaken tests are blocked. There's no dedicated threshold flag; it's a few lines in your pipeline.",
   },
   {
     q: "How do I share mutation results across ephemeral CI runners?",
@@ -57,7 +57,7 @@ export default function BestToolForCiPage() {
           <li>
             <strong>Sharding.</strong> <code>gooze run -s INDEX/TOTAL</code>
             {" "}splits a run across parallel jobs; <code>gooze report merge</code>
-            {" "}recombines them; see{" "}
+            {" "}recombines them. See{" "}
             <Link href="/docs/ci/sharding/">sharding and merging</Link>.
           </li>
           <li>
@@ -71,8 +71,8 @@ export default function BestToolForCiPage() {
             without running them.
           </li>
           <li>
-            <strong>Shared baselines.</strong> <code>gooze report push</code> /
-            {" "}<code>pull</code> to any OCI registry; see{" "}
+            <strong>Shared baselines.</strong> <code>gooze report push</code> and
+            {" "}<code>pull</code> store the reports directory in any OCI registry; see{" "}
             <Link href="/docs/ci/sharing-reports/">sharing reports</Link>.
           </li>
         </ul>

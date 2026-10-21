@@ -52,17 +52,17 @@ export const docsPages: DocsPage[] = [
     navTitle: "Overview",
     section: "Get started",
     description:
-      "Official documentation for Gooze. Learn how to implement AST-based mutation testing in Go to accurately measure test suite quality beyond simple code coverage.",
+      "Official documentation for Gooze, an AST-based mutation testing tool for Go. Run it locally and in CI to measure test suite quality beyond code coverage.",
     keywords: ["gooze documentation","getting started","golang mutation testing","test suite quality","ast mutation","docs overview"],
   },
   {
     href: "/docs/install",
     title: "Installation",
     seoTitle:
-      "Install the Gooze CLI Framework · Gooze docs",
+      "Install the Gooze CLI · Gooze docs",
     section: "Get started",
     description:
-      "Download and install Gooze using go install or via precompiled release binaries. Verify your installation to begin analyzing Go test effectiveness.",
+      "Install Gooze with go install or a prebuilt release binary, then verify the installation and start measuring how well your Go tests catch bugs.",
     keywords: ["install gooze","download cli","prebuilt binaries","go install","setup framework","go module"],
   },
   {
@@ -72,7 +72,7 @@ export const docsPages: DocsPage[] = [
       "Quick Start Guide for Go Mutation Testing · Gooze",
     section: "Get started",
     description:
-      "Run your first Go mutation test in under 5 minutes. Learn the basics of execution, interpreting your initial mutation score, and spotting hidden bug risks.",
+      "Run your first Go mutation test in under 5 minutes: start a run, read your first mutation score, and find the code your tests don't really check.",
     keywords: ["quick start","tutorial","first mutation run","calculate score","go testing guide","beginner setup"],
   },
   {
@@ -82,7 +82,7 @@ export const docsPages: DocsPage[] = [
       "What is Mutation Testing? Concepts Explained · Gooze",
     section: "Get started",
     description:
-      "Understand the theory behind mutation testing. Learn why measuring killed vs. survived mutants reveals critical logic gaps that code coverage misses.",
+      "How mutation testing works, and why counting killed and survived mutants finds gaps in your tests that code coverage misses.",
     keywords: ["mutation testing concepts","what is mutation score","killed mutants","survived mutants","code coverage vs mutation","software reliability"],
   },
   {
@@ -93,7 +93,7 @@ export const docsPages: DocsPage[] = [
     navTitle: "Comparison",
     section: "Get started",
     description:
-      "Compare Go mutation testing tools side by side on caching, sharding, CI, editor support and a Claude Code plugin, from tiny projects to microservices and large monorepos.",
+      "Compare Go mutation testing tools side by side on caching, sharding, CI, editor support and a Claude Code plugin, from tiny projects to large monorepos.",
     keywords: ["go mutation testing comparison","mutation testing tools","framework comparison","tdd monorepo","microservices mutation testing","monorepo mutation testing","golang test performance","claude code plugin","ai coding agent"],
   },
   {
@@ -103,7 +103,7 @@ export const docsPages: DocsPage[] = [
     navTitle: "Best tool",
     section: "Get started",
     description:
-      "Why Gooze is the best Go mutation testing tool for most teams: fast incremental runs, tight TDD feedback, and an honest comparison with other Go tools.",
+      "Why Gooze is the best Go mutation testing tool for most teams: it re-tests only changed files, keeps TDD loops short, and compares with other tools.",
     keywords: ["best go mutation testing tool","golang mutation testing","tdd feedback","go mutation testing comparison","fast mutation testing","go test quality"],
   },
   {
@@ -123,24 +123,24 @@ export const docsPages: DocsPage[] = [
       "Interpreting Statuses: Killed, Survived, Timeout · Gooze",
     section: "Using gooze",
     description:
-      "Learn how to interpret Gooze outcomes. Understand the difference between killed, survived, and not_covered statuses to systematically improve your score.",
+      "What each Gooze status means (killed, survived, not_covered, timeout, error) and how to use the results to improve your mutation score.",
     keywords: ["test statuses","killed mutant","survived mutant","not_covered","timeout error","interpret score","fix gaps"],
   },
   {
     href: "/docs/usage/ignoring-code",
     title: "Ignoring code",
     seoTitle:
-      "Exclude Files via Code Ignoral · Gooze docs",
+      "Ignore Files, Functions and Lines · Gooze docs",
     section: "Using gooze",
     description:
-      "Master techniques to skip specific Go files, functions, or lines during mutation testing. Apply -x flags and //gooze:ignore directives effectively.",
+      "Skip specific Go files, functions or lines during mutation testing with the -x flag and //gooze:ignore directives.",
     keywords: ["ignore files","skip functions","selective testing","exclude blocks","-x flag","gooze:ignore syntax"],
   },
   {
     href: "/docs/usage/incremental-runs",
     title: "Incremental runs",
     seoTitle:
-      "Optimize Speed with Incremental Runs · Gooze",
+      "Re-test Only Changed Files with Incremental Runs · Gooze",
     section: "Using gooze",
     description:
       "Re-test only what changed. Gooze caches results per file by content hash and scores cached and tested results together, cutting CI time for large Go apps.",
@@ -150,10 +150,10 @@ export const docsPages: DocsPage[] = [
     href: "/docs/usage/ui-modes",
     title: "UI modes",
     seoTitle:
-      "Configure Output: TUI vs Plain Text · Gooze docs",
+      "Output Modes: TUI vs Plain Text · Gooze docs",
     section: "Using gooze",
     description:
-      "Understand Gooze's TTY auto-detection. Force the interactive terminal UI for manual testing or fallback to plain text logs for automated CI environments.",
+      "Gooze picks its output by TTY detection: the interactive terminal UI in a terminal, plain text logs in CI or when output is piped or redirected.",
     keywords: ["terminal ui","tui interface","plain text logs","stdout","tty detection","environment output"],
   },
   {
@@ -184,7 +184,7 @@ export const docsPages: DocsPage[] = [
       "GitHub Actions for Go Mutation Testing · Gooze",
     section: "CI & teams",
     description:
-      "Integrate Gooze with GitHub Actions. Accelerate Golang mutation testing via sharding, cache results, and enforce quality gates with minimum score thresholds.",
+      "Run Gooze in GitHub Actions: shard Go mutation testing across jobs, cache results between runs, and fail pull requests below a minimum mutation score.",
     keywords: ["github actions","ci/cd","go mutation testing","pipeline","pull request","quality gate","threshold","shard","caching"],
   },
   {
@@ -194,7 +194,7 @@ export const docsPages: DocsPage[] = [
       "GitLab CI for Go Mutation Testing · Gooze",
     section: "CI & teams",
     description:
-      "Automate Gooze in GitLab CI pipelines. Configure sharding across parallel jobs and enforce mutation score thresholds to prevent merging weak Go test suites.",
+      "Run Gooze in GitLab CI pipelines: shard across parallel jobs and fail the pipeline below a minimum mutation score, so weak Go tests don't get merged.",
     keywords: ["gitlab ci","pipeline","parallel jobs","sharding","quality gate","minimum score","go testing"],
   },
   {
@@ -204,7 +204,7 @@ export const docsPages: DocsPage[] = [
       "Sharding & Merging Mutation Tests · Gooze",
     section: "CI & teams",
     description:
-      "Optimize CI execution speed by splitting Go mutation tests across parallel jobs using -s INDEX/TOTAL. Combine results seamlessly with gooze report merge.",
+      "Split Go mutation tests across parallel CI jobs with -s INDEX/TOTAL, then combine the shard reports into one score with gooze report merge.",
     keywords: ["test sharding","parallel execution","merge reports","split jobs","CI optimization","golang testing"],
   },
   {
@@ -214,7 +214,7 @@ export const docsPages: DocsPage[] = [
       "Sharing Reports via OCI Registries · Gooze",
     section: "CI & teams",
     description:
-      "Push and pull Gooze mutation reports to OCI registries like GHCR. Establish a shared baseline for CI pipelines and distributed Go development teams.",
+      "Push and pull Gooze mutation reports to OCI registries like GHCR, so CI pipelines and every teammate start from one shared baseline.",
     keywords: ["oci registry","ghcr","push reports","pull reports","test baseline","ci artifacts","authentication"],
   },
   {
@@ -224,18 +224,18 @@ export const docsPages: DocsPage[] = [
       "CLI Command Reference · Gooze",
     section: "Reference",
     description:
-      "Complete CLI reference for Gooze. Explore commands, global flags, and exit codes for running, reporting, configuring, and executing Go mutation tests.",
+      "Complete CLI reference for Gooze: every command, the global flags, and the exit codes for running Go mutation tests, viewing reports and generating config.",
     keywords: ["cli commands","terminal flags","exit codes","usage reference","gooze run","gooze report"],
   },
   {
     href: "/docs/cli/run",
     title: "gooze run",
     seoTitle:
-      "Execute Mutation Tests (gooze run) · Gooze",
+      "Run Mutation Tests (gooze run) · Gooze",
     section: "Reference",
     parent: "/docs/cli",
     description:
-      "Execute Go mutation testing. Master CLI arguments for parallelism, sharding, timeouts, the --estimate cache preview, and the --coverage-profile gate.",
+      "Run Go mutation testing with gooze run: flags for parallelism, sharding, timeouts, the --estimate cache preview, and the --coverage-profile gate.",
     keywords: ["gooze run","execute tests","parallelism","timeout control","coverage-profile","unkilled mutants","estimate"],
   },
   {
@@ -246,7 +246,7 @@ export const docsPages: DocsPage[] = [
     section: "Reference",
     parent: "/docs/cli",
     description:
-      "Interact with Gooze mutation reports. View per-file scores and survivors, browse every mutant in the TUI, merge sharded runs, and manage OCI artifact uploads.",
+      "Work with Gooze mutation reports: view per-file scores and survivors, browse every mutant in the TUI, merge sharded runs, and push or pull OCI artifacts.",
     keywords: ["report view","survivors","per-file score","tui","oci artifacts","merge shards","report push","test results","golang mutation score"],
   },
   {
@@ -257,7 +257,7 @@ export const docsPages: DocsPage[] = [
     section: "Reference",
     parent: "/docs/cli",
     description:
-      "Manage Gooze mutation testing configuration via CLI. Generate a starter gooze.yaml file automatically with the config init command.",
+      "Manage Gooze mutation testing configuration from the CLI. The gooze config init command writes a starter gooze.yaml file.",
     keywords: ["gooze config","cli configuration","gooze.yaml","settings scaffold","test generation","golang config"],
   },
   {
@@ -268,7 +268,7 @@ export const docsPages: DocsPage[] = [
     section: "Reference",
     parent: "/docs/cli",
     description:
-      "Verify your installed Gooze CLI version and the Go toolchain it was built with. Essential for accurate bug reporting and pinning CI/CD dependency versions.",
+      "Show the installed Gooze CLI version and the Go toolchain it was built with. Include it in bug reports and use it to pin the version in CI/CD.",
     keywords: ["gooze version","release build","go version","pin dependency","ci environment"],
   },
   {
@@ -279,7 +279,7 @@ export const docsPages: DocsPage[] = [
     navTitle: "Configuration",
     section: "Reference",
     description:
-      "Learn how to configure Gooze using the gooze.yaml file, environment variables (GOOZE_*), and CLI flags. Understand precedence rules, value bounds, and schemas.",
+      "Configure Gooze with the gooze.yaml file, GOOZE_* environment variables, and CLI flags: every key, its default and bounds, and which source takes precedence.",
     keywords: ["gooze.yaml","configuration syntax","environment variables","settings precedence","coverage_profile definition"],
   },
   {
@@ -289,8 +289,8 @@ export const docsPages: DocsPage[] = [
       "Understanding Output Report Formats · Gooze",
     section: "Reference",
     description:
-      "Analyze Gooze's directory layout, index.yaml schemas, and per-mutation result files. Discover how to extract structured JSON/YAML insights for custom tooling.",
-    keywords: ["report format","index.yaml","structured output","result schemas","custom tooling","test data extraction"],
+      "The layout of the Gooze reports directory, the _index.yaml summary, and the YAML result files, and how to read them from your own tooling.",
+    keywords: ["report format","_index.yaml","structured output","result schemas","custom tooling","test data extraction"],
   },
   {
     href: "/docs/mutations",
@@ -299,8 +299,8 @@ export const docsPages: DocsPage[] = [
       "Supported Go Mutation Operators · Gooze docs",
     section: "Reference",
     description:
-      "Review the full list of AST mutation operators applied by Gooze. See examples of arithmetic, logical, boolean, and comparison mutations injected into Go code.",
-    keywords: ["mutation operators","ast mutagens","logical mutations","arithmetic swaps","boolean flip","code injection examples"],
+      "The full list of AST mutation operators Gooze applies, with examples of arithmetic, comparison, logical, boolean, numbers, and unary mutations in Go code.",
+    keywords: ["mutation operators","ast mutagens","logical mutations","arithmetic swaps","boolean flip","mutation examples"],
   },
   {
     href: "/docs/troubleshooting",
@@ -309,7 +309,7 @@ export const docsPages: DocsPage[] = [
       "Troubleshoot Test Flakiness & Errors · Gooze docs",
     section: "Help",
     description:
-      "Resolve common Gooze execution issues. Debug build failures, diagnose flaky tests, fix test timeouts, and optimize performance for excessively slow test suites.",
+      "Fix common Gooze problems: every mutant killed, 0 files or 0 mutations found, stale reports, a missing reports directory, and shards missing from report view.",
     keywords: ["troubleshoot gooze","debug errors","fix flaky tests","resolve timeouts","performance optimization","build failure"],
   },
   {
@@ -319,7 +319,7 @@ export const docsPages: DocsPage[] = [
       "Development Roadmap & Known Limitations · Gooze",
     section: "Help",
     description:
-      "Explore planned features and current technical constraints within the Gooze framework. Find temporary workarounds for unsupported Go syntax mutations.",
+      "Planned Gooze features and current limitations (threshold flag, custom mutators, custom test runner, JSON reports), with workarounds you can use today.",
     keywords: ["project roadmap","future features","known limitations","workarounds","unsupported syntax","upcoming releases"],
   },
 ]

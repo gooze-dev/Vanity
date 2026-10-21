@@ -16,7 +16,7 @@ export const metadata = docsMetadata("/docs/config")
 const faqs = [
   {
     q: "How do I configure Gooze?",
-    a: "Put a gooze.yaml in your project root; run gooze config init to generate a starter file. Every key can also be set with a GOOZE_* environment variable or a CLI flag.",
+    a: "Put a gooze.yaml in your project root; run gooze config init to generate a starter file. Every key can also be set with a GOOZE_* environment variable, and the common ones (output, no-cache, paths.exclude, run.*) with a CLI flag.",
   },
   {
     q: "What is the configuration precedence in Gooze?",
@@ -79,7 +79,7 @@ export default function ConfigPage() {
             </li>
           </ul>
           <p>
-            Example: the flag <code>--no-cache</code> can be set via <code>GOOZE_NO_CACHE=true</code>.
+            Example: the flag <code>--no-cache</code> can be set with <code>GOOZE_NO_CACHE=true</code>.
           </p>
         </div>
 
@@ -129,7 +129,7 @@ export default function ConfigPage() {
           </div>
           <p className="mt-3">
             For logging, the <code>--verbose</code> and <code>--log-output</code>{" "}
-            flags override the env/config settings.
+            flags override the environment and config settings.
           </p>
 
           <div className="mt-4 rounded border">
@@ -288,7 +288,7 @@ log:
           <h2>Validation</h2>
           <p>
             <code>gooze run</code> checks the values before it starts and exits with an error for
-            any out of range:
+            any value out of range:
           </p>
           <ul>
             <li><code>run.parallel</code> must be at least 1</li>
@@ -301,8 +301,8 @@ log:
         <div id="cli-vs-config">
           <h2>CLI flags vs config</h2>
           <p>
-            In most tools, CLI flags override config.
-            If you see surprising behavior, print help and compare:
+            CLI flags override config (see the precedence table above).
+            If you see surprising behavior, print the help and compare:
           </p>
           <div className="mt-3 space-y-2">
             <CodeBlock lang="bash" code="gooze --help" />
