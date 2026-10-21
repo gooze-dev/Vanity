@@ -109,7 +109,8 @@ marketing (the rules above still win).
   feature text.
 - Don't claim gooze is fast, scalable or reliable without the mechanism behind it (per-file
   cache, sharding, OCI baselines, coverage profile).
-- Don't invent command output, URLs, env vars or config keys. Use `<placeholder>` values and
+- Don't invent command output (record it, see `tool-output.md`), URLs, env vars or config
+  keys. Use `<placeholder>` values and
   explain them when they aren't obvious.
 - Keep real tool output verbatim, even when it contains characters these rules ban in prose
   (goozels prints `—` in its diagnostics).
