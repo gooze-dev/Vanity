@@ -67,17 +67,23 @@ export default function CliPage() {
         <div id="exit-codes">
           <h2>Exit codes</h2>
           <ul>
-            <li><code>0</code>: the command completed, whatever the mutation score.</li>
-            <li><code>1</code>: the command failed (bad flag or config, build or I/O error, registry error, interrupted).</li>
+            <li><code>0</code>: the command completed, and every threshold set was met.</li>
+            <li><code>1</code>: an unexpected failure, such as reading or writing reports.</li>
+            <li><code>2</code>: a bad flag, argument or config value.</li>
+            <li><code>3</code>: the command completed, but a score is below a threshold. The reports are written.</li>
+            <li><code>4</code>: <code>--diff</code> couldn&apos;t compare against git (no git, not a repository, unknown ref).</li>
+            <li><code>5</code>: <code>gooze report push</code> or <code>pull</code> failed at the registry.</li>
+            <li><code>6</code>: there are no reports to view or merge.</li>
+            <li><code>130</code>: interrupted by Ctrl-C, SIGINT or SIGTERM.</li>
           </ul>
           <p>
             Errors print as <code>Error: ...</code>; the command&apos;s usage text follows only for
             flag and argument errors, not for runtime errors.
           </p>
           <p>
-            Survivors never change the exit code, and there is no threshold flag yet. To fail a
-            build below a minimum score, use the{" "}
-            <Link href="/docs/ci/github#gate">score gate step</Link>.
+            Survivors change the exit code only when you set a threshold. What each code means
+            for a pipeline, and how to let a low score pass while errors still fail:{" "}
+            <Link href="/docs/ci/quality-gates#exit-codes">Quality gates</Link>.
           </p>
         </div>
 

@@ -52,7 +52,7 @@ const faqs = [
   },
   {
     q: "How can we use mutation testing as an automated quality gate?",
-    a: "Add a short CI step that compares the mutation score to a threshold and fails the job when the score drops below it. Gooze has no built-in threshold flag; the CI docs show the step. This blocks pull requests that weaken your tests.",
+    a: "Set a threshold: `gooze run --threshold-total 80 ./...`, or `threshold.total: 80` in `gooze.yaml`. Below it, Gooze exits with code `3` and the CI job fails, which blocks pull requests that weaken your tests. A diff threshold sets a stricter bar for the lines a pull request changes.",
   },
   {
     q: "How do we store reports across ephemeral CI runners?",

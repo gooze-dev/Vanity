@@ -8,12 +8,6 @@ import { withCode } from "@/components/docs-faq"
 // Keep in sync with the comparison page when a limitation is lifted.
 const limitations = [
   {
-    id: "threshold",
-    title: "Score threshold flag",
-    detail: "A built-in flag to fail CI below a minimum mutation score is on the way.",
-    workaround: { text: "a three-line score gate step", href: "/docs/ci/github#gate" },
-  },
-  {
     id: "custom-mutators",
     title: "Custom mutator plugins",
     detail: "Adding an operator to Gooze itself is one small function, and caching, sharding, and reporting work with it unchanged. A plugin API for your own operators is planned.",
@@ -72,8 +66,11 @@ const themes: Theme[] = [
     title: "Core features",
     items: [
       {
-        title: "Score threshold",
-        detail: "A built-in flag that fails the run below a minimum mutation score, with distinct exit codes for each outcome.",
+        id: "threshold",
+        title: "Score thresholds",
+        detail: "Total, average and per-file minimum scores, a separate bar for diff runs, and a distinct exit code for each outcome.",
+        shipped: true,
+        href: "/docs/ci/quality-gates",
       },
       {
         title: "Custom exec hook",

@@ -26,11 +26,11 @@ const facts = `**Key facts (gooze ${DOCS_FACTS_VERSION}):**
 - Coverage gate: \`--coverage-profile coverage.out\` skips mutations on uncovered lines (status not_covered).
 - Mutation score = killed / (all mutations - error). survived, not_covered, and timeout lower it.
 - AI coding agents: a Claude Code plugin (beta), installed with \`/plugin marketplace add gooze-dev/claude-plugin\` and \`/plugin install gooze@gooze\`. It sets a project up (\`/gooze:init\`), runs the kill-survivors loop, adds gooze to existing CI, and gives Claude the score and surviving mutants after every edit (needs goozels). Codex and opencode are not verified yet.
-- Exit codes: 0 = completed (any score), 1 = command failed (including invalid config: run.parallel and run.mutation_timeout must be at least 1, version must be 1).
+- Exit codes: 0 = completed and every threshold met, 1 = unexpected failure (I/O, reports), 2 = bad flag, argument or config value (run.parallel and run.mutation_timeout must be at least 1, version must be 1, thresholds 0 to 100), 3 = score below a threshold (reports still written), 4 = git error in diff mode, 5 = registry error (report push/pull), 6 = no reports to view or merge, 130 = interrupted.
+- Score thresholds: \`--threshold-total\`, \`--threshold-average\`, \`--threshold-file\` (config \`threshold.total|average|file\`, env GOOZE_THRESHOLD_TOTAL etc.; percent, 0 = off) on \`gooze run\`, \`gooze report view\` and \`gooze report merge\`: total score, mean of the file scores, and the score every file must reach. \`--threshold-diff-*\` (config \`threshold.diff.*\`) apply only to \`gooze run --diff\`, on the changed lines, instead of the plain ones. A shard (-s) doesn't check thresholds; put them on report merge. Below one, gooze exits 3. Guide: ${SITE_URL}/docs/ci/quality-gates/
 
 **Not supported in ${DOCS_FACTS_VERSION}:**
 
-- No built-in score threshold flag; a documented 3-line CI step fails the build below a minimum score (${SITE_URL}/docs/ci/github/#gate).
 - No plugin API for custom mutators (adding one means a small function in the gooze source).
 - No custom test runner command (go-mutesting --exec equivalent).
 - No JSON or HTML report (YAML report files + _index.yaml).

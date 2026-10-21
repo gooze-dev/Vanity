@@ -1,0 +1,3 @@
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792588386, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "exit-code-no-reports (gooze v1.2.1-0.20261021130328-af6a3caac09d (go1.27.3))"}
+[0.129078, "o", "Error: no reports directory at missing; run `gooze run` first, or pass -o with the reports directory\r\n"]
+[0.154085, "o", "exit code 6\r\n"]

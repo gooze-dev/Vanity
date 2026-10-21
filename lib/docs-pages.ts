@@ -180,6 +180,16 @@ export const docsPages: DocsPage[] = [
     keywords: ["google cloud build","cloudbuild.yaml","artifact registry","gcp","pipeline","pull request","quality gate","incremental cache","go mutation testing"],
   },
   {
+    href: "/docs/ci/quality-gates",
+    title: "Quality gates",
+    seoTitle:
+      "Mutation Score Thresholds and Exit Codes in CI · Gooze",
+    section: "CI/CD",
+    description:
+      "Fail CI below a mutation score with Gooze thresholds: total, average and per file, a stricter bar for pull request diffs, gates on sharded runs, and every exit code.",
+    keywords: ["quality gate","mutation score threshold","minimum score","exit codes","fail ci","pull request","diff threshold","per-file score","allow_failure","allowExitCodes"],
+  },
+  {
     href: "/docs/ci/sharding",
     title: "Sharding and merging",
     seoTitle:
@@ -353,7 +363,7 @@ export const docsPages: DocsPage[] = [
       "Development Roadmap & Known Limitations · Gooze",
     section: "Help",
     description:
-      "Planned Gooze features and current limitations (threshold flag, custom mutators, custom test runner, JSON reports), with workarounds you can use today.",
+      "Planned Gooze features and current limitations (custom mutators, custom test runner, JSON reports), with workarounds you can use today.",
     keywords: ["project roadmap","future features","known limitations","workarounds","unsupported syntax","upcoming releases"],
   },
 ]

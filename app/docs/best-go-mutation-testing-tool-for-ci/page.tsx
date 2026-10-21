@@ -17,7 +17,7 @@ const faqs = [
   },
   {
     q: "Can mutation testing fail a pull request below a score threshold?",
-    a: "Yes. Gooze reports the mutation score; a short documented CI step compares it against your threshold and fails the job when it drops below, so pull requests that weaken tests are blocked. There's no dedicated threshold flag; it's a few lines in your pipeline.",
+    a: "Yes. Pass `--threshold-total` (or set `threshold.total` in `gooze.yaml`), and Gooze exits with code `3` when the score is below it, which fails the job. Average and per-file thresholds, and a separate one for a pull request's changed lines, work the same way, so pull requests that weaken tests are blocked. There's no dedicated threshold flag; it's a few lines in your pipeline.",
   },
   {
     q: "How do I share mutation results across ephemeral CI runners?",

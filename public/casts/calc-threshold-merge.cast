@@ -1,0 +1,4 @@
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792588328, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-threshold-merge (gooze v1.2.1-0.20261021130328-af6a3caac09d (go1.27.3))"}
+[0.183768, "o", "Mutation score: 84.62% (11 killed, 2 survived)\r\n"]
+[0.186252, "o", "Error: mutation score 84.62% is below threshold.total 90%\r\n"]
+[0.19269, "o", "exit code 3\r\n"]

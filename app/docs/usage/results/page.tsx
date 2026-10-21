@@ -134,7 +134,7 @@ export default function ResultsPage() {
               <code>(13 killed, 0 survived; 0 cached, 13 tested; changed lines since main)</code>.
               To fail CI
               below a minimum, see{" "}
-              <Link href="/docs/ci/github#gate">the score gate</Link>.
+              <Link href="/docs/ci/quality-gates">quality gates</Link>.
             </li>
             <li>
               <code>_index.yaml</code> stores the raw counts but

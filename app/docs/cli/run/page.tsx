@@ -51,6 +51,20 @@ const runFlags: RunFlag[] = [
     configKey: "run.mutagens",
   },
   {
+    flag: "--threshold-total",
+    description:
+      "Exit with code `3` when the mutation score is below this percent. `--threshold-average` (the mean of the file scores) and `--threshold-file` (every file's score) work the same way. Not checked on a shard. Env: `GOOZE_THRESHOLD_TOTAL`.",
+    defaultValue: "0 (off)",
+    configKey: "threshold.total",
+  },
+  {
+    flag: "--threshold-diff-total",
+    description:
+      "The same for a `--diff` run, on the changed lines; replaces the plain thresholds there. Also `--threshold-diff-average` and `--threshold-diff-file`. Env: `GOOZE_THRESHOLD_DIFF_TOTAL`.",
+    defaultValue: "0 (off)",
+    configKey: "threshold.diff.total",
+  },
+  {
     flag: "--parallel",
     alias: "-p",
     description: "Number of parallel workers for mutation testing (at least `1`).",
