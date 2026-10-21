@@ -29,7 +29,7 @@ const faqs = [
   },
   {
     q: "Does `--run` make each mutant faster to test?",
-    a: "No. Every mutant still runs the full test suite of its package. `--run` only generates fewer mutants, so the run is shorter because there is less to test.",
+    a: "No. Every mutant still runs all the tests of its own package (never the whole module). `--run` only generates fewer mutants, so the run is shorter because there is less to test.",
   },
   {
     q: "Does a `--run` or `--mutagens` run change my project reports?",
@@ -234,7 +234,7 @@ export default function SingleFunctionPage() {
               no pattern, so a <code>--run</code> run never mutates it.
             </li>
             <li>
-              Each mutant still runs the full test suite of its package.
+              Each mutant still runs all the tests of its own package, never the whole module.
             </li>
             <li>
               <code>--run</code> is a flag only; there is no config key or environment variable.

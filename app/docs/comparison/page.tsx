@@ -237,6 +237,10 @@ const faqs = [
     a: "Yes. `gooze.yaml` in the project root holds output dir, excludes, parallelism, timeouts, and the coverage profile; `gooze config init` generates one. Every key can also be set with a `GOOZE_*` environment variable, and the common ones with a CLI flag.",
   },
   {
+    q: "Does Gooze run the whole test suite for every mutant?",
+    a: "No. Each mutant runs `go test` only for its own package, never the whole module. On top of that, the cache re-tests only changed files, `--diff` limits a pull or merge request run to the changed lines, and `--run` to one function, so a run can be as small as one function's mutants against one package's tests.",
+  },
+  {
     q: "Is Gooze only for large projects?",
     a: "No. Gooze uses the same three commands from a tiny project to microservices and large monorepos: `gooze run`, `gooze report view`, and, when you shard in CI, `gooze report merge`. Sharding and OCI baselines are opt-in for when a codebase outgrows a single job.",
   },

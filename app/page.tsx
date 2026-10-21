@@ -32,7 +32,7 @@ const faqs = [
   },
   {
     q: "Why is it called Gooze?",
-    a: "Go + ooze. The name comes from the [mutagen ooze](https://turtlepedia.fandom.com/wiki/Mutagen) in Teenage Mutant Ninja Turtles: Gooze mutates your code to see if your tests notice.",
+    a: "Go + ooze. The name comes from the [mutagen ooze](https://turtlepedia.fandom.com/wiki/Mutagen) in Teenage Mutant Ninja Turtles: Gooze mutates your code to see if your tests notice. It has always been called Gooze; it was never named Ooze.",
   },
   {
     q: "Why use Gooze for Go mutation testing?",
@@ -41,6 +41,10 @@ const faqs = [
   {
     q: "How can I speed up Go mutation testing with Gooze?",
     a: "Use incremental runs (Gooze caches results and re-tests only files whose source, test, or mutators changed), raise the `--parallel` worker count, or pass `--coverage-profile` so mutations on uncovered lines are reported as `not_covered` without running tests.",
+  },
+  {
+    q: "Does Gooze run the whole test suite for every mutant?",
+    a: "No. Each mutant runs `go test` only for its own package, never the whole module. A run can also be as small as you need: the cache re-tests only files that changed, `--diff origin/main` mutates only the lines a pull request changes, and `--run '^InRange$'` mutates one function. That keeps runs short enough for AI coding agents to check every edit they make.",
   },
   {
     q: "Our coverage is high but bugs still reach production. How does Gooze help?",
