@@ -8,7 +8,8 @@ export default function CliVersionPage() {
     <section>
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">gooze version</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        Prints the Gooze version and the Go version it was built with.
+        You&apos;re filing a bug report or checking that an upgrade landed.{" "}
+        <code>gooze version</code> prints the Gooze version and the Go version it was built with.
       </p>
 
       <div>

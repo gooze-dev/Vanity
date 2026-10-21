@@ -271,7 +271,8 @@ export default function ComparisonPage() {
       />
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Gooze vs other Go mutation testing tools</h1>
       <p className="text-lg text-muted-foreground mb-4">
-        How Gooze compares with Gremlins, go-mutesting, and go-mutants, including what Gooze does not do yet.
+        You&apos;re choosing a Go mutation testing tool and want the facts side by side. This page compares
+        Gooze, Gremlins, go-mutesting, and go-mutants feature by feature, including what Gooze does not do yet.
       </p>
       <p className="text-sm text-muted-foreground mb-8">
         Last verified {VERIFIED} against Gooze <code>{DOCS_FACTS_VERSION}</code> and each tool&apos;s own documentation

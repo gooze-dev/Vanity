@@ -10,8 +10,9 @@ export default function CliReportPage() {
     <section>
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">gooze report</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        Work with reports that Gooze has already written: view them, merge sharded
-        results, and store or restore them from an OCI registry.
+        A run has finished and you want to see what survived, combine shard results or share
+        them. <code>gooze report</code> works with reports Gooze has already written: view them,
+        merge sharded results, and store or restore them from an OCI registry.
       </p>
 
       <div>
@@ -47,19 +48,23 @@ export default function CliReportPage() {
           <CodeBlock lang="bash" code="gooze report view -o DIR" />
 
           <h3>Example output</h3>
+          <p>
+            After the first run of the <code>calc</code> example, both bound checks in{" "}
+            <code>calc.go</code> survive:
+          </p>
           <CodeBlock
             lang="text"
             code={` PATH          │ MUTATIONS │ KILLED │ SURVIVED │ NOT COVERED │  SCORE
 ───────────────┼───────────┼────────┼──────────┼─────────────┼────────
- calc.go       │        16 │     14 │        2 │           0 │ 87.50%
+ calc.go       │        13 │     11 │        2 │           0 │ 84.62%
 ───────────────┼───────────┼────────┼──────────┼─────────────┼────────
- TOTAL FILES 1 │        16 │     14 │        2 │           0 │ 87.50%
+ TOTAL FILES 1 │        13 │     11 │        2 │           0 │ 84.62%
 
 Survivors (2):
 calc.go:10: survived (comparison): if n < lo { -> if n <= lo {
 calc.go:13: survived (comparison): if n > hi { -> if n >= hi {
 
-Mutation score: 87.50% (14 killed, 2 survived)`}
+Mutation score: 84.62% (11 killed, 2 survived)`}
           />
           <p>
             Each survivor line reads <code>path:line: status (mutagen): original -&gt; mutated</code>.

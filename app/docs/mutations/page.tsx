@@ -92,8 +92,9 @@ export default function MutationsPage() {
     <section>
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Mutation operators</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        A mutation is a tiny change in your code.
-        Gooze applies one mutation and runs your tests to see if they notice.
+        A report says a <code>comparison</code> mutant survived, and you want to know what
+        exactly Gooze changed. A mutation is a tiny change in your code. Gooze applies one
+        mutation and runs your tests to see if they notice.
         For what each result status means, see{" "}
         <Link href="/docs/usage/results">Reading results</Link>.
       </p>

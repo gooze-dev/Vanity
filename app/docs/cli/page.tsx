@@ -19,7 +19,8 @@ export default function CliPage() {
     <section>
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">CLI reference</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        This page is a simple map of the Gooze commands and the most common flags.
+        Look up which Gooze command to run and the flags they share. Each command has its own
+        page with every flag.
       </p>
 
       <div>

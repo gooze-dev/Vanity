@@ -10,14 +10,17 @@ export default function UIModesPage() {
     <section>
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">UI modes</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        Gooze picks its UI based on whether output is a TTY (interactive) or not (for example CI or redirected output).
+        The same <code>gooze run ./...</code> behaves differently on your laptop and in CI. Gooze
+        picks its UI from whether output is a TTY (interactive) or not (for example CI or
+        redirected output), so you get a live view locally and plain logs in pipelines.
       </p>
 
       <div>
         <div>
           <h2>TTY (interactive)</h2>
           <p>
-            When running in a terminal, Gooze uses an interactive TUI.
+            When running in a terminal, Gooze uses an interactive TUI. After a run, open every
+            mutation with its diff to see exactly what a survivor changed.
           </p>
 
           <div className="mt-4">

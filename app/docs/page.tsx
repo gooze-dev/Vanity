@@ -22,7 +22,9 @@ export default function DocsPage() {
         <GoozeLogo />
       </h1>
       <p className="text-lg text-muted-foreground mb-10">
-        Mutation testing for Go: Gooze mutates your source and runs tests to see what your suite catches.
+        Your tests pass, but would they fail if the code were wrong? Gooze is mutation testing for
+        Go: it makes small changes to your source, runs your tests against each one and shows you
+        the changes they miss.
       </p>
 
       <div className="rounded-lg border bg-card p-5 mb-12">
@@ -38,7 +40,7 @@ export default function DocsPage() {
 
       <div id="get-started">
         <h2>Get started</h2>
-        <p>Install Gooze, run it on your module, then read the report:</p>
+        <p>Install Gooze, run it from your module root, then read the report:</p>
 
         <CodeBlock
           lang="bash"
@@ -47,7 +49,9 @@ gooze run ./...
 gooze report view`}
         />
         <p className="text-sm text-muted-foreground mb-4">
-          The Quick start covers faster runs with <code>--coverage-profile</code> and parallel workers.
+          The Quick start walks through a first run on a small package, from the surviving mutants
+          to the tests that kill them, plus faster runs with <code>--coverage-profile</code> and
+          parallel workers.
         </p>
 
         <GoozePrimaryCtaButton asChild>

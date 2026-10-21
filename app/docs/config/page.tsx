@@ -48,8 +48,8 @@ export default function ConfigPage() {
       />
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Configuration (gooze.yaml)</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        Gooze reads config from a file named <code>gooze.yaml</code>.
-        This helps you keep the same settings in your repo and in CI.
+        You want the same Gooze settings on your machine and in CI. Gooze reads them from a
+        file named <code>gooze.yaml</code> that you commit with your code.
       </p>
 
       <div>

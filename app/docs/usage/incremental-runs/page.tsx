@@ -85,7 +85,8 @@ export default function IncrementalRunsPage() {
       />
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Incremental runs</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        Gooze caches mutation results and skips unchanged files on subsequent runs. Use{" "}
+        Mutation testing runs your tests once per mutant, so a full run on a large module is slow.
+        Gooze caches results per file and, on the next run, re-tests only what changed. Use{" "}
         <code>--no-cache</code> to force a full re-test.
       </p>
 
@@ -134,13 +135,28 @@ export default function IncrementalRunsPage() {
             Everything else is reused, and reports for deleted files are dropped, so the mutation
             score always covers the whole codebase, not only the files that were re-tested. The
             score line of <code>gooze run</code> counts cached and tested results in its scope
-            and says how many were which:
+            and says how many were which.
           </p>
-          <CodeBlock lang="text" code="Mutation score: 87.50% (14 killed, 2 survived; 16 cached, 0 tested)" />
           <p>
-            <code>gooze run --estimate</code> marks the files that will be served from the cache
-            in a <code>CACHE</code> column, with an <code>N CACHED</code> total.
+            In the <Link href="/docs/quick-start"><code>calc</code> example</Link>, the run after
+            the boundary tests were added tested all 13 mutations, because the test file changed.
+            Running again without changes tests nothing and still reports the full score:
           </p>
+          <CodeBlock lang="text" code="Mutation score: 100.00% (13 killed, 0 survived; 13 cached, 0 tested)" />
+          <p>
+            To check before a run, <code>gooze run --estimate</code> marks the files that will be
+            served from the cache in a <code>CACHE</code> column, with an <code>N CACHED</code> total:
+          </p>
+          <CodeBlock
+            lang="text"
+            code={` PATH          │ MUTATIONS │   CACHE   
+───────────────┼───────────┼───────────
+ calc.go       │    13     │ cached    
+───────────────┼───────────┼───────────
+ TOTAL FILES 1 │    13     │ 13 CACHED 
+
+13 of 13 mutations are in cached files and will not be re-tested; use --no-cache to re-test everything.`}
+          />
           <p>
             Changes are detected from file contents, not from git: no base branch, commit, or
             history is needed, and uncommitted edits are picked up. See{" "}
@@ -170,7 +186,7 @@ export default function IncrementalRunsPage() {
                 {cacheRows.map((r) => (
                   <TableRow key={r.action}>
                     <TableCell className="align-top">{withCode(r.action)}</TableCell>
-                    <TableCell className="align-top whitespace-nowrap">{r.state}</TableCell>
+                    <TableCell className="align-top">{r.state}</TableCell>
                     <TableCell className="align-top">{r.behavior}</TableCell>
                   </TableRow>
                 ))}

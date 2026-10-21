@@ -50,10 +50,77 @@ export default function MutationTestingPage() {
       />
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">What is mutation testing?</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        Mutation testing measures the quality of your test suite by injecting
-        small, deliberate bugs (mutations) into your code and checking whether
-        your tests catch them. It asks: if we break the code, do the tests fail?
+        Your tests are green and coverage is high, but a bug in a bound check can still reach
+        production. Mutation testing asks a direct question: if the code breaks, do the tests
+        fail? It injects small, deliberate bugs (mutations) into your code and checks whether your
+        tests catch them.
       </p>
+
+      <div>
+        <div id="idea">
+          <h2>The basic idea</h2>
+          <ol>
+            <li>Take your real code.</li>
+            <li>Make one tiny change (a mutation).</li>
+            <li>Run your tests.</li>
+            <li>
+              If tests fail, good: the mutation is <strong>killed</strong>.
+              If tests still pass, the mutation <strong>survived</strong>, and your tests missed
+              a change in behavior.
+            </li>
+          </ol>
+        </div>
+
+        <div id="example">
+          <h2>A small example (what Gooze finds)</h2>
+          <p>
+            <code>InRange</code> reports whether <code>n</code> is inside <code>[lo, hi]</code>,
+            with both bounds inclusive:
+          </p>
+          <CodeBlock
+            lang="go"
+            code={`func InRange(n, lo, hi int) bool {
+	if n < lo {
+		return false
+	}
+	if n > hi {
+		return false
+	}
+	return true
+}`}
+          />
+          <p>
+            The tests try a value inside the range and one on each side. They pass, and every line runs:
+          </p>
+          <CodeBlock
+            lang="go"
+            code={`		{5, 0, 10, true},
+		{-3, 0, 10, false},
+		{42, 0, 10, false},`}
+          />
+          <p>
+            Gooze makes 13 mutations of this file. One of them changes <code>if n &lt; lo {"{"}</code>{" "}
+            to <code>if n &lt;= lo {"{"}</code>. The tests never call <code>InRange</code> with{" "}
+            <code>n</code> equal to <code>lo</code>, so they still pass and the mutant survives.
+            The same happens on the upper bound:
+          </p>
+          <CodeBlock
+            lang="text"
+            code={`calc.go:10: survived (comparison): if n < lo { -> if n <= lo {
+calc.go:13: survived (comparison): if n > hi { -> if n >= hi {
+
+Mutation score: 84.62% (11 killed, 2 survived)`}
+          />
+          <p>The fix is two test cases exactly on the bounds:</p>
+          <CodeBlock
+            lang="go"
+            code={`		{0, 0, 10, true},  // lower bound is inside
+		{10, 0, 10, true}, // upper bound is inside`}
+          />
+          <p>Now both mutants make a test fail, and the score reaches 100%:</p>
+          <CodeBlock lang="text" code="Mutation score: 100.00% (13 killed, 0 survived)" />
+        </div>
+      </div>
 
       <div id="vs-coverage">
         <h2>Code coverage vs. mutation testing</h2>
@@ -91,7 +158,8 @@ export default function MutationTestingPage() {
           </TableBody>
         </Table>
         <p>
-          This is not just intuition. Just et al. (FSE 2014) found a test
+          In the example, coverage was already complete before the fix. This is not just
+          intuition. Just et al. (FSE 2014) found a test
           suite&apos;s ability to{" "}
           <a
             href="https://dl.acm.org/doi/10.1145/2635868.2635929"
@@ -119,7 +187,7 @@ export default function MutationTestingPage() {
           <dt><strong>Mutant</strong></dt>
           <dd>
             A copy of your code with one small, deliberate change injected by
-            Gooze (for example, <code>&gt;</code> → <code>&gt;=</code>).
+            Gooze (for example, <code>&lt;</code> → <code>&lt;=</code>).
           </dd>
           <dt><strong>Killed</strong></dt>
           <dd>The desired outcome: a test failed on the mutant, so the change was caught.</dd>
@@ -136,19 +204,6 @@ export default function MutationTestingPage() {
       </div>
 
       <div>
-        <div id="idea">
-          <h2>The basic idea</h2>
-          <ol>
-            <li>Take your real code.</li>
-            <li>Make one tiny change (a mutation).</li>
-            <li>Run your tests.</li>
-            <li>
-              If tests fail, good: the mutation is <strong>killed</strong>.
-              If tests still pass, not good: the mutation <strong>survived</strong>.
-            </li>
-          </ol>
-        </div>
-
         <div id="why">
           <h2>Why people use it</h2>
           <ul>
@@ -156,55 +211,9 @@ export default function MutationTestingPage() {
             <li>Mutation testing shows where assertions are missing or too weak.</li>
             <li>It gives a repeatable signal in CI (not just &quot;coverage&quot;).</li>
           </ul>
-        </div>
-
-        <div id="example">
-          <h2>A small example (what Gooze finds)</h2>
           <p>
-            Code:
-          </p>
-          <CodeBlock
-            lang="go"
-            code={`func label(balance int) string {
-    if balance > 0 {
-        return "positive"
-    }
-    return "not-positive"
-}
-`}
-          />
-
-          <p>
-            Test (too weak): it only checks <code>balance = 1</code>.
-          </p>
-          <CodeBlock
-            lang="go"
-            code={`import "testing"
-
-func TestLabel_Positive(t *testing.T) {
-    got := label(1)
-    if got != "positive" {
-        t.Fatalf("expected positive, got %q", got)
-    }
-}
-`}
-          />
-
-          <p>
-            One common mutation is changing <code>&gt;</code> to <code>&gt;=</code>.
-            With that change, <code>balance = 0</code> returns <code>&quot;positive&quot;</code>.
-            If you do not test <code>balance = 0</code>, this mutation can survive.
-          </p>
-          <CodeBlock
-            lang="diff"
-            code={`- if balance > 0 {
-+ if balance >= 0 {
-    return "positive"
-}`}
-          />
-
-          <p>
-            Fix: add a test for <code>balance = 0</code> (and maybe negative too).
+            To run the example yourself, follow the{" "}
+            <Link href="/docs/quick-start">Quick start</Link>.
           </p>
         </div>
 

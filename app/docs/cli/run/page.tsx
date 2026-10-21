@@ -93,8 +93,8 @@ export default function CliRunPage() {
     <section>
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">gooze run</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        Runs mutation testing and writes reports.
-        This is the main command.
+        You want to know whether your tests catch real bugs, not only run the code.{" "}
+        <code>gooze run</code> is the main command: it runs mutation testing and writes reports.
       </p>
 
       <div>
@@ -192,9 +192,14 @@ export default function CliRunPage() {
           </ol>
           <p>
             It ends with the mutation score of every result in scope, cached and tested, with a
-            breakdown:
+            breakdown. The first run of the <code>calc</code> example tests all 13 mutations:
           </p>
-          <CodeBlock lang="text" code="Mutation score: 87.50% (14 killed, 2 survived; 16 cached, 0 tested)" />
+          <CodeBlock lang="text" code="Mutation score: 84.62% (11 killed, 2 survived; 0 cached, 13 tested)" />
+          <p>
+            Run it again without changes (here after the boundary tests were added) and every
+            result comes from the cache:
+          </p>
+          <CodeBlock lang="text" code="Mutation score: 100.00% (13 killed, 0 survived; 13 cached, 0 tested)" />
           <p className="text-sm text-muted-foreground">
             With <code>--no-cache</code> it scores only what it tested; a sharded run scores its
             shard (<code>gooze report merge</code> gives the full score).
@@ -212,18 +217,29 @@ export default function CliRunPage() {
           <CodeBlock lang="bash" code="gooze run --estimate ./internal/domain/..." />
           <p className="text-sm text-muted-foreground">
             In a TTY you get an interactive, filterable list; in CI you get a table with
-            per-file mutation counts. Files whose stored reports are still valid are marked in a{" "}
-            <code>CACHE</code> column; they will not be re-tested:
+            per-file mutation counts:
+          </p>
+          <CodeBlock
+            lang="text"
+            code={` PATH          │ MUTATIONS
+───────────────┼───────────
+ calc.go       │    13
+───────────────┼───────────
+ TOTAL FILES 1 │    13`}
+          />
+          <p className="text-sm text-muted-foreground">
+            Files whose stored reports are still valid are marked in a <code>CACHE</code> column;
+            they will not be re-tested:
           </p>
           <CodeBlock
             lang="text"
             code={` PATH          │ MUTATIONS │   CACHE
 ───────────────┼───────────┼───────────
- calc.go       │    16     │ cached
+ calc.go       │    13     │ cached
 ───────────────┼───────────┼───────────
- TOTAL FILES 1 │    16     │ 16 CACHED
+ TOTAL FILES 1 │    13     │ 13 CACHED
 
-16 of 16 mutations are in cached files and will not be re-tested; use --no-cache to re-test everything.`}
+13 of 13 mutations are in cached files and will not be re-tested; use --no-cache to re-test everything.`}
           />
         </div>
 

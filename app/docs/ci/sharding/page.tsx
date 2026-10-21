@@ -10,8 +10,9 @@ export default function ShardingPage() {
     <section>
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Sharding and merging</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        Split one mutation run across parallel jobs to cut wall-clock time, then merge the
-        shards back into a single report set.
+        Every mutation runs your package&apos;s tests once, so a large module can keep one CI
+        job busy for a long time. Split the run across parallel jobs, then merge the shards
+        back into one report set that reads like a single run.
       </p>
 
       <div>
@@ -28,6 +29,10 @@ export default function ShardingPage() {
 gooze run -s 1/3 ./...
 gooze run -s 2/3 ./...`}
           />
+          <p>
+            Each job tests only its slice of the mutations and prints a score for that slice,
+            not for the whole module.
+          </p>
           <p className="text-sm text-muted-foreground">
             Shards are 0-based: the value must satisfy{" "}
             <code>0 &lt;= INDEX &lt; TOTAL</code>
@@ -42,6 +47,8 @@ gooze run -s 2/3 ./...`}
             Bring every <code>shard_*</code> directory back
             into one reports directory (in CI, upload each shard as an artifact and download them
             all in a final job), then merge. Results don&apos;t show up in the viewer until you do.
+            After the merge, <code>gooze report view</code> shows one table and one score for
+            the whole module, the same as an unsharded run would.
           </p>
           <CodeBlock
             lang="bash"
@@ -59,6 +66,7 @@ gooze report view`}
 
         <div id="ci">
           <h2>Ready-made CI pipelines</h2>
+          <p>Both provider guides wire these two steps into a pipeline:</p>
           <ul>
             <li>
               <Link href="/docs/ci/github#sharded">GitHub Actions</Link>:

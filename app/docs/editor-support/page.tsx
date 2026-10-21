@@ -42,9 +42,11 @@ export default function EditorSupportPage() {
         >
           goozels
         </a>{" "}
-        is the language server for Gooze. It runs in front of <code>gopls</code>,
-        so you keep all your normal Go features and get Gooze ones on top: completion,
-        hovers, live validation, and one-click mutation runs.
+        is the language server for Gooze. After a run, you don&apos;t want to switch to a
+        terminal table to find the two lines your tests missed; goozels marks them in the
+        file you&apos;re editing. It runs in front of <code>gopls</code>, so you keep all your
+        normal Go features and get Gooze ones on top: completion, hovers, live validation,
+        and one-click mutation runs.
       </p>
 
       <div>
@@ -158,19 +160,25 @@ export default function EditorSupportPage() {
           <h2>Command line</h2>
           <p>
             <code>goozels check</code> prints the same diagnostics without an editor,
-            one per line, showing each surviving mutant&apos;s original and mutated code:
+            one per line, showing each surviving mutant&apos;s original and mutated code.
+            After the first run of the <code>calc</code> package from the{" "}
+            <Link href="/docs/quick-start" className={LINK}>quick start</Link>, it shows the
+            file score and the two bound checks no test pins down:
           </p>
+          <CodeBlock lang="bash" code="goozels check calc.go" />
           <CodeBlock
-            lang="bash"
-            code={`$ goozels check calc.go gooze.yaml
-calc.go:1:1: warning: gooze: score 87.50% — 14 killed, 2 survived
+            lang="text"
+            code={`calc.go:1:1: warning: gooze: score 84.62% — 11 killed, 2 survived
 calc.go:10:2: warning: gooze: surviving comparison mutant — tests still pass with \`if n < lo {\` → \`if n <= lo {\`
-calc.go:13:2: warning: gooze: surviving comparison mutant — tests still pass with \`if n > hi {\` → \`if n >= hi {\`
-gooze.yaml:1:1: error: missing a space after ":"; gooze will ignore this whole file and use its defaults`}
+calc.go:13:2: warning: gooze: surviving comparison mutant — tests still pass with \`if n > hi {\` → \`if n >= hi {\``}
           />
           <p>
-            Checking a <code>_test.go</code> file also reports the source files it
-            tests. When a file changed since gooze last ran, goozels says so and prints
+            These are the same lines your editor marks. Checking{" "}
+            <code>calc_test.go</code> prints the same three lines, because a{" "}
+            <code>_test.go</code> file reports the source files it tests. Add the two
+            boundary tests, run <code>gooze run ./...</code> again, and the warnings go away.
+            You can also pass <code>gooze.yaml</code>: a line gooze can&apos;t parse becomes an
+            error that says gooze will ignore the whole file. When a file changed since gooze last ran, goozels says so and prints
             the rerun command instead of pointing at lines that moved. It finds the
             workspace by walking up to <code>.gooze-reports</code>;{" "}
             <code>-max N</code> caps the output. It exits <code>1</code> when it reports an error
@@ -181,7 +189,7 @@ gooze.yaml:1:1: error: missing a space after ":"; gooze will ignore this whole f
         <div id="ai-agents">
           <h2>AI coding agents</h2>
           <p>
-            Coding agents keep their own Go tooling; goozels adds gooze diagnostics
+            Coding agents keep their own Go tooling; goozels adds the same gooze diagnostics
             after each edit, so the agent sees the mutation score and every
             surviving mutant right away and can write tests that kill them. Editing a
             test file shows the survivors of the code it tests.

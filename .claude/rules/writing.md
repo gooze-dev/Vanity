@@ -54,11 +54,12 @@ marketing (the rules above still win).
 - **Problem, action, result.** Each section moves the reader one step: what's wrong or what
   they want, what they run or change, what they see. Show the result (output, report line,
   score change) right after the step that causes it.
-- **One running example.** Use the same small `calc` package across pages: the bound check
-  `if n < lo {` that survives as `if n <= lo {`, the test that kills it, the score going up.
-  New pages reuse it (same file names, line numbers and output) instead of inventing new
-  code, so the docs read like one continuous story. Use another example only when `calc`
-  can't show the feature, and keep it as small.
+- **One running example.** Use the `calc` story in `.claude/docs-example/calc.md`: `InRange`,
+  whose bound checks `if n < lo {` and `if n > hi {` survive as `<=` / `>=` (84.62%), the two
+  boundary tests that kill them (100%), then a fully cached re-run. Every output there is real
+  gooze v1.2.0 output; quote it exactly (same file names, line numbers, numbers) instead of
+  writing new code or output, so the docs read like one continuous story. Use another example
+  only when `calc` can't show the feature, keep it as small, and run it for real.
 - **Connect the steps.** End a section with why the next one matters, in one sentence, when it
   isn't obvious ("Running everything again is slow, so the next run only re-tests what
   changed."). Link to the next page the same way, not with "see also" lists.
