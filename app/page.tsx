@@ -11,6 +11,7 @@ import { LatestReleaseBadge } from "@/components/latest-release-badge";
 import { Github } from "lucide-react";
 import { CodeBlock } from "@/components/code-block";
 import { ClaudeCodeAnnouncement } from "@/components/agent-install";
+import { faqPageJsonLd, withCode } from "@/components/docs-faq";
 
 // Self-canonical for the homepage. The root layout no longer sets a default
 // canonical (it would leak onto every other page).
@@ -33,7 +34,7 @@ const faqs = [
   },
   {
     q: "How can I speed up Go mutation testing with Gooze?",
-    a: "Use incremental runs (Gooze caches results and re-tests only files whose source, test, or mutators changed), raise the --parallel worker count, or pass --coverage-profile so mutations on uncovered lines are reported as not_covered without running tests.",
+    a: "Use incremental runs (Gooze caches results and re-tests only files whose source, test, or mutators changed), raise the `--parallel` worker count, or pass `--coverage-profile` so mutations on uncovered lines are reported as `not_covered` without running tests.",
   },
   {
     q: "Our coverage is high but bugs still reach production. How does Gooze help?",
@@ -49,7 +50,7 @@ const faqs = [
   },
   {
     q: "How do we store reports across ephemeral CI runners?",
-    a: "Gooze packages the reports directory as an OCI artifact. CI jobs can push and pull it to your existing container registry (such as GHCR) with gooze report push and gooze report pull, so runs share one baseline.",
+    a: "Gooze packages the reports directory as an OCI artifact. CI jobs can push and pull it to your existing container registry (such as GHCR) with `gooze report push` and `gooze report pull`, so runs share one baseline.",
   },
   {
     q: "How can developers see mutation results without waiting for CI?",
@@ -57,15 +58,7 @@ const faqs = [
   },
 ];
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-};
+const faqJsonLd = faqPageJsonLd(faqs);
 
 export default async function Home() {
   return (
@@ -191,8 +184,8 @@ export default async function Home() {
                 <li>Generate a mutant (a small code change).</li>
                 <li>Run the test suite against that mutant.</li>
                 <li>
-                  Report <span className="font-medium text-foreground">killed</span> vs{' '}
-                  <span className="font-medium text-foreground">survived</span> and compute a mutation score.
+                  Report <code className="px-1.5 py-0.5 rounded bg-muted text-xs">killed</code> vs{' '}
+                  <code className="px-1.5 py-0.5 rounded bg-muted text-xs">survived</code> and compute a mutation score.
                 </li>
               </ol>
             </div>
@@ -313,9 +306,9 @@ export default async function Home() {
             <dl className="space-y-8">
               {faqs.map((f) => (
                 <div key={f.q}>
-                  <dt className="text-lg font-semibold mb-2">{f.q}</dt>
+                  <dt className="text-lg font-semibold mb-2">{withCode(f.q)}</dt>
                   <dd className="text-muted-foreground leading-relaxed">
-                    {f.a}
+                    {withCode(f.a)}
                   </dd>
                 </div>
               ))}

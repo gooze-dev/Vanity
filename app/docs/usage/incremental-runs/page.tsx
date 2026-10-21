@@ -1,4 +1,5 @@
 import { docsMetadata } from "@/lib/docs-meta"
+import { DocsFaq, faqPageJsonLd, withCode } from "@/components/docs-faq"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
@@ -29,7 +30,7 @@ const cacheRows = [
     behavior: "Re-tests that file; reuses every other file.",
   },
   {
-    action: "Edit its _test.go file",
+    action: "Edit its `_test.go` file",
     state: "Partial miss",
     behavior: "Re-tests the associated source file.",
   },
@@ -39,7 +40,7 @@ const cacheRows = [
     behavior: "Re-tests every file whose reports came from an older version of that mutator.",
   },
   {
-    action: "gooze run --no-cache",
+    action: "`gooze run --no-cache`",
     state: "Bypass",
     behavior: "Ignores stored results and re-tests everything.",
   },
@@ -57,15 +58,15 @@ const faqs = [
   },
   {
     q: "How do I disable the Gooze cache?",
-    a: "Pass --no-cache for a one-off full re-run, or set GOOZE_NO_CACHE=true in the environment.",
+    a: "Pass `--no-cache` for a one-off full re-run, or set `GOOZE_NO_CACHE=true` in the environment.",
   },
   {
     q: "Where does Gooze store its incremental cache?",
-    a: "In the reports directory (default .gooze-reports), alongside the YAML reports. Change it with -o/--output.",
+    a: "In the reports directory (default `.gooze-reports`), alongside the YAML reports. Change it with `-o/--output`.",
   },
   {
     q: "How do I clear or reset the Gooze cache?",
-    a: "Delete the reports directory (for example rm -rf .gooze-reports); Gooze rebuilds it on the next run.",
+    a: "Delete the reports directory (for example `rm -rf .gooze-reports`); Gooze rebuilds it on the next run.",
   },
   {
     q: "Why did Gooze finish instantly and skip my mutations?",
@@ -73,15 +74,7 @@ const faqs = [
   },
 ]
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-}
+const faqJsonLd = faqPageJsonLd(faqs)
 
 export default function IncrementalRunsPage() {
   return (
@@ -101,7 +94,7 @@ export default function IncrementalRunsPage() {
         <AlertDescription>
           <p>
             Related pages: <Link href="/docs/reports">Report format</Link> and{" "}
-            <Link href="/docs/cli/run#cache">gooze run</Link>.
+            <Link href="/docs/cli/run#cache"><code>gooze run</code></Link>.
           </p>
         </AlertDescription>
       </Alert>
@@ -133,7 +126,7 @@ export default function IncrementalRunsPage() {
             <li>its content changed,</li>
             <li>its test file (<code>&lt;name&gt;_test.go</code>) changed, or</li>
             <li>
-              the mutators that produced its reports changed (a Gooze upgrade; for example v1.2.0
+              the mutators that produced its reports changed (a Gooze upgrade; for example <code>v1.2.0</code>{" "}
               re-tests reports from version 1 of the <code>comparison</code> mutator).
             </li>
           </ul>
@@ -155,10 +148,10 @@ export default function IncrementalRunsPage() {
           </p>
           <p>
             What the cache does not see: changes in <em>other</em> files that a file&apos;s tests
-            depend on (a helper in another file, a shared test fixture, testdata, a dependency bump).
+            depend on (a helper in another file, a shared test fixture, <code>testdata</code>, a dependency bump).
             Those can leave a cached result out of date. Run a full pass with{" "}
             <code>--no-cache</code> on a schedule (for
-            example nightly on main) to refresh the baseline.
+            example nightly on <code>main</code>) to refresh the baseline.
           </p>
         </div>
 
@@ -176,7 +169,7 @@ export default function IncrementalRunsPage() {
               <TableBody className="text-muted-foreground">
                 {cacheRows.map((r) => (
                   <TableRow key={r.action}>
-                    <TableCell className="align-top">{r.action}</TableCell>
+                    <TableCell className="align-top">{withCode(r.action)}</TableCell>
                     <TableCell className="align-top whitespace-nowrap">{r.state}</TableCell>
                     <TableCell className="align-top">{r.behavior}</TableCell>
                   </TableRow>
@@ -207,15 +200,7 @@ export default function IncrementalRunsPage() {
           </p>
         </div>
 
-        <div id="faq">
-          <h2>FAQ</h2>
-          {faqs.map((f) => (
-            <div key={f.q}>
-              <h3>{f.q}</h3>
-              <p>{f.a}</p>
-            </div>
-          ))}
-        </div>
+        <DocsFaq faqs={faqs} />
       </div>
     </section>
   )

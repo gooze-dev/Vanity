@@ -1,4 +1,5 @@
 import { docsMetadata } from "@/lib/docs-meta"
+import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 import { CodeBlock } from "@/components/code-block"
 import {
   Table,
@@ -16,35 +17,27 @@ export const metadata = docsMetadata("/docs/config")
 const faqs = [
   {
     q: "How do I configure Gooze?",
-    a: "Put a gooze.yaml in your project root; run gooze config init to generate a starter file. Every key can also be set with a GOOZE_* environment variable, and the common ones (output, no-cache, paths.exclude, run.*) with a CLI flag.",
+    a: "Put a `gooze.yaml` in your project root; run `gooze config init` to generate a starter file. Every key can also be set with a `GOOZE_*` environment variable, and the common ones (`output`, `no-cache`, `paths.exclude`, `run.*`) with a CLI flag.",
   },
   {
     q: "What is the configuration precedence in Gooze?",
-    a: "CLI flags override environment variables, environment variables override gooze.yaml, and gooze.yaml overrides the built-in defaults.",
+    a: "CLI flags override environment variables, environment variables override `gooze.yaml`, and `gooze.yaml` overrides the built-in defaults.",
   },
   {
-    q: "How do I turn a gooze.yaml key into an environment variable?",
-    a: "Add the GOOZE_ prefix, uppercase the key, and replace dots and hyphens with underscores. For example, paths.exclude becomes GOOZE_PATHS_EXCLUDE and run.parallel becomes GOOZE_RUN_PARALLEL.",
+    q: "How do I turn a `gooze.yaml` key into an environment variable?",
+    a: "Add the `GOOZE_` prefix, uppercase the key, and replace dots and hyphens with underscores. For example, `paths.exclude` becomes `GOOZE_PATHS_EXCLUDE` and `run.parallel` becomes `GOOZE_RUN_PARALLEL`.",
   },
   {
     q: "How do I exclude vendor or mock files?",
-    a: "List regular-expression patterns under paths.exclude in gooze.yaml, or pass -x/--exclude on the CLI (repeat the flag for more than one pattern).",
+    a: "List regular-expression patterns under `paths.exclude` in `gooze.yaml`, or pass `-x`/`--exclude` on the CLI (repeat the flag for more than one pattern).",
   },
   {
     q: "Why is my logging configuration being ignored?",
-    a: "The --verbose and --log-output CLI flags take precedence over the file and environment logging settings, so a flag on the command line overrides what is in gooze.yaml.",
+    a: "The `--verbose` and `--log-output` CLI flags take precedence over the file and environment logging settings, so a flag on the command line overrides what is in `gooze.yaml`.",
   },
 ]
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-}
+const faqJsonLd = faqPageJsonLd(faqs)
 
 export default function ConfigPage() {
   return (
@@ -151,7 +144,7 @@ export default function ConfigPage() {
                   <TableCell>
                     <code>GOOZE_NO_CACHE</code>
                   </TableCell>
-                  <TableCell>Disable incremental cache when true</TableCell>
+                  <TableCell>Disable incremental cache when <code>true</code></TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
@@ -191,40 +184,41 @@ export default function ConfigPage() {
                   <TableCell>
                     <code>GOOZE_LOG_VERBOSE</code>
                   </TableCell>
-                  <TableCell>Force verbose logging when true</TableCell>
+                  <TableCell>Force verbose logging when <code>true</code></TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
                     <code>GOOZE_LOG_LEVEL</code>
                   </TableCell>
                   <TableCell>
-                    Log level: debug, info, warn or error, or a numeric slog level (-4 debug, 0 info, 4
-                    warn, 8 error); default info
+                    Log level: <code>debug</code>, <code>info</code>, <code>warn</code> or{" "}
+                    <code>error</code>, or a numeric slog level (<code>-4</code> debug, <code>0</code>{" "}
+                    info, <code>4</code> warn, <code>8</code> error); default <code>info</code>
                   </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
                     <code>GOOZE_LOG_MAX_SIZE</code>
                   </TableCell>
-                  <TableCell>Max log size in MiB before rotation (default 10)</TableCell>
+                  <TableCell>Max log size in MiB before rotation (default <code>10</code>)</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
                     <code>GOOZE_LOG_MAX_BACKUPS</code>
                   </TableCell>
-                  <TableCell>Number of rotated log files to keep (default 3)</TableCell>
+                  <TableCell>Number of rotated log files to keep (default <code>3</code>)</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
                     <code>GOOZE_LOG_MAX_AGE</code>
                   </TableCell>
-                  <TableCell>Days to keep rotated logs (default 28)</TableCell>
+                  <TableCell>Days to keep rotated logs (default <code>28</code>)</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
                     <code>GOOZE_LOG_COMPRESS</code>
                   </TableCell>
-                  <TableCell>Gzip rotated logs (default true)</TableCell>
+                  <TableCell>Gzip rotated logs (default <code>true</code>)</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -291,9 +285,9 @@ log:
             any value out of range:
           </p>
           <ul>
-            <li><code>run.parallel</code> must be at least 1</li>
-            <li><code>run.mutation_timeout</code> must be at least 1 (seconds)</li>
-            <li><code>version</code> must be 1</li>
+            <li><code>run.parallel</code> must be at least <code>1</code></li>
+            <li><code>run.mutation_timeout</code> must be at least <code>1</code> (seconds)</li>
+            <li><code>version</code> must be <code>1</code></li>
           </ul>
           <CodeBlock lang="text" code="Error: invalid run.parallel: 0 is out of range: must be at least 1" />
         </div>
@@ -310,15 +304,7 @@ log:
           </div>
         </div>
 
-        <div id="faq">
-          <h2>FAQ</h2>
-          {faqs.map((f) => (
-            <div key={f.q}>
-              <h3>{f.q}</h3>
-              <p>{f.a}</p>
-            </div>
-          ))}
-        </div>
+        <DocsFaq faqs={faqs} />
       </div>
     </section>
   )

@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 
 import { docsMetadata } from "@/lib/docs-meta"
 import { CodeBlock } from "@/components/code-block"
@@ -34,19 +35,11 @@ const faqs = [
   },
   {
     q: "How is the mutation score calculated?",
-    a: "Mutation score = killed / (all mutations − error). Survived, not_covered, and timeout results are in the denominator and lower the score; error mutations (mutants that don't compile) are left out.",
+    a: "Mutation score = `killed / (all mutations − error)`. Survived, `not_covered`, and `timeout` results are in the denominator and lower the score; error mutations (mutants that don't compile) are left out.",
   },
 ]
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-}
+const faqJsonLd = faqPageJsonLd(faqs)
 
 export default function MutationTestingPage() {
   return (
@@ -135,7 +128,7 @@ export default function MutationTestingPage() {
           <dt><strong>Mutation score</strong></dt>
           <dd>
             <code>killed / (all mutations − error)</code>. Survived,
-            not_covered, and timeout lower it; error is excluded. See{" "}
+            <code>not_covered</code>, and <code>timeout</code> lower it; <code>error</code> is excluded. See{" "}
             <Link href="/docs/usage/results/">reading results</Link> for every
             status.
           </dd>
@@ -182,7 +175,7 @@ export default function MutationTestingPage() {
           />
 
           <p>
-            Test (too weak): it only checks balance = 1.
+            Test (too weak): it only checks <code>balance = 1</code>.
           </p>
           <CodeBlock
             lang="go"
@@ -199,8 +192,8 @@ func TestLabel_Positive(t *testing.T) {
 
           <p>
             One common mutation is changing <code>&gt;</code> to <code>&gt;=</code>.
-            With that change, balance = 0 returns &quot;positive&quot;.
-            If you do not test balance = 0, this mutation can survive.
+            With that change, <code>balance = 0</code> returns <code>&quot;positive&quot;</code>.
+            If you do not test <code>balance = 0</code>, this mutation can survive.
           </p>
           <CodeBlock
             lang="diff"
@@ -211,19 +204,11 @@ func TestLabel_Positive(t *testing.T) {
           />
 
           <p>
-            Fix: add a test for balance = 0 (and maybe negative too).
+            Fix: add a test for <code>balance = 0</code> (and maybe negative too).
           </p>
         </div>
 
-        <div id="faq">
-          <h2>FAQ</h2>
-          {faqs.map((f) => (
-            <div key={f.q}>
-              <h3>{f.q}</h3>
-              <p>{f.a}</p>
-            </div>
-          ))}
-        </div>
+        <DocsFaq faqs={faqs} />
       </div>
     </section>
   )

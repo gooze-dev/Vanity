@@ -2,6 +2,7 @@ import type * as React from "react"
 import { docsMetadata } from "@/lib/docs-meta"
 import Link from "next/link"
 import { ArrowRight, CircleCheck, CircleDashed, FlaskConical } from "lucide-react"
+import { withCode } from "@/components/docs-faq"
 
 // Stated plainly so readers (and search/AI summaries) don't have to guess.
 // Keep in sync with the comparison page when a limitation is lifted.
@@ -33,12 +34,12 @@ const limitations = [
   {
     id: "build-tags",
     title: "Build tags",
-    detail: "Passing -tags through to go test is planned, so files behind build constraints get mutated too.",
+    detail: "Passing `-tags` through to `go test` is planned, so files behind build constraints get mutated too.",
   },
   {
     id: "exec",
     title: "Custom test runner",
-    detail: "Gooze runs go test on the package that owns each mutated file; plugging in your own test command is planned.",
+    detail: "Gooze runs `go test` on the package that owns each mutated file; plugging in your own test command is planned.",
   },
   {
     id: "agents",
@@ -49,7 +50,7 @@ const limitations = [
   {
     id: "json",
     title: "JSON and HTML reports",
-    detail: "Results are YAML files plus _index.yaml; JSON and HTML output are on the way.",
+    detail: "Results are YAML files plus `_index.yaml`; JSON and HTML output are on the way.",
     workaround: { text: "the report format", href: "/docs/reports" },
   },
 ]
@@ -111,7 +112,7 @@ const themes: Theme[] = [
         ),
       },
       {
-        title: "JSON Schema for gooze.yaml",
+        title: "JSON Schema for `gooze.yaml`",
         detail: "A published schema, registered in SchemaStore, so any YAML-aware editor validates and completes the config.",
       },
       {
@@ -241,7 +242,7 @@ const themes: Theme[] = [
         title: "Build tags",
         detail: (
           <>
-            Pass <code>-tags</code> through to go test so files behind build constraints get tested.
+            Pass <code>-tags</code> through to <code>go test</code> so files behind build constraints get tested.
           </>
         ),
       },
@@ -282,7 +283,7 @@ const themes: Theme[] = [
         title: "CPU-based parallelism",
         detail: (
           <>
-            Default <code>--parallel</code> to the number of CPU cores instead of 1.
+            Default <code>--parallel</code> to the number of CPU cores instead of <code>1</code>.
           </>
         ),
       },
@@ -367,7 +368,12 @@ const themes: Theme[] = [
       },
       {
         title: "opencode",
-        detail: "Mutation results after every opencode edit through a plugin for opencode 1.x and 2.x. The plugins exist in goozels; support lands once they're verified with opencode.",
+        detail: (
+          <>
+            Mutation results after every opencode edit through a plugin for opencode <code>1.x</code> and{" "}
+            <code>2.x</code>. The plugins exist in goozels; support lands once they&apos;re verified with opencode.
+          </>
+        ),
       },
     ],
   },
@@ -411,7 +417,7 @@ function Card({ item }: { item: Item }) {
       }
     >
       <div className="flex items-start justify-between gap-3">
-        <h3 className="text-base font-semibold leading-snug text-foreground">{item.title}</h3>
+        <h3 className="text-base font-semibold leading-snug text-foreground">{withCode(item.title)}</h3>
         <Status shipped={item.shipped} beta={item.beta} />
       </div>
       <p className="text-sm leading-relaxed text-muted-foreground [&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.8125rem] [&_code]:text-foreground">
@@ -500,8 +506,8 @@ export default function RoadmapPage() {
           {limitations.map((item) => (
             <li key={item.id} id={item.id} className="p-4">
               <div className="font-medium text-foreground">{item.title}</div>
-              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                {item.detail}
+              <p className="mt-1 text-sm leading-relaxed text-muted-foreground [&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.8125rem] [&_code]:text-foreground">
+                {withCode(item.detail)}
                 {item.workaround && (
                   <>
                     {" "}Until then, use{" "}

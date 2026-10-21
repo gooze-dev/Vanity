@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 import { docsMetadata } from "@/lib/docs-meta"
 import { CodeBlock } from "@/components/code-block"
 
@@ -10,27 +11,19 @@ export const metadata = docsMetadata("/docs/editor-support")
 const faqs = [
   {
     q: "What is goozels?",
-    a: "goozels is the Gooze language server (LSP). It runs in front of gopls, so you keep all normal Go features and get Gooze ones on top: completion and validation for //gooze:ignore directives and gooze.yaml, code lenses to run gooze, and mutation scores shown inline.",
+    a: "goozels is the Gooze language server (LSP). It runs in front of `gopls`, so you keep all normal Go features and get Gooze ones on top: completion and validation for `//gooze:ignore` directives and `gooze.yaml`, code lenses to run `gooze`, and mutation scores shown inline.",
   },
   {
     q: "Does Gooze work in VS Code?",
-    a: "Yes. Install goozels (go install gooze.dev/pkg/goozels/cmd/goozels@latest) and set go.alternateTools so the Go extension launches goozels instead of gopls: {\"go.alternateTools\": {\"gopls\": \"goozels\"}}. goozels proxies gopls for you.",
+    a: "Yes. Install goozels (`go install gooze.dev/pkg/goozels/cmd/goozels@latest`) and set `go.alternateTools` so the Go extension launches `goozels` instead of `gopls`: `{\"go.alternateTools\": {\"gopls\": \"goozels\"}}`. goozels proxies `gopls` for you.",
   },
   {
     q: "How do I use Gooze in Neovim or other editors?",
-    a: "Point your Go LSP config at the goozels binary instead of gopls; goozels proxies gopls. JetBrains works via the LSP4IJ plugin. See the editor guides in the goozels repository.",
+    a: "Point your Go LSP config at the `goozels` binary instead of `gopls`; goozels proxies `gopls`. JetBrains works via the LSP4IJ plugin. See the editor guides in the goozels repository.",
   },
 ]
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-}
+const faqJsonLd = faqPageJsonLd(faqs)
 
 export default function EditorSupportPage() {
   return (
@@ -59,11 +52,11 @@ export default function EditorSupportPage() {
           <h2>What you get</h2>
           <ul>
             <li>
-              Completion, hover docs, and a warning for unknown names inside
+              Completion, hover docs, and a warning for unknown names inside{" "}
               <code>{"//gooze:ignore"}</code> comments.
             </li>
             <li>
-              Key/value completion, hover, and validation for your
+              Key/value completion, hover, and validation for your{" "}
               <code>gooze.yaml</code> config.
             </li>
             <li>
@@ -114,7 +107,8 @@ export default function EditorSupportPage() {
         <div id="vscode">
           <h2>VS Code</h2>
           <p>
-            Tell the Go extension to launch goozels instead of gopls (it proxies gopls for you):
+            Tell the Go extension to launch <code>goozels</code> instead of <code>gopls</code> (it proxies{" "}
+            <code>gopls</code> for you):
           </p>
           <CodeBlock
             lang="json"
@@ -138,7 +132,7 @@ export default function EditorSupportPage() {
               rel="noopener noreferrer"
               className="text-[color:var(--gooze-teal)] hover:underline"
             >
-              editors/neovim.md
+              <code>editors/neovim.md</code>
             </a>
             .
           </p>
@@ -154,7 +148,7 @@ export default function EditorSupportPage() {
               rel="noopener noreferrer"
               className="text-[color:var(--gooze-teal)] hover:underline"
             >
-              editors/jetbrains.md
+              <code>editors/jetbrains.md</code>
             </a>
             .
           </p>
@@ -179,8 +173,8 @@ gooze.yaml:1:1: error: missing a space after ":"; gooze will ignore this whole f
             tests. When a file changed since gooze last ran, goozels says so and prints
             the rerun command instead of pointing at lines that moved. It finds the
             workspace by walking up to <code>.gooze-reports</code>;{" "}
-            <code>-max N</code> caps the output. It exits 1 when it reports an error
-            (such as a gooze.yaml that gooze would ignore), so it also works in CI.
+            <code>-max N</code> caps the output. It exits <code>1</code> when it reports an error
+            (such as a <code>gooze.yaml</code> that gooze would ignore), so it also works in CI.
           </p>
         </div>
 
@@ -210,13 +204,13 @@ gooze.yaml:1:1: error: missing a space after ":"; gooze will ignore this whole f
           <p>
             Copy{" "}
             <a href={`${GITHUB_REPO}/blob/main/editors/codex/hooks.json`} target="_blank" rel="noopener noreferrer" className={LINK}>
-              editors/codex/hooks.json
+              <code>editors/codex/hooks.json</code>
             </a>{" "}
             to <code>.codex/hooks.json</code> in your project and trust it once with{" "}
             <code>/hooks</code>. It runs <code>goozels hook codex</code> after every{" "}
-            <code>apply_patch</code> (Codex 0.125 or later). See{" "}
+            <code>apply_patch</code> (Codex <code>0.125</code> or later). See{" "}
             <a href={`${GITHUB_REPO}/blob/main/editors/codex/README.md`} target="_blank" rel="noopener noreferrer" className={LINK}>
-              editors/codex
+              <code>editors/codex</code>
             </a>
             .
           </p>
@@ -229,29 +223,21 @@ gooze.yaml:1:1: error: missing a space after ":"; gooze will ignore this whole f
             Copy the plugin for your version to{" "}
             <code>.opencode/plugins/goozels.ts</code>:{" "}
             <a href={`${GITHUB_REPO}/blob/main/editors/opencode/v1/goozels.ts`} target="_blank" rel="noopener noreferrer" className={LINK}>
-              v1
+              <code>v1</code>
             </a>{" "}
-            for 1.x or{" "}
+            for <code>1.x</code> or{" "}
             <a href={`${GITHUB_REPO}/blob/main/editors/opencode/v2/goozels.ts`} target="_blank" rel="noopener noreferrer" className={LINK}>
-              v2
+              <code>v2</code>
             </a>{" "}
-            for 2.x. See{" "}
+            for <code>2.x</code>. See{" "}
             <a href={`${GITHUB_REPO}/blob/main/editors/opencode/README.md`} target="_blank" rel="noopener noreferrer" className={LINK}>
-              editors/opencode
+              <code>editors/opencode</code>
             </a>
             .
           </p>
         </div>
 
-        <div id="faq">
-          <h2>FAQ</h2>
-          {faqs.map((f) => (
-            <div key={f.q}>
-              <h3>{f.q}</h3>
-              <p>{f.a}</p>
-            </div>
-          ))}
-        </div>
+        <DocsFaq faqs={faqs} />
       </div>
     </section>
   )

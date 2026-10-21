@@ -39,7 +39,7 @@ export default function UIModesPage() {
               </li>
             </ul>
             <p className="text-sm text-muted-foreground">
-              More details: <Link href="/docs/cli/report#view">gooze report view</Link>.
+              More details: <Link href="/docs/cli/report#view"><code>gooze report view</code></Link>.
             </p>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import type * as React from "react"
+import { DocsFaq, faqPageJsonLd, withCode } from "@/components/docs-faq"
 
 import { docsMetadata } from "@/lib/docs-meta"
 import { DOCS_FACTS_VERSION } from "@/lib/version"
@@ -33,27 +34,27 @@ type Row = {
 const rows: Row[] = [
   {
     feature: "Config file in the repo",
-    gooze: ["yes", "gooze.yaml + GOOZE_* env vars"],
-    gremlins: ["yes", ".gremlins.yaml"],
+    gooze: ["yes", "`gooze.yaml` + `GOOZE_*` env vars"],
+    gremlins: ["yes", "`.gremlins.yaml`"],
     goMutesting: ["no", "flags only"],
-    avito: ["yes", "YAML via --config"],
-    goMutants: ["yes", ".go-mutants.toml"],
+    avito: ["yes", "YAML via `--config`"],
+    goMutants: ["yes", "`.go-mutants.toml`"],
   },
   {
     feature: "Fail the build below a score",
     gooze: ["partial", "no flag yet; 3-line script gate"],
-    gremlins: ["yes", "--threshold-efficacy, --threshold-mcover"],
+    gremlins: ["yes", "`--threshold-efficacy`, `--threshold-mcover`"],
     goMutesting: ["unknown", ""],
     avito: ["unknown", ""],
-    goMutants: ["yes", "policy.minimum_score + --strict"],
+    goMutants: ["yes", "`policy.minimum_score` + `--strict`"],
   },
   {
     feature: "Test only changed code",
     gooze: ["yes", "detected by incremental execution (content hashes); no git or base ref"],
-    gremlins: ["yes", "git diff against a ref (--diff)"],
+    gremlins: ["yes", "git diff against a ref (`--diff`)"],
     goMutesting: ["unknown", ""],
     avito: ["unknown", ""],
-    goMutants: ["yes", "git diff against a ref (--changed)"],
+    goMutants: ["yes", "git diff against a ref (`--changed`)"],
   },
   {
     feature: "Incremental cache between runs",
@@ -66,22 +67,22 @@ const rows: Row[] = [
   {
     feature: "Whole-codebase score without re-running everything",
     gooze: ["yes", "cached results + re-tested changed files"],
-    gremlins: ["partial", "--diff tests only changed code; otherwise a full run"],
+    gremlins: ["partial", "`--diff` tests only changed code; otherwise a full run"],
     goMutesting: ["no", "full run every time"],
     avito: ["no", "full run every time"],
-    goMutants: ["yes", "cached outcomes; --changed narrows to the diff"],
+    goMutants: ["yes", "cached outcomes; `--changed` narrows to the diff"],
   },
   {
     feature: "Split one run across CI jobs",
-    gooze: ["yes", "-s INDEX/TOTAL + report merge"],
+    gooze: ["yes", "`-s INDEX/TOTAL` + `report merge`"],
     gremlins: ["unknown", ""],
     goMutesting: ["unknown", ""],
     avito: ["unknown", ""],
-    goMutants: ["yes", "--shard K/N + report merge"],
+    goMutants: ["yes", "`--shard K/N` + `report merge`"],
   },
   {
     feature: "Shared baseline for CI and teammates",
-    gooze: ["yes", "report push/pull to any OCI registry"],
+    gooze: ["yes", "`report push`/`pull` to any OCI registry"],
     gremlins: ["unknown", ""],
     goMutesting: ["unknown", ""],
     avito: ["unknown", ""],
@@ -89,55 +90,55 @@ const rows: Row[] = [
   },
   {
     feature: "Parallel workers",
-    gooze: ["yes", "-p/--parallel"],
-    gremlins: ["yes", "--workers"],
-    goMutesting: ["partial", "via a custom --exec script"],
+    gooze: ["yes", "`-p/--parallel`"],
+    gremlins: ["yes", "`--workers`"],
+    goMutesting: ["partial", "via a custom `--exec` script"],
     avito: ["unknown", ""],
     goMutants: ["unknown", ""],
   },
   {
     feature: "Skip code tests never execute",
-    gooze: ["yes", "--coverage-profile"],
-    gremlins: ["yes", "NOT COVERED status"],
+    gooze: ["yes", "`--coverage-profile`"],
+    gremlins: ["yes", "`NOT COVERED` status"],
     goMutesting: ["unknown", ""],
     avito: ["unknown", ""],
-    goMutants: ["yes", "uncovered status"],
+    goMutants: ["yes", "`uncovered` status"],
   },
   {
     feature: "Ignore code with comments",
-    gooze: ["yes", "//gooze:ignore, per file/func/line/mutator"],
-    gremlins: ["no", "file regex only (--exclude-files)"],
+    gooze: ["yes", "`//gooze:ignore`, per file/func/line/mutator"],
+    gremlins: ["no", "file regex only (`--exclude-files`)"],
     goMutesting: ["partial", "checksum blacklist"],
-    avito: ["yes", "mutator-disable-* directives"],
+    avito: ["yes", "`mutator-disable-*` directives"],
     goMutants: ["unknown", ""],
   },
   {
     feature: "Write your own mutators",
     gooze: ["partial", "one small function in the gooze source; no plugin API"],
     gremlins: ["partial", "toggle built-ins only"],
-    goMutesting: ["yes", "Mutator interface + Register"],
+    goMutesting: ["yes", "`Mutator` interface + `Register`"],
     avito: ["unknown", ""],
     goMutants: ["unknown", ""],
   },
   {
     feature: "Custom test runner command",
     gooze: ["no", "on the roadmap"],
-    gremlins: ["partial", "--integration runs the full suite"],
-    goMutesting: ["yes", "--exec"],
-    avito: ["yes", "--exec"],
-    goMutants: ["yes", "test.command"],
+    gremlins: ["partial", "`--integration` runs the full suite"],
+    goMutesting: ["yes", "`--exec`"],
+    avito: ["yes", "`--exec`"],
+    goMutants: ["yes", "`test.command`"],
   },
   {
     feature: "Machine-readable results",
-    gooze: ["yes", "YAML report dir + _index.yaml"],
-    gremlins: ["yes", "JSON (-o)"],
+    gooze: ["yes", "YAML report dir + `_index.yaml`"],
+    gremlins: ["yes", "JSON (`-o`)"],
     goMutesting: ["partial", "stdout"],
     avito: ["yes", "JSON and HTML"],
     goMutants: ["yes", "JSON (Stryker-style) and HTML"],
   },
   {
     feature: "Interactive results viewer",
-    gooze: ["yes", "TUI with diffs (report view --all)"],
+    gooze: ["yes", "TUI with diffs (`report view --all`)"],
     gremlins: ["unknown", ""],
     goMutesting: ["unknown", ""],
     avito: ["partial", "static HTML report"],
@@ -161,8 +162,8 @@ const rows: Row[] = [
   },
   {
     feature: "Stable (1.x) CLI and config",
-    gooze: ["yes", "v1.x"],
-    gremlins: ["no", "v0.x; config may change between minors"],
+    gooze: ["yes", "`v1.x`"],
+    gremlins: ["no", "`v0.x`; config may change between minors"],
     goMutesting: ["unknown", ""],
     avito: ["unknown", ""],
     goMutants: ["no", "pre-release"],
@@ -186,12 +187,28 @@ const supportBadge: Record<Support, React.ComponentProps<typeof Badge>> = {
   unknown: { variant: "outline", className: "text-muted-foreground" },
 }
 
-function Cell({ value }: { value: [Support, string] }) {
+const tools: { key: Exclude<keyof Row, "feature">; name: string }[] = [
+  { key: "gooze", name: "Gooze" },
+  { key: "gremlins", name: "Gremlins" },
+  { key: "goMutesting", name: "go-mutesting" },
+  { key: "avito", name: "go-mutesting (avito-tech)" },
+  { key: "goMutants", name: "go-mutants" },
+]
+
+function SupportValue({ value }: { value: [Support, string] }) {
   const [support, note] = value
   return (
-    <TableCell className="align-top whitespace-normal">
+    <>
       <Badge {...supportBadge[support]}>{supportLabel[support]}</Badge>
-      {note && <div className="mt-1 text-xs text-muted-foreground">{note}</div>}
+      {note && <div className="mt-1 text-xs text-muted-foreground">{withCode(note)}</div>}
+    </>
+  )
+}
+
+function Cell({ value }: { value: [Support, string] }) {
+  return (
+    <TableCell>
+      <SupportValue value={value} />
     </TableCell>
   )
 }
@@ -201,11 +218,11 @@ function Cell({ value }: { value: [Support, string] }) {
 const faqs = [
   {
     q: "Does Gooze have a config file?",
-    a: "Yes. gooze.yaml in the project root holds output dir, excludes, parallelism, timeouts, and the coverage profile; `gooze config init` generates one. Every key can also be set with a GOOZE_* environment variable, and the common ones with a CLI flag.",
+    a: "Yes. `gooze.yaml` in the project root holds output dir, excludes, parallelism, timeouts, and the coverage profile; `gooze config init` generates one. Every key can also be set with a `GOOZE_*` environment variable, and the common ones with a CLI flag.",
   },
   {
     q: "Is Gooze only for large projects?",
-    a: "No. Gooze uses the same three commands from a tiny project to microservices and large monorepos: gooze run, gooze report view, and, when you shard in CI, gooze report merge. Sharding and OCI baselines are opt-in for when a codebase outgrows a single job.",
+    a: "No. Gooze uses the same three commands from a tiny project to microservices and large monorepos: `gooze run`, `gooze report view`, and, when you shard in CI, `gooze report merge`. Sharding and OCI baselines are opt-in for when a codebase outgrows a single job.",
   },
   {
     q: "Does Gooze work for microservices?",
@@ -217,15 +234,15 @@ const faqs = [
   },
   {
     q: "Can Gooze fail CI when the mutation score drops below a threshold?",
-    a: "Not with a built-in flag yet (as of " + DOCS_FACTS_VERSION + "). Gooze prints `Mutation score: NN.NN%` followed by a breakdown, and a three-line shell step compares it to a minimum and fails the job. The GitHub Actions and GitLab CI guides include it.",
+    a: "Not with a built-in flag yet (as of `" + DOCS_FACTS_VERSION + "`). Gooze prints `Mutation score: NN.NN%` followed by a breakdown, and a three-line shell step compares it to a minimum and fails the job. The GitHub Actions and GitLab CI guides include it.",
   },
   {
     q: "Does Gooze only test changed code?",
-    a: "Yes, and it doesn't need git. Gooze detects changes through incremental execution: it hashes each file and its test file and re-tests only what changed since the stored reports. Results for the rest are reused, so the score always covers the whole codebase. No base branch, commit, or git history is needed, and uncommitted edits count. Granularity is per file, not per changed line. Changes in other files don't invalidate cached results, so run --no-cache periodically.",
+    a: "Yes, and it doesn't need git. Gooze detects changes through incremental execution: it hashes each file and its test file and re-tests only what changed since the stored reports. Results for the rest are reused, so the score always covers the whole codebase. No base branch, commit, or git history is needed, and uncommitted edits count. Granularity is per file, not per changed line. Changes in other files don't invalidate cached results, so run `--no-cache` periodically.",
   },
   {
     q: "Can I write custom mutators for Gooze?",
-    a: "Not as plugins. Gooze ships six default operators (arithmetic, comparison, logical, boolean, numbers, unary). Adding an operator means one small function in the gooze source; caching, sharding, and reporting don't change. go-mutesting supports mutators outside the tool via its Mutator interface.",
+    a: "Not as plugins. Gooze ships six default operators (arithmetic, comparison, logical, boolean, numbers, unary). Adding an operator means one small function in the gooze source; caching, sharding, and reporting don't change. go-mutesting supports mutators outside the tool via its `Mutator` interface.",
   },
   {
     q: "Does Gooze work with Claude Code and other AI coding agents?",
@@ -233,7 +250,7 @@ const faqs = [
   },
   {
     q: "How is the Gooze mutation score calculated?",
-    a: "killed / (all mutations - error). Mutants that do not compile (error) are left out; survived, not_covered, and timeout all lower the score.",
+    a: "`killed / (all mutations - error)`. Mutants that do not compile (`error`) are left out; `survived`, `not_covered`, and `timeout` all lower the score.",
   },
   {
     q: "Can Gooze run across several CI machines?",
@@ -241,15 +258,7 @@ const faqs = [
   },
 ]
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((faq) => ({
-    "@type": "Question",
-    name: faq.q,
-    acceptedAnswer: { "@type": "Answer", text: faq.a.replaceAll("`", "") },
-  })),
-}
+const faqJsonLd = faqPageJsonLd(faqs)
 
 export const metadata = docsMetadata("/docs/comparison")
 
@@ -265,7 +274,7 @@ export default function ComparisonPage() {
         How Gooze compares with Gremlins, go-mutesting, and go-mutants, including what Gooze does not do yet.
       </p>
       <p className="text-sm text-muted-foreground mb-8">
-        Last verified {VERIFIED} against Gooze {DOCS_FACTS_VERSION} and each tool&apos;s own documentation
+        Last verified {VERIFIED} against Gooze <code>{DOCS_FACTS_VERSION}</code> and each tool&apos;s own documentation
         (<a href="https://gremlins.dev">gremlins.dev</a>,{" "}
         <a href="https://github.com/zimmski/go-mutesting">zimmski/go-mutesting</a>,{" "}
         <a href="https://github.com/avito-tech/go-mutesting">avito-tech/go-mutesting</a>,{" "}
@@ -291,7 +300,7 @@ export default function ComparisonPage() {
             </li>
             <li>
               <strong>Gremlins</strong> has a built-in score threshold and a git-based diff mode, but
-              describes itself as best for &ldquo;smallish&rdquo; modules and is still 0.x.
+              describes itself as best for &ldquo;smallish&rdquo; modules and is still <code>0.x</code>.
             </li>
             <li>
               <strong>go-mutesting</strong> is a minimal framework: write your own mutators and
@@ -329,7 +338,26 @@ export default function ComparisonPage() {
 
         <div id="matrix">
           <h2>Feature matrix</h2>
-          <div className="rounded-lg border">
+          {/* Six columns don't fit narrow screens without scrolling, so below lg
+              each feature is a card with one line per tool. */}
+          <ul data-slot="feature-cards" className="space-y-3 lg:hidden">
+            {rows.map((row) => (
+              <li key={row.feature} className="rounded-lg border p-4">
+                <div className="font-medium">{row.feature}</div>
+                <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
+                  {tools.map((tool) => (
+                    <div key={tool.key} className="contents">
+                      <dt className="text-muted-foreground">{tool.name}</dt>
+                      <dd>
+                        <SupportValue value={row[tool.key]} />
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </li>
+            ))}
+          </ul>
+          <div className="hidden rounded-lg border lg:block">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -415,22 +443,12 @@ export default function ComparisonPage() {
           <h2>What Gooze doesn&apos;t do (yet)</h2>
           <p>
             A threshold flag, custom mutator plugins, and a custom test runner are not
-            supported in {DOCS_FACTS_VERSION}. Workarounds and status are on the{" "}
+            supported in <code>{DOCS_FACTS_VERSION}</code>. Workarounds and status are on the{" "}
             <Link href="/docs/roadmap#limitations">Roadmap</Link>.
           </p>
         </div>
 
-        <div id="faq">
-          <h2>FAQ</h2>
-          <div>
-            {faqs.map((faq) => (
-              <div key={faq.q}>
-                <h3>{faq.q}</h3>
-                <p>{faq.a.replaceAll("`", "")}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+        <DocsFaq faqs={faqs} />
       </div>
     </section>
   )

@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 
 import { docsMetadata } from "@/lib/docs-meta"
 import { CodeBlock } from "@/components/code-block"
@@ -8,11 +9,11 @@ export const metadata = docsMetadata("/docs/best-go-mutation-testing-tool-for-ci
 const faqs = [
   {
     q: "What is the best Go mutation testing tool for CI/CD?",
-    a: "Gooze is built for CI/CD: shard a run across parallel jobs with -s INDEX/TOTAL and merge with gooze report merge, cache results so only changed files re-run, skip uncovered lines via a coverage profile, and share one baseline across jobs through an OCI registry.",
+    a: "Gooze is built for CI/CD: shard a run across parallel jobs with `-s INDEX/TOTAL` and merge with `gooze report merge`, cache results so only changed files re-run, skip uncovered lines via a coverage profile, and share one baseline across jobs through an OCI registry.",
   },
   {
     q: "How do I keep mutation testing fast enough for CI?",
-    a: "Combine three levers: pass a Go coverage profile so mutations on uncovered lines are reported as not_covered without running, cache the reports directory between runs for incremental execution, and raise --parallel. For big suites, shard across runners.",
+    a: "Combine three levers: pass a Go coverage profile so mutations on uncovered lines are reported as `not_covered` without running, cache the reports directory between runs for incremental execution, and raise `--parallel`. For big suites, shard across runners.",
   },
   {
     q: "Can mutation testing fail a pull request below a score threshold?",
@@ -20,19 +21,11 @@ const faqs = [
   },
   {
     q: "How do I share mutation results across ephemeral CI runners?",
-    a: "Use gooze report push and gooze report pull to store the reports directory as an OCI artifact in a registry such as GHCR, so jobs and teammates reuse one baseline instead of recomputing from scratch.",
+    a: "Use `gooze report push` and `gooze report pull` to store the reports directory as an OCI artifact in a registry such as GHCR, so jobs and teammates reuse one baseline instead of recomputing from scratch.",
   },
 ]
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-}
+const faqJsonLd = faqPageJsonLd(faqs)
 
 export default function BestToolForCiPage() {
   return (
@@ -93,15 +86,7 @@ gooze run --coverage-profile=coverage.out ./...`}
         </p>
       </div>
 
-      <div id="faq">
-        <h2>FAQ</h2>
-        {faqs.map((f) => (
-          <div key={f.q}>
-            <h3>{f.q}</h3>
-            <p>{f.a}</p>
-          </div>
-        ))}
-      </div>
+      <DocsFaq faqs={faqs} />
     </section>
   )
 }

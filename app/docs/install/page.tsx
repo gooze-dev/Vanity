@@ -1,4 +1,5 @@
 import { docsMetadata } from "@/lib/docs-meta"
+import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 import { CodeBlock } from "@/components/code-block"
 
 export const metadata = docsMetadata("/docs/install")
@@ -8,39 +9,31 @@ export const metadata = docsMetadata("/docs/install")
 const faqs = [
   {
     q: "How do I install the Gooze CLI?",
-    a: "Run go install gooze.dev/pkg/gooze@latest, then make sure your Go bin directory ($(go env GOPATH)/bin) is on your PATH.",
+    a: "Run `go install gooze.dev/pkg/gooze@latest`, then make sure your Go bin directory (`$(go env GOPATH)/bin`) is on your `PATH`.",
   },
   {
     q: "What are the prerequisites for installing Gooze?",
-    a: "Go 1.27.3 or newer and a Go module with a go.mod file. Gooze runs on Linux, macOS, and Windows.",
+    a: "Go 1.27.3 or newer and a Go module with a `go.mod` file. Gooze runs on Linux, macOS, and Windows.",
   },
   {
     q: "How do I verify Gooze is installed correctly?",
-    a: "Run gooze version. It prints the gooze version and the Go version it was built with.",
+    a: "Run `gooze version`. It prints the gooze version and the Go version it was built with.",
   },
   {
-    q: "How do I fix 'gooze: command not found' after installing?",
-    a: "Your Go bin directory is not on your PATH. Add $(go env GOPATH)/bin to PATH (for example export PATH=$PATH:$(go env GOPATH)/bin in your shell profile) and restart the terminal.",
+    q: "How do I fix `gooze: command not found` after installing?",
+    a: "Your Go bin directory is not on your `PATH`. Add `$(go env GOPATH)/bin` to `PATH` (for example `export PATH=$PATH:$(go env GOPATH)/bin` in your shell profile) and restart the terminal.",
   },
   {
     q: "How do I update Gooze to the latest version?",
-    a: "Run go install gooze.dev/pkg/gooze@latest again. It fetches and builds the newest release over the old binary.",
+    a: "Run `go install gooze.dev/pkg/gooze@latest` again. It fetches and builds the newest release over the old binary.",
   },
   {
     q: "How do I uninstall Gooze?",
-    a: "Delete the binary: rm $(go env GOPATH)/bin/gooze.",
+    a: "Delete the binary: `rm $(go env GOPATH)/bin/gooze`.",
   },
 ]
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-}
+const faqJsonLd = faqPageJsonLd(faqs)
 
 export default function InstallPage() {
   return (
@@ -118,15 +111,7 @@ export default function InstallPage() {
           </div>
         </div>
 
-        <div id="faq">
-          <h2>FAQ</h2>
-          {faqs.map((f) => (
-            <div key={f.q}>
-              <h3>{f.q}</h3>
-              <p>{f.a}</p>
-            </div>
-          ))}
-        </div>
+        <DocsFaq faqs={faqs} />
       </div>
     </section>
   )
