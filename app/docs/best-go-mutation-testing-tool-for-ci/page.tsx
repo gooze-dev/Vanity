@@ -82,8 +82,9 @@ gooze run --coverage-profile=coverage.out ./...`}
         />
         <p>
           Full workflows (including sharding and the score gate) are on the{" "}
-          <Link href="/docs/ci/github/">GitHub Actions</Link> and{" "}
-          <Link href="/docs/ci/gitlab/">GitLab CI</Link> pages.
+          <Link href="/docs/ci/github/">GitHub Actions</Link>,{" "}
+          <Link href="/docs/ci/gitlab/">GitLab CI</Link> and{" "}
+          <Link href="/docs/ci/cloud-build/">Google Cloud Build</Link> pages.
         </p>
       </div>
 
