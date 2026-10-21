@@ -22,14 +22,15 @@ function openTarget() {
   }
 }
 
-// Adds a "copy link" button to every h2/h3 in the docs article and to each FAQ
-// question. It shows on hover or keyboard focus, copies the full URL with the
-// heading's #id and puts the #id in the address bar.
-export function HeadingAnchors() {
+// Adds a "copy link" button to every h2/h3 under rootId (the docs article, or
+// the landing page FAQ) and to each FAQ question. It shows on hover or keyboard
+// focus, copies the full URL with the heading's #id and puts the #id in the
+// address bar.
+export function HeadingAnchors({ rootId = "docs-content" }: { rootId?: string }) {
   const pathname = usePathname()
 
   React.useEffect(() => {
-    const article = document.getElementById("docs-content")
+    const article = document.getElementById(rootId)
     if (!article) return
 
     const headings = Array.from(article.querySelectorAll<HTMLElement>("h2, h3")).filter(
@@ -77,7 +78,7 @@ export function HeadingAnchors() {
       window.removeEventListener("hashchange", openTarget)
       buttons.forEach((button) => button.remove())
     }
-  }, [pathname])
+  }, [pathname, rootId])
 
   return null
 }

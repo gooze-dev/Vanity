@@ -58,7 +58,8 @@ Link to the page that owns a topic instead of repeating it.
 Section order inside a page: intro, prerequisites, main content, examples, limitations, FAQ,
 next steps. The FAQ is always the last `h2` before next steps. Render it with
 `<DocsFaq faqs={faqs} />` (`components/docs-faq.tsx`), the same `faqs` array that feeds the
-page's FAQPage JSON-LD; never hand-write FAQ markup. Wrap commands and flags in answers in
+page's FAQPage JSON-LD; never hand-write FAQ markup. The landing page uses the same
+`FaqList` and `faqPageJsonLd`, plus `<HeadingAnchors rootId="faq" />` for its copy links. Wrap commands and flags in answers in
 backticks, and the component shows them as code. `h2` headings form the page's
 table of contents, so keep them short and unique on the page.
 

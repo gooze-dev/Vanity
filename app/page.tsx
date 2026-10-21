@@ -11,7 +11,8 @@ import { LatestReleaseBadge } from "@/components/latest-release-badge";
 import { Github } from "lucide-react";
 import { CodeBlock } from "@/components/code-block";
 import { ClaudeCodeAnnouncement } from "@/components/agent-install";
-import { faqPageJsonLd, withCode } from "@/components/docs-faq";
+import { FaqList, faqPageJsonLd } from "@/components/docs-faq";
+import { HeadingAnchors } from "@/components/heading-anchors";
 
 // Self-canonical for the homepage. The root layout no longer sets a default
 // canonical (it would leak onto every other page).
@@ -76,6 +77,12 @@ export default async function Home() {
             className="text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60"
           >
             Documentation
+          </Link>
+          <Link
+            href="#faq"
+            className="text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60"
+          >
+            FAQ
           </Link>
           <div className="flex items-center gap-2">
             <Link
@@ -300,22 +307,13 @@ Mutation score: 84.62% (11 killed, 2 survived)`}</pre>
       </section>
 
       {/* FAQ */}
-      <section className="border-t bg-muted/50 py-24">
+      <section id="faq" className="scroll-mt-8 border-t bg-muted/50 py-24">
         <div className="container mx-auto max-w-screen-xl px-4">
           <div className="mx-auto max-w-3xl">
             <h2 className="text-4xl font-bold tracking-tight text-center mb-12">
               Frequently asked questions
             </h2>
-            <dl className="space-y-8">
-              {faqs.map((f) => (
-                <div key={f.q}>
-                  <dt className="text-lg font-semibold mb-2">{withCode(f.q)}</dt>
-                  <dd className="text-muted-foreground leading-relaxed">
-                    {withCode(f.a)}
-                  </dd>
-                </div>
-              ))}
-            </dl>
+            <FaqList faqs={faqs} className="bg-background" />
             <p className="mt-12 text-center text-muted-foreground">
               See how Gooze compares with other Go mutation testing tools in the{" "}
               <Link
@@ -328,6 +326,7 @@ Mutation score: 84.62% (11 killed, 2 survived)`}</pre>
             </p>
           </div>
         </div>
+        <HeadingAnchors rootId="faq" />
       </section>
 
       {/* Footer */}
