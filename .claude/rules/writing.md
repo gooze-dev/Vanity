@@ -3,15 +3,14 @@ paths:
   - "app/**"
   - "components/**"
   - "lib/docs-pages.ts"
-  - "seo-texts.json"
   - "README.md"
 ---
 
 # Writing site and docs text
 
 These rules apply to every text a reader can see on gooze.dev: page copy, docs, FAQ questions and
-answers, `lib/docs-pages.ts` titles, descriptions and keywords, `seo-texts.json`, `app/llms.txt`,
-alt text and code comments in examples. The readers are Go engineers, many of them using English
+answers, `lib/docs-pages.ts` titles, descriptions and keywords, `app/llms.txt`, alt text and
+code comments in examples. The readers are Go engineers, many of them using English
 as a second language, and AI answer engines that quote the docs.
 
 Write like an experienced engineer explaining gooze to another engineer. Explain the system, don't
@@ -108,7 +107,7 @@ are.
 - FAQ answers are shown on the page and emitted as FAQPage JSON-LD from the same array. Write
   them so they read well both on the page and when quoted alone: start with the direct answer
   ("Yes.", "No.", or the fact), then the detail.
-- Titles, descriptions and keywords in `lib/docs-pages.ts` and `seo-texts.json` follow the same
+- Titles, descriptions and keywords in `lib/docs-pages.ts` follow the same
   rules: plain, accurate, no competitor targeting, no dashes.
 
 ## Editing existing text
