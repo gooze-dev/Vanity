@@ -15,9 +15,8 @@ const limitations = [
   },
   {
     id: "mutator-selection",
-    title: "Mutator selection",
-    detail: "`--mutagens` (or `run.mutagens`) picks among the six default mutagens. Turning on the three that are off by default (`branch`, `statement`, `loop`) is planned.",
-    workaround: { text: "per-mutagen ignore directives", href: "/docs/usage/ignoring-code" },
+    title: "Off-by-default mutagens",
+    detail: "The `branch`, `statement` and `loop` mutagens exist but can't be turned on yet; `--mutagens` picks only among the six default ones. Turning them on is planned.",
   },
   {
     id: "build-tags",
@@ -98,12 +97,23 @@ const themes: Theme[] = [
         detail: "A plugin API for writing your own mutation operators outside the Gooze source.",
       },
       {
-        title: "Mutator selection",
+        id: "mutagen-selection",
+        title: "Mutagen selection",
         detail: (
           <>
-            <code>--mutagens</code> or <code>run.mutagens</code> picks among the six default
-            mutagens. Planned: turning on the
-            three that exist but are off by default. <code>branch</code> forces a condition true
+            Run only some of the six default mutagens with <code>--mutagens</code> or{" "}
+            <code>run.mutagens</code>.
+          </>
+        ),
+        shipped: true,
+        href: "/docs/usage/single-function#mutagens",
+      },
+      {
+        title: "Off-by-default mutagens",
+        detail: (
+          <>
+            Turning on the three mutagens that exist but are off by default.{" "}
+            <code>branch</code> forces a condition true
             or false, inverts it, removes an <code>if</code> block (such as{" "}
             <code>{"if err != nil { return err }"}</code>) and removes switch cases;{" "}
             <code>statement</code> deletes assignments, calls, <code>defer</code>,{" "}
