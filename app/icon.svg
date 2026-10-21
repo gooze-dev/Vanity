@@ -1,10 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 760">
+  <!-- The "G" of the Gooze wordmark (Oxanium ExtraBold), in the two brand colors. -->
+  <!-- The path is flipped upright, so y1="1" is the top of the letter. -->
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="g" x1="0" y1="1" x2="1" y2="0">
       <stop offset="0" stop-color="#7DBC23"/>
       <stop offset="1" stop-color="#4CB8B8"/>
     </linearGradient>
   </defs>
-  <rect width="32" height="32" rx="8" fill="url(#g)"/>
-  <text x="16" y="23" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#fff">G</text>
+  <path transform="translate(34 725) scale(1 -1)" fill="url(#g)" d="M68 176V514Q68 690 244 690H526L604 630V533H253Q242 533 242 522V168Q242 157 253 157H450V273H337V430H624V0H244Q68 0 68 176Z"/>
 </svg>
