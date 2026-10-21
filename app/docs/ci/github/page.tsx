@@ -1,9 +1,17 @@
 import { docsMetadata } from "@/lib/docs-meta"
 import { Recording } from "@/components/recording"
-import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
+import { DocsFaq, faqPageJsonLd, withCode } from "@/components/docs-faq"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 const simple = `name: Mutation testing
 
@@ -155,6 +163,31 @@ const gate = `      # Last step: fails the job (exit code 3) below 60%, after th
       - name: Mutation score gate
         run: gooze report view --threshold-total 60`
 
+const tolerate = `      # A low score (exit code 3) doesn't fail this step; errors still do.
+      - name: Mutation testing
+        run: gooze run --threshold-total 80 ./... || [ $? -eq 3 ]`
+
+const keepReports = `      # Runs even when the gate step before it failed, but not when the
+      # job was cancelled.
+      - name: Upload reports
+        if: \${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gooze-reports
+          path: .gooze-reports/`
+
+// What each Gooze exit code means in a GitHub Actions job.
+const exitCodes = [
+  { code: "0", what: "The step passes." },
+  { code: "1", what: "Unexpected failure. Add `-v` and upload `.gooze.log` to read it." },
+  { code: "2", what: "A bad flag or `gooze.yaml` value: fix the workflow or the config." },
+  { code: "3", what: "A score below a threshold. The step fails, but the reports are written: later steps with `if: ${{ !cancelled() }}` still see them." },
+  { code: "4", what: "`--diff` can't find the base: check out with `fetch-depth: 0`, and keep git in the image." },
+  { code: "5", what: "The registry refused `report push` or `pull`: check `GOOZE_REGISTRY_*` and `packages: write`." },
+  { code: "6", what: "No reports: the merge job ran before the shard artifacts were downloaded, or `-o` points elsewhere." },
+  { code: "130", what: "The job was cancelled or hit `timeout-minutes`." },
+]
+
 const faqs = [
   {
     q: "How do I run Gooze mutation tests in GitHub Actions?",
@@ -304,9 +337,48 @@ export default function CiPage() {
           </p>
           <p className="text-sm text-muted-foreground">
             A shard doesn&apos;t check thresholds, so gate only in the merge job. The average and
-            per-file thresholds, <code>gooze.yaml</code> settings, and how to let a low score
-            pass while errors still fail are in{" "}
-            <Link href="/docs/ci/quality-gates">Quality gates</Link>.
+            per-file thresholds and <code>gooze.yaml</code> settings are in{" "}
+            <Link href="/docs/ci/quality-gates">Quality gates</Link>; how to let a low score
+            pass while errors still fail is in <a href="#exit-codes">exit codes</a>.
+          </p>
+        </div>
+
+        <div id="exit-codes">
+          <h2>Exit codes</h2>
+          <p>
+            Every Gooze exit code but <code>0</code> fails the step, and GitHub skips the steps
+            after it. That is right for errors. A low score (code <code>3</code>) is different:
+            the run finished and wrote its reports, so you choose what it does.
+          </p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Code</TableHead>
+                <TableHead>In GitHub Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody className="text-muted-foreground">
+              {exitCodes.map((row) => (
+                <TableRow key={row.code}>
+                  <TableCell><code>{row.code}</code></TableCell>
+                  <TableCell>{withCode(row.what)}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <p>
+            To let a step pass on a low score but still fail on errors, accept code{" "}
+            <code>3</code> in the shell, and gate in a later step:
+          </p>
+          <CodeBlock lang="yaml" code={tolerate} />
+          <p>
+            Steps that must run after a failed gate, such as uploading reports, take{" "}
+            <code>if: {"${{ !cancelled() }}"}</code>:
+          </p>
+          <CodeBlock lang="yaml" code={keepReports} />
+          <p className="text-sm text-muted-foreground">
+            What every code means, whatever runs Gooze:{" "}
+            <Link href="/docs/ci/quality-gates#exit-codes">Quality gates</Link>.
           </p>
         </div>
 

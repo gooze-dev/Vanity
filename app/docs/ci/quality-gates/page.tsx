@@ -21,43 +21,6 @@ const config = `threshold:
   diff:           # --diff runs only, on the changed lines
     total: 100`
 
-const github = `      - name: Merge shard reports
-        run: gooze report merge
-
-      - name: Publish merged baseline (main only)
-        if: \${{ github.ref == 'refs/heads/main' }}
-        run: gooze report push "$REPORTS_REF"
-
-      # Last: the baseline is already pushed when the score is low.
-      - name: Mutation score gate
-        run: gooze report view --threshold-total 80`
-
-const githubTolerate = `      # Exit code 3 (score below a threshold) doesn't fail this step;
-      # errors still do. A later gate step checks the score.
-      - name: Mutation testing
-        run: gooze run --threshold-total 80 ./... || [ $? -eq 3 ]`
-
-const gitlab = `gooze:
-  script:
-    - gooze run --threshold-total 80 ./...
-  # A low score marks the job as a warning instead of failing the pipeline.
-  # Any other exit code still fails it.
-  allow_failure:
-    exit_codes: [3]
-  cache:
-    key: gooze
-    paths: [.gooze-reports/]
-    when: always   # keep the reports of a run below the threshold`
-
-const cloudBuild = `  - id: mutation
-    name: golang:1.27
-    script: |
-      set -e
-      go install gooze.dev/pkg/gooze@latest
-      gooze run -p 8 --threshold-total 80 ./...
-    # A low score doesn't fail the build; any other exit code does.
-    allowExitCodes: [3]`
-
 const faqs = [
   {
     q: "Can Gooze fail CI below a mutation score?",
@@ -296,53 +259,28 @@ export default function QualityGatesPage() {
         </div>
 
         <div id="ci">
-          <h2>Handle each code in CI</h2>
+          <h2>Exit codes in your pipeline</h2>
           <p>
-            Every code but <code>0</code> fails a CI step. That is right for most of them: a bad
-            flag or an unreachable registry should stop the pipeline. Code <code>3</code> is
-            different, because the run finished and wrote its reports. Decide what a low score
-            should do, and keep the cache and the baseline current either way.
+            Every code but <code>0</code> fails a CI step. That is right for errors. Code{" "}
+            <code>3</code> is different, because the run finished and wrote its reports, so
+            you choose what a low score does. Each CI guide shows how, for its own system:
           </p>
-
-          <h3>GitHub Actions</h3>
-          <p>
-            Put the gate in the last step, after the merged baseline is pushed, so a low score
-            fails the job without losing the baseline:
-          </p>
-          <CodeBlock lang="yaml" code={github} />
-          <p>
-            To let a step pass on a low score but still fail on errors, accept code{" "}
-            <code>3</code> in the shell:
-          </p>
-          <CodeBlock lang="yaml" code={githubTolerate} />
-          <p className="text-sm text-muted-foreground">
-            Steps that must run after a failed gate, such as uploading reports, take{" "}
-            <code>if: always()</code>. Full workflow:{" "}
-            <Link href="/docs/ci/github#gate">GitHub Actions</Link>.
-          </p>
-
-          <h3>GitLab CI</h3>
-          <p>
-            <code>allow_failure: exit_codes</code> turns a low score into a warning on the job,
-            while every other code still fails the pipeline. <code>cache: when: always</code>{" "}
-            keeps the reports of that run:
-          </p>
-          <CodeBlock lang="yaml" code={gitlab} />
-          <p className="text-sm text-muted-foreground">
-            Leave out <code>allow_failure</code> to block the merge request on a low score. Full
-            pipeline: <Link href="/docs/ci/gitlab#gate">GitLab CI</Link>.
-          </p>
-
-          <h3>Google Cloud Build</h3>
-          <p>
-            A failed step stops the build, so put the gate in the last step, after the baseline
-            is pushed. To record a low score without failing the build, list the code in{" "}
-            <code>allowExitCodes</code>:
-          </p>
-          <CodeBlock lang="yaml" code={cloudBuild} />
-          <p className="text-sm text-muted-foreground">
-            Full build: <Link href="/docs/ci/cloud-build#gate">Google Cloud Build</Link>.
-          </p>
+          <ul>
+            <li>
+              <Link href="/docs/ci/github#exit-codes">GitHub Actions</Link>: accept code{" "}
+              <code>3</code> in the shell, and keep later steps running with{" "}
+              <code>if: {"${{ !cancelled() }}"}</code>.
+            </li>
+            <li>
+              <Link href="/docs/ci/gitlab#exit-codes">GitLab CI</Link>: show a low score as a
+              warning with <code>allow_failure: exit_codes: [3]</code>, and keep the reports with{" "}
+              <code>when: always</code>.
+            </li>
+            <li>
+              <Link href="/docs/ci/cloud-build#exit-codes">Google Cloud Build</Link>: gate in the
+              last step, or record a low score with <code>allowExitCodes: [3]</code>.
+            </li>
+          </ul>
         </div>
 
         <DocsFaq faqs={faqs} />

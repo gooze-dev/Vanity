@@ -1,9 +1,17 @@
 import { docsMetadata } from "@/lib/docs-meta"
 import { Recording } from "@/components/recording"
-import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
+import { DocsFaq, faqPageJsonLd, withCode } from "@/components/docs-faq"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 const simple = `# .gitlab-ci.yml
 image: golang:1.27          # official Go image: go is already installed
@@ -133,6 +141,37 @@ const gate = `merge:
     - gooze report merge
     # Fails the job (exit code 3) below 60%.
     - gooze report view --threshold-total 60`
+
+const allowLowScore = `merge:
+  script:
+    - gooze report merge
+    - gooze report push "$REPORTS_REF"
+    - gooze report view --threshold-total 90
+  # A low score marks the job with a warning instead of failing the
+  # pipeline. Any other exit code still fails it.
+  allow_failure:
+    exit_codes: [3]`
+
+const keepCache = `test:
+  cache:
+    key: gooze
+    paths: [.gooze-reports/]
+    when: always        # also save the reports of a job that failed
+  artifacts:
+    when: always
+    paths: [.gooze-reports/]`
+
+// What each Gooze exit code means in a GitLab CI job.
+const exitCodes = [
+  { code: "0", what: "The job passes." },
+  { code: "1", what: "Unexpected failure. Add `-v` and keep `.gooze.log` as an artifact to read it." },
+  { code: "2", what: "A bad flag or `gooze.yaml` value: fix `.gitlab-ci.yml` or the config." },
+  { code: "3", what: "A score below a threshold. The job fails, or shows a warning with `allow_failure: exit_codes: [3]`. The reports are written." },
+  { code: "4", what: "`--diff` can't find the base: set `GIT_DEPTH: 0` and fetch the target branch." },
+  { code: "5", what: "The registry refused `report push` or `pull`: check `GOOZE_REGISTRY_*` and the job token's registry access." },
+  { code: "6", what: "No reports: the merge job has no `dependencies` on the shard jobs, or `-o` points elsewhere." },
+  { code: "130", what: "The job was cancelled or hit its `timeout`." },
+]
 
 const faqs = [
   {
@@ -278,7 +317,73 @@ export default function GitlabPage() {
             A shard doesn&apos;t check thresholds, so gate only in the merge job. To show a low
             score as a warning instead of failing the pipeline, add{" "}
             <code>allow_failure: exit_codes: [3]</code>; every other code still fails it. More
-            in <Link href="/docs/ci/quality-gates#ci">Quality gates</Link>.
+            in <a href="#exit-codes">exit codes</a>.
+          </p>
+        </div>
+
+        <div id="exit-codes">
+          <h2>Exit codes</h2>
+          <p>
+            Every Gooze exit code but <code>0</code> fails the job. That is right for errors. A
+            low score (code <code>3</code>) is different: the run finished and wrote its reports,
+            so you choose what it does.
+          </p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Code</TableHead>
+                <TableHead>In GitLab CI</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody className="text-muted-foreground">
+              {exitCodes.map((row) => (
+                <TableRow key={row.code}>
+                  <TableCell><code>{row.code}</code></TableCell>
+                  <TableCell>{withCode(row.what)}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <p>
+            <code>allow_failure: exit_codes</code> turns a low score into a warning on the job,
+            while every other code still fails the pipeline. Leave it out to block the merge
+            request on a low score:
+          </p>
+          <CodeBlock lang="yaml" code={allowLowScore} />
+
+          <h3>Warning: a low score</h3>
+          <p>
+            With <code>allow_failure: exit_codes: [3]</code>, the <code>calc</code> merge job at{" "}
+            <code>84.62%</code> against a <code>90</code> threshold ends its log like this:
+          </p>
+          <Recording name="calc-threshold-merge" title="Recorded gooze report merge below threshold.total, exit code 3" />
+          <p>
+            Code <code>3</code> is in <code>exit_codes</code>, so GitLab marks the job as passed
+            with warnings (an orange <strong>!</strong> instead of a red cross) and runs the
+            next stages. The merge request shows the warning, and the reports are written.
+          </p>
+
+          <h3>Error: anything else</h3>
+          <p>
+            A threshold above <code>100</code> is a usage error:
+          </p>
+          <Recording name="threshold-out-of-range" title="Recorded threshold out of range, exit code 2" />
+          <p>
+            Code <code>2</code> is not in <code>exit_codes</code>, so GitLab fails the job and
+            the pipeline, the same as without <code>allow_failure</code>. So do a missing base
+            ref (<code>4</code>), a registry error (<code>5</code>) and missing reports{" "}
+            (<code>6</code>).
+          </p>
+
+          <p>
+            GitLab saves caches and artifacts only for jobs that pass, unless you say{" "}
+            <code>when: always</code>. Set it so a run below a threshold still keeps its
+            reports:
+          </p>
+          <CodeBlock lang="yaml" code={keepCache} />
+          <p className="text-sm text-muted-foreground">
+            What every code means, whatever runs Gooze:{" "}
+            <Link href="/docs/ci/quality-gates#exit-codes">Quality gates</Link>.
           </p>
         </div>
 
