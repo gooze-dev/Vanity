@@ -1,17 +1,9 @@
 import { docsMetadata } from "@/lib/docs-meta"
 import { Recording } from "@/components/recording"
-import { DocsFaq, faqPageJsonLd, withCode } from "@/components/docs-faq"
+import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 
 const simple = `name: Mutation testing
 
@@ -176,17 +168,6 @@ const keepReports = `      # Runs even when the gate step before it failed, but 
           name: gooze-reports
           path: .gooze-reports/`
 
-// What each Gooze exit code means in a GitHub Actions job.
-const exitCodes = [
-  { code: "0", what: "The step passes." },
-  { code: "1", what: "Unexpected failure. Add `-v` and upload `.gooze.log` to read it." },
-  { code: "2", what: "A bad flag or `gooze.yaml` value: fix the workflow or the config." },
-  { code: "3", what: "A score below a threshold. The step fails, but the reports are written: later steps with `if: ${{ !cancelled() }}` still see them." },
-  { code: "4", what: "`--diff` can't find the base: check out with `fetch-depth: 0`, and keep git in the image." },
-  { code: "5", what: "The registry refused `report push` or `pull`: check `GOOZE_REGISTRY_*` and `packages: write`." },
-  { code: "6", what: "No reports: the merge job ran before the shard artifacts were downloaded, or `-o` points elsewhere." },
-  { code: "130", what: "The job was cancelled or hit `timeout-minutes`." },
-]
 
 const faqs = [
   {
@@ -350,22 +331,6 @@ export default function CiPage() {
             after it. That is right for errors. A low score (code <code>3</code>) is different:
             the run finished and wrote its reports, so you choose what it does.
           </p>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Code</TableHead>
-                <TableHead>In GitHub Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody className="text-muted-foreground">
-              {exitCodes.map((row) => (
-                <TableRow key={row.code}>
-                  <TableCell><code>{row.code}</code></TableCell>
-                  <TableCell>{withCode(row.what)}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
           <p>
             To let a step pass on a low score but still fail on errors, accept code{" "}
             <code>3</code> in the shell, and gate in a later step:
@@ -377,8 +342,11 @@ export default function CiPage() {
           </p>
           <CodeBlock lang="yaml" code={keepReports} />
           <p className="text-sm text-muted-foreground">
-            What every code means, whatever runs Gooze:{" "}
-            <Link href="/docs/ci/quality-gates#exit-codes">Quality gates</Link>.
+            The usual causes of the other codes in GitHub Actions: <code>4</code>, a checkout
+            without <code>fetch-depth: 0</code>; <code>5</code>, missing{" "}
+            <code>GOOZE_REGISTRY_*</code> or <code>packages: write</code>; <code>6</code>, a
+            merge job that ran before the shard artifacts were downloaded. Every code:{" "}
+            <Link href="/docs/cli#exit-codes">CLI reference</Link>.
           </p>
         </div>
 

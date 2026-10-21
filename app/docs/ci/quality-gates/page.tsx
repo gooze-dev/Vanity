@@ -44,22 +44,12 @@ const faqs = [
   },
   {
     q: "What do Gooze's exit codes mean?",
-    a: "`0` completed, `1` unexpected failure, `2` bad flag, argument or config value, `3` score below a threshold, `4` git error in diff mode, `5` registry error, `6` no reports to view or merge, `130` interrupted.",
+    a: "Gooze has one exit code per outcome: `3` means the run finished with a score below a threshold, and the other non-zero codes are errors (bad flags, git, the registry, missing reports, an interrupt). The CLI reference lists each code and what to do about it.",
   },
 ]
 
 const faqJsonLd = faqPageJsonLd(faqs)
 
-const exitCodes: { code: string; meaning: string; action: string }[] = [
-  { code: "0", meaning: "Completed; every threshold set is met.", action: "Nothing." },
-  { code: "1", meaning: "Unexpected failure, such as reading or writing reports.", action: "Read the error; rerun with -v for the log." },
-  { code: "2", meaning: "Bad flag, argument or config value (an invalid --run pattern, a threshold above 100).", action: "Fix the command or gooze.yaml." },
-  { code: "3", meaning: "Completed, but a score is below a threshold. Reports are written.", action: "Kill the survivors, or treat it as a warning." },
-  { code: "4", meaning: "--diff can't compare against git: no git, not a repository, unknown ref.", action: "Install git, or fetch the base ref (fetch-depth: 0)." },
-  { code: "5", meaning: "report push or pull failed at the registry.", action: "Check the reference and credentials." },
-  { code: "6", meaning: "No reports to view or merge.", action: "Run gooze run first, or point -o at the reports." },
-  { code: "130", meaning: "Interrupted (Ctrl-C, SIGINT or SIGTERM).", action: "Rerun the command." },
-]
 
 export default function QualityGatesPage() {
   return (
@@ -231,31 +221,10 @@ export default function QualityGatesPage() {
         <div id="exit-codes">
           <h2>Exit codes</h2>
           <p>
-            Every Gooze command exits with one of these codes, so a pipeline can tell a low
-            score from a broken setup:
+            Gooze exits with one code per outcome, so a pipeline can tell a low score{" "}
+            (<code>3</code>) from a broken setup. What each code means and what to do:{" "}
+            <Link href="/docs/cli#exit-codes">CLI reference</Link>.
           </p>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Code</TableHead>
-                <TableHead>Meaning</TableHead>
-                <TableHead>What to do</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody className="text-muted-foreground">
-              {exitCodes.map((row) => (
-                <TableRow key={row.code}>
-                  <TableCell><code>{row.code}</code></TableCell>
-                  <TableCell>{row.meaning}</TableCell>
-                  <TableCell>{row.action}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <p>Some of them, recorded:</p>
-          <Recording name="exit-code-usage" title="Recorded exit code 2 for an invalid --run pattern" />
-          <Recording name="exit-code-git" title="Recorded exit code 4 for an unknown diff ref" />
-          <Recording name="exit-code-no-reports" title="Recorded exit code 6 for a missing reports directory" />
         </div>
 
         <div id="ci">

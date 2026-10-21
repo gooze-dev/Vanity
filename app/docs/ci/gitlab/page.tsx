@@ -1,17 +1,9 @@
 import { docsMetadata } from "@/lib/docs-meta"
 import { Recording } from "@/components/recording"
-import { DocsFaq, faqPageJsonLd, withCode } from "@/components/docs-faq"
+import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 
 const simple = `# .gitlab-ci.yml
 image: golang:1.27          # official Go image: go is already installed
@@ -161,17 +153,6 @@ const keepCache = `test:
     when: always
     paths: [.gooze-reports/]`
 
-// What each Gooze exit code means in a GitLab CI job.
-const exitCodes = [
-  { code: "0", what: "The job passes." },
-  { code: "1", what: "Unexpected failure. Add `-v` and keep `.gooze.log` as an artifact to read it." },
-  { code: "2", what: "A bad flag or `gooze.yaml` value: fix `.gitlab-ci.yml` or the config." },
-  { code: "3", what: "A score below a threshold. The job fails, or shows a warning with `allow_failure: exit_codes: [3]`. The reports are written." },
-  { code: "4", what: "`--diff` can't find the base: set `GIT_DEPTH: 0` and fetch the target branch." },
-  { code: "5", what: "The registry refused `report push` or `pull`: check `GOOZE_REGISTRY_*` and the job token's registry access." },
-  { code: "6", what: "No reports: the merge job has no `dependencies` on the shard jobs, or `-o` points elsewhere." },
-  { code: "130", what: "The job was cancelled or hit its `timeout`." },
-]
 
 const faqs = [
   {
@@ -328,22 +309,6 @@ export default function GitlabPage() {
             low score (code <code>3</code>) is different: the run finished and wrote its reports,
             so you choose what it does.
           </p>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Code</TableHead>
-                <TableHead>In GitLab CI</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody className="text-muted-foreground">
-              {exitCodes.map((row) => (
-                <TableRow key={row.code}>
-                  <TableCell><code>{row.code}</code></TableCell>
-                  <TableCell>{withCode(row.what)}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
           <p>
             <code>allow_failure: exit_codes</code> turns a low score into a warning on the job,
             while every other code still fails the pipeline. Leave it out to block the merge
@@ -382,8 +347,11 @@ export default function GitlabPage() {
           </p>
           <CodeBlock lang="yaml" code={keepCache} />
           <p className="text-sm text-muted-foreground">
-            What every code means, whatever runs Gooze:{" "}
-            <Link href="/docs/ci/quality-gates#exit-codes">Quality gates</Link>.
+            The usual causes of the other codes in GitLab CI: <code>4</code>, a shallow clone
+            without <code>GIT_DEPTH: 0</code> and the target branch; <code>5</code>, a job
+            token without registry access; <code>6</code>, a merge job without{" "}
+            <code>dependencies</code> on the shard jobs. Every code:{" "}
+            <Link href="/docs/cli#exit-codes">CLI reference</Link>.
           </p>
         </div>
 

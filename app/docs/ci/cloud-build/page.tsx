@@ -1,17 +1,9 @@
 import { docsMetadata } from "@/lib/docs-meta"
 import { Recording } from "@/components/recording"
-import { DocsFaq, faqPageJsonLd, withCode } from "@/components/docs-faq"
+import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 
 const simple = `# cloudbuild.yaml
 steps:
@@ -168,17 +160,6 @@ const allowLowScore = `  - id: gate
     # A low score doesn't fail the build; any other exit code does.
     allowExitCodes: [3]`
 
-// What each Gooze exit code means in a Cloud Build step.
-const exitCodes = [
-  { code: "0", what: "The step passes." },
-  { code: "1", what: "Unexpected failure. Add `-v` to read the log in the step output." },
-  { code: "2", what: "A bad flag or `gooze.yaml` value: fix `cloudbuild.yaml` or the config." },
-  { code: "3", what: "A score below a threshold. The build stops at that step, unless it lists `allowExitCodes: [3]`. The reports are written." },
-  { code: "4", what: "`--diff` can't find the base: the `history` step must fetch it, since builds clone one commit." },
-  { code: "5", what: "Artifact Registry refused `report push` or `pull`: fetch a fresh token, and check `roles/artifactregistry.writer`." },
-  { code: "6", what: "No reports: an earlier step didn't run Gooze in `/workspace`, or `-o` points elsewhere." },
-  { code: "130", what: "The build was cancelled or hit its `timeout`." },
-]
 
 const faqs = [
   {
@@ -388,22 +369,6 @@ export default function CloudBuildPage() {
             build. That is right for errors. A low score (code <code>3</code>) is different: the
             run finished and wrote its reports, so you choose what it does.
           </p>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Code</TableHead>
-                <TableHead>In Cloud Build</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody className="text-muted-foreground">
-              {exitCodes.map((row) => (
-                <TableRow key={row.code}>
-                  <TableCell><code>{row.code}</code></TableCell>
-                  <TableCell>{withCode(row.what)}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
           <p>
             Put the gate in the last step, after the <code>push</code> step, so a low score
             never costs the baseline. To record a low score without failing the build, list
@@ -411,8 +376,11 @@ export default function CloudBuildPage() {
           </p>
           <CodeBlock lang="yaml" code={allowLowScore} />
           <p className="text-sm text-muted-foreground">
-            What every code means, whatever runs Gooze:{" "}
-            <Link href="/docs/ci/quality-gates#exit-codes">Quality gates</Link>.
+            The usual causes of the other codes in Cloud Build: <code>4</code>, a build without
+            the <code>history</code> step, since builds clone one commit; <code>5</code>, an
+            expired token or a missing <code>roles/artifactregistry.writer</code>;{" "}
+            <code>6</code>, a step that runs before Gooze wrote reports to{" "}
+            <code>/workspace</code>. Every code: <Link href="/docs/cli#exit-codes">CLI reference</Link>.
           </p>
         </div>
 
