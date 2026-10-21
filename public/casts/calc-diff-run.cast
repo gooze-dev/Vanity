@@ -1,0 +1,2 @@
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792581051, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-diff-run (gooze v1.2.1-0.20261021104757-d45e71426c9a, goozels v0.2.1-0.20261021074934-182f51a116d4, go1.27.3)"}
+[3.108724, "o", "Mutation score: 100.00% (13 killed, 0 survived; 0 cached, 13 tested; changed lines since main)\r\nReports of this run are in .gooze-reports/run; add them to the main reports with gooze report merge.\r\n"]

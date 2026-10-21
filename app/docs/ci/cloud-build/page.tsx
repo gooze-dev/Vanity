@@ -120,10 +120,15 @@ const diff = `steps:
       set -e
       # ...install and login, pull the baseline as above
       # Pull requests test only their changed lines; main keeps a full run.
+      # A diff run writes its reports to .gooze-reports/run.
       BASE=""
-      if [ -n "\${_PR_NUMBER:-}" ]; then BASE="origin/\${_BASE_BRANCH}"; fi
+      REPORTS=.gooze-reports
+      if [ -n "\${_PR_NUMBER:-}" ]; then
+        BASE="origin/\${_BASE_BRANCH}"
+        REPORTS=.gooze-reports/run
+      fi
       gooze run -p 8 --diff="$BASE" ./...
-      gooze report view \${BASE:+--diff "$BASE"}
+      gooze report view -o "$REPORTS"
 
   # ...push-token and push steps as above`
 
@@ -286,9 +291,16 @@ export default function CloudBuildPage() {
               include git, which diff mode needs; a minimal image may not.
             </li>
             <li>
-              In a pull request, <code>gooze report view --diff</code> prints the score of the
-              changed lines. Call it the same way in the <a href="#gate">gate</a>, so a pull
-              request is gated on its own code.
+              A diff run writes its reports to <code>.gooze-reports/run/</code> and leaves the
+              pulled baseline as it was. In a pull request,{" "}
+              <code>gooze report view -o .gooze-reports/run</code> prints the score of the
+              changed lines. Read it the same way in the <a href="#gate">gate</a> (
+              <code>gooze report view -o &quot;$REPORTS&quot;</code>), so a pull request is gated
+              on its own code.
+            </li>
+            <li>
+              The build runs in one step, without shards, which suits a diff run: gating a
+              sharded diff run on the score of the changed lines isn&apos;t supported yet.
             </li>
           </ul>
         </div>

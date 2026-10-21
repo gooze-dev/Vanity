@@ -3,6 +3,7 @@ import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
+import { Recording } from "@/components/recording"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Info } from "lucide-react"
 
@@ -27,7 +28,11 @@ const faqs = [
   },
   {
     q: "Which score should a CI gate read in diff mode?",
-    a: "The `Mutation score` line, which covers only the changed lines. The existing gate step reads that line, so it checks the pull request's own code without changes. The `Total mutation score` line covers every file in scope.",
+    a: "The score of the diff run, which covers only the changed lines. A diff run prints one `Mutation score` line, and `gooze report view -o .gooze-reports/run` prints the same score from its reports, so the existing gate step works with either.",
+  },
+  {
+    q: "Does a diff run change my main reports?",
+    a: "No. A diff run writes its reports to `.gooze-reports/run/` and leaves the main reports as they were. For the score of the whole codebase, run `gooze report merge` and then `gooze report view`.",
   },
   {
     q: "Why does `--diff` fail in CI with an unknown ref or no merge base?",
@@ -97,18 +102,21 @@ export default function DiffModePage() {
             tests. Preview what diff mode will test:
           </p>
           <CodeBlock lang="bash" code="gooze run --estimate --diff main ./..." />
-          {/* TODO(record): calc-diff-estimate: gooze run --estimate --diff main ./... | cat */}
+          <Recording name="calc-diff-estimate" title="Recorded gooze run --estimate --diff main on the calc branch" />
           <p>
-            The preview lists only the files in scope, each with the number of its changed lines.
-            Unchanged files aren&apos;t listed. Then run it:
+            The first line says how many files changed since <code>main</code> and names the
+            merge base commit. The table lists only the files in scope, and its counts cover
+            the changed lines only. Unchanged files aren&apos;t listed. Here all 13 mutations of{" "}
+            <code>calc.go</code> are in scope, because the branch changed its test file (see{" "}
+            <a href="#tests">below</a>). Then run it:
           </p>
           <CodeBlock lang="bash" code="gooze run --diff main ./..." />
-          {/* TODO(record): calc-diff-run: gooze run --diff main ./... | cat */}
+          <Recording name="calc-diff-run" title="Recorded last lines of gooze run --diff main on the calc branch" />
           <p>
-            The run starts with a line that says how many files changed since <code>main</code>{" "}
-            and names the merge base commit. It ends with two score lines: the{" "}
-            <code>Mutation score</code> of the changed lines, then a{" "}
-            <code>Total mutation score</code> (see <a href="#scores">Two scores</a>).
+            The run ends with one score line. It covers the changed lines only and says so at
+            the end (<code>changed lines since main</code>). The next line says where the
+            reports of this run are: a diff run doesn&apos;t change the main reports (see{" "}
+            <a href="#scores">The score of the change</a>).
           </p>
           <p>
             <code>REF</code> is anything <code>git rev-parse</code> accepts: a branch (
@@ -170,52 +178,64 @@ run:
         </div>
 
         <div id="scores">
-          <h2>Two scores</h2>
-          <p>A diff run ends with two score lines:</p>
-          <ol>
-            <li>
-              <code>Mutation score</code> covers the changed lines only. This is the score of
-              your change.
-            </li>
-            <li>
-              <code>Total mutation score</code> covers every file in scope. A changed file counts
-              only its tested lines, and the line says how many files were partly tested.
-            </li>
-          </ol>
+          <h2>The score of the change</h2>
+          <p>
+            The <code>Mutation score</code> line of a diff run covers the changed lines only. It
+            is the score of your change, not of the codebase. The run writes its reports to{" "}
+            <code>.gooze-reports/run/</code>, so you can read them again, survivors included:
+          </p>
+          <CodeBlock lang="bash" code="gooze report view -o .gooze-reports/run" />
+          <Recording name="calc-diff-run-view" title="Recorded gooze report view -o .gooze-reports/run after the diff run" />
           <p>
             The <Link href="/docs/ci/github#gate">score gate</Link> step reads the line that
-            starts with <code>Mutation score:</code> (the <code>Total mutation score</code> line
-            doesn&apos;t match), so it gates the pull request&apos;s own code without any change. When the branch changes no Go lines, there is nothing to
-            mutate: the score for the changed lines is <code>100%</code>, the run exits with{" "}
-            <code>0</code>, and the gate passes.
+            starts with <code>Mutation score:</code>, from the run&apos;s output or from this
+            view, so it gates the pull request&apos;s own code. When the branch changes no Go
+            lines, there is nothing to mutate: the score is <code>100.00%</code>, the run exits
+            with <code>0</code>, and the gate passes.
           </p>
+          <Recording name="calc-diff-no-changes" title="Recorded last lines of gooze run --diff main with no changes" />
           <p>
-            To read the same numbers from stored reports, for example after{" "}
-            <code>gooze report merge</code>, pass the same ref to <code>gooze report view</code>.
-            It prints the score and the survivors of the changed lines only:
+            The main reports still hold the last full run, the one on <code>main</code> with the
+            two survivors:
           </p>
-          <CodeBlock lang="bash" code="gooze report view --diff main" />
-          {/* TODO(record): calc-diff-report-view: gooze report view --diff main | cat */}
+          <CodeBlock lang="bash" code="gooze report view" />
+          <Recording name="calc-diff-main-view" title="Recorded score line of gooze report view after the diff run" />
+          <p>
+            For the score of the whole codebase with your change, fold the diff run into the
+            main reports, then view them:
+          </p>
+          <CodeBlock
+            lang="bash"
+            code={`gooze report merge
+gooze report view`}
+          />
+          <Recording name="calc-diff-merge" title="Recorded gooze report merge after the diff run" />
+          <Recording name="calc-diff-merged-view" title="Recorded score line of gooze report view after the merge" />
         </div>
 
         <div id="cache">
           <h2>Diff mode and the cache</h2>
           <p>
-            Diff mode uses the same reports directory and cache as every other run:
+            A diff run is a narrowed run, like a run with <code>--run</code> or{" "}
+            <code>--mutagens</code>, and follows the same rules (see{" "}
+            <Link href="/docs/usage/single-function#run-dir">the run directory</Link>):
           </p>
           <ul>
-            <li>Files you didn&apos;t change aren&apos;t re-tested; their stored results stay.</li>
-            <li>A changed file is tested on its changed lines only.</li>
             <li>
-              Its stored results remember that they cover only some lines. A later full{" "}
-              <code>gooze run</code> re-tests such a <em>partly tested</em> file in full.
+              Its reports go to a fresh <code>.gooze-reports/run/</code> (
+              <code>run/shard_N</code> when sharded). The main reports don&apos;t change.
             </li>
             <li>
-              A later diff run reuses the results when the file hashes are the same and it needs
-              the same lines or fewer.
+              It uses the main reports as its cache: a file unchanged since them is skipped and
+              isn&apos;t in the score. <code>--no-cache</code> tests the changed lines anyway.
             </li>
             <li>
-              <code>--no-cache</code> re-tests the changed lines anyway.
+              <code>gooze report merge</code> folds <code>run/</code> into the main reports and
+              removes it. A file that changed since the main reports gets the diff run&apos;s
+              results in place of its own. If the run tested only some of its lines, the file is
+              marked partial, and the next full <code>gooze run</code> re-tests it in full. On
+              the <code>calc</code> branch the whole file was in scope, so the merge leaves it
+              complete.
             </li>
           </ul>
         </div>
@@ -243,10 +263,15 @@ run:
               <a href="#errors">Errors</a>).
             </li>
             <li>
-              <strong>Sharding.</strong> Every shard computes the same changes from git, and{" "}
-              <code>gooze report merge</code> keeps the scope information. Gate after the merge
-              with <code>gooze report view --diff REF</code>, which needs the checkout and the
-              base ref too.
+              <strong>One job.</strong> A diff run is small, so run it in one job and gate in
+              that job. Gating a sharded diff run on the score of the changed lines isn&apos;t
+              supported yet: <code>gooze report merge</code> folds the shards into the main
+              reports, whose score covers the whole codebase. Keep sharding for the full run on{" "}
+              <code>main</code>.
+            </li>
+            <li>
+              <strong>Baseline.</strong> Don&apos;t push a diff run&apos;s reports as the
+              baseline. Push from the full run on <code>main</code>.
             </li>
             <li>
               <strong>Coverage profile.</strong> <code>--coverage-profile</code> still applies:
@@ -275,22 +300,30 @@ run:
             </li>
           </ul>
           <CodeBlock lang="bash" code="git fetch origin main" />
-          {/* TODO(record): diff-unknown-ref: gooze run --diff no-such-branch ./... 2>&1 | cat */}
-          {/* TODO(record): diff-no-repo: gooze run --diff main ./... 2>&1 | cat (in a directory outside any git repository) */}
-          {/* TODO(record): diff-no-git: PATH="$(dirname "$(command -v gooze)")" gooze run --diff main ./... 2>&1 | cat (gooze's directory must not contain git) */}
+          <p>An unknown ref:</p>
+          <Recording name="diff-unknown-ref" title="Recorded gooze run --diff with an unknown ref" />
+          <p>Outside a git repository:</p>
+          <Recording name="diff-no-repo" title="Recorded gooze run --diff outside a git repository" />
+          <p>Without git on <code>PATH</code>:</p>
+          <Recording name="diff-no-git" title="Recorded gooze run --diff without git on PATH" />
         </div>
 
         <div id="limitations">
           <h2>Limitations</h2>
           <ul>
             <li>
-              The score describes the change, not the codebase. Use a full run (on{" "}
-              <code>main</code>, or the <code>Total mutation score</code>) for the whole picture.
+              The score describes the change, not the codebase. Use a full run on{" "}
+              <code>main</code>, or <code>gooze report merge</code> and{" "}
+              <code>gooze report view</code>, for the whole picture.
             </li>
             <li>
               Deleted lines have no mutants. A pull request that only removes code tests nothing.
             </li>
             <li>A mutant that spans several lines is placed on its first changed line.</li>
+            <li>
+              A sharded diff run can&apos;t be gated on the score of the changed lines yet (see{" "}
+              <a href="#ci">Run it in CI</a>).
+            </li>
             <li>
               Unchanged code isn&apos;t re-tested even when its behavior depends on a line you
               changed in another file.

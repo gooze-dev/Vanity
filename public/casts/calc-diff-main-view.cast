@@ -1,0 +1,2 @@
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792581054, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-diff-main-view (gooze v1.2.1-0.20261021104757-d45e71426c9a, goozels v0.2.1-0.20261021074934-182f51a116d4, go1.27.3)"}
+[0.017553, "o", "Mutation score: 84.62% (11 killed, 2 survived)\r\n"]

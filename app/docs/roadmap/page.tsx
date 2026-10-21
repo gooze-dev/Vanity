@@ -22,7 +22,8 @@ const limitations = [
   {
     id: "mutator-selection",
     title: "Mutator selection",
-    detail: "The six default operators run on every file; switching operators on and off, including branch, statement, and loop, is planned.",
+    // TODO(version): name the release that ships --mutagens.
+    detail: "From the next release, `--mutagens` (or `run.mutagens`) picks among the six default mutagens. Turning on the three that are off by default (`branch`, `statement`, `loop`) is planned.",
     workaround: { text: "per-mutagen ignore directives", href: "/docs/usage/ignoring-code" },
   },
   {
@@ -83,17 +84,39 @@ const themes: Theme[] = [
           </>
         ),
       },
+      // TODO(version): name the release that ships --run.
       {
+        id: "function-selection",
         title: "Function selection",
-        detail: "Target specific functions or methods, for example by regex.",
+        detail: (
+          <>
+            Mutate only the functions or methods matching a regex with{" "}
+            <code>gooze run --run</code>, into a separate <code>run/</code> directory that{" "}
+            <code>gooze report merge</code> folds in. Arrives in the next Gooze release.
+          </>
+        ),
+        shipped: true,
+        href: "/docs/usage/single-function",
       },
       {
         title: "Custom mutator plugins",
         detail: "A plugin API for writing your own mutation operators outside the Gooze source.",
       },
+      // TODO(version): name the release that ships --mutagens.
       {
         title: "Mutator selection",
-        detail: "Turn mutators on or off in the config file or by flag, including the branch, statement, and loop mutators.",
+        detail: (
+          <>
+            Picking among the six default mutagens with <code>--mutagens</code> or{" "}
+            <code>run.mutagens</code> arrives in the next Gooze release. Planned: turning on the
+            three that exist but are off by default. <code>branch</code> forces a condition true
+            or false, inverts it, removes an <code>if</code> block (such as{" "}
+            <code>{"if err != nil { return err }"}</code>) and removes switch cases;{" "}
+            <code>statement</code> deletes assignments, calls, <code>defer</code>,{" "}
+            <code>go</code> and channel sends; <code>loop</code> changes loop bounds and removes
+            loop bodies, <code>break</code> and <code>continue</code>.
+          </>
+        ),
       },
       {
         title: "Config path",
@@ -161,6 +184,68 @@ const themes: Theme[] = [
         ),
         shipped: true,
         href: "/docs/config",
+      },
+    ],
+  },
+  {
+    id: "operators",
+    title: "Mutation operators",
+    items: [
+      {
+        title: "Return values",
+        detail: (
+          <>
+            Replace a returned value with its zero value, <code>nil</code> or an empty
+            collection (<code>return x</code> to <code>return 0</code>,{" "}
+            <code>return items</code> to <code>return nil</code>).
+          </>
+        ),
+      },
+      {
+        title: "String literals",
+        detail: (
+          <>
+            <code>&quot;&quot;</code> to <code>&quot;x&quot;</code> and back, and other string
+            constant changes. Today only integer and float literals are mutated.
+          </>
+        ),
+      },
+      {
+        title: "Assignment operators",
+        detail: (
+          <>
+            <code>+=</code> and <code>-=</code>, <code>*=</code> and <code>/=</code>, and the
+            other compound assignments. Today only binary <code>+ - * / %</code> expressions are
+            mutated.
+          </>
+        ),
+      },
+      {
+        title: "Increment and decrement",
+        detail: (
+          <>
+            <code>i++</code> to <code>i--</code> and back.
+          </>
+        ),
+      },
+      {
+        title: "Index and slice bounds",
+        detail: (
+          <>
+            <code>s[i]</code> to <code>s[i+1]</code>, <code>s[1:]</code> to <code>s[:]</code>.
+          </>
+        ),
+      },
+      {
+        title: "Default operators",
+        detail: (
+          <>
+            Comparison, arithmetic, logical, negation, numeric constant and nil check mutations,
+            in the six default mutagens.
+          </>
+        ),
+        shipped: true,
+        href: "/docs/mutations",
       },
     ],
   },

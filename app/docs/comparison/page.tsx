@@ -432,8 +432,9 @@ export default function ComparisonPage() {
           </ul>
           <p>
             The trade-off is granularity: incremental execution re-tests a whole changed file, a
-            diff mode only the changed lines. Gooze combines them: a diff run reuses the cache for
-            unchanged files, and a later full run re-tests the files it tested only in part (see{" "}
+            diff mode only the changed lines. Gooze combines them: a diff run writes its own
+            reports and leaves the whole-codebase reports as they were, <code>gooze report merge</code>{" "}
+            folds it in, and a later full run re-tests the files it tested only in part (see{" "}
             <Link href="/docs/usage/diff-mode#cache">diff mode and the cache</Link>).
           </p>
           <p>
