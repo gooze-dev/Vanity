@@ -1,4 +1,5 @@
 import { docsMetadata } from "@/lib/docs-meta"
+import { Recording } from "@/components/recording"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
@@ -42,13 +43,15 @@ export default function CliConfigPage() {
             This writes <code>gooze.yaml</code> and stops.
             It does not run mutation testing.
           </p>
-          <CodeBlock lang="text" code="Wrote the default configuration to gooze.yaml" />
+          <Recording name="config-init" title="Recorded gooze config init, run twice" />
           <p>
             It never overwrites an existing file: if <code>gooze.yaml</code> is already there it
             exits <code>1</code> with{" "}
             <code>gooze.yaml already exists; edit it or remove it first</code>. For every key the
             file can contain, see <Link href="/docs/config">Configuration (<code>gooze.yaml</code>)</Link>.
           </p>
+          <p>The file it writes holds every key with its default value:</p>
+          <Recording name="config-init-file" title="Recorded contents of the gooze.yaml written by gooze config init" />
 
           <h3>Next step</h3>
           <p>After you have a config file, run:</p>

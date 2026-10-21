@@ -1,4 +1,5 @@
 import { docsMetadata } from "@/lib/docs-meta"
+import { Recording } from "@/components/recording"
 import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 import { CodeBlock } from "@/components/code-block"
 import {
@@ -257,9 +258,7 @@ output: .gooze-reports        # where reports and the incremental cache live
 no-cache: false               # set true to force a full re-run
 
 paths:
-  exclude:                    # regex patterns of files to skip
-    - '^vendor/'
-    - '^examples/'
+  exclude: []                 # regex patterns of files to skip, e.g. '^vendor/'
 
 run:
   parallel: 1                 # concurrent mutation workers
@@ -289,7 +288,7 @@ log:
             <li><code>run.mutation_timeout</code> must be at least <code>1</code> (seconds)</li>
             <li><code>version</code> must be <code>1</code></li>
           </ul>
-          <CodeBlock lang="text" code="Error: invalid run.parallel: 0 is out of range: must be at least 1" />
+          <Recording name="run-invalid-parallel" title="Recorded gooze run with --parallel 0" />
         </div>
 
         <div id="cli-vs-config">

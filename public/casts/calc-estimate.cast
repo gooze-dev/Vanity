@@ -1,2 +1,2 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792567698, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-estimate (gooze v1.2.0, goozels v0.2.0, go1.27.3)"}
-[0.013668, "o", "\r\n PATH          │ MUTATIONS \r\n───────────────┼───────────\r\n calc.go       │    13     \r\n───────────────┼───────────\r\n TOTAL FILES 1 │    13     \r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792568444, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-estimate (gooze v1.2.0, goozels v0.2.0, go1.27.3)"}
+[0.011737, "o", "\r\n PATH          │ MUTATIONS \r\n───────────────┼───────────\r\n calc.go       │    13     \r\n───────────────┼───────────\r\n TOTAL FILES 1 │    13     \r\n"]

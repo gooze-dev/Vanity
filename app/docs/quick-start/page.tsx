@@ -1,7 +1,7 @@
 import { docsMetadata } from "@/lib/docs-meta"
+import { Recording } from "@/components/recording"
 import Link from "next/link"
 import { CodeBlock } from "@/components/code-block"
-import { TerminalCast } from "@/components/terminal-cast"
 
 export const metadata = docsMetadata("/docs/quick-start")
 
@@ -84,7 +84,7 @@ export default function QuickStartPage() {
             Before running any tests, see which files Gooze will mutate and how many mutations apply:
           </p>
           <CodeBlock lang="bash" code="gooze run --estimate ./..." />
-          <TerminalCast src="/casts/calc-estimate.cast" title="Recorded output of gooze run --estimate for the calc package" />
+          <Recording name="calc-estimate" title="Recorded gooze run --estimate before the first run" />
           <p className="mt-4 mb-3 text-muted-foreground">
             Exclude files with a regex (repeat the flag as needed):
           </p>
@@ -101,7 +101,7 @@ export default function QuickStartPage() {
             The last line is the mutation score:
           </p>
           <CodeBlock lang="bash" code="gooze run ./..." />
-          <TerminalCast src="/casts/calc-first-run.cast" title="Recorded last line of the first gooze run on calc" />
+          <Recording name="calc-first-run" title="Recorded last line of the first gooze run on calc" />
           <p>
             Two mutants survived: Gooze changed the code and every test still passed.
           </p>
@@ -114,7 +114,7 @@ export default function QuickStartPage() {
             <code>-o/--output</code>). To see which mutants survived, view the last run:
           </p>
           <CodeBlock lang="bash" code="gooze report view" />
-          <TerminalCast src="/casts/calc-report-view.cast" title="Recorded output of gooze report view after the first run" />
+          <Recording name="calc-report-view" title="Recorded gooze report view after the first run" />
           <p>
             No test calls <code>InRange</code> with <code>n</code> equal to <code>lo</code> or{" "}
             <code>hi</code>, so <code>&lt;</code> and <code>&lt;=</code> (and <code>&gt;</code>{" "}
@@ -128,11 +128,11 @@ export default function QuickStartPage() {
 
           <p>
             To browse every mutation with its diff, run{" "}
-            <code>gooze report view --all</code>. In the interactive UI:
-            <code className="ml-2">/</code> to filter,
-            <code className="ml-2">enter</code> to open the diff,
-            and <code className="ml-2">q</code> to quit.
+            <code>gooze report view --all</code>. In the interactive UI, move with{" "}
+            <code>j</code>/<code>k</code>, press <code>enter</code> or <code>space</code> to open the
+            diff, and <code>q</code> to quit. Here it opens the first survivor:
           </p>
+          <Recording name="calc-report-view-all-tui" title="Recorded gooze report view --all session opening a survivor's diff" tui />
         </div>
 
         <div id="fix">
@@ -144,7 +144,8 @@ export default function QuickStartPage() {
 		{10, 0, 10, true}, // upper bound is inside`}
           />
           <p>Run Gooze again and view the report. Both mutants are killed now:</p>
-          <TerminalCast src="/casts/calc-fixed-run.cast" title="Recorded run and report after adding the boundary tests" />
+          <Recording name="calc-fixed-run" title="Recorded last line of gooze run after adding the boundary tests" />
+          <Recording name="calc-fixed-report-view" title="Recorded gooze report view after the fix" />
         </div>
 
         <div id="rerun">
@@ -152,7 +153,8 @@ export default function QuickStartPage() {
           <p>
             Gooze caches results per file. Run it again without changes and nothing is re-tested; <code>--estimate</code> shows the same:
           </p>
-          <TerminalCast src="/casts/calc-cached-run.cast" title="Recorded cached run and estimate" />
+          <Recording name="calc-cached-run" title="Recorded last line of a gooze run with nothing changed" />
+          <Recording name="calc-cached-estimate" title="Recorded gooze run --estimate with everything cached" />
           <p className="text-sm text-muted-foreground">
             What triggers a re-test: <Link href="/docs/usage/incremental-runs">Incremental runs</Link>.
           </p>

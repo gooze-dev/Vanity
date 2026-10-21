@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { Recording } from "@/components/recording"
 import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 import { docsMetadata } from "@/lib/docs-meta"
 import { CodeBlock } from "@/components/code-block"
@@ -166,12 +167,7 @@ export default function EditorSupportPage() {
             file score and the two bound checks no test pins down:
           </p>
           <CodeBlock lang="bash" code="goozels check calc.go" />
-          <CodeBlock
-            lang="text"
-            code={`calc.go:1:1: warning: gooze: score 84.62% — 11 killed, 2 survived
-calc.go:10:2: warning: gooze: surviving comparison mutant — tests still pass with \`if n < lo {\` → \`if n <= lo {\`
-calc.go:13:2: warning: gooze: surviving comparison mutant — tests still pass with \`if n > hi {\` → \`if n >= hi {\``}
-          />
+          <Recording name="calc-goozels-check" title="Recorded goozels check calc.go" />
           <p>
             These are the same lines your editor marks. Checking{" "}
             <code>calc_test.go</code> prints the same three lines, because a{" "}

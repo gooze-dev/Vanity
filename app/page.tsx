@@ -13,6 +13,7 @@ import { CodeBlock } from "@/components/code-block";
 import { ClaudeCodeAnnouncement } from "@/components/agent-install";
 import { FaqList, faqPageJsonLd } from "@/components/docs-faq";
 import { HeadingAnchors } from "@/components/heading-anchors";
+import { recordingText } from "@/components/recording";
 
 // Self-canonical for the homepage. The root layout no longer sets a default
 // canonical (it would leak onto every other page).
@@ -222,12 +223,11 @@ export default async function Home() {
                   <span className="h-2.5 w-2.5 rounded-full bg-green-500" />
                 </div>
                 <div className="bg-black dark:bg-zinc-950 p-4 font-mono text-sm overflow-x-auto">
-                  <div className="text-zinc-500">gooze@linux:~/calc $ gooze report view</div>
-                  <pre className="m-0 bg-transparent p-0 text-zinc-300">{`Survivors (2):
-calc.go:10: survived (comparison): if n < lo { -> if n <= lo {
-calc.go:13: survived (comparison): if n > hi { -> if n >= hi {
-
-Mutation score: 84.62% (11 killed, 2 survived)`}</pre>
+                  <div className="text-zinc-500">~/calc $ gooze report view</div>
+                  {/* The last lines of the real recording (public/casts), read at build time. */}
+                  <pre className="m-0 bg-transparent p-0 text-zinc-300">
+                    {recordingText("calc-report-view").split("\n").slice(-5).join("\n")}
+                  </pre>
                 </div>
               </div>
               <p className="text-sm text-muted-foreground mt-4">

@@ -1,3 +1,2 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792567706, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-cached-run (gooze v1.2.0, goozels v0.2.0, go1.27.3)"}
-[0.025843, "o", "Mutation score: 100.00% (13 killed, 0 survived; 13 cached, 0 tested)\r\n"]
-[0.040646, "o", "\r\n PATH          │ MUTATIONS │   CACHE   \r\n───────────────┼───────────┼───────────\r\n calc.go       │    13     │ cached    \r\n───────────────┼───────────┼───────────\r\n TOTAL FILES 1 │    13     │ 13 CACHED \r\n\r\n13 of 13 mutations are in cached files and will not be re-tested; use --no-cache to re-test everything.\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792568470, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-cached-run (gooze v1.2.0, goozels v0.2.0, go1.27.3)"}
+[0.013447, "o", "Mutation score: 100.00% (13 killed, 0 survived; 13 cached, 0 tested)\r\n"]

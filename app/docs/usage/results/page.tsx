@@ -1,4 +1,5 @@
 import { docsMetadata } from "@/lib/docs-meta"
+import { Recording } from "@/components/recording"
 import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 import Link from "next/link"
 
@@ -54,20 +55,7 @@ export default function ResultsPage() {
             package from the <Link href="/docs/quick-start">Quick start</Link>:
           </p>
           <CodeBlock lang="bash" code="gooze report view" />
-          <CodeBlock
-            lang="text"
-            code={` PATH          │ MUTATIONS │ KILLED │ SURVIVED │ NOT COVERED │  SCORE 
-───────────────┼───────────┼────────┼──────────┼─────────────┼────────
- calc.go       │        13 │     11 │        2 │           0 │ 84.62% 
-───────────────┼───────────┼────────┼──────────┼─────────────┼────────
- TOTAL FILES 1 │        13 │     11 │        2 │           0 │ 84.62% 
-
-Survivors (2):
-calc.go:10: survived (comparison): if n < lo { -> if n <= lo {
-calc.go:13: survived (comparison): if n > hi { -> if n >= hi {
-
-Mutation score: 84.62% (11 killed, 2 survived)`}
-          />
+          <Recording name="calc-report-view" title="Recorded gooze report view after the first run" />
           <p>
             Each survivor line gives the file, the line, the mutation operator, and the original and
             mutated code. Pass paths (<code>./internal/domain/...</code>, <code>calc.go</code>) to narrow it to
@@ -176,10 +164,7 @@ Mutation score: 84.62% (11 killed, 2 survived)`}
             </li>
             <li>Run Gooze again and check that it&apos;s killed now:</li>
           </ol>
-          <CodeBlock
-            lang="text"
-            code="Mutation score: 100.00% (13 killed, 0 survived; 0 cached, 13 tested)"
-          />
+          <Recording name="calc-fixed-run" title="Recorded last line of gooze run after adding the boundary tests" />
           <p>
             If the code should not be tested (generated code, debug helpers), skip it
             instead: see <Link href="/docs/usage/ignoring-code">Ignoring code</Link>.
