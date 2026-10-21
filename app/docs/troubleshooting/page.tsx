@@ -19,13 +19,13 @@ export default function TroubleshootingPage() {
           <p>
             <strong>Killed</strong> means the tests of the package that owns the mutated file failed for that mutation
             (<code>go test -count=1</code> on that package).
-            A mutant that does not compile is reported as <strong>error</strong>, not killed.
+            A mutant that does not compile is reported as <code>error</code>, not killed.
             Sometimes a kill is good (your tests catch the bug).
             Sometimes it is not (timeouts, flaky tests, setup problems).
           </p>
           <p>
             Timeouts are not kills: a mutation whose tests exceed{" "}
-            <code>--mutation-timeout</code> (default 120 seconds) is reported with status{" "}
+            <code>--mutation-timeout</code> (default <code>120</code> seconds) is reported with status{" "}
             <code>timeout</code>. If kills still look suspicious, run verbose and check the logs:
           </p>
           <div>
@@ -54,7 +54,8 @@ export default function TroubleshootingPage() {
         <div id="statuses">
           <h2>Not sure what a status means</h2>
           <p>
-            Killed, survived, not covered, timeout, and error are explained in{" "}
+            <code>killed</code>, <code>survived</code>, <code>not_covered</code>, <code>timeout</code>, and{" "}
+            <code>error</code> are explained in{" "}
             <Link href="/docs/usage/results#statuses">Reading results</Link>.
           </p>
         </div>
@@ -71,7 +72,7 @@ export default function TroubleshootingPage() {
         </div>
 
         <div id="no-reports">
-          <h2>&quot;no reports directory&quot; or &quot;no reports ... match&quot;</h2>
+          <h2><code>no reports directory</code> or <code>no reports ... match</code></h2>
           <p>
             <code>gooze report view</code> reads the reports directory set by <code>-o</code>
             (default <code>.gooze-reports</code>). If it does not exist, run{" "}
@@ -84,7 +85,7 @@ export default function TroubleshootingPage() {
           <p>
             Path arguments are module-relative, like <code>gooze run</code>&apos;s (
             <code>./...</code>, <code>./pkg/...</code>, <code>./pkg</code>,{" "}
-            <code>./pkg/file.go</code>). When no report matches, view exits 1 with{" "}
+            <code>./pkg/file.go</code>). When no report matches, view exits <code>1</code> with{" "}
             <code>no reports in .gooze-reports match ...</code>.
           </p>
         </div>

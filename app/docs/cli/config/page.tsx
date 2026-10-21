@@ -19,7 +19,7 @@ export default function CliConfigPage() {
           <h2>Usage</h2>
           <CodeBlock lang="bash" code="gooze config <subcommand>" />
           <p>
-            Subcommands: <Link href="#init">init</Link>.
+            Subcommands: <Link href="#init"><code>init</code></Link>.
           </p>
         </div>
 
@@ -44,9 +44,9 @@ export default function CliConfigPage() {
           <CodeBlock lang="text" code="Wrote the default configuration to gooze.yaml" />
           <p>
             It never overwrites an existing file: if <code>gooze.yaml</code> is already there it
-            exits 1 with{" "}
+            exits <code>1</code> with{" "}
             <code>gooze.yaml already exists; edit it or remove it first</code>. For every key the
-            file can contain, see <Link href="/docs/config">Configuration (gooze.yaml)</Link>.
+            file can contain, see <Link href="/docs/config">Configuration (<code>gooze.yaml</code>)</Link>.
           </p>
 
           <h3>Next step</h3>

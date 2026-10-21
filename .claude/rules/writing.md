@@ -102,6 +102,24 @@ are.
 - One main idea per paragraph. Don't repeat the same point in several sections.
 - No emojis.
 
+## Code in text
+
+Anything a reader could type, copy or find in code or output is highlighted as code, never
+plain text:
+
+- **Inline code** for commands (`gooze run ./...`), flags (`--coverage-profile`), env vars
+  (`GOOZE_*`), config keys (`run.parallel`), file names and paths (`gooze.yaml`,
+  `.gooze-reports`), directives (`//gooze:ignore`), statuses and values (`survived`,
+  `not_covered`, `120`), identifiers, versions (`v1.2.0`) and short snippets (`if n <= lo {`).
+  In JSX use `<code>`. In FAQ strings and other plain strings use backticks; `DocsFaq` renders
+  them as code and `faqPageJsonLd` strips them from the structured data.
+- **Code blocks** (`CodeBlock` with the right `lang`: `bash`, `yaml`, `go`, `text`) for anything
+  the reader runs or copies as a whole: a command line to run, a config file or fragment, a Go
+  example, real output. One command per line; comments only when they add information.
+- Product names in prose stay plain text: Gooze, goozels, Go, GitHub Actions. Use code only
+  when you mean the command or package (`gooze`, `goozels check`, `gooze.dev/pkg/gooze`).
+- Don't put a long sentence inside `<code>`; keep inline code to the token itself.
+
 ## FAQs and SEO text
 
 - FAQ answers are shown on the page and emitted as FAQPage JSON-LD from the same array. Write

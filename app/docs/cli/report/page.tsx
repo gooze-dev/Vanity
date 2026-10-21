@@ -25,10 +25,10 @@ export default function CliReportPage() {
           </p>
           <p>
             Subcommands:{" "}
-            <Link href="#view">view</Link>,{" "}
-            <Link href="#push">push</Link>,{" "}
-            <Link href="#pull">pull</Link>, and{" "}
-            <Link href="#merge">merge</Link>.
+            <Link href="#view"><code>view</code></Link>,{" "}
+            <Link href="#push"><code>push</code></Link>,{" "}
+            <Link href="#pull"><code>pull</code></Link>, and{" "}
+            <Link href="#merge"><code>merge</code></Link>.
           </p>
         </div>
 
@@ -63,14 +63,14 @@ Mutation score: 87.50% (14 killed, 2 survived)`}
           />
           <p>
             Each survivor line reads <code>path:line: status (mutagen): original -&gt; mutated</code>.
-            Survived, not covered, timed out and skipped mutations are listed; with none, view
+            Survived, not covered, timed out and skipped mutations are listed; with none, <code>view</code>
             prints <code>No survivors.</code> The output is the same in a TTY and in CI.
           </p>
 
           <h3>Paths</h3>
           <p>
             Paths limit the output to matching source files and read like{" "}
-            <Link href="/docs/cli/run#usage">gooze run</Link> arguments, relative to the module root:
+            <Link href="/docs/cli/run#usage"><code>gooze run</code></Link> arguments, relative to the module root:
           </p>
           <ul>
             <li><code>./...</code>: every file (the default)</li>
@@ -80,7 +80,7 @@ Mutation score: 87.50% (14 killed, 2 survived)`}
           </ul>
           <CodeBlock lang="bash" code="gooze report view ./internal/domain/..." />
           <p>
-            If no report matches, view exits 1 with{" "}
+            If no report matches, <code>view</code> exits <code>1</code> with{" "}
             <code>no reports in .gooze-reports match ./internal/domain/...</code>. If the reports
             directory does not exist, it names the directory and suggests running{" "}
             <code>gooze run</code> first or passing <code>-o</code>.
@@ -156,7 +156,7 @@ Mutation score: 87.50% (14 killed, 2 survived)`}
               <code>GOOZE_REGISTRY_PASSWORD</code>. The
               password may be a token or PAT. For GHCR, use your GitHub username with a PAT (or{" "}
               <code>GITHUB_TOKEN</code> in CI). The same
-              variables apply to <Link href="#pull">pull</Link>.
+              variables apply to <Link href="#pull"><code>pull</code></Link>.
             </p>
             <CodeBlock
               lang="bash"
@@ -246,12 +246,12 @@ gooze report view`}
 
           <h3>Notes</h3>
           <ul>
-            <li>If there are no shard directories, merge just rebuilds the index and prints the score.</li>
+            <li>If there are no shard directories, <code>merge</code> just rebuilds the index and prints the score.</li>
             <li>
               Shard reports replace base reports for the same source file; base reports for files
               no shard re-tested are kept, so caching can still work.
             </li>
-            <li>When merge runs inside the checkout, base reports for files that no longer exist are dropped.</li>
+            <li>When <code>merge</code> runs inside the checkout, base reports for files that no longer exist are dropped.</li>
           </ul>
         </div>
       </div>

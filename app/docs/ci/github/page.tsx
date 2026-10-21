@@ -1,4 +1,5 @@
 import { docsMetadata } from "@/lib/docs-meta"
+import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
@@ -125,19 +126,19 @@ const gate = `      # Fail the job when the mutation score is below MIN_SCORE (p
 const faqs = [
   {
     q: "How do I run Gooze mutation tests in GitHub Actions?",
-    a: "In a golang:1.27 container, install the CLI with go install gooze.dev/pkg/gooze@latest and run gooze run ./... There is no dedicated action; the plain go install step is the supported approach.",
+    a: "In a `golang:1.27` container, install the CLI with `go install gooze.dev/pkg/gooze@latest` and run `gooze run ./...`. There is no dedicated action; the plain `go install` step is the supported approach.",
   },
   {
     q: "How do I shard Gooze across multiple GitHub Actions runners?",
-    a: "Use a strategy.matrix of shard indexes (0-based) and pass them to gooze run -s INDEX/TOTAL, for example gooze run -s ${{ matrix.shard }}/3. A final job downloads every shard's reports and runs gooze report merge.",
+    a: "Use a `strategy.matrix` of shard indexes (0-based) and pass them to `gooze run -s INDEX/TOTAL`, for example `gooze run -s ${{ matrix.shard }}/3`. A final job downloads every shard's reports and runs `gooze report merge`.",
   },
   {
     q: "How do I cache incremental Gooze reports in CI?",
-    a: "Pull a baseline from an OCI registry with gooze report pull at the start of each shard so unchanged files are skipped, and push the merged baseline back from the main branch after gooze report merge.",
+    a: "Pull a baseline from an OCI registry with `gooze report pull` at the start of each shard so unchanged files are skipped, and push the merged baseline back from the main branch after `gooze report merge`.",
   },
   {
     q: "How do I fail a pull request when the mutation score is too low?",
-    a: "Add a short shell step that reads 'Mutation score' from gooze report view and fails the job below your minimum. Gooze has no built-in threshold flag. When you shard, gate in the merge job.",
+    a: "Add a short shell step that reads `Mutation score` from `gooze report view` and fails the job below your minimum. Gooze has no built-in threshold flag. When you shard, gate in the merge job.",
   },
   {
     q: "Does Gooze post results as a pull-request comment?",
@@ -145,15 +146,7 @@ const faqs = [
   },
 ]
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-}
+const faqJsonLd = faqPageJsonLd(faqs)
 
 export const metadata = docsMetadata("/docs/ci/github")
 
@@ -189,7 +182,7 @@ export default function CiPage() {
             time. Each job tests its own slice and uploads its reports; a final{" "}
             <code>merge</code> job downloads them all and
             combines them with{" "}
-            <Link href="/docs/cli/report#merge">gooze report merge</Link>.
+            <Link href="/docs/cli/report#merge"><code>gooze report merge</code></Link>.
           </p>
           <CodeBlock lang="yaml" code={sharded} />
         </div>
@@ -202,8 +195,8 @@ export default function CiPage() {
             Every shard pulls the <code>:main</code> baseline
             for the cache, then hands its reports to the merge job as an artifact; shards never push
             to the registry. The merge job combines them with{" "}
-            <Link href="/docs/cli/report#merge">gooze report merge</Link>{" "}
-            and, <strong>only on main</strong>, publishes the single merged baseline back to{" "}
+            <Link href="/docs/cli/report#merge"><code>gooze report merge</code></Link>{" "}
+            and, <strong>only on <code>main</code></strong>, publishes the single merged baseline back to{" "}
             <code>:main</code>.
           </p>
           <CodeBlock lang="yaml" code={cached} />
@@ -213,7 +206,7 @@ export default function CiPage() {
           <h2>Fail the build below a score (quality gate)</h2>
           <p>
             Gooze has no threshold flag yet: survivors never change its exit code. Add this
-            step after the gooze run (in the merge job, after <code>gooze report merge</code>, when you shard). It reads the{" "}
+            step after the <code>gooze run</code> (in the merge job, after <code>gooze report merge</code>, when you shard). It reads the{" "}
             <Link href="/docs/usage/results#score">mutation score</Link>{" "}
             from the <code>Mutation score: NN.NN% (...)</code> line of{" "}
             <code>gooze report view</code> and fails when it is below{" "}
@@ -242,20 +235,12 @@ export default function CiPage() {
             <li>
               For a non-TLS or self-signed registry add{" "}
               <code>--plain-http</code> or{" "}
-              <code>--insecure</code> to push/pull.
+              <code>--insecure</code> to <code>push</code>/<code>pull</code>.
             </li>
           </ul>
         </div>
 
-        <div id="faq">
-          <h2>FAQ</h2>
-          {faqs.map((f) => (
-            <div key={f.q}>
-              <h3>{f.q}</h3>
-              <p>{f.a}</p>
-            </div>
-          ))}
-        </div>
+        <DocsFaq faqs={faqs} />
       </div>
     </section>
   )

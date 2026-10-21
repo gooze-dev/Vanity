@@ -2,6 +2,7 @@ import { docsMetadata } from "@/lib/docs-meta"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
+import { withCode } from "@/components/docs-faq"
 import { Button } from "@/components/ui/button"
 import {
   Table,
@@ -31,25 +32,25 @@ const runFlags: RunFlag[] = [
   {
     flag: "--parallel",
     alias: "-p",
-    description: "Number of parallel workers for mutation testing (at least 1).",
+    description: "Number of parallel workers for mutation testing (at least `1`).",
     defaultValue: "1",
     configKey: "run.parallel",
   },
   {
     flag: "--shard",
     alias: "-s",
-    description: "Shard index and total shard count in the format INDEX/TOTAL (for example 0/3).",
+    description: "Shard index and total shard count in the format `INDEX/TOTAL` (for example `0/3`).",
   },
   {
     flag: "--mutation-timeout",
-    description: "Timeout in seconds for testing one mutation (at least 1); a mutation that exceeds it is reported as timeout.",
+    description: "Timeout in seconds for testing one mutation (at least `1`); a mutation that exceeds it is reported as `timeout`.",
     defaultValue: "120",
     configKey: "run.mutation_timeout",
   },
   {
     flag: "--coverage-profile",
     description:
-      "Path to a Go coverage profile; mutations on uncovered lines are reported as not_covered without running tests.",
+      "Path to a Go coverage profile; mutations on uncovered lines are reported as `not_covered` without running tests.",
     defaultValue: "empty (disabled)",
     configKey: "run.coverage_profile",
   },
@@ -120,7 +121,7 @@ export default function CliRunPage() {
             <code>gooze.yaml</code> from the current directory; there is no{" "}
             <code>--config</code> flag. See <Link href="/docs/config">Configuration</Link> for precedence.
           </p>
-          <ul className="space-y-3 md:hidden">
+          <ul className="space-y-3 lg:hidden">
             {runFlags.map((row) => (
               <li key={row.flag} className="rounded-lg border p-4 text-sm">
                 <div className="flex flex-wrap items-center gap-1 font-mono">
@@ -132,7 +133,7 @@ export default function CliRunPage() {
                     </>
                   )}
                 </div>
-                <p className="mt-2 text-muted-foreground">{row.description}</p>
+                <p className="mt-2 text-muted-foreground">{withCode(row.description)}</p>
                 <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-xs text-muted-foreground">
                   <dt>Default</dt>
                   <dd>{row.defaultValue ? <code>{row.defaultValue}</code> : "—"}</dd>
@@ -142,7 +143,7 @@ export default function CliRunPage() {
               </li>
             ))}
           </ul>
-          <div className="hidden overflow-x-auto rounded border md:block">
+          <div className="hidden rounded border lg:block">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -155,7 +156,7 @@ export default function CliRunPage() {
               <TableBody className="text-muted-foreground">
                 {runFlags.map((row) => (
                   <TableRow key={row.flag}>
-                    <TableCell className="whitespace-nowrap">
+                    <TableCell>
                       <code>{row.flag}</code>
                       {row.alias && (
                         <>
@@ -163,11 +164,11 @@ export default function CliRunPage() {
                         </>
                       )}
                     </TableCell>
-                    <TableCell className="min-w-64">{row.description}</TableCell>
-                    <TableCell className="whitespace-nowrap">
+                    <TableCell>{withCode(row.description)}</TableCell>
+                    <TableCell>
                       {row.defaultValue ? <code>{row.defaultValue}</code> : "—"}
                     </TableCell>
-                    <TableCell className="whitespace-nowrap">
+                    <TableCell>
                       {row.configKey ? <code>{row.configKey}</code> : "—"}
                     </TableCell>
                   </TableRow>
@@ -233,7 +234,7 @@ export default function CliRunPage() {
           </p>
           <CodeBlock lang="bash" code="gooze run -p 4 ./..." />
           <p>
-            This example runs up to 4 mutations at the same time. The value must be at least 1:{" "}
+            This example runs up to 4 mutations at the same time. The value must be at least <code>1</code>:{" "}
             <code>run.parallel: 0</code> fails with{" "}
             <code>invalid run.parallel: 0 is out of range: must be at least 1</code>.
           </p>
@@ -243,9 +244,9 @@ export default function CliRunPage() {
           <h2>Timeouts</h2>
           <p>
             The tests for each mutation must finish within{" "}
-            <code>--mutation-timeout</code> seconds (default 120). A mutation
+            <code>--mutation-timeout</code> seconds (default <code>120</code>). A mutation
             whose tests exceed it is reported as <code>timeout</code>. The timeout must be at
-            least 1 second; <code>0</code> is an error, not &quot;no timeout&quot;.
+            least <code>1</code> second; <code>0</code> is an error, not &quot;no timeout&quot;.
           </p>
           <CodeBlock lang="bash" code="gooze run --mutation-timeout 300 ./..." />
           <p>
@@ -334,7 +335,7 @@ gooze run -s 2/3 ./...`}
               <Link href="/docs/usage/results">Reading results</Link>
             </Button>
             <Button asChild variant="outline">
-              <Link href="/docs/cli/report#view">gooze report view</Link>
+              <Link href="/docs/cli/report#view"><code>gooze report view</code></Link>
             </Button>
           </div>
         </div>

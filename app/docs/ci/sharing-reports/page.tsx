@@ -32,8 +32,8 @@ gooze report pull ghcr.io/your-org/your-repo/gooze-reports:main`}
           <p className="text-sm text-muted-foreground">
             Both commands use the reports dir set by <code>-o/--output</code> (default{" "}
             <code>.gooze-reports</code>). Flags:{" "}
-            <Link href="/docs/cli/report#push">gooze report push</Link>,{" "}
-            <Link href="/docs/cli/report#pull">gooze report pull</Link>.
+            <Link href="/docs/cli/report#push"><code>gooze report push</code></Link>,{" "}
+            <Link href="/docs/cli/report#pull"><code>gooze report pull</code></Link>.
           </p>
         </div>
 

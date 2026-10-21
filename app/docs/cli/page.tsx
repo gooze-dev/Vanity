@@ -2,12 +2,13 @@ import { docsMetadata } from "@/lib/docs-meta"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
+import { withCode } from "@/components/docs-faq"
 import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item"
 
 const commands = [
-  { title: "run", href: "/docs/cli/run", desc: "Run mutation testing (use --estimate to preview)" },
+  { title: "run", href: "/docs/cli/run", desc: "Run mutation testing (use `--estimate` to preview)" },
   { title: "report", href: "/docs/cli/report", desc: "View, merge, push, and pull reports" },
-  { title: "config", href: "/docs/cli/config", desc: "Manage configuration (config init)" },
+  { title: "config", href: "/docs/cli/config", desc: "Manage configuration (`config init`)" },
   { title: "version", href: "/docs/cli/version", desc: "Print version/build info" },
 ]
 
@@ -54,7 +55,7 @@ export default function CliPage() {
           </ul>
           <p>
             Flags that only apply to one command, such as <code>--coverage-profile</code>, are listed on that
-            command&apos;s page (see <Link href="/docs/cli/run#flags">gooze run</Link>).
+            command&apos;s page (see <Link href="/docs/cli/run#flags"><code>gooze run</code></Link>).
           </p>
           <p>
             Tip: flags can change between versions.
@@ -87,7 +88,7 @@ export default function CliPage() {
                 <Link href={cmd.href}>
                   <ItemContent>
                     <ItemTitle>{cmd.title}</ItemTitle>
-                    <ItemDescription>{cmd.desc}</ItemDescription>
+                    <ItemDescription>{withCode(cmd.desc)}</ItemDescription>
                   </ItemContent>
                 </Link>
               </Item>

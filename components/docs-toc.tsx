@@ -4,6 +4,7 @@ import * as React from "react"
 import { usePathname } from "next/navigation"
 import { ChevronRight } from "lucide-react"
 
+import { headingId } from "@/lib/heading-id"
 import { cn } from "@/lib/utils"
 
 type TocEntry = {
@@ -16,20 +17,6 @@ type DocsTocProps = {
   className?: string
 }
 
-function slugify(text: string) {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-}
-
-function headingId(heading: HTMLHeadingElement, index: number) {
-  if (heading.id) return heading.id
-  const parentId = heading.parentElement?.id
-  if (parentId) return parentId
-  heading.id = slugify(heading.textContent ?? "") || `section-${index}`
-  return heading.id
-}
 
 export function DocsToc({ collapsible = false, className }: DocsTocProps) {
   const pathname = usePathname()

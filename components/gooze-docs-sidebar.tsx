@@ -10,6 +10,8 @@ import {
   LifeBuoy,
   Terminal,
   Workflow,
+  Bot,
+  Scale,
   type LucideIcon,
 } from "lucide-react"
 
@@ -35,9 +37,11 @@ import {
 
 const sectionIcons: Record<DocsSection, LucideIcon> = {
   "Get started": Home,
-  "Using gooze": Terminal,
-  "CI & teams": Workflow,
+  Guides: Terminal,
+  "CI/CD": Workflow,
+  "Editors & agents": Bot,
   Reference: BookOpen,
+  Compare: Scale,
   Help: LifeBuoy,
 }
 

@@ -5,17 +5,18 @@
 // structured data. Array order is reading order: it drives the sidebar and
 // the pager.
 //
-// Grouping follows the user's journey (start -> use locally -> CI and teams ->
-// look up facts -> get help). Each page has one job (a task, a concept, or
+// Grouping follows the user's journey; see .claude/rules/docs-structure.md. Each page has one job (a task, a concept, or
 // reference facts); link to the canonical page instead of repeating content.
 
 export const SITE_URL = "https://gooze.dev"
 
 export const docsSections = [
   "Get started",
-  "Using gooze",
-  "CI & teams",
+  "Guides",
+  "CI/CD",
+  "Editors & agents",
   "Reference",
+  "Compare",
   "Help",
 ] as const
 
@@ -86,103 +87,51 @@ export const docsPages: DocsPage[] = [
     keywords: ["mutation testing concepts","what is mutation score","killed mutants","survived mutants","code coverage vs mutation","software reliability"],
   },
   {
-    href: "/docs/comparison",
-    title: "Gooze vs Gremlins vs go-mutesting vs go-mutants",
-    seoTitle:
-      "Gooze vs Gremlins vs go-mutesting vs go-mutants",
-    navTitle: "Comparison",
-    section: "Get started",
-    description:
-      "Compare Go mutation testing tools side by side on caching, sharding, CI, editor support and a Claude Code plugin, from tiny projects to large monorepos.",
-    keywords: ["go mutation testing comparison","mutation testing tools","framework comparison","tdd monorepo","microservices mutation testing","monorepo mutation testing","golang test performance","claude code plugin","ai coding agent"],
-  },
-  {
-    href: "/docs/best-go-mutation-testing-tool",
-    title: "Best Go mutation testing tool",
-    seoTitle: "Best Go Mutation Testing Tool · Gooze",
-    navTitle: "Best tool",
-    section: "Get started",
-    description:
-      "Why Gooze is the best Go mutation testing tool for most teams: it re-tests only changed files, keeps TDD loops short, and compares with other tools.",
-    keywords: ["best go mutation testing tool","golang mutation testing","tdd feedback","go mutation testing comparison","fast mutation testing","go test quality"],
-  },
-  {
-    href: "/docs/best-go-mutation-testing-tool-for-ci",
-    title: "Best Go mutation testing tool for CI/CD",
-    seoTitle: "Best Go Mutation Testing Tool for CI/CD · Gooze",
-    navTitle: "Best for CI/CD",
-    section: "Get started",
-    description:
-      "The best Go mutation testing tool for CI/CD: shard across parallel runners, cache incrementally, gate pull requests on mutation score, and share OCI baselines.",
-    keywords: ["best go mutation testing ci","ci/cd mutation testing","sharding","mutation score gate","github actions","gitlab ci"],
-  },
-  {
     href: "/docs/usage/results",
     title: "Reading results",
     seoTitle:
       "Interpreting Statuses: Killed, Survived, Timeout · Gooze",
-    section: "Using gooze",
+    section: "Guides",
     description:
       "What each Gooze status means (killed, survived, not_covered, timeout, error) and how to use the results to improve your mutation score.",
     keywords: ["test statuses","killed mutant","survived mutant","not_covered","timeout error","interpret score","fix gaps"],
-  },
-  {
-    href: "/docs/usage/ignoring-code",
-    title: "Ignoring code",
-    seoTitle:
-      "Ignore Files, Functions and Lines · Gooze docs",
-    section: "Using gooze",
-    description:
-      "Skip specific Go files, functions or lines during mutation testing with the -x flag and //gooze:ignore directives.",
-    keywords: ["ignore files","skip functions","selective testing","exclude blocks","-x flag","gooze:ignore syntax"],
   },
   {
     href: "/docs/usage/incremental-runs",
     title: "Incremental runs",
     seoTitle:
       "Re-test Only Changed Files with Incremental Runs · Gooze",
-    section: "Using gooze",
+    section: "Guides",
     description:
       "Re-test only what changed. Gooze caches results per file by content hash and scores cached and tested results together, cutting CI time for large Go apps.",
     keywords: ["incremental testing","fast ci","cache results","git diff","modified code","no-cache flag","cached score"],
+  },
+  {
+    href: "/docs/usage/ignoring-code",
+    title: "Ignoring code",
+    seoTitle:
+      "Ignore Files, Functions and Lines · Gooze docs",
+    section: "Guides",
+    description:
+      "Skip specific Go files, functions or lines during mutation testing with the -x flag and //gooze:ignore directives.",
+    keywords: ["ignore files","skip functions","selective testing","exclude blocks","-x flag","gooze:ignore syntax"],
   },
   {
     href: "/docs/usage/ui-modes",
     title: "UI modes",
     seoTitle:
       "Output Modes: TUI vs Plain Text · Gooze docs",
-    section: "Using gooze",
+    section: "Guides",
     description:
       "Gooze picks its output by TTY detection: the interactive terminal UI in a terminal, plain text logs in CI or when output is piped or redirected.",
     keywords: ["terminal ui","tui interface","plain text logs","stdout","tty detection","environment output"],
-  },
-  {
-    href: "/docs/editor-support",
-    title: "Editor support (goozels)",
-    seoTitle:
-      "IDE & Editor Support via LSP (goozels) · Gooze",
-    navTitle: "Editor support",
-    section: "Using gooze",
-    description:
-      "Mutation testing results in your editor and AI coding agents: the goozels language server for VS Code, Neovim and more, plus goozels check for agents.",
-    keywords: ["editor support","goozels lsp","language server protocol","vscode extension","neovim integration","inline results","goozels check","claude code","claude plugin","codex","opencode","ai coding agents"],
-  },
-  {
-    href: "/docs/claude-code",
-    title: "Claude Code",
-    seoTitle:
-      "Go Mutation Testing in Claude Code (gooze plugin) · Gooze",
-    section: "Using gooze",
-    description:
-      "Install the gooze plugin for Claude Code: project setup with /gooze:init, the kill-survivors loop, CI setup, and mutation results after every edit.",
-    keywords: ["claude code","claude plugin","ai coding agent","vibe coding","/gooze:init","mutation testing skill","post-edit hook","code review","ci setup"],
   },
   {
     href: "/docs/ci/github",
     title: "GitHub Actions",
     seoTitle:
       "GitHub Actions for Go Mutation Testing · Gooze",
-    section: "CI & teams",
+    section: "CI/CD",
     description:
       "Run Gooze in GitHub Actions: shard Go mutation testing across jobs, cache results between runs, and fail pull requests below a minimum mutation score.",
     keywords: ["github actions","ci/cd","go mutation testing","pipeline","pull request","quality gate","threshold","shard","caching"],
@@ -192,7 +141,7 @@ export const docsPages: DocsPage[] = [
     title: "GitLab CI",
     seoTitle:
       "GitLab CI for Go Mutation Testing · Gooze",
-    section: "CI & teams",
+    section: "CI/CD",
     description:
       "Run Gooze in GitLab CI pipelines: shard across parallel jobs and fail the pipeline below a minimum mutation score, so weak Go tests don't get merged.",
     keywords: ["gitlab ci","pipeline","parallel jobs","sharding","quality gate","minimum score","go testing"],
@@ -202,7 +151,7 @@ export const docsPages: DocsPage[] = [
     title: "Sharding and merging",
     seoTitle:
       "Sharding & Merging Mutation Tests · Gooze",
-    section: "CI & teams",
+    section: "CI/CD",
     description:
       "Split Go mutation tests across parallel CI jobs with -s INDEX/TOTAL, then combine the shard reports into one score with gooze report merge.",
     keywords: ["test sharding","parallel execution","merge reports","split jobs","CI optimization","golang testing"],
@@ -212,10 +161,31 @@ export const docsPages: DocsPage[] = [
     title: "Sharing reports (OCI)",
     seoTitle:
       "Sharing Reports via OCI Registries · Gooze",
-    section: "CI & teams",
+    section: "CI/CD",
     description:
       "Push and pull Gooze mutation reports to OCI registries like GHCR, so CI pipelines and every teammate start from one shared baseline.",
     keywords: ["oci registry","ghcr","push reports","pull reports","test baseline","ci artifacts","authentication"],
+  },
+  {
+    href: "/docs/editor-support",
+    title: "Editor support (goozels)",
+    seoTitle:
+      "IDE & Editor Support via LSP (goozels) · Gooze",
+    navTitle: "Editor support",
+    section: "Editors & agents",
+    description:
+      "Mutation testing results in your editor and AI coding agents: the goozels language server for VS Code, Neovim and more, plus goozels check for agents.",
+    keywords: ["editor support","goozels lsp","language server protocol","vscode extension","neovim integration","inline results","goozels check","claude code","claude plugin","codex","opencode","ai coding agents"],
+  },
+  {
+    href: "/docs/claude-code",
+    title: "Claude Code",
+    seoTitle:
+      "Go Mutation Testing in Claude Code (gooze plugin) · Gooze",
+    section: "Editors & agents",
+    description:
+      "Install the gooze plugin for Claude Code: project setup with /gooze:init, the kill-survivors loop, CI setup, and mutation results after every edit.",
+    keywords: ["claude code","claude plugin","ai coding agent","vibe coding","/gooze:init","mutation testing skill","post-edit hook","code review","ci setup"],
   },
   {
     href: "/docs/cli",
@@ -301,6 +271,37 @@ export const docsPages: DocsPage[] = [
     description:
       "The full list of AST mutation operators Gooze applies, with examples of arithmetic, comparison, logical, boolean, numbers, and unary mutations in Go code.",
     keywords: ["mutation operators","ast mutagens","logical mutations","arithmetic swaps","boolean flip","mutation examples"],
+  },
+  {
+    href: "/docs/comparison",
+    title: "Gooze vs Gremlins vs go-mutesting vs go-mutants",
+    seoTitle:
+      "Gooze vs Gremlins vs go-mutesting vs go-mutants",
+    navTitle: "Comparison",
+    section: "Compare",
+    description:
+      "Compare Go mutation testing tools side by side on caching, sharding, CI, editor support and a Claude Code plugin, from tiny projects to large monorepos.",
+    keywords: ["go mutation testing comparison","mutation testing tools","framework comparison","tdd monorepo","microservices mutation testing","monorepo mutation testing","golang test performance","claude code plugin","ai coding agent"],
+  },
+  {
+    href: "/docs/best-go-mutation-testing-tool",
+    title: "Best Go mutation testing tool",
+    seoTitle: "Best Go Mutation Testing Tool · Gooze",
+    navTitle: "Best tool",
+    section: "Compare",
+    description:
+      "Why Gooze is the best Go mutation testing tool for most teams: it re-tests only changed files, keeps TDD loops short, and compares with other tools.",
+    keywords: ["best go mutation testing tool","golang mutation testing","tdd feedback","go mutation testing comparison","fast mutation testing","go test quality"],
+  },
+  {
+    href: "/docs/best-go-mutation-testing-tool-for-ci",
+    title: "Best Go mutation testing tool for CI/CD",
+    seoTitle: "Best Go Mutation Testing Tool for CI/CD · Gooze",
+    navTitle: "Best for CI/CD",
+    section: "Compare",
+    description:
+      "The best Go mutation testing tool for CI/CD: shard across parallel runners, cache incrementally, gate pull requests on mutation score, and share OCI baselines.",
+    keywords: ["best go mutation testing ci","ci/cd mutation testing","sharding","mutation score gate","github actions","gitlab ci"],
   },
   {
     href: "/docs/troubleshooting",

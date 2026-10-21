@@ -164,7 +164,8 @@
       [data-slot="code-block"],
       [data-slot="alert"],
       [data-slot="tabs"],
-      [data-slot="table-container"]
+      [data-slot="table-container"],
+      [data-slot="faq"]
     ) {
     margin-block-start: var(--typeset-flow);
   }

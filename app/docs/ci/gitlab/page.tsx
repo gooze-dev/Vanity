@@ -1,4 +1,5 @@
 import { docsMetadata } from "@/lib/docs-meta"
+import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
@@ -82,19 +83,19 @@ const gate = `merge:
 const faqs = [
   {
     q: "How do I run Gooze mutation tests in GitLab CI?",
-    a: "Use a golang:1.27 image, install the CLI with go install gooze.dev/pkg/gooze@latest, and run gooze run ./... in the job script.",
+    a: "Use a `golang:1.27` image, install the CLI with `go install gooze.dev/pkg/gooze@latest`, and run `gooze run ./...` in the job script.",
   },
   {
     q: "How do I shard Gooze across parallel GitLab runners?",
-    a: "Set parallel: N and map GitLab's 1-based CI_NODE_INDEX to gooze's 0-based shards: gooze run -s \"$((CI_NODE_INDEX - 1))/$CI_NODE_TOTAL\" ./... Then merge the artifacts with gooze report merge.",
+    a: "Set `parallel: N` and map GitLab's 1-based `CI_NODE_INDEX` to gooze's 0-based shards: `gooze run -s \"$((CI_NODE_INDEX - 1))/$CI_NODE_TOTAL\" ./...`. Then merge the artifacts with `gooze report merge`.",
   },
   {
     q: "How do I cache incremental Gooze reports in GitLab CI?",
-    a: "Pull a baseline from your container registry with gooze report pull before the run so unchanged files are skipped, and push the merged baseline back from the main branch.",
+    a: "Pull a baseline from your container registry with `gooze report pull` before the run so unchanged files are skipped, and push the merged baseline back from the main branch.",
   },
   {
     q: "How do I fail a merge request when the mutation score is too low?",
-    a: "Add a short script step that reads 'Mutation score' from gooze report view and fails the job below your minimum. Gooze has no built-in threshold flag. When you shard, gate in the merge job.",
+    a: "Add a short script step that reads `Mutation score` from `gooze report view` and fails the job below your minimum. Gooze has no built-in threshold flag. When you shard, gate in the merge job.",
   },
   {
     q: "Does Gooze post results as a GitLab merge-request note?",
@@ -102,15 +103,7 @@ const faqs = [
   },
 ]
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-}
+const faqJsonLd = faqPageJsonLd(faqs)
 
 export const metadata = docsMetadata("/docs/ci/gitlab")
 
@@ -145,7 +138,7 @@ export default function GitlabPage() {
             <code>-s INDEX/TOTAL</code> and saves its
             reports as an artifact. The <code>merge</code>{" "}
             job collects them all and runs{" "}
-            <Link href="/docs/cli/report#merge">gooze report merge</Link>.
+            <Link href="/docs/cli/report#merge"><code>gooze report merge</code></Link>.
           </p>
           <CodeBlock lang="yaml" code={sharded} />
         </div>
@@ -156,7 +149,7 @@ export default function GitlabPage() {
             Each shard pulls the <code>:main</code> baseline
             for the cache (<Link href="/docs/usage/incremental-runs">incremental runs</Link>),
             then hands its reports to the merge job as an artifact; shards never push to the
-            registry. The merge job combines them and, <strong>only on main</strong>, publishes the
+            registry. The merge job combines them and, <strong>only on <code>main</code></strong>, publishes the
             single merged baseline back to <code>:main</code>.
           </p>
           <CodeBlock lang="yaml" code={cached} />
@@ -166,7 +159,7 @@ export default function GitlabPage() {
           <h2>Fail the build below a score (quality gate)</h2>
           <p>
             Gooze has no threshold flag yet: survivors never change its exit code. Add this
-            step after the gooze run (in the merge job, after <code>gooze report merge</code>, when you shard). It reads the{" "}
+            step after the <code>gooze run</code> (in the merge job, after <code>gooze report merge</code>, when you shard). It reads the{" "}
             <Link href="/docs/usage/results#score">mutation score</Link>{" "}
             from the <code>Mutation score: NN.NN% (...)</code> line of{" "}
             <code>gooze report view</code> and fails when it is below{" "}
@@ -198,20 +191,12 @@ export default function GitlabPage() {
             <li>
               For a non-TLS or self-signed registry add{" "}
               <code>--plain-http</code> or{" "}
-              <code>--insecure</code> to push/pull.
+              <code>--insecure</code> to <code>push</code>/<code>pull</code>.
             </li>
           </ul>
         </div>
 
-        <div id="faq">
-          <h2>FAQ</h2>
-          {faqs.map((f) => (
-            <div key={f.q}>
-              <h3>{f.q}</h3>
-              <p>{f.a}</p>
-            </div>
-          ))}
-        </div>
+        <DocsFaq faqs={faqs} />
       </div>
     </section>
   )

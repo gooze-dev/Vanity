@@ -1,4 +1,5 @@
 import { docsMetadata } from "@/lib/docs-meta"
+import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
@@ -8,35 +9,27 @@ export const metadata = docsMetadata("/docs/usage/results")
 const faqs = [
   {
     q: "How do I view my Gooze mutation results?",
-    a: "Run gooze report view. It reads the reports directory and prints a per-file score table, one line per survivor, and the mutation score. Add --all to list every mutation with its diff (an interactive list in a TTY, plain text in CI).",
+    a: "Run `gooze report view`. It reads the reports directory and prints a per-file score table, one line per survivor, and the mutation score. Add `--all` to list every mutation with its diff (an interactive list in a TTY, plain text in CI).",
   },
   {
-    q: "What does a 'survived' mutation mean in Gooze?",
+    q: "What does a `survived` mutation mean in Gooze?",
     a: "A survived mutation means Gooze injected a bug but the package's tests still passed, usually because of a weak or missing assertion. Add a test that would fail on that behavior change.",
   },
   {
-    q: "What does a 'killed' mutation mean?",
+    q: "What does a `killed` mutation mean?",
     a: "A killed mutation is the good case: the tests of the package owning the mutated file failed for the mutation, so your tests caught the change.",
   },
   {
-    q: "What does a 'timeout' status mean in Gooze?",
-    a: "The mutant's tests exceeded --mutation-timeout (default 120 seconds). A timeout is not a kill; it lowers the mutation score like a survivor.",
+    q: "What does a `timeout` status mean in Gooze?",
+    a: "The mutant's tests exceeded `--mutation-timeout` (default `120` seconds). A timeout is not a kill; it lowers the mutation score like a survivor.",
   },
   {
     q: "How is the Gooze mutation score calculated?",
-    a: "score = killed / (all mutations - error). Only killed counts in your favor; survived, not_covered, and timeout lower it; error mutants (that did not compile) are excluded.",
+    a: "`score = killed / (all mutations - error)`. Only `killed` counts in your favor; `survived`, `not_covered`, and `timeout` lower it; `error` mutants (that did not compile) are excluded.",
   },
 ]
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-}
+const faqJsonLd = faqPageJsonLd(faqs)
 
 export default function ResultsPage() {
   return (
@@ -72,7 +65,7 @@ Mutation score: 87.50% (14 killed, 2 survived)`}
             some files, or <code>--all</code> to list every mutation with its diff.
           </p>
           <p className="text-sm text-muted-foreground">
-            Keys and flags: <Link href="/docs/cli/report#view">gooze report view</Link>.
+            Keys and flags: <Link href="/docs/cli/report#view"><code>gooze report view</code></Link>.
             File layout: <Link href="/docs/reports">Report format</Link>.
           </p>
         </div>
@@ -99,7 +92,7 @@ Mutation score: 87.50% (14 killed, 2 survived)`}
             </li>
             <li>
               <code>timeout</code>: the tests exceeded{" "}
-              <code>--mutation-timeout</code> (default 120
+              <code>--mutation-timeout</code> (default <code>120</code>{" "}
               seconds). A timeout is not a kill.
             </li>
             <li>
@@ -127,7 +120,7 @@ Mutation score: 87.50% (14 killed, 2 survived)`}
             </li>
             <li>
               <code>error</code> mutants (did not compile) are
-              left out entirely. With no scorable mutations the score is 100%.
+              left out entirely. With no scorable mutations the score is <code>100%</code>.
             </li>
             <li>
               <code>gooze run</code>,{" "}
@@ -175,15 +168,7 @@ Mutation score: 87.50% (14 killed, 2 survived)`}
           </p>
         </div>
 
-        <div id="faq">
-          <h2>FAQ</h2>
-          {faqs.map((f) => (
-            <div key={f.q}>
-              <h3>{f.q}</h3>
-              <p>{f.a}</p>
-            </div>
-          ))}
-        </div>
+        <DocsFaq faqs={faqs} />
       </div>
     </section>
   )

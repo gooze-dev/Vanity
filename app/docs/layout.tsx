@@ -6,6 +6,7 @@ import { DocsPager } from "@/components/docs-pager"
 import { DocsSearch } from "@/components/docs-search"
 import { DocsStructuredData } from "@/components/docs-structured-data"
 import { DocsToc } from "@/components/docs-toc"
+import { HeadingAnchors } from "@/components/heading-anchors"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Separator } from "@/components/ui/separator"
 import {
@@ -25,7 +26,7 @@ export default function DocsLayout({
       <SidebarProvider defaultOpen={true}>
         <GoozeDocsSidebar />
         <SidebarInset>
-          <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+          <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-2 border-b bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
             <div className="flex min-w-0 flex-1 items-center gap-2 px-4">
               <SidebarTrigger className="-ml-1 text-[color:var(--gooze-teal)] hover:text-[color:var(--gooze-green)]" />
               <Separator
@@ -39,13 +40,14 @@ export default function DocsLayout({
               <ThemeToggle />
             </div>
           </header>
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-4 md:pt-0">
+          <div className="flex flex-1 flex-col gap-4 p-4 pt-6">
             <div className="mx-auto flex w-full max-w-4xl gap-10 xl:max-w-6xl">
               <div className="min-w-0 flex-1 space-y-8">
                 <DocsToc collapsible className="xl:hidden" />
                 <article id="docs-content" className="typeset typeset-docs">
                   {children}
                 </article>
+                <HeadingAnchors />
                 <DocsPager />
               </div>
               <aside className="hidden w-52 shrink-0 xl:block">

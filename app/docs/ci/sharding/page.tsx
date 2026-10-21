@@ -53,7 +53,7 @@ gooze report view`}
             no shard re-tested are kept, so the cache still works. Each shard&apos;s{" "}
             <code>gooze run</code> prints the score of its shard only; the merge prints the full
             score. Details:{" "}
-            <Link href="/docs/cli/report#merge">gooze report merge</Link>.
+            <Link href="/docs/cli/report#merge"><code>gooze report merge</code></Link>.
           </p>
         </div>
 

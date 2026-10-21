@@ -38,7 +38,7 @@ export default function ClaudeCodePage() {
               mutation testing.
             </li>
             <li>
-              <code>/gooze:ci-setup</code>: adds gooze to the Makefile or CI files your
+              <code>/gooze:ci-setup</code>: adds gooze to the <code>Makefile</code> or CI files your
               repo already has (GitHub Actions, GitLab CI, Taskfile, justfile, …), adapted
               to their conventions. It never creates new CI files.
             </li>
@@ -65,12 +65,12 @@ export default function ClaudeCodePage() {
           <CodeBlock code="/plugin install gooze@gooze" lang="text" />
           <p>
             Then install the tools it uses, on the <code>PATH</code> of the shell you
-            start <code>claude</code> from: gooze (v1.2.0 or later) and, for the results
+            start <code>claude</code> from: gooze (<code>v1.2.0</code> or later) and, for the results
             after every edit,{" "}
             <Link href="/docs/editor-support" className={LINK}>
               goozels
             </Link>{" "}
-            (v0.2.0 or later).
+            (<code>v0.2.0</code> or later).
           </p>
           <CodeBlock
             lang="bash"
@@ -78,7 +78,7 @@ export default function ClaudeCodePage() {
 go install gooze.dev/pkg/goozels/cmd/goozels@latest`}
           />
           <p>
-            Both need Go 1.27.3 to build. On an older Go, prefix the commands with{" "}
+            Both need Go <code>1.27.3</code> to build. On an older Go, prefix the commands with{" "}
             <code>GOTOOLCHAIN=auto</code>; your project keeps its own Go version.
           </p>
         </div>

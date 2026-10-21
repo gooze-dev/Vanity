@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { DocsFaq, faqPageJsonLd } from "@/components/docs-faq"
 
 import { docsMetadata } from "@/lib/docs-meta"
 import { CodeBlock } from "@/components/code-block"
@@ -22,19 +23,11 @@ const faqs = [
   },
   {
     q: "Is Gooze free and open source?",
-    a: "Yes. Gooze is open source (MIT) and installs with go install gooze.dev/pkg/gooze@latest.",
+    a: "Yes. Gooze is open source (MIT) and installs with `go install gooze.dev/pkg/gooze@latest`.",
   },
 ]
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-}
+const faqJsonLd = faqPageJsonLd(faqs)
 
 export default function BestToolPage() {
   return (
@@ -98,15 +91,7 @@ gooze run ./...`}
         />
       </div>
 
-      <div id="faq">
-        <h2>FAQ</h2>
-        {faqs.map((f) => (
-          <div key={f.q}>
-            <h3>{f.q}</h3>
-            <p>{f.a}</p>
-          </div>
-        ))}
-      </div>
+      <DocsFaq faqs={faqs} />
     </section>
   )
 }
