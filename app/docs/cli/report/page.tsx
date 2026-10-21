@@ -121,6 +121,16 @@ export default function CliReportPage() {
             mutation linearly, with diffs for the ones not killed:
           </p>
           <CodeBlock lang="bash" code="gooze report view --all | cat" />
+
+          <h3>Thresholds</h3>
+          <p>
+            <code>--threshold-total</code>, <code>--threshold-average</code> and{" "}
+            <code>--threshold-file</code> (or <code>threshold.*</code> in{" "}
+            <code>gooze.yaml</code>) make <code>view</code> exit with code <code>3</code> when
+            a score of the viewed reports is below them, so a last CI step can gate on the
+            reports. Paths limit which files count. See{" "}
+            <Link href="/docs/ci/quality-gates">Quality gates</Link>.
+          </p>
         </div>
 
         <div id="push">
@@ -229,6 +239,11 @@ gooze report push ghcr.io/your-org/your-repo/gooze-reports:main`}
 
           <h3>Usage</h3>
           <CodeBlock lang="bash" code="gooze report merge" />
+
+          <p>
+            It takes the same threshold flags as <code>view</code>, checked on the merged
+            reports. A shard doesn&apos;t check thresholds, so put them here when you shard.
+          </p>
 
           <h3>When you need this</h3>
           <p>

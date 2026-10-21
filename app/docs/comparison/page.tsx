@@ -42,7 +42,7 @@ const rows: Row[] = [
   },
   {
     feature: "Fail the build below a score",
-    gooze: ["partial", "no flag yet; 3-line script gate"],
+    gooze: ["yes", "total, average and per-file (`--threshold-*`), plus diff-only ones"],
     gremlins: ["yes", "`--threshold-efficacy`, `--threshold-mcover`"],
     goMutesting: ["unknown", ""],
     avito: ["unknown", ""],
@@ -250,7 +250,7 @@ const faqs = [
   },
   {
     q: "Can Gooze fail CI when the mutation score drops below a threshold?",
-    a: "Not with a built-in flag yet (as of `" + DOCS_FACTS_VERSION + "`). Gooze prints `Mutation score: NN.NN%` followed by a breakdown, and a three-line shell step compares it to a minimum and fails the job. The GitHub Actions and GitLab CI guides include it.",
+    a: "Yes. `--threshold-total`, `--threshold-average` and `--threshold-file` (or `threshold.*` in `gooze.yaml`) set minimums for the total score, the average file score and every file's score. Below one, Gooze exits with code `3`. `--threshold-diff-*` sets a separate bar for the changed lines of a `--diff` run.",
   },
   {
     q: "Does Gooze only test changed code?",
@@ -415,8 +415,8 @@ export default function ComparisonPage() {
               <Link href="/docs/claude-code">Claude Code plugin</Link> if an agent writes your code.
             </li>
             <li>
-              <strong>Pick Gremlins</strong> if you need a built-in threshold flag and the module
-              is small.
+              <strong>Pick Gremlins</strong> if you want to gate on mutant coverage as well as
+              efficacy (<code>--threshold-mcover</code>) and the module is small.
             </li>
             <li>
               <strong>Pick go-mutesting</strong> if you need a fully custom test runner or want to
@@ -464,8 +464,8 @@ export default function ComparisonPage() {
         <div id="limitations">
           <h2>What Gooze doesn&apos;t do (yet)</h2>
           <p>
-            A threshold flag, custom mutator plugins, and a custom test runner are not
-            supported in <code>{DOCS_FACTS_VERSION}</code>. Workarounds and status are on the{" "}
+            Custom mutator plugins and a custom test runner are not supported in{" "}
+            <code>{DOCS_FACTS_VERSION}</code>. Workarounds and status are on the{" "}
             <Link href="/docs/roadmap#limitations">Roadmap</Link>.
           </p>
         </div>

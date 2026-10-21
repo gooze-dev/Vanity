@@ -95,16 +95,12 @@ diff:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
     GIT_DEPTH: 0             # full history, so gooze finds the merge base
-    MIN_SCORE: "60"
   script:
     # The target branch may not be fetched yet.
     - git fetch origin "+refs/heads/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME:refs/remotes/origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
-    # Reports go to .gooze-reports/run; nothing is pushed.
-    - gooze run --diff "origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" ./...
-    - |
-      score=$(gooze report view -o .gooze-reports/run | sed -n 's/^Mutation score: \\([0-9.]*\\)%.*$/\\1/p' | tail -1)
-      echo "Mutation score: \${score}% (minimum \${MIN_SCORE}%)"
-      awk -v s="$score" -v m="$MIN_SCORE" 'BEGIN { exit !(s != "" && s >= m) }'
+    # Reports go to .gooze-reports/run; nothing is pushed. Fails the job
+    # (exit code 3) when the changed lines score below 80%.
+    - gooze run --diff "origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" --threshold-diff-total 80 ./...
 
 # The default branch: the sharded full run, which publishes the baseline.
 test:
@@ -124,27 +120,39 @@ merge:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   dependencies: [test]
-  variables:
-    MIN_SCORE: "60"
   script:
     - gooze report merge
     - gooze report push "$REPORTS_REF"
-    - |
-      score=$(gooze report view | sed -n 's/^Mutation score: \\([0-9.]*\\)%.*$/\\1/p' | tail -1)
-      echo "Mutation score: \${score}% (minimum \${MIN_SCORE}%)"
-      awk -v s="$score" -v m="$MIN_SCORE" 'BEGIN { exit !(s != "" && s >= m) }'`
+    # Last: fails the job (exit code 3) below 60%, after the baseline push.
+    - gooze report view --threshold-total 60`
 
 const gate = `merge:
-  # ...after gooze report merge (or in the single job, after gooze run):
-  variables:
-    MIN_SCORE: "60"          # fail below this percent
+  # ...or in the single job, as the last line of the script.
   script:
     - go install gooze.dev/pkg/gooze@latest
     - gooze report merge
-    - |
-      score=$(gooze report view | sed -n 's/^Mutation score: \\([0-9.]*\\)%.*$/\\1/p' | tail -1)
-      echo "Mutation score: \${score}% (minimum \${MIN_SCORE}%)"
-      awk -v s="$score" -v m="$MIN_SCORE" 'BEGIN { exit !(s != "" && s >= m) }'`
+    # Fails the job (exit code 3) below 60%.
+    - gooze report view --threshold-total 60`
+
+const allowLowScore = `merge:
+  script:
+    - gooze report merge
+    - gooze report push "$REPORTS_REF"
+    - gooze report view --threshold-total 90
+  # A low score marks the job with a warning instead of failing the
+  # pipeline. Any other exit code still fails it.
+  allow_failure:
+    exit_codes: [3]`
+
+const keepCache = `test:
+  cache:
+    key: gooze
+    paths: [.gooze-reports/]
+    when: always        # also save the reports of a job that failed
+  artifacts:
+    when: always
+    paths: [.gooze-reports/]`
+
 
 const faqs = [
   {
@@ -161,11 +169,11 @@ const faqs = [
   },
   {
     q: "How do I fail a merge request when the mutation score is too low?",
-    a: "Add a short script step that reads `Mutation score` from `gooze report view` and fails the job below your minimum. Gooze has no built-in threshold flag. When you shard, gate in the merge job.",
+    a: "End the job's script with `gooze report view --threshold-total 60` (or set `threshold.total` in `gooze.yaml`). Below it, Gooze exits with code `3` and the job fails. To show a low score as a warning instead, add `allow_failure: exit_codes: [3]`. When you shard, gate in the merge job.",
   },
   {
     q: "How do I test only the lines a merge request changed in GitLab CI?",
-    a: "In a merge request pipeline, set `GIT_DEPTH: 0`, fetch the target branch, and run `gooze run --diff \"origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME\" ./...`. Keep a full run on `main`, which pushes the baseline.",
+    a: "In a merge request pipeline, set `GIT_DEPTH: 0`, fetch the target branch, and run `gooze run --diff \"origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME\" --threshold-diff-total 80 ./...`. Keep a full run on `main`, which pushes the baseline.",
   },
   {
     q: "Does Gooze post results as a GitLab merge-request note?",
@@ -198,8 +206,7 @@ export default function GitlabPage() {
           <p>
             Install Gooze and run the whole suite. No registry, no caching. For the{" "}
             <Link href="/docs/quick-start"><code>calc</code></Link> package, the job log ends
-            with the line you saw locally, and the job passes, because survivors don&apos;t
-            change the exit code:
+            with the line you saw locally, and the job passes, because no threshold is set:
           </p>
           <CodeBlock lang="yaml" code={simple} />
           <Recording name="calc-first-run" title="Recorded last line of the first gooze run on calc" />
@@ -256,14 +263,15 @@ export default function GitlabPage() {
               unknown ref or no merge base.
             </li>
             <li>
-              The <code>diff</code> job runs without shards. A diff run is small, and gating a
-              sharded diff run on the score of the changed lines isn&apos;t supported yet.
+              The <code>diff</code> job runs without shards. A diff run is small, and a shard
+              doesn&apos;t check thresholds.
             </li>
             <li>
               A diff run writes its reports to <code>.gooze-reports/run/</code>, and its score
-              covers the changed lines only. The gate reads that score with{" "}
-              <code>gooze report view -o .gooze-reports/run</code>, so it checks the merge
-              request&apos;s own code. Only the default branch pushes the baseline.
+              covers the changed lines only. <code>--threshold-diff-total</code> checks that
+              score, so the gate holds the merge request&apos;s own code to its bar (see{" "}
+              <Link href="/docs/ci/quality-gates#diff">diff thresholds</Link>). Only the default
+              branch pushes the baseline.
             </li>
             <li>
               Diff mode needs git. The <code>golang</code> image includes it; a minimal image
@@ -275,12 +283,10 @@ export default function GitlabPage() {
         <div id="gate">
           <h2>Fail the build below a score (quality gate)</h2>
           <p>
-            Gooze has no threshold flag yet: survivors never change its exit code. Add this
-            step after the <code>gooze run</code> (in the merge job, after <code>gooze report merge</code>, when you shard). It reads the{" "}
-            <Link href="/docs/usage/results#score">mutation score</Link>{" "}
-            from the <code>Mutation score: NN.NN% (...)</code> line of{" "}
-            <code>gooze report view</code> and fails when it is below{" "}
-            <code>MIN_SCORE</code>.
+            End the script with a threshold: in the merge job, after{" "}
+            <code>gooze report merge</code> and the baseline push, when you shard. Below the{" "}
+            <Link href="/docs/usage/results#score">mutation score</Link> you set, Gooze exits
+            with code <code>3</code> and the job fails:
           </p>
           <CodeBlock lang="yaml" code={gate} />
           <p>
@@ -289,8 +295,63 @@ export default function GitlabPage() {
             tests bring it to <code>100.00%</code>.
           </p>
           <p className="text-sm text-muted-foreground">
-            With sharding, gate only in the merge job: a single shard&apos;s score covers only its slice.
-            A missing score (no reports) also fails the step.
+            A shard doesn&apos;t check thresholds, so gate only in the merge job. To show a low
+            score as a warning instead of failing the pipeline, add{" "}
+            <code>allow_failure: exit_codes: [3]</code>; every other code still fails it. More
+            in <a href="#exit-codes">exit codes</a>.
+          </p>
+        </div>
+
+        <div id="exit-codes">
+          <h2>Exit codes</h2>
+          <p>
+            Every Gooze exit code but <code>0</code> fails the job. That is right for errors. A
+            low score (code <code>3</code>) is different: the run finished and wrote its reports,
+            so you choose what it does.
+          </p>
+          <p>
+            <code>allow_failure: exit_codes</code> turns a low score into a warning on the job,
+            while every other code still fails the pipeline. Leave it out to block the merge
+            request on a low score:
+          </p>
+          <CodeBlock lang="yaml" code={allowLowScore} />
+
+          <h3>Warning: a low score</h3>
+          <p>
+            With <code>allow_failure: exit_codes: [3]</code>, the <code>calc</code> merge job at{" "}
+            <code>84.62%</code> against a <code>90</code> threshold ends its log like this:
+          </p>
+          <Recording name="calc-threshold-merge" title="Recorded gooze report merge below threshold.total, exit code 3" />
+          <p>
+            Code <code>3</code> is in <code>exit_codes</code>, so GitLab marks the job as passed
+            with warnings (an orange <strong>!</strong> instead of a red cross) and runs the
+            next stages. The merge request shows the warning, and the reports are written.
+          </p>
+
+          <h3>Error: anything else</h3>
+          <p>
+            A threshold above <code>100</code> is a usage error:
+          </p>
+          <Recording name="threshold-out-of-range" title="Recorded threshold out of range, exit code 2" />
+          <p>
+            Code <code>2</code> is not in <code>exit_codes</code>, so GitLab fails the job and
+            the pipeline, the same as without <code>allow_failure</code>. So do a missing base
+            ref (<code>4</code>), a registry error (<code>5</code>) and missing reports{" "}
+            (<code>6</code>).
+          </p>
+
+          <p>
+            GitLab saves caches and artifacts only for jobs that pass, unless you say{" "}
+            <code>when: always</code>. Set it so a run below a threshold still keeps its
+            reports:
+          </p>
+          <CodeBlock lang="yaml" code={keepCache} />
+          <p className="text-sm text-muted-foreground">
+            The usual causes of the other codes in GitLab CI: <code>4</code>, a shallow clone
+            without <code>GIT_DEPTH: 0</code> and the target branch; <code>5</code>, a job
+            token without registry access; <code>6</code>, a merge job without{" "}
+            <code>dependencies</code> on the shard jobs. Every code:{" "}
+            <Link href="/docs/cli#exit-codes">CLI reference</Link>.
           </p>
         </div>
 

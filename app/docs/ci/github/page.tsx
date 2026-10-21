@@ -135,17 +135,10 @@ jobs:
           fetch-depth: 0
       - run: go install gooze.dev/pkg/gooze@latest
 
-      # Reports go to .gooze-reports/run; nothing is pushed.
+      # Reports go to .gooze-reports/run; nothing is pushed. Fails the job
+      # (exit code 3) when the changed lines score below 80%.
       - name: Mutate the changed lines
-        run: gooze run --diff "origin/\${{ github.base_ref }}" ./...
-
-      - name: Mutation score gate (changed lines)
-        env:
-          MIN_SCORE: "60"
-        run: |
-          score=$(gooze report view -o .gooze-reports/run | sed -n 's/^Mutation score: \\([0-9.]*\\)%.*$/\\1/p' | tail -1)
-          echo "Mutation score: \${score}% (minimum \${MIN_SCORE}%)"
-          awk -v s="$score" -v m="$MIN_SCORE" 'BEGIN { exit !(s != "" && s >= m) }'
+        run: gooze run --diff "origin/\${{ github.base_ref }}" --threshold-diff-total 80 ./...
 
   # Pushes: the sharded full run from above, which publishes the baseline on main.
   test:
@@ -155,16 +148,26 @@ jobs:
   merge:
     if: \${{ github.event_name == 'push' }}
     needs: test
-    # ...same steps as above, plus the score gate`
+    # ...same steps as above, then the score gate`
 
-const gate = `      # Fail the job when the mutation score is below MIN_SCORE (percent).
+const gate = `      # Last step: fails the job (exit code 3) below 60%, after the
+      # baseline is already pushed.
       - name: Mutation score gate
-        env:
-          MIN_SCORE: "60"
-        run: |
-          score=$(gooze report view | sed -n 's/^Mutation score: \\([0-9.]*\\)%.*$/\\1/p' | tail -1)
-          echo "Mutation score: \${score}% (minimum \${MIN_SCORE}%)"
-          awk -v s="$score" -v m="$MIN_SCORE" 'BEGIN { exit !(s != "" && s >= m) }'`
+        run: gooze report view --threshold-total 60`
+
+const tolerate = `      # A low score (exit code 3) doesn't fail this step; errors still do.
+      - name: Mutation testing
+        run: gooze run --threshold-total 80 ./... || [ $? -eq 3 ]`
+
+const keepReports = `      # Runs even when the gate step before it failed, but not when the
+      # job was cancelled.
+      - name: Upload reports
+        if: \${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gooze-reports
+          path: .gooze-reports/`
+
 
 const faqs = [
   {
@@ -181,11 +184,11 @@ const faqs = [
   },
   {
     q: "How do I fail a pull request when the mutation score is too low?",
-    a: "Add a short shell step that reads `Mutation score` from `gooze report view` and fails the job below your minimum. Gooze has no built-in threshold flag. When you shard, gate in the merge job.",
+    a: "Add `--threshold-total 60` (or `threshold.total` in `gooze.yaml`) to the last Gooze step, for example `gooze report view --threshold-total 60`. Below it, Gooze exits with code `3` and the job fails. When you shard, gate in the merge job.",
   },
   {
     q: "How do I test only the lines a pull request changed in GitHub Actions?",
-    a: "In one job on pull requests, check out with `fetch-depth: 0` and run `gooze run --diff origin/${{ github.base_ref }} ./...`, then gate on `gooze report view -o .gooze-reports/run`. Keep the full run on pushes to `main`, which pushes the baseline.",
+    a: "In one job on pull requests, check out with `fetch-depth: 0` and run `gooze run --diff origin/${{ github.base_ref }} --threshold-diff-total 80 ./...`. The diff threshold checks the score of the changed lines. Keep the full run on pushes to `main`, which pushes the baseline.",
   },
   {
     q: "Does Gooze post results as a pull-request comment?",
@@ -223,9 +226,9 @@ export default function CiPage() {
           <CodeBlock lang="yaml" code={simple} />
           <Recording name="calc-first-run" title="Recorded last line of the first gooze run on calc" />
           <p>
-            The job passes even with those two survivors, because survivors don&apos;t change
-            Gooze&apos;s exit code. The <a href="#gate">quality gate</a> below fixes that. First,
-            a bigger module needs the run split up.
+            The job passes even with those two survivors, because no threshold is set. The{" "}
+            <a href="#gate">quality gate</a> below fixes that. First, a bigger module needs the
+            run split up.
           </p>
         </div>
 
@@ -282,15 +285,15 @@ export default function CiPage() {
               would stop with an unknown ref or no merge base.
             </li>
             <li>
-              The diff job runs in one job, without shards. A diff run is small, and gating a
-              sharded diff run on the score of the changed lines isn&apos;t supported yet.
+              The diff job runs in one job, without shards. A diff run is small, and a shard
+              doesn&apos;t check thresholds.
             </li>
             <li>
               A diff run writes its reports to <code>.gooze-reports/run/</code>, and its score
-              covers the changed lines only. The gate reads that score with{" "}
-              <code>gooze report view -o .gooze-reports/run</code>, so it checks the pull
-              request&apos;s own code. The job doesn&apos;t push: the baseline comes only from the
-              full run on <code>main</code>.
+              covers the changed lines only. <code>--threshold-diff-total</code> checks that
+              score, so the gate holds the pull request&apos;s own code to its bar (see{" "}
+              <Link href="/docs/ci/quality-gates#diff">diff thresholds</Link>). The job
+              doesn&apos;t push: the baseline comes only from the full run on <code>main</code>.
             </li>
             <li>
               Diff mode needs git. The <code>golang</code> image includes it; a minimal image
@@ -302,26 +305,48 @@ export default function CiPage() {
         <div id="gate">
           <h2>Fail the build below a score (quality gate)</h2>
           <p>
-            Gooze has no threshold flag yet: survivors never change its exit code. Add this
-            step after the <code>gooze run</code> (in the merge job, after <code>gooze report merge</code>, when you shard). It reads the{" "}
-            <Link href="/docs/usage/results#score">mutation score</Link>{" "}
-            from the <code>Mutation score: NN.NN% (...)</code> line of{" "}
-            <code>gooze report view</code> and fails when it is below{" "}
-            <code>MIN_SCORE</code>.
+            Add a threshold to the last Gooze step: in the merge job, after{" "}
+            <code>gooze report merge</code> and the baseline push, when you shard. Below the{" "}
+            <Link href="/docs/usage/results#score">mutation score</Link> you set, Gooze exits
+            with code <code>3</code> and the job fails:
           </p>
           <CodeBlock lang="yaml" code={gate} />
           <p>
-            With <code>MIN_SCORE: &quot;60&quot;</code>, the <code>calc</code> run at{" "}
-            <code>84.62%</code> passes. Raise the minimum to <code>90</code> and the same run
-            fails until you add the two boundary tests that bring it to{" "}
-            <code>100.00%</code>.
+            With <code>60</code>, the <code>calc</code> run at <code>84.62%</code> passes. Raise
+            it to <code>90</code> and the same run fails until you add the two boundary tests
+            that bring it to <code>100.00%</code>.
           </p>
           <p className="text-sm text-muted-foreground">
-            With sharding, gate only in the merge job: a single shard&apos;s score covers only its slice.
-            A missing score (no reports) also fails the step. For a{" "}
-            <a href="#diff">diff mode</a> run, read the run&apos;s own reports with{" "}
-            <code>gooze report view -o .gooze-reports/run</code>, whose score covers the changed
-            lines.
+            A shard doesn&apos;t check thresholds, so gate only in the merge job. The average and
+            per-file thresholds and <code>gooze.yaml</code> settings are in{" "}
+            <Link href="/docs/ci/quality-gates">Quality gates</Link>; how to let a low score
+            pass while errors still fail is in <a href="#exit-codes">exit codes</a>.
+          </p>
+        </div>
+
+        <div id="exit-codes">
+          <h2>Exit codes</h2>
+          <p>
+            Every Gooze exit code but <code>0</code> fails the step, and GitHub skips the steps
+            after it. That is right for errors. A low score (code <code>3</code>) is different:
+            the run finished and wrote its reports, so you choose what it does.
+          </p>
+          <p>
+            To let a step pass on a low score but still fail on errors, accept code{" "}
+            <code>3</code> in the shell, and gate in a later step:
+          </p>
+          <CodeBlock lang="yaml" code={tolerate} />
+          <p>
+            Steps that must run after a failed gate, such as uploading reports, take{" "}
+            <code>if: {"${{ !cancelled() }}"}</code>:
+          </p>
+          <CodeBlock lang="yaml" code={keepReports} />
+          <p className="text-sm text-muted-foreground">
+            The usual causes of the other codes in GitHub Actions: <code>4</code>, a checkout
+            without <code>fetch-depth: 0</code>; <code>5</code>, missing{" "}
+            <code>GOOZE_REGISTRY_*</code> or <code>packages: write</code>; <code>6</code>, a
+            merge job that ran before the shard artifacts were downloaded. Every code:{" "}
+            <Link href="/docs/cli#exit-codes">CLI reference</Link>.
           </p>
         </div>
 

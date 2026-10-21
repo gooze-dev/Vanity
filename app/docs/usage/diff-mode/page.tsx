@@ -174,11 +174,11 @@ run:
           <CodeBlock lang="bash" code="gooze report view -o .gooze-reports/run" />
           <Recording name="calc-diff-run-view" title="Recorded gooze report view -o .gooze-reports/run after the diff run" />
           <p>
-            The <Link href="/docs/ci/github#gate">score gate</Link> step reads the line that
-            starts with <code>Mutation score:</code>, from the run&apos;s output or from this
-            view, so it gates the pull request&apos;s own code. When the branch changes no Go
-            lines, there is nothing to mutate: the score is <code>100.00%</code>, the run exits
-            with <code>0</code>, and the gate passes.
+            A <Link href="/docs/ci/quality-gates#diff">diff threshold</Link> such as{" "}
+            <code>--threshold-diff-total 80</code> checks this score, so it gates the pull
+            request&apos;s own code. When the branch changes no Go lines, there is nothing to
+            mutate: the score is <code>100.00%</code>, the run exits with <code>0</code>, and the
+            gate passes.
           </p>
           <Recording name="calc-diff-no-changes" title="Recorded last lines of gooze run --diff main with no changes" />
           <p>
@@ -265,8 +265,10 @@ gooze report view`}
               changed lines that no test runs are reported as <code>not_covered</code>.
             </li>
             <li>
-              <strong>Exit code.</strong> It doesn&apos;t change: survivors never fail a run, so
-              fail the build with the score gate.
+              <strong>Thresholds.</strong> A diff run checks the{" "}
+              <Link href="/docs/ci/quality-gates#diff"><code>threshold.diff</code></Link> keys
+              (<code>--threshold-diff-total</code> and the others) on the changed lines, not the
+              plain thresholds, and exits with code <code>3</code> below one.
             </li>
           </ul>
         </div>

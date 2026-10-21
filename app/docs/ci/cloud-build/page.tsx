@@ -127,23 +127,39 @@ const diff = `steps:
         BASE="origin/\${_BASE_BRANCH}"
         REPORTS=.gooze-reports/run
       fi
-      gooze run -p 8 --diff="$BASE" ./...
+      # On a pull request, the build fails (exit code 3) when the changed
+      # lines score below 80%. On main, BASE is empty and this threshold
+      # doesn't apply.
+      gooze run -p 8 --diff="$BASE" --threshold-diff-total 80 ./...
       gooze report view -o "$REPORTS"
 
   # ...push-token and push steps as above`
 
-const gate = `  - id: mutation
+const gate = `steps:
+  # ...token, mutation, push-token and push steps as above
+
+  # Last: on main, fail the build (exit code 3) below _MIN_SCORE. The
+  # baseline is already pushed. Pull requests are gated on their changed
+  # lines in the mutation step.
+  - id: gate
     name: golang:1.27
     script: |
       set -e
-      # ...after gooze run:
-      score=$(gooze report view | sed -n 's/^Mutation score: \\([0-9.]*\\)%.*$/\\1/p' | tail -1)
-      echo "Mutation score: \${score}% (minimum \${_MIN_SCORE}%)"
-      awk -v s="$score" -v m="$_MIN_SCORE" 'BEGIN { exit !(s != "" && s >= m) }'
+      if [ -n "\${_PR_NUMBER:-}" ]; then exit 0; fi
+      gooze report view --threshold-total "\${_MIN_SCORE}"
 
 substitutions:
   _REGION: us-central1
   _MIN_SCORE: "60"           # fail below this percent`
+
+const allowLowScore = `  - id: gate
+    name: golang:1.27
+    script: |
+      set -e
+      gooze report view --threshold-total "\${_MIN_SCORE}"
+    # A low score doesn't fail the build; any other exit code does.
+    allowExitCodes: [3]`
+
 
 const faqs = [
   {
@@ -164,7 +180,7 @@ const faqs = [
   },
   {
     q: "How do I fail a Cloud Build when the mutation score is too low?",
-    a: "Add a few lines to the script that read `Mutation score` from `gooze report view` and exit non-zero below a `_MIN_SCORE` substitution. Gooze has no built-in threshold flag.",
+    a: "Add a last step that runs `gooze report view --threshold-total \"${_MIN_SCORE}\"`. Below it, Gooze exits with code `3` and the build fails, after the baseline is pushed. To record a low score without failing the build, add `allowExitCodes: [3]` to that step.",
   },
 ]
 
@@ -197,8 +213,7 @@ export default function CloudBuildPage() {
             <code>-p</code> as many workers as the machine has vCPUs, and raise the build{" "}
             <code>timeout</code> (60 minutes by default) if a full run needs longer. For the{" "}
             <Link href="/docs/quick-start"><code>calc</code></Link> package, the build log ends
-            with the line you saw locally, and the build passes, because survivors don&apos;t
-            change the exit code:
+            with the line you saw locally, and the build passes, because no threshold is set:
           </p>
           <CodeBlock lang="yaml" code={simple} />
           <Recording name="calc-first-run" title="Recorded last line of the first gooze run on calc" />
@@ -293,13 +308,13 @@ export default function CloudBuildPage() {
               A diff run writes its reports to <code>.gooze-reports/run/</code> and leaves the
               pulled baseline as it was. In a pull request,{" "}
               <code>gooze report view -o .gooze-reports/run</code> prints the score of the
-              changed lines. Read it the same way in the <a href="#gate">gate</a> (
-              <code>gooze report view -o &quot;$REPORTS&quot;</code>), so a pull request is gated
-              on its own code.
+              changed lines, and <code>--threshold-diff-total</code> gates the pull request on
+              that score, its own code (see{" "}
+              <Link href="/docs/ci/quality-gates#diff">diff thresholds</Link>).
             </li>
             <li>
-              The build runs in one step, without shards, which suits a diff run: gating a
-              sharded diff run on the score of the changed lines isn&apos;t supported yet.
+              The build runs in one step, without shards, which suits a diff run: a shard
+              doesn&apos;t check thresholds.
             </li>
           </ul>
         </div>
@@ -328,11 +343,9 @@ export default function CloudBuildPage() {
         <div id="gate">
           <h2>Fail the build below a score (quality gate)</h2>
           <p>
-            Gooze has no threshold flag yet: survivors never change its exit code. Add these
-            lines after <code>gooze run</code>. They read the{" "}
-            <Link href="/docs/usage/results#score">mutation score</Link> from the{" "}
-            <code>Mutation score: NN.NN% (...)</code> line of <code>gooze report view</code>{" "}
-            and fail the step below <code>_MIN_SCORE</code>:
+            Add a last step with a threshold. Below the{" "}
+            <Link href="/docs/usage/results#score">mutation score</Link> you set, Gooze exits
+            with code <code>3</code> and the build fails:
           </p>
           <CodeBlock lang="yaml" code={gate} />
           <p>
@@ -341,9 +354,33 @@ export default function CloudBuildPage() {
             tests bring it to <code>100.00%</code>.
           </p>
           <p className="text-sm text-muted-foreground">
-            In the cached setup, put the gate in the <code>mutation</code> step. A failed
-            step stops the build, so a <code>main</code> build below the minimum does not
-            push its baseline. A missing score (no reports) also fails the step.
+            A failed step stops the build, so the gate comes after the <code>push</code> step:
+            a <code>main</code> build below the minimum still pushes its baseline. To record a
+            low score without failing the build, add <code>allowExitCodes: [3]</code> to the
+            step; every other code still fails it. More in{" "}
+            <a href="#exit-codes">exit codes</a>.
+          </p>
+        </div>
+
+        <div id="exit-codes">
+          <h2>Exit codes</h2>
+          <p>
+            Every Gooze exit code but <code>0</code> fails the step, and a failed step stops the
+            build. That is right for errors. A low score (code <code>3</code>) is different: the
+            run finished and wrote its reports, so you choose what it does.
+          </p>
+          <p>
+            Put the gate in the last step, after the <code>push</code> step, so a low score
+            never costs the baseline. To record a low score without failing the build, list
+            the code in <code>allowExitCodes</code>:
+          </p>
+          <CodeBlock lang="yaml" code={allowLowScore} />
+          <p className="text-sm text-muted-foreground">
+            The usual causes of the other codes in Cloud Build: <code>4</code>, a build without
+            the <code>history</code> step, since builds clone one commit; <code>5</code>, an
+            expired token or a missing <code>roles/artifactregistry.writer</code>;{" "}
+            <code>6</code>, a step that runs before Gooze wrote reports to{" "}
+            <code>/workspace</code>. Every code: <Link href="/docs/cli#exit-codes">CLI reference</Link>.
           </p>
         </div>
 
