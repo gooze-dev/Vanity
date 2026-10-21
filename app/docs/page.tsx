@@ -13,7 +13,7 @@ const sections = [
     title: "Using gooze",
     cards: [
       { title: "Reading results", href: "/docs/usage/results", desc: "Statuses, survivors, and what to do next." },
-      { title: "Ignoring code", href: "/docs/usage/ignoring-code", desc: "Use -x and //gooze:ignore to skip." },
+      { title: "Ignoring code", href: "/docs/usage/ignoring-code", desc: "Skip code with -x and //gooze:ignore." },
       { title: "Incremental runs", href: "/docs/usage/incremental-runs", desc: "Re-test only what changed." },
     ],
   },
@@ -80,7 +80,7 @@ export default function DocsPage() {
         <div id="get-started">
           <h2>Get started</h2>
           <p>
-            Install Gooze, preview what will be mutated, run mutation testing, then view the latest report.
+            Install Gooze, run mutation testing, then view the latest report.
             The whole flow is three commands:
           </p>
 
@@ -91,11 +91,12 @@ gooze run ./...                         # run mutation testing
 gooze report view                       # read the report`}
           />
           <p className="text-sm text-muted-foreground mb-4">
-            For faster runs, pass a coverage profile; see the{" "}
+            For faster runs, pass a coverage profile with{" "}
+            <code>--coverage-profile</code> or add parallel workers (see the{" "}
             <Link href="/docs/quick-start" className="underline underline-offset-4">
               Quick start
             </Link>
-            .
+            ).
           </p>
 
           <GoozePrimaryCtaButton asChild>

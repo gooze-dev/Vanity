@@ -200,43 +200,43 @@ function Cell({ value }: { value: [Support, string] }) {
 // and AI answers quote the same wording people read.
 const faqs = [
   {
-    q: "Does gooze have a config file?",
-    a: "Yes. gooze.yaml in the project root holds output dir, excludes, parallelism, timeouts, and the coverage profile; `gooze config init` generates one. Every key can also be set with a GOOZE_* environment variable or a CLI flag.",
+    q: "Does Gooze have a config file?",
+    a: "Yes. gooze.yaml in the project root holds output dir, excludes, parallelism, timeouts, and the coverage profile; `gooze config init` generates one. Every key can also be set with a GOOZE_* environment variable, and the common ones with a CLI flag.",
   },
   {
-    q: "Is gooze only for large projects?",
-    a: "No. Gooze outperforms from a tiny project to microservices and large monorepos with the same three commands: gooze run, gooze report view, and, when you shard in CI, gooze report merge. Sharding and OCI baselines are opt-in for when a codebase outgrows a single job.",
+    q: "Is Gooze only for large projects?",
+    a: "No. Gooze uses the same three commands from a tiny project to microservices and large monorepos: gooze run, gooze report view, and, when you shard in CI, gooze report merge. Sharding and OCI baselines are opt-in for when a codebase outgrows a single job.",
   },
   {
-    q: "Does gooze work for microservices?",
-    a: "Yes. Run gooze in each service's own CI job; the per-file cache keeps every run short, and `gooze report push` and `pull` share each service's baseline through any OCI registry, so teammates and CI start from the same results.",
+    q: "Does Gooze work for microservices?",
+    a: "Yes. Run Gooze in each service's own CI job; the per-file cache keeps every run short, and `gooze report push` and `pull` share each service's baseline through any OCI registry, so teammates and CI start from the same results.",
   },
   {
-    q: "Is gooze good for TDD?",
+    q: "Is Gooze good for TDD?",
     a: "Yes. Results are cached per file, so after you edit a file or its test only that file is re-tested and the rest of the report is reused. The feedback loop stays short without losing the whole-codebase score.",
   },
   {
-    q: "Can gooze fail CI when the mutation score drops below a threshold?",
-    a: "Not with a built-in flag yet (as of " + DOCS_FACTS_VERSION + "). gooze prints `Mutation score: NN.NN%` followed by a breakdown, and a three-line shell step compares it to a minimum and fails the job. The GitHub Actions and GitLab CI guides include it.",
+    q: "Can Gooze fail CI when the mutation score drops below a threshold?",
+    a: "Not with a built-in flag yet (as of " + DOCS_FACTS_VERSION + "). Gooze prints `Mutation score: NN.NN%` followed by a breakdown, and a three-line shell step compares it to a minimum and fails the job. The GitHub Actions and GitLab CI guides include it.",
   },
   {
-    q: "Does gooze only test changed code?",
-    a: "Yes, by design without git. gooze detects changes through incremental execution: it hashes each file and its test file and re-tests only what changed since the stored reports, reusing results for the rest, so the score always covers the whole codebase. No base branch, commit, or git history is needed, and uncommitted edits count. Granularity is per file, not per changed line. Changes in other files don't invalidate cached results, so run --no-cache periodically.",
+    q: "Does Gooze only test changed code?",
+    a: "Yes, and it doesn't need git. Gooze detects changes through incremental execution: it hashes each file and its test file and re-tests only what changed since the stored reports. Results for the rest are reused, so the score always covers the whole codebase. No base branch, commit, or git history is needed, and uncommitted edits count. Granularity is per file, not per changed line. Changes in other files don't invalidate cached results, so run --no-cache periodically.",
   },
   {
-    q: "Can I write custom mutators for gooze?",
-    a: "Not as plugins. gooze ships six default operators (arithmetic, comparison, logical, boolean, numbers, unary). Adding an operator means one small function in the gooze source; caching, sharding, and reporting don't change. go-mutesting supports mutators outside the tool via its Mutator interface.",
+    q: "Can I write custom mutators for Gooze?",
+    a: "Not as plugins. Gooze ships six default operators (arithmetic, comparison, logical, boolean, numbers, unary). Adding an operator means one small function in the gooze source; caching, sharding, and reporting don't change. go-mutesting supports mutators outside the tool via its Mutator interface.",
   },
   {
-    q: "Does gooze work with Claude Code and other AI coding agents?",
-    a: "Yes, with Claude Code through the gooze plugin (beta): `/plugin marketplace add gooze-dev/claude-plugin`, then `/plugin install gooze@gooze`. It sets a project up with `/gooze:init`, runs the kill-survivors loop, adds gooze to existing CI, and shows Claude the score and surviving mutants after every edit. Codex and opencode support is on the way.",
+    q: "Does Gooze work with Claude Code and other AI coding agents?",
+    a: "Yes, with Claude Code through the gooze plugin (beta): `/plugin marketplace add gooze-dev/claude-plugin`, then `/plugin install gooze@gooze`. It sets a project up with `/gooze:init`, runs the kill-survivors loop, adds Gooze to existing CI, and shows Claude the score and surviving mutants after every edit. Codex and opencode support is on the way.",
   },
   {
-    q: "How is the gooze mutation score calculated?",
+    q: "How is the Gooze mutation score calculated?",
     a: "killed / (all mutations - error). Mutants that do not compile (error) are left out; survived, not_covered, and timeout all lower the score.",
   },
   {
-    q: "Can gooze run across several CI machines?",
+    q: "Can Gooze run across several CI machines?",
     a: "Yes. `gooze run -s INDEX/TOTAL` runs one shard per job, and `gooze report merge` combines them. Ready-made GitHub Actions and GitLab CI pipelines are in the docs.",
   },
 ]
@@ -279,11 +279,11 @@ export default function ComparisonPage() {
           <h2>In short</h2>
           <ul>
             <li>
-              <strong>Gooze</strong> outperforms from a tiny project to microservices and large
-              monorepos, with the same three commands
+              <strong>Gooze</strong> uses the same three commands
               (<code>run</code>,{" "}
               <code>report view</code>,{" "}
-              <code>report merge</code>) at every size. Its per-file cache re-tests only what you changed, so
+              <code>report merge</code>) from a tiny project to microservices and large
+              monorepos. Its per-file cache re-tests only what you changed, so
               local TDD loops stay fast, and every run still reports a score for the whole
               codebase, not just the diff. Sharding, a shared OCI baseline, a TUI viewer,
               editor integration, and a{" "}

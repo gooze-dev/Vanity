@@ -34,9 +34,9 @@ const cacheRows = [
     behavior: "Re-tests the associated source file.",
   },
   {
-    action: "Upgrade Gooze (mutators change)",
-    state: "Full miss",
-    behavior: "Re-tests everything, since prior results may differ.",
+    action: "Upgrade Gooze to a version that changes a mutator",
+    state: "Partial miss",
+    behavior: "Re-tests every file whose reports came from an older version of that mutator.",
   },
   {
     action: "gooze run --no-cache",
@@ -119,7 +119,7 @@ export default function IncrementalRunsPage() {
           </p>
           <CodeBlock lang="bash" code="gooze run -o .gooze-reports ./..." />
           <p className="text-sm text-muted-foreground">
-            Reports are written as one YAML per run (<code>&lt;hash&gt;.yaml</code>) plus an index (<code>_index.yaml</code>).
+            Reports are written as one YAML file per report (<code>&lt;hash&gt;.yaml</code>) plus an index (<code>_index.yaml</code>).
           </p>
         </div>
 
@@ -201,7 +201,7 @@ export default function IncrementalRunsPage() {
         <div id="share">
           <h2>Reuse the cache in CI</h2>
           <p>
-            A fresh CI runner starts with an empty reports dir. Pull a baseline from an OCI
+            A fresh CI runner starts with an empty reports directory. Pull a baseline from an OCI
             registry before the run and push the updated one after:{" "}
             <Link href="/docs/ci/sharing-reports">Sharing reports (OCI)</Link>.
           </p>

@@ -94,7 +94,7 @@ const faqs = [
   },
   {
     q: "How do I fail a merge request when the mutation score is too low?",
-    a: "Gooze has no threshold flag; add a short script step that reads 'Mutation score' from gooze report view and fails the job below your minimum. Gate in the merge job when sharding.",
+    a: "Add a short script step that reads 'Mutation score' from gooze report view and fails the job below your minimum. Gooze has no built-in threshold flag. When you shard, gate in the merge job.",
   },
   {
     q: "Does Gooze post results as a GitLab merge-request note?",

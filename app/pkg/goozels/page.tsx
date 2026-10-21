@@ -12,16 +12,16 @@ const GITHUB_REPO = "https://github.com/gooze-dev/goozels";
 const IMPORT_PREFIX = "gooze.dev/pkg/goozels";
 const INSTALL_PATH = "gooze.dev/pkg/goozels/cmd/goozels";
 
-const TITLE = "pkg/goozels - Mutation Testing LSP for Editors";
+const TITLE = "pkg/goozels: Mutation Testing LSP for Editors";
 const DESCRIPTION =
-  "Import the goozels language server module. Enable inline code diagnostics and surface real-time Gooze mutation results directly in editors like VSCode.";
+  "Install goozels, the language server for Gooze. It shows Gooze mutation results as inline diagnostics in editors such as VS Code, Neovim and GoLand.";
 const KEYWORDS = [
   "pkg/goozels",
   "language server protocol",
   "lsp module",
   "editor integration",
   "inline diagnostics",
-  "real-time results",
+  "inline mutation results",
 ];
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -83,7 +83,7 @@ export default async function VanityPage() {
             </div>
             <CodeBlock code={`go install ${INSTALL_PATH}@latest`} lang="bash" />
             <p className="text-sm text-muted-foreground">
-              This vanity import path redirects to the official Git repository
+              This vanity import path points to the official Git repository.
             </p>
           </div>
 

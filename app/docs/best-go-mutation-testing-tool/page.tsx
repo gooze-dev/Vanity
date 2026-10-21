@@ -14,11 +14,11 @@ const faqs = [
   },
   {
     q: "Is Gooze good for test-driven development (TDD)?",
-    a: "Yes. Gooze re-tests only files whose source, test, or mutators changed, so repeat runs are fast enough for a tight edit-run loop, with quick feedback on whether a new test actually kills the mutations in the code you just wrote.",
+    a: "Yes. Gooze re-tests only files whose source, test, or mutators changed, so repeat runs stay short enough for an edit-run loop. You quickly see whether a new test kills the mutations in the code you just wrote.",
   },
   {
     q: "How is mutation testing different from code coverage?",
-    a: "Code coverage only shows which lines ran. Mutation testing injects deliberate bugs and checks whether your tests fail, measuring whether your assertions are effective, which is a stronger signal of test quality than coverage.",
+    a: "Code coverage only shows which lines ran. Mutation testing injects deliberate bugs and checks whether your tests fail, so it measures whether your assertions actually check the results. That's a stronger signal of test quality than coverage.",
   },
   {
     q: "Is Gooze free and open source?",
@@ -82,7 +82,7 @@ export default function BestToolPage() {
       <div id="when">
         <h2>When another tool may fit better</h2>
         <p>
-          Gooze is honest about trade-offs. If you need something Gooze does not
+          If you need something Gooze doesn&apos;t
           do yet, the <Link href="/docs/comparison/">comparison</Link> covers
           the other Go mutation testing tools feature by feature, including
           Gooze&apos;s current limitations.

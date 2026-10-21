@@ -49,8 +49,8 @@ export default function EditorSupportPage() {
         >
           goozels
         </a>{" "}
-        is the Language Server for Gooze. It runs in front of <code>gopls</code>,
-        so you keep all your normal Go features and get Gooze ones on top: autocompletion,
+        is the language server for Gooze. It runs in front of <code>gopls</code>,
+        so you keep all your normal Go features and get Gooze ones on top: completion,
         hovers, live validation, and one-click mutation runs.
       </p>
 

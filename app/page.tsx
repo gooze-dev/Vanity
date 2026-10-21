@@ -29,23 +29,23 @@ const faqs = [
   },
   {
     q: "Why use Gooze for Go mutation testing?",
-    a: "Gooze is built for scale and CI/CD. It features incremental caching that re-tests only changed files, sharding across parallel CI runners, coverage-profile integration to skip untested lines, and OCI-registry support to share baseline reports across teams.",
+    a: "Gooze is built for CI/CD. It has an incremental cache that re-tests only changed files, sharding across parallel CI runners, coverage-profile support that skips tests for uncovered lines, and OCI registry support to share baseline reports across teams.",
   },
   {
     q: "How can I speed up Go mutation testing with Gooze?",
-    a: "Use incremental runs (Gooze caches results and re-tests only files whose source, test, or mutators changed), raise the --parallel worker count, or pass --coverage-profile so mutations on uncovered lines are tallied as not_covered without running tests.",
+    a: "Use incremental runs (Gooze caches results and re-tests only files whose source, test, or mutators changed), raise the --parallel worker count, or pass --coverage-profile so mutations on uncovered lines are reported as not_covered without running tests.",
   },
   {
     q: "Our coverage is high but bugs still reach production. How does Gooze help?",
-    a: "High line coverage only proves your code was executed, not that your assertions check the result. Gooze injects deliberate faults into your code and verifies your tests actually fail, proving the tests are meaningful.",
+    a: "High line coverage only proves your code was executed, not that your assertions check the result. Gooze injects deliberate faults into your code and checks that your tests fail. A survived mutant shows code your tests run but don't check.",
   },
   {
     q: "Mutation testing is slow. Will it block our CI/CD pipeline?",
-    a: "Gooze is optimized for CI. Passing a Go coverage profile skips uncovered lines, incremental caching reuses unchanged results, and parallel workers keep builds fast.",
+    a: "It doesn't have to. Passing a Go coverage profile skips tests for uncovered lines, the incremental cache reuses results for unchanged files, and parallel workers and sharding split the remaining work.",
   },
   {
     q: "How can we use mutation testing as an automated quality gate?",
-    a: "Configure your pipeline to compare the mutation score against a threshold and fail the job when it drops below it, using a short documented CI step (gooze does not need a built-in flag). This blocks pull requests that weaken your tests.",
+    a: "Add a short CI step that compares the mutation score to a threshold and fails the job when the score drops below it. Gooze has no built-in threshold flag; the CI docs show the step. This blocks pull requests that weaken your tests.",
   },
   {
     q: "How do we store reports across ephemeral CI runners?",
@@ -53,7 +53,7 @@ const faqs = [
   },
   {
     q: "How can developers see mutation results without waiting for CI?",
-    a: "Gooze ships goozels, a language server (LSP) that surfaces mutation results inline in LSP-capable editors such as Neovim and Helix, so developers can fix weak tests before they commit.",
+    a: "Gooze ships goozels, a language server (LSP) that surfaces mutation results inline in editors such as VS Code, Neovim and GoLand, so developers can fix weak tests before they commit.",
   },
 ];
 
@@ -253,7 +253,7 @@ export default async function Home() {
                 <div className="flex-1 min-w-0">
                   <h3 className="text-2xl font-bold mb-3">Install Gooze</h3>
                   <p className="text-muted-foreground mb-4">
-                      Install with a single command using Go&apos;s package manager
+                      Install with a single command using the Go toolchain
                   </p>
                   <CodeBlock code="go install gooze.dev/pkg/gooze@latest" lang="bash" />
                 </div>
@@ -267,7 +267,7 @@ export default async function Home() {
                 <div className="flex-1 min-w-0">
                   <h3 className="text-2xl font-bold mb-3">Run Mutation Tests</h3>
                   <p className="text-muted-foreground mb-4">
-                    Execute mutation testing across your codebase
+                    Run mutation testing across your codebase
                   </p>
                   <CodeBlock code="gooze run ./..." lang="bash" />
                 </div>
@@ -281,7 +281,7 @@ export default async function Home() {
                 <div className="flex-1 min-w-0">
                   <h3 className="text-2xl font-bold mb-3">View Results</h3>
                   <p className="text-muted-foreground mb-4">
-                      Get detailed insights into your test suite&apos;s effectiveness
+                      See per-file scores, surviving mutations and the mutation score
                   </p>
                   <CodeBlock code="gooze report view" lang="bash" />
                 </div>

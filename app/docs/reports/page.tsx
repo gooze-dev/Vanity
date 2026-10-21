@@ -17,7 +17,7 @@ export default function ReportsPage() {
         <div id="where">
           <h2>Where reports are stored</h2>
           <p>
-            Default output directory is <code>.gooze-reports/</code>.
+            The default output directory is <code>.gooze-reports/</code>.
             You can change it with <code>-o/--output</code>.
           </p>
           <CodeBlock lang="bash" code="gooze run -o .gooze-reports ./..." />
@@ -32,9 +32,9 @@ export default function ReportsPage() {
               <code>shard_INDEX/</code> subdirectory per shard until you merge
             </li>
             <li>
-              A summary index file: <code>_index.yaml</code>.
-              When you use <code>--coverage-profile</code>, it
-              also includes a <code>not_covered_mutations</code> count.
+              A summary index file: <code>_index.yaml</code>. It
+              includes a <code>not_covered_mutations</code> count, which is non-zero only when you
+              use <code>--coverage-profile</code>.
             </li>
           </ul>
         </div>

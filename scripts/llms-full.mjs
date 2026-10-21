@@ -78,10 +78,12 @@ function toMarkdown(html) {
       const url = href.startsWith("/") ? `${SITE_URL}${href}` : href
       // Card links hold a title and a description in separate blocks.
       const card = /<(div|p)\b/i.test(body)
-      const text = stripTags(body.replace(/<\/(div|p)>/gi, " \u2014 "))
-        .replace(/\s+/g, " ")
-        .replace(/( \u2014 ?)+$/, "")
-        .trim()
+      // Join the blocks with ": " (no em dash, per the writing rules).
+      const text = stripTags(body.replace(/<\/(div|p)>/gi, "\u0001"))
+        .split("\u0001")
+        .map((part) => part.replace(/\s+/g, " ").trim())
+        .filter(Boolean)
+        .join(": ")
       if (!text) return ""
       return card ? `\n- [${text}](${url})\n` : ` [${text}](${url})`
     })

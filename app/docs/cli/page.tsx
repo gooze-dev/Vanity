@@ -37,10 +37,10 @@ export default function CliPage() {
           <h2>Global flags</h2>
           <ul>
             <li>
-              <code>-o, --output &lt;dir&gt;</code>: where reports are written (default is usually <code>.gooze-reports</code>)
+              <code>-o, --output &lt;dir&gt;</code>: where reports are written (default <code>.gooze-reports</code>)
             </li>
             <li>
-              <code>--no-cache</code>: re-test everything (do not reuse cached reports)
+              <code>--no-cache</code>: re-test everything (don&apos;t reuse cached reports)
             </li>
             <li>
               <code>-x, --exclude &lt;regex&gt;</code>: exclude files by regex (you can repeat this)

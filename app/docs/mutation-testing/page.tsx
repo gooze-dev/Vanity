@@ -22,7 +22,7 @@ const faqs = [
   },
   {
     q: "What is the difference between code coverage and mutation testing?",
-    a: "Code coverage only measures whether a line ran during a test; it does not check that the result was asserted. Mutation testing proves your tests have effective assertions by requiring them to fail when the code's behavior changes.",
+    a: "Code coverage only measures whether a line ran during a test; it does not check that the result was asserted. Mutation testing checks that your tests have effective assertions: they must fail when the code's behavior changes.",
   },
   {
     q: "What does it mean when a mutant survives?",
@@ -34,7 +34,7 @@ const faqs = [
   },
   {
     q: "How is the mutation score calculated?",
-    a: "Mutation score = killed / (all mutations − error). Survived, not_covered, and timeout results are in the denominator and lower the score; error mutations (that failed to build or run) are excluded.",
+    a: "Mutation score = killed / (all mutations − error). Survived, not_covered, and timeout results are in the denominator and lower the score; error mutations (mutants that don't compile) are left out.",
   },
 ]
 
@@ -144,7 +144,7 @@ export default function MutationTestingPage() {
 
       <div>
         <div id="idea">
-          <h2>The idea (simple)</h2>
+          <h2>The basic idea</h2>
           <ol>
             <li>Take your real code.</li>
             <li>Make one tiny change (a mutation).</li>
@@ -199,7 +199,7 @@ func TestLabel_Positive(t *testing.T) {
 
           <p>
             One common mutation is changing <code>&gt;</code> to <code>&gt;=</code>.
-            That means balance = 0 becomes &quot;positive&quot;.
+            With that change, balance = 0 returns &quot;positive&quot;.
             If you do not test balance = 0, this mutation can survive.
           </p>
           <CodeBlock

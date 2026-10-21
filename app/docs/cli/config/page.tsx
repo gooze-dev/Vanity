@@ -10,8 +10,8 @@ export default function CliConfigPage() {
     <section>
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">gooze config</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        Manage Gooze configuration. Today this generates a starter config file;
-        it is the home for configuration commands as more are added.
+        Manage Gooze configuration. Today the only subcommand is <code>init</code>,
+        which generates a starter config file.
       </p>
 
       <div>
@@ -50,7 +50,7 @@ export default function CliConfigPage() {
           </p>
 
           <h3>Next step</h3>
-          <p>After you have config, run:</p>
+          <p>After you have a config file, run:</p>
           <CodeBlock lang="bash" code="gooze run ./..." />
         </div>
       </div>

@@ -229,7 +229,7 @@ export default function CliRunPage() {
         <div id="parallel">
           <h2>Parallel workers</h2>
           <p>
-            Run faster by using multiple workers:
+            Use several workers to test mutations in parallel:
           </p>
           <CodeBlock lang="bash" code="gooze run -p 4 ./..." />
           <p>
@@ -249,7 +249,7 @@ export default function CliRunPage() {
           </p>
           <CodeBlock lang="bash" code="gooze run --mutation-timeout 300 ./..." />
           <p>
-            You can also set it via <code>run.mutation_timeout</code> in{" "}
+            You can also set it with <code>run.mutation_timeout</code> in{" "}
             <code>gooze.yaml</code> or <code>GOOZE_RUN_MUTATION_TIMEOUT</code>.
             If you see many unexpected timeouts, run verbose and inspect the logs:
           </p>
@@ -296,7 +296,7 @@ gooze run --coverage-profile coverage.out ./...`}
             A <code>not_covered</code> mutation counts as a
             survivor in the mutation score (it lowers the score like{" "}
             <code>survived</code>) but is tallied
-            separately. The default is empty, which disables the feature. You can also set it via{" "}
+            separately. The default is empty, which disables the feature. You can also set it with{" "}
             <code>run.coverage_profile</code> in{" "}
             <code>gooze.yaml</code> or{" "}
             <code>GOOZE_RUN_COVERAGE_PROFILE</code>.
