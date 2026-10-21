@@ -35,6 +35,10 @@ const faqs = [
     a: "A killed mutant is the success case: Gooze injected a bug and your test suite caught it by failing.",
   },
   {
+    q: "Does Gooze run the whole test suite for every mutant?",
+    a: "No. Each mutant runs `go test` only for the package it's in, never the whole module. To make a run smaller still, use the cache (only changed files), `--diff` (only changed lines) or `--run` (one function).",
+  },
+  {
     q: "How is the mutation score calculated?",
     a: "Mutation score = `killed / (all mutations − error)`. Survived, `not_covered`, and `timeout` results are in the denominator and lower the score; error mutations (mutants that don't compile) are left out.",
   },
@@ -115,6 +119,48 @@ export default function MutationTestingPage() {
           <p>Now both mutants make a test fail, and the score reaches 100%:</p>
           <Recording name="calc-fixed-score" title="Recorded score line of gooze report view after the fix" />
         </div>
+      </div>
+
+      <div id="how-gooze-runs">
+        <h2>How Gooze tests each mutant</h2>
+        <p>
+          A mutant changes one line in one file, and Gooze tests it with the tests of that
+          file&apos;s package only. Each worker keeps its own copy of your project,
+          applies the mutant there and runs <code>go test</code> for that one package, never for
+          the whole module. In the example above, each of the 13 mutants of{" "}
+          <code>calc.go</code> runs only the tests of <code>example.com/calc</code>, and{" "}
+          <code>--parallel</code> workers test several mutants at once.
+        </p>
+        <p>You can make a run as small as the change you want to check:</p>
+        <ul>
+          <li>
+            <strong>A package or a file pattern.</strong> <code>gooze run ./internal/calc</code>{" "}
+            mutates one package, and <code>--exclude</code> skips files.
+          </li>
+          <li>
+            <strong>Changed files.</strong> The cache re-tests only files whose source, test or
+            mutators changed and reuses the rest (
+            <Link href="/docs/usage/incremental-runs">incremental runs</Link>).
+          </li>
+          <li>
+            <strong>Changed lines.</strong> <code>--diff origin/main</code> mutates only the lines
+            a pull or merge request changes (<Link href="/docs/usage/diff-mode">diff mode</Link>).
+          </li>
+          <li>
+            <strong>One function.</strong> <code>--run &apos;^InRange$&apos;</code> mutates one
+            function, like <code>go test -run</code> (
+            <Link href="/docs/usage/single-function">one function at a time</Link>).
+          </li>
+          <li>
+            <strong>One kind of mutation.</strong> <code>--mutagens comparison</code>.
+          </li>
+        </ul>
+        <p>
+          These combine, except <code>--run</code> with <code>--shard</code>. Small runs are what
+          let an AI coding agent use Gooze while it works: after each edit it checks only the
+          function or lines it touched and gets the score and surviving mutants back. The{" "}
+          <Link href="/docs/claude-code">Claude Code plugin</Link> does this after every edit.
+        </p>
       </div>
 
       <div id="vs-coverage">
