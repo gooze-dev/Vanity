@@ -32,7 +32,7 @@ export default function IgnoringCodePage() {
           <p>
             Skip files by regex. You can pass <code>-x</code> multiple times.
           </p>
-          <CodeBlock lang="bash" code="gooze run -x '^vendor/' -x '^mock_' ./..." />
+          <CodeBlock lang="bash" code="gooze run -x mocks/ -x '^mock_' ./..." />
           <p className="text-sm text-muted-foreground">
             The regex matches the path relative to the working directory (so{" "}
             <code>^vendor/</code> works), the absolute path, or the base filename.{" "}
@@ -124,9 +124,9 @@ func f() int {
           <h2>Generated files</h2>
           <p>
             Generated code such as mocks, protobuf and <code>stringer</code> output has no tests of
-            its own, so its mutants survive and lower your score. Gooze doesn&apos;t detect the{" "}
-            <code>{"// Code generated ... DO NOT EDIT."}</code> header yet, so exclude these files
-            in a way that survives regeneration.
+            its own, so its mutants survive and lower your score. Gooze doesn&apos;t skip files by their{" "}
+            <code>{"// Code generated ... DO NOT EDIT."}</code> header, so exclude them in a way
+            that survives regeneration.
           </p>
           <p>
             If the generator can add a header, have it write <code>{"//gooze:ignore"}</code>. With

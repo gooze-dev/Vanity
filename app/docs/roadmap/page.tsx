@@ -343,16 +343,6 @@ const themes: Theme[] = [
     title: "Smart test execution",
     items: [
       {
-        title: "Skip generated files",
-        detail: (
-          <>
-            Leave files with a <code>{"// Code generated ... DO NOT EDIT."}</code> header out of a
-            run automatically, like <code>go vet</code> and gopls do.
-          </>
-        ),
-        issue: 61,
-      },
-      {
         title: "Build tags",
         detail: (
           <>
