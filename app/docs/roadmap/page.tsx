@@ -204,6 +204,18 @@ const themes: Theme[] = [
         ),
       },
       {
+        title: "Number parsing",
+        detail: (
+          <>
+            A <code>parse</code> mutagen for <code>strconv</code> calls: base <code>10</code> to{" "}
+            <code>0</code> and back, <code>Atoi</code> to a base-<code>0</code> parse, and bit size{" "}
+            <code>64</code> to <code>32</code>. It asks for tests with inputs like{" "}
+            <code>&quot;010&quot;</code>, where the base or size changes the result.
+          </>
+        ),
+        issue: 59,
+      },
+      {
         title: "String literals",
         detail: (
           <>
