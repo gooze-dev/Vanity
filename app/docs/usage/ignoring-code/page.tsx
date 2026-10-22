@@ -119,6 +119,40 @@ func f() int {
             </div>
           </div>
         </div>
+
+        <div id="generated">
+          <h2>Generated files</h2>
+          <p>
+            Generated code such as mocks, protobuf and <code>stringer</code> output has no tests of
+            its own, so its mutants survive and lower your score. Gooze doesn&apos;t detect the{" "}
+            <code>{"// Code generated ... DO NOT EDIT."}</code> header yet, so exclude these files
+            in a way that survives regeneration.
+          </p>
+          <p>
+            If the generator can add a header, have it write <code>{"//gooze:ignore"}</code>. With
+            mockery, put the directive in a file and point <code>boilerplate-file</code> at it:
+          </p>
+          <CodeBlock lang="bash" code={`echo '//gooze:ignore' > .mockery-boilerplate.txt`} />
+          <CodeBlock
+            lang="yaml"
+            code={`# .mockery.yaml
+with-expecter: true
+boilerplate-file: .mockery-boilerplate.txt`}
+          />
+          <p>
+            Every mock mockery writes then starts with <code>{"//gooze:ignore"}</code>, including
+            mocks that live next to your code instead of in a <code>mocks/</code> folder.
+          </p>
+          <p>
+            For other generators, exclude them by path in <code>gooze.yaml</code>, so every run
+            skips them without a flag:
+          </p>
+          <CodeBlock
+            lang="yaml"
+            code={`paths:
+  exclude: ['^mock_', 'mocks/', '\\.pb\\.go$', '_string\\.go$']`}
+          />
+        </div>
       </div>
     </section>
   )
