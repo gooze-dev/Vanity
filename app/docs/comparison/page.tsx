@@ -66,7 +66,7 @@ const rows: Row[] = [
   },
   {
     feature: "Pick the mutators for one run",
-    gooze: ["yes", "`--mutagens` or `run.mutagens`"],
+    gooze: ["yes", "`--mutagens` or `run.mutagens`, including the opt-in `branch`, `statement`, `loop`"],
     gremlins: ["yes", "one flag per mutator, or `mutants.<name>.enabled`"],
     goMutesting: ["unknown", ""],
     avito: ["partial", "per-line comments only"],
@@ -262,7 +262,7 @@ const faqs = [
   },
   {
     q: "Can I write custom mutators for Gooze?",
-    a: "Not as plugins. Gooze ships six default operators (arithmetic, comparison, logical, boolean, numbers, unary). Adding an operator means one small function in the gooze source; caching, sharding, and reporting don't change. go-mutesting supports mutators outside the tool via its `Mutator` interface.",
+    a: "Not as plugins. Gooze ships nine default operators (arithmetic, comparison, logical, boolean, numbers, unary, bitwise, increment, assignment) and three you turn on with `--mutagens` (branch, statement, loop). Adding an operator means one small function in the gooze source; caching, sharding, and reporting don't change. go-mutesting supports mutators outside the tool via its `Mutator` interface.",
   },
   {
     q: "Does Gooze work with Claude Code and other AI coding agents?",

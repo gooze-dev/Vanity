@@ -46,8 +46,8 @@ const runFlags: RunFlag[] = [
   {
     flag: "--mutagens",
     description:
-      "Generate only these mutagens: comma-separated or repeated, any case (`arithmetic`, `boolean`, `numbers`, `comparison`, `logical`, `unary`). Env: `GOOZE_RUN_MUTAGENS`.",
-    defaultValue: "empty (all six)",
+      "Generate only these mutagens: comma-separated or repeated, any case (`arithmetic`, `boolean`, `numbers`, `comparison`, `logical`, `unary`, `bitwise`, `increment`, `assignment`, and the opt-in `branch`, `statement`, `loop`). Env: `GOOZE_RUN_MUTAGENS`.",
+    defaultValue: "empty (the nine defaults)",
     configKey: "run.mutagens",
   },
   {
@@ -277,12 +277,13 @@ export default function CliRunPage() {
             </li>
             <li>
               It needs git on <code>PATH</code> and a git repository. Without either, or with an
-              unknown ref or no merge base, the run exits <code>1</code>.
+              unknown ref or no merge base, the run exits <code>4</code>.
             </li>
             <li>
               Path arguments, <code>-x/--exclude</code>, <code>--shard</code>,{" "}
-              <code>--coverage-profile</code> and <code>--estimate</code> work with it. The exit
-              code doesn&apos;t change.
+              <code>--coverage-profile</code> and <code>--estimate</code> work with it. Below a{" "}
+              <Link href="/docs/ci/quality-gates#diff"><code>--threshold-diff-*</code></Link> threshold, the run exits{" "}
+              <code>3</code>.
             </li>
             <li>
               It is a <a href="#narrowed">narrowed run</a>: its score covers the changed lines
@@ -318,9 +319,9 @@ export default function CliRunPage() {
               <code>Only functions matching REGEX.</code> first.
             </li>
             <li>
-              With <code>--shard</code> it exits <code>1</code>:{" "}
+              With <code>--shard</code> it exits <code>2</code>:{" "}
               <code>--run can&apos;t be combined with --shard: a function-level run is small, so run it in one job</code>.
-              A pattern that doesn&apos;t compile exits <code>1</code> with{" "}
+              A pattern that doesn&apos;t compile exits <code>2</code> with{" "}
               <code>invalid --run pattern ...</code>.
             </li>
           </ul>
@@ -341,11 +342,13 @@ export default function CliRunPage() {
 gooze run --mutagens comparison --mutagens boolean ./...`}
           />
           <p>
-            Valid names are the six mutagens Gooze runs. Any other name exits <code>1</code>:
+            Valid names are every <Link href="/docs/mutations">mutagen</Link>: the nine that run by
+            default and <code>branch</code>, <code>statement</code> and <code>loop</code>, which run
+            only when named. Any other name is a usage error, exit code <code>2</code>:
           </p>
           <Recording name="run-unknown-mutagen" title="Recorded gooze run --mutagens with an unknown name" />
           <p>
-            Also config key <code>run.mutagens</code> (a list; empty means all six) and{" "}
+            Also config key <code>run.mutagens</code> (a list; empty means the nine defaults) and{" "}
             <code>GOOZE_RUN_MUTAGENS</code>. A configured value narrows every run.
           </p>
         </div>

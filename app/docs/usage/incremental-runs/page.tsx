@@ -36,9 +36,9 @@ const cacheRows = [
     behavior: "Re-tests the associated source file.",
   },
   {
-    action: "Upgrade Gooze to a version that changes a mutator",
+    action: "Upgrade Gooze to a version that changes or adds a mutator",
     state: "Partial miss",
-    behavior: "Re-tests every file whose reports came from an older version of that mutator.",
+    behavior: "Re-tests every file whose reports came from an older version of that mutator, or that the added mutator mutates.",
   },
   {
     action: "`gooze run` with `--diff`, `--run` or `--mutagens`",
@@ -136,10 +136,16 @@ export default function IncrementalRunsPage() {
           <ul>
             <li>it has no stored reports yet,</li>
             <li>its content changed,</li>
-            <li>its test file (<code>&lt;name&gt;_test.go</code>) changed, or</li>
+            <li>its test file (<code>&lt;name&gt;_test.go</code>) changed,</li>
             <li>
               the mutators that produced its reports changed (a Gooze upgrade; for example <code>v1.2.0</code>{" "}
-              re-tests reports from version 1 of the <code>comparison</code> mutator).
+              re-tests reports from version 1 of the <code>comparison</code> mutator), or
+            </li>
+            <li>
+              a mutator of the run mutates it but its reports hold no results of that mutator,
+              such as a mutator added in a Gooze upgrade or one named in{" "}
+              <code>--mutagens</code> for the first time. Files it doesn&apos;t mutate stay
+              cached.
             </li>
           </ul>
           <p>

@@ -133,7 +133,6 @@ rec calc-func-full-run "gooze run ./... | tail -n 1"
 rec calc-func-mutagens-estimate "gooze run --estimate --mutagens arithmetic,numbers ./... | cat"
 
 rec run-invalid-pattern "gooze run --run '(' ./... 2>&1 | cat"
-rec run-unknown-mutagen "gooze run --mutagens conditional ./... 2>&1 | cat"
 rec run-run-with-shard "gooze run --run '^InRange\$' -s 0/2 ./... 2>&1 | cat"
 
 echo "recorded the narrowed-run casts with $title"

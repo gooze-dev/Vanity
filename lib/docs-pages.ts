@@ -312,8 +312,8 @@ export const docsPages: DocsPage[] = [
       "Supported Go Mutation Operators · Gooze docs",
     section: "Reference",
     description:
-      "The full list of AST mutation operators Gooze applies, with examples of arithmetic, comparison, logical, boolean, numbers, and unary mutations in Go code.",
-    keywords: ["mutation operators","ast mutagens","logical mutations","arithmetic swaps","boolean flip","mutation examples"],
+      "The full list of AST mutation operators Gooze applies, with examples of arithmetic, comparison, logical, boolean, numbers, unary, bitwise, increment and assignment mutations in Go code, and the opt-in branch, statement and loop mutagens.",
+    keywords: ["mutation operators","ast mutagens","logical mutations","arithmetic swaps","boolean flip","bitwise mutations","increment decrement","compound assignment","statement deletion","mutation examples"],
   },
   {
     href: "/docs/comparison",
