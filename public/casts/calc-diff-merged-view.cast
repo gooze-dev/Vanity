@@ -1,2 +1,2 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792584387, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-diff-merged-view (gooze v1.2.1-0.20261021115114-86623fdd7984, goozels v0.2.1-0.20261021120153-07a44ccf3b7c, go1.27.3)"}
-[0.007766, "o", "Mutation score: 100.00% (13 killed, 0 survived)\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792666563, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-diff-merged-view (gooze v1.3.0, goozels v0.3.0, go1.27.3)"}
+[0.01823, "o", "Mutation score: 100.00% (13 killed, 0 survived)\r\n"]

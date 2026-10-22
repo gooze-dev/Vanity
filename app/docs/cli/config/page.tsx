@@ -50,7 +50,10 @@ export default function CliConfigPage() {
             <code>gooze.yaml already exists; edit it or remove it first</code>. For every key the
             file can contain, see <Link href="/docs/config">Configuration (<code>gooze.yaml</code>)</Link>.
           </p>
-          <p>The file it writes holds every key with its default value:</p>
+          <p>
+            The file it writes holds every key in schema order with its default value and a
+            comment that explains it. Environment variables and flags don&apos;t change it:
+          </p>
           <Recording name="config-init-file" title="Recorded contents of the gooze.yaml written by gooze config init" />
 
           <h3>Next step</h3>

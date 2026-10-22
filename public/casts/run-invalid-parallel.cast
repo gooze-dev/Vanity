@@ -1,2 +1,2 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792568470, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "run-invalid-parallel (gooze v1.2.0, goozels v0.2.0, go1.27.3)"}
-[0.011679, "o", "Error: invalid run.parallel: 0 is out of range: must be at least 1\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792666553, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "run-invalid-parallel (gooze v1.3.0, goozels v0.3.0, go1.27.3)"}
+[0.007337, "o", "Error: invalid run.parallel: 0 is out of range: must be at least 1\r\n"]

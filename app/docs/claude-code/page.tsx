@@ -67,7 +67,7 @@ export default function ClaudeCodePage() {
           <CodeBlock code="/plugin install gooze@gooze" lang="text" />
           <p>
             Then install the tools it uses, on the <code>PATH</code> of the shell you
-            start <code>claude</code> from: gooze (<code>v1.2.0</code> or later) and, for the results
+            start <code>claude</code> from: gooze (<code>v1.3.0</code> or later) and, for the results
             after every edit,{" "}
             <Link href="/docs/editor-support" className={LINK}>
               goozels

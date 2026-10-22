@@ -1,2 +1,2 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792568444, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-version (gooze v1.2.0, goozels v0.2.0, go1.27.3)"}
-[0.009938, "o", "gooze v1.2.0 (go1.27.3)\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792666529, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-version (gooze v1.3.0, goozels v0.3.0, go1.27.3)"}
+[0.007594, "o", "gooze v1.3.0 (go1.27.3)\r\n"]
