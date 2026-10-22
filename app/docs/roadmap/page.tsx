@@ -457,7 +457,14 @@ const themes: Theme[] = [
       },
       {
         title: "Official GitHub Action",
-        detail: "A published action that installs and runs Gooze in one step.",
+        detail: (
+          <>
+            <code>gooze-dev/gooze-action@v1</code> installs and runs Gooze in one step, with a
+            score gate and a job summary.
+          </>
+        ),
+        shipped: true,
+        href: "/docs/ci/github#action",
       },
       {
         title: "Docker image",
