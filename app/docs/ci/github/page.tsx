@@ -5,22 +5,6 @@ import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
 
-const action = `name: Mutation testing
-
-on: [push, pull_request]
-
-jobs:
-  gooze:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-go@v7
-        with:
-          go-version-file: go.mod
-      - uses: gooze-dev/gooze-action@v1
-        with:
-          threshold-total: 80`
-
 const simple = `name: Mutation testing
 
 on: [push, pull_request]
@@ -188,7 +172,7 @@ const keepReports = `      # Runs even when the gate step before it failed, but 
 const faqs = [
   {
     q: "How do I run Gooze mutation tests in GitHub Actions?",
-    a: "Use the Gooze action: after `actions/setup-go`, add `uses: gooze-dev/gooze-action@v1`. It installs Gooze, runs it, writes the report to the job summary and fails the job below `threshold-total`. Or install the CLI yourself with `go install gooze.dev/pkg/gooze@latest` and run `gooze run ./...`, as the workflows below show.",
+    a: "In a `golang:1.27` container, install the CLI with `go install gooze.dev/pkg/gooze@latest` and run `gooze run ./...`. There is no dedicated action; the plain `go install` step is the supported approach.",
   },
   {
     q: "How do I shard Gooze across multiple GitHub Actions runners?",
@@ -232,25 +216,6 @@ export default function CiPage() {
       </p>
 
       <div>
-        <div id="action">
-          <h2>Quickest: the Gooze action</h2>
-          <p>
-            The <a href="https://github.com/gooze-dev/gooze-action">Gooze action</a> installs
-            Gooze, runs it, writes the report to the job summary and fails the job below your
-            threshold. Set up Go first; your project keeps its own Go version.
-          </p>
-          <CodeBlock lang="yaml" code={action} />
-          <p>
-            Its inputs follow the flags: <code>diff</code> for the lines a pull request changes,{" "}
-            <code>threshold-diff-total</code>, <code>shard</code>, <code>coverage-profile</code>,{" "}
-            <code>baseline</code> and <code>push-baseline</code> for a shared baseline, and{" "}
-            <code>version</code> to pin Gooze. The outputs <code>score</code> and{" "}
-            <code>exit-code</code> feed later steps. See the{" "}
-            <a href="https://github.com/gooze-dev/gooze-action#inputs">full list of inputs</a>.
-            The workflows below do the same with plain steps, when you want full control.
-          </p>
-        </div>
-
         <div id="simple">
           <h2>1. Simplest: checkout and run</h2>
           <p>
