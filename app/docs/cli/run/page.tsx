@@ -268,6 +268,11 @@ export default function CliRunPage() {
               <a href="#workspace">Workspace</a>).
             </li>
             <li>
+              Runs the tests of each package once without any mutation. If they fail, every
+              mutant would look killed, so that package&apos;s mutants are skipped and the run
+              ends with exit code <code>7</code> and the failing <code>go test</code> output.
+            </li>
+            <li>
               Runs the tests of the package that owns the file (<code>go test -count=1 ./&lt;pkg&gt;</code>)
               to see if they fail. A mutant that does not compile is reported as{" "}
               <code>error</code>, not killed.
