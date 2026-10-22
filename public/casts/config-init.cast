@@ -1,3 +1,3 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792568470, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "config-init (gooze v1.2.0, goozels v0.2.0, go1.27.3)"}
-[0.011009, "o", "Wrote the default configuration to gooze.yaml\r\n"]
-[0.022053, "o", "Error: gooze.yaml already exists; edit it or remove it first\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792666553, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "config-init (gooze v1.3.0, goozels v0.3.0, go1.27.3)"}
+[0.008786, "o", "Wrote the default configuration to gooze.yaml\r\n"]
+[0.015516, "o", "Error: gooze.yaml already exists; edit it or remove it first\r\n"]

@@ -1,2 +1,2 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792588354, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-threshold-config (gooze v1.2.1-0.20261021130328-af6a3caac09d (go1.27.3))"}
-[0.026094, "o", "threshold:\r\n  total: 80\r\n  diff:\r\n    total: 100\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792666588, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-threshold-config (gooze v1.3.0 (go1.27.3))"}
+[0.006836, "o", "threshold:\r\n  total: 80\r\n  diff:\r\n    total: 100\r\n"]

@@ -1,3 +1,3 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792588385, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "exit-code-git (gooze v1.2.1-0.20261021130328-af6a3caac09d (go1.27.3))"}
-[0.121629, "o", "Error: diff against no-such-branch: unknown ref \"no-such-branch\"; fetch it first (actions/checkout: fetch-depth: 0, or git fetch origin <branch>)\r\n"]
-[0.125098, "o", "exit code 4\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792666591, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "exit-code-git (gooze v1.3.0 (go1.27.3))"}
+[0.019828, "o", "Error: diff against no-such-branch: unknown ref \"no-such-branch\"; fetch it first (actions/checkout: fetch-depth: 0, or git fetch origin <branch>)\r\n"]
+[0.020779, "o", "exit code 4\r\n"]

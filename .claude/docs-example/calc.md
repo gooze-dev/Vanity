@@ -1,7 +1,7 @@
 # The `calc` story
 
 The running example for the docs (see "Tell it as a story" in `../rules/writing.md`). Every
-output below is real: gooze v1.2.0 and goozels v0.2.0 on Go 1.27.3, 2026-10-21. The code lives in
+output below is real: gooze v1.3.0 and goozels v0.3.0 on Go 1.27.3, 2026-10-22. The code lives in
 `examples/calc/`, and `scripts/record-casts.sh` records every step below into `public/casts/`
 (`calc-*.cast`); copy outputs from there instead of writing them by hand. If gooze output changes, rerun the steps and update
 this file and the pages that quote it.

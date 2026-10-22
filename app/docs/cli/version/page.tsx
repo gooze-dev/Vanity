@@ -53,7 +53,7 @@ export default function CliVersionPage() {
           <CodeBlock
             lang="bash"
             code={`gooze version
-gooze version | grep -q 'gooze v1.2.0 ' || { echo 'unexpected gooze version'; exit 1; }`}
+gooze version | grep -q 'gooze v1.3.0 ' || { echo 'unexpected gooze version'; exit 1; }`}
           />
         </div>
       </div>
