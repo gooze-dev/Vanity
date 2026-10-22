@@ -3,7 +3,7 @@ import { Recording } from "@/components/recording"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
-import { withCode } from "@/components/docs-faq"
+import { DocsFaq, faqPageJsonLd, withCode } from "@/components/docs-faq"
 import { Button } from "@/components/ui/button"
 import {
   Table,
@@ -32,6 +32,31 @@ const workspaceBenchmark = [
   { parallel: "4", overlay: "16.6 s", deepCopy: "21.4 s", saved: "22%" },
   { parallel: "8", overlay: "10.7 s", deepCopy: "15.3 s", saved: "30%" },
 ]
+
+const faqs = [
+  {
+    q: "Does Gooze change my source files while it tests mutants?",
+    a: "No. By default Gooze writes each mutated file to a temporary folder and swaps it in with `go test -overlay`, so your files are never written or copied. With `--workspace deep-copy` each worker tests in its own copy of the project instead.",
+  },
+  {
+    q: "What is the difference between `overlay` and `deep-copy`?",
+    a: "`overlay` (the default) builds each mutant in your project through `go test -overlay` and reuses its build cache. `deep-copy` copies the module once per worker and tests the mutants there. Both give the same results for tests that call your code directly; `overlay` is faster.",
+  },
+  {
+    q: "When should I use `--workspace deep-copy`?",
+    a: "When your tests build or run your own code in a separate process (`go run`, `go build`, a binary built during the test), read your `.go` files, or write files next to themselves. Those tests don't see an overlay, so a mutant they would catch looks survived. Set `run.workspace: deep-copy` in `gooze.yaml` to keep it.",
+  },
+  {
+    q: "Is `overlay` faster than `deep-copy`?",
+    a: "Yes. On Gooze's own `pkg/config` package (125 mutants), `overlay` took 22% to 37% less time at 1, 2, 4 and 8 workers, with the same results. A single-function run with `--run` was about 30% faster.",
+  },
+  {
+    q: "Do tests with mocks work with `overlay`?",
+    a: "Yes. Any test that calls your code inside the test binary sees the mutant, including tests that use mocks or fakes and tests that re-run their own binary with `os.Args[0]`.",
+  },
+]
+
+const faqJsonLd = faqPageJsonLd(faqs)
 
 const runFlags: RunFlag[] = [
   {
@@ -142,6 +167,10 @@ const runFlags: RunFlag[] = [
 export default function CliRunPage() {
   return (
     <section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">gooze run</h1>
       <p className="text-lg text-muted-foreground mb-8">
         You want to know whether your tests catch real bugs, not only run the code.{" "}
@@ -576,6 +605,8 @@ gooze run -s 2/3 ./...`}
             <code>4/4</code> or <code>1/4abc</code>) is an error.
           </p>
         </div>
+
+        <DocsFaq faqs={faqs} />
 
         <div id="next">
           <h2>Next</h2>
