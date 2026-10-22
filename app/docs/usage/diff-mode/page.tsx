@@ -111,7 +111,7 @@ export default function DiffModePage() {
             <code>HEAD~3</code>. Path arguments and <code>-x/--exclude</code> (or{" "}
             <code>paths.exclude</code>) still apply, and diff mode narrows the result further:
           </p>
-          <CodeBlock lang="bash" code="gooze run --diff origin/main -x mocks/ ./internal/..." />
+          <CodeBlock lang="bash" code="gooze run --diff origin/main -x '^mocks/' ./internal/..." />
           <p>
             To use diff mode on every run, set <code>run.diff</code> in <code>gooze.yaml</code>{" "}
             or <code>GOOZE_RUN_DIFF</code> in the environment. The flag overrides both, and{" "}

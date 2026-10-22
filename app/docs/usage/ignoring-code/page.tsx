@@ -32,7 +32,7 @@ export default function IgnoringCodePage() {
           <p>
             Skip files by regex. You can pass <code>-x</code> multiple times.
           </p>
-          <CodeBlock lang="bash" code="gooze run -x mocks/ -x '^mock_' ./..." />
+          <CodeBlock lang="bash" code="gooze run -x '^vendor/' -x '^mock_' ./..." />
           <p className="text-sm text-muted-foreground">
             The regex matches the path relative to the working directory (so{" "}
             <code>^vendor/</code> works), the absolute path, or the base filename.{" "}
@@ -150,7 +150,7 @@ boilerplate-file: .mockery-boilerplate.txt`}
           <CodeBlock
             lang="yaml"
             code={`paths:
-  exclude: ['^mock_', 'mocks/', '\\.pb\\.go$', '_string\\.go$']`}
+  exclude: ['^vendor/', '^mock_', '\\.pb\\.go$', '_string\\.go$']`}
           />
         </div>
       </div>

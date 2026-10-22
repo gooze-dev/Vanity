@@ -88,7 +88,7 @@ export default function QuickStartPage() {
           <p className="mt-4 mb-3 text-muted-foreground">
             Exclude files with a regex (repeat the flag as needed):
           </p>
-          <CodeBlock lang="bash" code="gooze run --estimate -x mocks/ -x '^mock_' ./..." />
+          <CodeBlock lang="bash" code="gooze run --estimate -x '^vendor/' -x '^mock_' ./..." />
           <p className="text-sm text-muted-foreground">
             If you get 0 mutations, first check that you&apos;re running from your module root (where <code>go.mod</code> is).
           </p>

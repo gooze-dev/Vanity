@@ -303,7 +303,7 @@ output: .gooze-reports        # where reports and the incremental cache live
 no-cache: false               # set true to force a full re-run
 
 paths:
-  exclude: []                 # regex patterns of files to skip, e.g. '^mock_'
+  exclude: []                 # regex patterns of files to skip, e.g. '^vendor/'
 
 run:
   parallel: 1                 # concurrent mutation workers
