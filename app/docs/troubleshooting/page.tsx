@@ -35,6 +35,24 @@ export default function TroubleshootingPage() {
           </div>
         </div>
 
+        <div id="false-survivor">
+          <h2>A mutant survives, but a test should catch it</h2>
+          <p>
+            By default Gooze builds mutants with <code>go test -overlay</code>, and only that{" "}
+            <code>go test</code> sees the mutant. If the test that should catch it builds your
+            code in a separate process (<code>go run</code>, <code>go build</code>, a binary built
+            during the test) or reads your <code>.go</code> files, it tests the original code and
+            the mutant survives. Test in a copy of the project instead:
+          </p>
+          <div>
+            <CodeBlock lang="bash" code="gooze run --workspace deep-copy ./..." />
+          </div>
+          <p>
+            Set <code>run.workspace: deep-copy</code> in <code>gooze.yaml</code> to keep it. See{" "}
+            <Link href="/docs/cli/run#workspace">Workspace</Link>.
+          </p>
+        </div>
+
         <div id="zero">
           <h2>Gooze finds 0 files / 0 mutations</h2>
           <ul>

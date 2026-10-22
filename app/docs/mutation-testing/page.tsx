@@ -125,9 +125,9 @@ export default function MutationTestingPage() {
         <h2>How Gooze tests each mutant</h2>
         <p>
           A mutant changes one line in one file, and Gooze tests it with the tests of that
-          file&apos;s package only. Each worker keeps its own copy of your project,
-          applies the mutant there and runs <code>go test</code> for that one package, never for
-          the whole module. In the example above, each of the 13 mutants of{" "}
+          file&apos;s package only. It runs <code>go test</code> for that one package, never for
+          the whole module, with the mutated file swapped in through{" "}
+          <code>go test -overlay</code>, so your files are never changed. In the example above, each of the 13 mutants of{" "}
           <code>calc.go</code> runs only the tests of <code>example.com/calc</code>, and{" "}
           <code>--parallel</code> workers test several mutants at once.
         </p>

@@ -3,7 +3,7 @@ import { Recording } from "@/components/recording"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
-import { withCode } from "@/components/docs-faq"
+import { DocsFaq, faqPageJsonLd, withCode } from "@/components/docs-faq"
 import { Button } from "@/components/ui/button"
 import {
   Table,
@@ -23,6 +23,40 @@ type RunFlag = {
   defaultValue?: string
   configKey?: string
 }
+
+// Measured on gooze's own pkg/config (125 mutants) with --no-cache, the mean of
+// two rounds with the mode order swapped, on a 12-core Linux machine.
+const workspaceBenchmark = [
+  { parallel: "1", overlay: "42.9 s", deepCopy: "61.7 s", saved: "30%" },
+  { parallel: "2", overlay: "20.1 s", deepCopy: "31.9 s", saved: "37%" },
+  { parallel: "4", overlay: "16.6 s", deepCopy: "21.4 s", saved: "22%" },
+  { parallel: "8", overlay: "10.7 s", deepCopy: "15.3 s", saved: "30%" },
+]
+
+const faqs = [
+  {
+    q: "Does Gooze change my source files while it tests mutants?",
+    a: "No. By default Gooze writes each mutated file to a temporary folder and swaps it in with `go test -overlay`, so your files are never written or copied. With `--workspace deep-copy` each worker tests in its own copy of the project instead.",
+  },
+  {
+    q: "What is the difference between `overlay` and `deep-copy`?",
+    a: "`overlay` (the default) builds each mutant in your project through `go test -overlay` and reuses its build cache. `deep-copy` copies the module once per worker and tests the mutants there. Both give the same results for tests that call your code directly; `overlay` is faster.",
+  },
+  {
+    q: "When should I use `--workspace deep-copy`?",
+    a: "When your tests build or run your own code in a separate process (`go run`, `go build`, a binary built during the test), read your `.go` files, or write files next to themselves. Those tests don't see an overlay, so a mutant they would catch looks survived. Set `run.workspace: deep-copy` in `gooze.yaml` to keep it.",
+  },
+  {
+    q: "Is `overlay` faster than `deep-copy`?",
+    a: "Yes. On Gooze's own `pkg/config` package (125 mutants), `overlay` took 22% to 37% less time at 1, 2, 4 and 8 workers, with the same results. A single-function run with `--run` was about 30% faster.",
+  },
+  {
+    q: "Do tests with mocks work with `overlay`?",
+    a: "Yes. Any test that calls your code inside the test binary sees the mutant, including tests that use mocks or fakes and tests that re-run their own binary with `os.Args[0]`.",
+  },
+]
+
+const faqJsonLd = faqPageJsonLd(faqs)
 
 const runFlags: RunFlag[] = [
   {
@@ -90,6 +124,13 @@ const runFlags: RunFlag[] = [
     configKey: "run.coverage_profile",
   },
   {
+    flag: "--workspace",
+    description:
+      "How each mutant is built: `overlay` builds it in your project through `go test -overlay`, without writing or copying your files; `deep-copy` tests it in a copy of the project per worker. See Workspace below. Env: `GOOZE_RUN_WORKSPACE`.",
+    defaultValue: "overlay",
+    configKey: "run.workspace",
+  },
+  {
     flag: "--exclude",
     alias: "-x",
     description: "Exclude files matching a regex (can be repeated).",
@@ -126,6 +167,10 @@ const runFlags: RunFlag[] = [
 export default function CliRunPage() {
   return (
     <section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">gooze run</h1>
       <p className="text-lg text-muted-foreground mb-8">
         You want to know whether your tests catch real bugs, not only run the code.{" "}
@@ -217,7 +262,11 @@ export default function CliRunPage() {
           <h2>What it does (high level)</h2>
           <ol>
             <li>Generates mutations for a source file.</li>
-            <li>Applies one mutation.</li>
+            <li>
+              Builds the package with the mutated file in place of yours, through{" "}
+              <code>go test -overlay</code>. Your files are never changed (see{" "}
+              <a href="#workspace">Workspace</a>).
+            </li>
             <li>
               Runs the tests of the package that owns the file (<code>go test -count=1 ./&lt;pkg&gt;</code>)
               to see if they fail. A mutant that does not compile is reported as{" "}
@@ -414,6 +463,78 @@ gooze run --mutagens comparison --mutagens boolean ./...`}
           <CodeBlock lang="bash" code="gooze run --verbose ./..." />
         </div>
 
+        <div id="workspace">
+          <h2>Workspace: how mutants are built</h2>
+          <p>
+            Gooze never writes a mutant into your files. By default (<code>overlay</code>) it
+            writes the mutated file to a temporary folder and runs <code>go test -overlay</code>{" "}
+            in your project, so the Go build reads the mutant instead of your file. Nothing is
+            copied, and the build cache of your project is reused, so a run doesn&apos;t start
+            by rebuilding every package.
+          </p>
+          <p>
+            On Gooze&apos;s own <code>pkg/config</code> package (125 mutants, <code>--no-cache</code>,
+            the mean of two rounds on a 12-core machine), overlay takes 22% to 37% less time at
+            every worker count, with identical results (<code>73.55%</code> in every run):
+          </p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>
+                  <code>--parallel</code>
+                </TableHead>
+                <TableHead>overlay</TableHead>
+                <TableHead>deep-copy</TableHead>
+                <TableHead>Time saved</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {workspaceBenchmark.map((row) => (
+                <TableRow key={row.parallel}>
+                  <TableCell>{row.parallel}</TableCell>
+                  <TableCell>{row.overlay}</TableCell>
+                  <TableCell>{row.deepCopy}</TableCell>
+                  <TableCell>{row.saved}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <p>
+            A single-function run (<code>--run</code>, 20 mutants) takes about 30% less time too:
+            6.0 s instead of 8.3 s with one worker, 3.1 s instead of 4.6 s with four.
+          </p>
+          <p>
+            Tests that call your code directly see the mutant, including tests that use mocks and
+            fakes. The overlay only reaches the <code>go test</code> that Gooze runs, so switch to{" "}
+            <code>deep-copy</code> when your tests:
+          </p>
+          <ul>
+            <li>
+              build or run your own code in a separate process (<code>go run</code>,{" "}
+              <code>go build</code>, or a binary built during the test). That build reads your
+              original file, so the mutant looks like it survived.
+            </li>
+            <li>
+              read your <code>.go</code> source files, for example a code generator or a doc check.
+            </li>
+            <li>
+              write files next to themselves, such as golden files. In overlay mode they run in
+              your package folder, and parallel workers share it.
+            </li>
+          </ul>
+          <CodeBlock lang="bash" code="gooze run --workspace deep-copy ./..." />
+          <p>
+            In <code>deep-copy</code> mode each worker copies the module (without <code>.git</code>{" "}
+            and <code>node_modules</code>) to a temporary folder once, and tests its mutants
+            there. It takes longer to start, because each copy builds its packages from scratch.
+          </p>
+          <p>
+            You can also set it with <code>run.workspace</code> in <code>gooze.yaml</code> or{" "}
+            <code>GOOZE_RUN_WORKSPACE</code>. Any value other than <code>overlay</code> or{" "}
+            <code>deep-copy</code> exits with code <code>2</code>.
+          </p>
+        </div>
+
         <div id="cache">
           <h2>Caching / incremental runs</h2>
           <p>
@@ -484,6 +605,8 @@ gooze run -s 2/3 ./...`}
             <code>4/4</code> or <code>1/4abc</code>) is an error.
           </p>
         </div>
+
+        <DocsFaq faqs={faqs} />
 
         <div id="next">
           <h2>Next</h2>

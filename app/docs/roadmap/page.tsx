@@ -400,11 +400,13 @@ const themes: Theme[] = [
         title: "No project copies",
         detail: (
           <>
-            Test each mutant with <code>go test -overlay</code> instead of a copy of the project per
-            worker.
+            Each mutant is built with <code>go test -overlay</code> in your project, reusing its
+            build cache. <code>--workspace deep-copy</code> keeps a copy per worker for tests that need
+            one.
           </>
         ),
-        issue: 53,
+        shipped: true,
+        href: "/docs/cli/run#workspace",
       },
       {
         title: "Compile once per package",
