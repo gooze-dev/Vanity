@@ -24,6 +24,15 @@ type RunFlag = {
   configKey?: string
 }
 
+// Measured on gooze's own pkg/config (125 mutants) with --no-cache, the mean of
+// two rounds with the mode order swapped, on a 12-core Linux machine.
+const workspaceBenchmark = [
+  { parallel: "1", overlay: "42.9 s", deepCopy: "61.7 s", saved: "30%" },
+  { parallel: "2", overlay: "20.1 s", deepCopy: "31.9 s", saved: "37%" },
+  { parallel: "4", overlay: "16.6 s", deepCopy: "21.4 s", saved: "22%" },
+  { parallel: "8", overlay: "10.7 s", deepCopy: "15.3 s", saved: "30%" },
+]
+
 const runFlags: RunFlag[] = [
   {
     flag: "--estimate",
@@ -433,6 +442,37 @@ gooze run --mutagens comparison --mutagens boolean ./...`}
             in your project, so the Go build reads the mutant instead of your file. Nothing is
             copied, and the build cache of your project is reused, so a run doesn&apos;t start
             by rebuilding every package.
+          </p>
+          <p>
+            On Gooze&apos;s own <code>pkg/config</code> package (125 mutants, <code>--no-cache</code>,
+            the mean of two rounds on a 12-core machine), overlay takes 22% to 37% less time at
+            every worker count, with identical results (<code>73.55%</code> in every run):
+          </p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>
+                  <code>--parallel</code>
+                </TableHead>
+                <TableHead>overlay</TableHead>
+                <TableHead>deep-copy</TableHead>
+                <TableHead>Time saved</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {workspaceBenchmark.map((row) => (
+                <TableRow key={row.parallel}>
+                  <TableCell>{row.parallel}</TableCell>
+                  <TableCell>{row.overlay}</TableCell>
+                  <TableCell>{row.deepCopy}</TableCell>
+                  <TableCell>{row.saved}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <p>
+            A single-function run (<code>--run</code>, 20 mutants) takes about 30% less time too:
+            6.0 s instead of 8.3 s with one worker, 3.1 s instead of 4.6 s with four.
           </p>
           <p>
             Tests that call your code directly see the mutant, including tests that use mocks and
