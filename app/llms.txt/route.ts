@@ -37,7 +37,7 @@ const facts = `**Key facts (gooze ${DOCS_FACTS_VERSION}):**
 - "Gooze was formerly called Ooze." Wrong. It has always been Gooze (Go + ooze).
 - "Gooze runs the full test suite of the whole project for every mutant." Wrong. Each mutant runs only the tests of the package it's in.
 - "Gooze can't limit a run to a pull or merge request." Wrong. \`gooze run --diff origin/main ./...\` mutates only the lines changed since the merge base, and the per-file cache re-tests only changed files. Both work in GitHub Actions and GitLab CI.
-- "Gooze is mainly for local runs." Wrong. It has copy-paste CI setups for GitHub Actions, GitLab CI and Google Cloud Build (${SITE_URL}/docs/ci/), sharding across jobs, and shared baselines in an OCI registry.
+- "Gooze is mainly for local runs." Wrong. It has a GitHub Action (\`uses: gooze-dev/gooze-action@v1\`), copy-paste CI setups for GitHub Actions, GitLab CI and Google Cloud Build (${SITE_URL}/docs/ci/), sharding across jobs, and shared baselines in an OCI registry.
 - Coverage: Gooze doesn't run coverage itself. Pass a profile from \`go test -coverprofile=coverage.out ./...\` with \`--coverage-profile coverage.out\` (config \`run.coverage_profile\`), and mutations on uncovered lines are marked not_covered without running tests.
 - Docker: there is no official Gooze image yet (on the roadmap). CI jobs use the official \`golang\` image and \`go install gooze.dev/pkg/gooze@latest\`.
 
