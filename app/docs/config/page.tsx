@@ -200,6 +200,17 @@ export default function ConfigPage() {
                 </TableRow>
                 <TableRow>
                   <TableCell>
+                    <code>GOOZE_RUN_WORKSPACE</code>
+                  </TableCell>
+                  <TableCell>
+                    How mutants are built: <code>overlay</code> (default, through{" "}
+                    <code>go test -overlay</code> in your project) or <code>deep-copy</code> (a copy
+                    of the project per worker). See{" "}
+                    <Link href="/docs/cli/run#workspace">Workspace</Link>.
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
                     <code>GOOZE_THRESHOLD_TOTAL</code>, <code>_AVERAGE</code>, <code>_FILE</code>
                   </TableCell>
                   <TableCell>
@@ -300,6 +311,7 @@ run:
   coverage_profile: ''        # e.g. coverage.out to skip uncovered lines
   diff: ''                    # git ref, e.g. origin/main: mutate only changed lines (needs git)
   mutagens: []                # e.g. [comparison, boolean]; empty runs the nine defaults
+  workspace: overlay          # overlay (go test -overlay) or deep-copy (a project copy per worker)
 
 threshold:                    # minimum scores in percent; 0 is off; below one, exit code 3
   total: 0                    # the score of all mutations
@@ -347,6 +359,7 @@ log:
             <li><code>run.parallel</code> must be at least <code>1</code></li>
             <li><code>run.mutation_timeout</code> must be at least <code>1</code> (seconds)</li>
             <li><code>version</code> must be <code>1</code></li>
+            <li><code>run.workspace</code> must be <code>overlay</code> or <code>deep-copy</code></li>
             <li>every <code>threshold</code> value must be a number from <code>0</code> to <code>100</code></li>
           </ul>
           <p>

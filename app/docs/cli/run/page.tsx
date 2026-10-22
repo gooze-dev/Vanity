@@ -90,6 +90,13 @@ const runFlags: RunFlag[] = [
     configKey: "run.coverage_profile",
   },
   {
+    flag: "--workspace",
+    description:
+      "How each mutant is built: `overlay` builds it in your project through `go test -overlay`, without writing or copying your files; `deep-copy` tests it in a copy of the project per worker. See Workspace below. Env: `GOOZE_RUN_WORKSPACE`.",
+    defaultValue: "overlay",
+    configKey: "run.workspace",
+  },
+  {
     flag: "--exclude",
     alias: "-x",
     description: "Exclude files matching a regex (can be repeated).",
@@ -217,7 +224,11 @@ export default function CliRunPage() {
           <h2>What it does (high level)</h2>
           <ol>
             <li>Generates mutations for a source file.</li>
-            <li>Applies one mutation.</li>
+            <li>
+              Builds the package with the mutated file in place of yours, through{" "}
+              <code>go test -overlay</code>. Your files are never changed (see{" "}
+              <a href="#workspace">Workspace</a>).
+            </li>
             <li>
               Runs the tests of the package that owns the file (<code>go test -count=1 ./&lt;pkg&gt;</code>)
               to see if they fail. A mutant that does not compile is reported as{" "}
@@ -412,6 +423,47 @@ gooze run --mutagens comparison --mutagens boolean ./...`}
             If you see many unexpected timeouts, run verbose and inspect the logs:
           </p>
           <CodeBlock lang="bash" code="gooze run --verbose ./..." />
+        </div>
+
+        <div id="workspace">
+          <h2>Workspace: how mutants are built</h2>
+          <p>
+            Gooze never writes a mutant into your files. By default (<code>overlay</code>) it
+            writes the mutated file to a temporary folder and runs <code>go test -overlay</code>{" "}
+            in your project, so the Go build reads the mutant instead of your file. Nothing is
+            copied, and the build cache of your project is reused, so a run doesn&apos;t start
+            by rebuilding every package.
+          </p>
+          <p>
+            Tests that call your code directly see the mutant, including tests that use mocks and
+            fakes. The overlay only reaches the <code>go test</code> that Gooze runs, so switch to{" "}
+            <code>deep-copy</code> when your tests:
+          </p>
+          <ul>
+            <li>
+              build or run your own code in a separate process (<code>go run</code>,{" "}
+              <code>go build</code>, or a binary built during the test). That build reads your
+              original file, so the mutant looks like it survived.
+            </li>
+            <li>
+              read your <code>.go</code> source files, for example a code generator or a doc check.
+            </li>
+            <li>
+              write files next to themselves, such as golden files. In overlay mode they run in
+              your package folder, and parallel workers share it.
+            </li>
+          </ul>
+          <CodeBlock lang="bash" code="gooze run --workspace deep-copy ./..." />
+          <p>
+            In <code>deep-copy</code> mode each worker copies the module (without <code>.git</code>{" "}
+            and <code>node_modules</code>) to a temporary folder once, and tests its mutants
+            there. It takes longer to start, because each copy builds its packages from scratch.
+          </p>
+          <p>
+            You can also set it with <code>run.workspace</code> in <code>gooze.yaml</code> or{" "}
+            <code>GOOZE_RUN_WORKSPACE</code>. Any value other than <code>overlay</code> or{" "}
+            <code>deep-copy</code> exits with code <code>2</code>.
+          </p>
         </div>
 
         <div id="cache">
