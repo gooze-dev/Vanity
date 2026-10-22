@@ -46,6 +46,8 @@ type Item = {
   /** Shipped but still changing; shows a Beta badge. */
   beta?: boolean
   href?: string
+  /** Tracking issue in gooze-dev/gooze. */
+  issue?: number
 }
 
 type Theme = {
@@ -360,8 +362,13 @@ const themes: Theme[] = [
       },
       {
         title: "Relevant tests only",
-        detail: "Cut test execution time by running only the tests that matter.",
-        shipped: true,
+        detail: (
+          <>
+            Run only the tests that cover the mutated line (<code>-run</code>), not every test of
+            the package.
+          </>
+        ),
+        issue: 54,
       },
     ],
   },
@@ -376,6 +383,21 @@ const themes: Theme[] = [
             Default <code>--parallel</code> to the number of CPU cores instead of <code>1</code>.
           </>
         ),
+      },
+      {
+        title: "No project copies",
+        detail: (
+          <>
+            Test each mutant with <code>go test -overlay</code> instead of a copy of the project per
+            worker.
+          </>
+        ),
+        issue: 53,
+      },
+      {
+        title: "Compile once per package",
+        detail: "Build all mutants of a package into one test binary and switch between them at run time (mutant schemata), instead of recompiling for every mutant.",
+        issue: 55,
       },
       {
         title: "Parallel workers",
@@ -409,6 +431,16 @@ const themes: Theme[] = [
     id: "workflow",
     title: "CI/CD & editors",
     items: [
+      {
+        title: "Go tool install",
+        detail: (
+          <>
+            Pin Gooze in your <code>go.mod</code> with <code>go get -tool</code> and run{" "}
+            <code>go tool gooze</code>, documented on the install and CI pages.
+          </>
+        ),
+        issue: 52,
+      },
       {
         title: "Official GitHub Action",
         detail: "A published action that installs and runs Gooze in one step.",
@@ -514,6 +546,15 @@ function Card({ item }: { item: Item }) {
       <p className="text-sm leading-relaxed text-muted-foreground [&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.8125rem] [&_code]:text-foreground">
         {item.detail}
       </p>
+      {item.issue && (
+        <a
+          href={`https://github.com/gooze-dev/gooze/issues/${item.issue}`}
+          className="mt-auto inline-flex w-fit items-center gap-1 text-sm font-medium text-[color:var(--gooze-teal)] hover:text-[color:var(--gooze-green)]"
+        >
+          Issue #{item.issue}
+          <ArrowRight className="size-3.5" aria-hidden />
+        </a>
+      )}
       {item.href && (
         <Link
           href={item.href}
