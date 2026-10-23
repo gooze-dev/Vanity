@@ -3,6 +3,14 @@ import { Recording } from "@/components/recording"
 import Link from "next/link"
 
 import { CodeBlock } from "@/components/code-block"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 export const metadata = docsMetadata("/docs/cli/report")
 
@@ -89,6 +97,66 @@ export default function CliReportPage() {
             </p>
             <CodeBlock lang="bash" code="gooze report view -o .gooze-reports/run" />
             <Recording name="calc-func-run-view" title="Recorded gooze report view -o .gooze-reports/run after a --run run" />
+          </div>
+
+          <div id="view-format">
+            <h3>Output formats (--format)</h3>
+            <p>
+              <code>--format</code> chooses how <code>view</code> writes the mutations that count
+              against the score. The default comes from <code>report.format</code> in{" "}
+              <code>gooze.yaml</code> (or <code>GOOZE_REPORT_FORMAT</code>).
+            </p>
+            <div className="mt-3 rounded border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Format</TableHead>
+                    <TableHead>Output</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody className="text-muted-foreground">
+                  <TableRow>
+                    <TableCell><code>text</code></TableCell>
+                    <TableCell>The summary above (the default).</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell><code>github</code></TableCell>
+                    <TableCell>
+                      A GitHub Actions workflow annotation for each line with survivors, then the
+                      summary.
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell><code>sarif</code></TableCell>
+                    <TableCell>
+                      A SARIF 2.1.0 log for code scanning, instead of the summary.
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+            <CodeBlock lang="bash" code="gooze report view --format github" />
+            <Recording name="calc-report-view-github" title="Recorded gooze report view --format github on calc" />
+            <p>
+              Paths in both formats are relative to the git repository root, so they match the
+              files on GitHub even when the module is in a subdirectory. Outside a git
+              repository, Gooze uses the working directory&apos;s path inside{" "}
+              <code>$GITHUB_WORKSPACE</code> when it is set.
+            </p>
+            <p>
+              Thresholds work as with <code>text</code>. With <code>sarif</code>, the log is
+              written first, so a gate that fails still leaves a complete file:
+            </p>
+            <CodeBlock lang="bash" code="gooze report view --format sarif --threshold-total 90 > gooze.sarif" />
+            <Recording name="calc-report-view-sarif-gate" title="Recorded gooze report view --format sarif below a threshold" />
+            <p>
+              <code>--all</code> always lists mutations as text, so{" "}
+              <code>--all --format github</code> or <code>--all --format sarif</code> exits with
+              code <code>2</code>. An unknown format also exits with <code>2</code>. The fields of
+              both formats are in <Link href="/docs/reports#formats">Report format</Link>, and the
+              workflows that use them are in{" "}
+              <Link href="/docs/ci/github#survivors">GitHub Actions</Link>.
+            </p>
           </div>
 
           <h3>Every mutation (--all)</h3>

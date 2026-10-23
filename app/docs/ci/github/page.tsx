@@ -169,6 +169,54 @@ const keepReports = `      # Runs even when the gate step before it failed, but 
           path: .gooze-reports/`
 
 
+const annotate = `  diff:
+    if: \${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    container: golang:1.27
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: go install gooze.dev/pkg/gooze@latest
+
+      # No threshold here, so the next step always runs.
+      - name: Mutate the changed lines
+        run: gooze run --diff "origin/\${{ github.base_ref }}" ./...
+
+      # One annotation per line with survivors, then the summary. Fails the
+      # job (exit code 3) when the changed lines score below 80%.
+      - name: Annotate survivors
+        run: gooze report view -o .gooze-reports/run --format github --threshold-diff-total 80`
+
+const sarif = `  merge:
+    needs: test
+    runs-on: ubuntu-latest
+    container: golang:1.27
+    permissions:
+      contents: read
+      packages: write          # push the merged baseline to GHCR
+      security-events: write   # upload the SARIF log to code scanning
+      actions: read            # upload-sarif needs it in private repositories
+    steps:
+      # upload-sarif matches the log with the commit it checks out.
+      - uses: actions/checkout@v4
+      - run: go install gooze.dev/pkg/gooze@latest
+
+      # ...download and merge the shard reports, push the baseline (main only)
+
+      # Writes the log, then fails the job (exit code 3) below 60%.
+      - name: Write SARIF
+        run: gooze report view --format sarif --threshold-total 60 > gooze.sarif
+
+      # Runs even when the gate failed, so the survivors still reach code scanning.
+      - name: Upload to code scanning
+        if: \${{ !cancelled() }}
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: gooze.sarif
+          category: gooze`
+
+
 const faqs = [
   {
     q: "How do I run Gooze mutation tests in GitHub Actions?",
@@ -191,8 +239,12 @@ const faqs = [
     a: "In one job on pull requests, check out with `fetch-depth: 0` and run `gooze run --diff origin/${{ github.base_ref }} --threshold-diff-total 80 ./...`. The diff threshold checks the score of the changed lines. Keep the full run on pushes to `main`, which pushes the baseline.",
   },
   {
-    q: "Does Gooze post results as a pull-request comment?",
-    a: "No. Gooze does not post PR comments. Surface results by failing the job with the mutation-score gate, or by publishing the report as an artifact or OCI baseline.",
+    q: "Can Gooze show surviving mutants on the pull request?",
+    a: "Yes. `gooze report view --format github` prints a workflow annotation for each line with surviving mutants, and GitHub shows it on that line of the pull request's changed files. It doesn't post PR comments.",
+  },
+  {
+    q: "Does Gooze support GitHub code scanning (SARIF)?",
+    a: "Yes. `gooze report view --format sarif > gooze.sarif` writes a SARIF 2.1.0 log, one result per line with surviving mutants. Upload it with `github/codeql-action/upload-sarif` and a job with `security-events: write`. In private repositories, code scanning needs GitHub Code Security or GitHub Advanced Security.",
   },
 ]
 
@@ -211,8 +263,8 @@ export default function CiPage() {
       <p className="text-lg text-muted-foreground mb-8">
         Your mutation score is good on your machine, and you want every push to keep it
         that way. Start with the one-job workflow, then add shards when the run gets slow, a
-        shared baseline so unchanged files are skipped, and a gate that fails the build
-        below a score.
+        shared baseline so unchanged files are skipped, annotations that show each surviving
+        mutant on the pull request, and a gate that fails the build below a score.
       </p>
 
       <div>
@@ -300,6 +352,70 @@ export default function CiPage() {
               may not.
             </li>
           </ul>
+        </div>
+
+        <div id="survivors">
+          <h2>5. Show survivors on the pull request</h2>
+          <p>
+            A red gate tells the author that the score dropped, but not where. The surviving
+            mutants are in the job log, and nobody reads the job log while reviewing.{" "}
+            <code>gooze report view --format github</code> prints them as workflow annotations,
+            and GitHub shows each one on its line in the pull request&apos;s changed files.
+            Annotate in the diff job, where the survivors are on lines the pull request changed:
+          </p>
+          <CodeBlock lang="yaml" code={annotate} />
+          <p>
+            For the <code>calc</code> survivors, the step prints one annotation per line, then the
+            usual summary:
+          </p>
+          <Recording name="calc-report-view-github" title="Recorded gooze report view --format github on calc" />
+          <ul>
+            <li>
+              A line with a surviving mutant gets a <code>warning</code>. A line whose mutants are
+              only not covered, timed out or skipped gets a <code>notice</code>.
+            </li>
+            <li>
+              Several mutants on one line make one annotation, such as{" "}
+              <code>2 surviving mutants (comparison)</code>, because GitHub shows only a limited
+              number of annotations per step.
+            </li>
+            <li>
+              Annotation paths are relative to the repository root, so a module in a subdirectory
+              works when you run Gooze there (with <code>working-directory</code>).
+            </li>
+            <li>
+              The flag isn&apos;t needed when <code>GOOZE_REPORT_FORMAT: github</code> is in the
+              job&apos;s <code>env</code>. Don&apos;t put <code>report.format: github</code> in{" "}
+              <code>gooze.yaml</code>: local <code>gooze report view</code> would print annotations too.
+            </li>
+          </ul>
+          <p>
+            Annotations belong to one workflow run. To track survivors across commits, send them
+            to code scanning: <code>--format sarif</code> writes a SARIF 2.1.0 log in place
+            of the summary. Upload it from the merge job, after the full run:
+          </p>
+          <CodeBlock lang="yaml" code={sarif} />
+          <ul>
+            <li>
+              Each line with surviving mutants is one alert under the rule{" "}
+              <code>gooze/survived</code>, <code>gooze/not-covered</code>,{" "}
+              <code>gooze/timeout</code> or <code>gooze/skipped</code>. Every field is in{" "}
+              <Link href="/docs/reports#sarif">Report format</Link>.
+            </li>
+            <li>
+              The log is written before the gate checks the score, so a failed gate still leaves a
+              complete <code>gooze.sarif</code>. That is why the upload step runs with{" "}
+              <code>if: {"${{ !cancelled() }}"}</code>.
+            </li>
+            <li>
+              Code scanning is available for public repositories. Private ones need GitHub Code
+              Security or GitHub Advanced Security.
+            </li>
+          </ul>
+          <p>
+            Both formats only change what <code>view</code> prints. Thresholds and exit codes
+            work the same, and the next section explains them.
+          </p>
         </div>
 
         <div id="gate">

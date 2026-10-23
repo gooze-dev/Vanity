@@ -281,8 +281,26 @@ const themes: Theme[] = [
         ),
       },
       {
+        title: "GitHub annotations",
+        detail: (
+          <>
+            Show surviving mutants on the pull request&apos;s changed lines with{" "}
+            <code>gooze report view --format github</code>.
+          </>
+        ),
+        shipped: true,
+        href: "/docs/ci/github#survivors",
+      },
+      {
         title: "SARIF report",
-        detail: "Surface surviving mutants in GitHub code scanning and other SARIF tools.",
+        detail: (
+          <>
+            Surface surviving mutants in GitHub code scanning and other SARIF tools with{" "}
+            <code>gooze report view --format sarif</code>.
+          </>
+        ),
+        shipped: true,
+        href: "/docs/reports#sarif",
       },
       {
         title: "Code Climate report",
