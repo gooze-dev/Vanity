@@ -146,7 +146,7 @@ const rows: Row[] = [
   },
   {
     feature: "Machine-readable results",
-    gooze: ["yes", "YAML report dir + `_index.yaml`"],
+    gooze: ["yes", "YAML report dir + `_index.yaml`; SARIF (`report view --format sarif`)"],
     gremlins: ["yes", "JSON (`-o`)"],
     goMutesting: ["partial", "stdout"],
     avito: ["yes", "JSON and HTML"],

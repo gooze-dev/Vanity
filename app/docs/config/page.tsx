@@ -222,6 +222,17 @@ export default function ConfigPage() {
                 </TableRow>
                 <TableRow>
                   <TableCell>
+                    <code>GOOZE_REPORT_FORMAT</code>
+                  </TableCell>
+                  <TableCell>
+                    How <code>gooze report view</code> writes survivors: <code>text</code> (default),{" "}
+                    <code>github</code> (workflow annotations, then the summary) or{" "}
+                    <code>sarif</code> (a SARIF 2.1.0 log); see{" "}
+                    <Link href="/docs/cli/report#view-format">output formats</Link>.
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
                     <code>GOOZE_LOG_FILENAME</code>
                   </TableCell>
                   <TableCell>Log file path</TableCell>
@@ -322,6 +333,9 @@ threshold:                    # minimum scores in percent; 0 is off; below one, 
     average: 0
     file: 0
 
+report:
+  format: text                # gooze report view output: text | github | sarif
+
 log:
   filename: .gooze.log
   level: info                 # debug | info | warn | error
@@ -361,6 +375,7 @@ log:
             <li><code>version</code> must be <code>1</code></li>
             <li><code>run.workspace</code> must be <code>overlay</code> or <code>deep-copy</code></li>
             <li>every <code>threshold</code> value must be a number from <code>0</code> to <code>100</code></li>
+            <li><code>report.format</code> must be <code>text</code>, <code>github</code> or <code>sarif</code></li>
           </ul>
           <p>
             An invalid value exits with code <code>2</code>.

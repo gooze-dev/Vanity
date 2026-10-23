@@ -1,0 +1,4 @@
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792751026, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-report-view-sarif-gate (gooze v1.3.1-0.20261023102334-b3f53b3c106d (go1.27.3))"}
+[0.039014, "o", "Error: mutation score 84.62% is below threshold.total 90%\r\n"]
+[0.043047, "o", "exit code 3\r\n"]
+[0.045446, "o", "gooze.sarif\r\n"]

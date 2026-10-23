@@ -155,8 +155,8 @@ export const docsPages: DocsPage[] = [
       "GitHub Actions for Go Mutation Testing · Gooze",
     section: "CI/CD",
     description:
-      "Run Gooze in GitHub Actions: shard Go mutation testing across jobs, cache results between runs, and fail pull requests below a minimum mutation score.",
-    keywords: ["github actions","ci/cd","go mutation testing","pipeline","pull request","quality gate","threshold","shard","caching"],
+      "Run Gooze in GitHub Actions: shard Go mutation testing across jobs, cache results between runs, annotate surviving mutants on pull requests, upload SARIF to code scanning, and fail pull requests below a minimum mutation score.",
+    keywords: ["github actions","ci/cd","go mutation testing","pipeline","pull request","annotations","sarif","code scanning","quality gate","threshold","shard","caching"],
   },
   {
     href: "/docs/ci/gitlab",
@@ -259,8 +259,8 @@ export const docsPages: DocsPage[] = [
     section: "Reference",
     parent: "/docs/cli",
     description:
-      "Work with Gooze mutation reports: view per-file scores and survivors, browse every mutant in the TUI, merge sharded runs, and push or pull OCI artifacts.",
-    keywords: ["report view","survivors","per-file score","tui","oci artifacts","merge shards","report push","test results","golang mutation score"],
+      "Work with Gooze mutation reports: view per-file scores and survivors, write them as GitHub annotations or SARIF, browse every mutant in the TUI, merge sharded runs, and push or pull OCI artifacts.",
+    keywords: ["report view","survivors","per-file score","github annotations","sarif","tui","oci artifacts","merge shards","report push","test results","golang mutation score"],
   },
   {
     href: "/docs/cli/config",
@@ -302,8 +302,8 @@ export const docsPages: DocsPage[] = [
       "Understanding Output Report Formats · Gooze",
     section: "Reference",
     description:
-      "The layout of the Gooze reports directory, the _index.yaml summary, and the YAML result files, and how to read them from your own tooling.",
-    keywords: ["report format","_index.yaml","structured output","result schemas","custom tooling","test data extraction"],
+      "The layout of the Gooze reports directory, the _index.yaml summary, the YAML result files, and the GitHub annotation and SARIF output of gooze report view.",
+    keywords: ["report format","_index.yaml","structured output","result schemas","sarif","github annotations","code scanning","custom tooling","test data extraction"],
   },
   {
     href: "/docs/mutations",
