@@ -157,6 +157,9 @@ export default function CliReportPage() {
             </p>
             <CodeBlock lang="bash" code="gooze report view --format sarif --threshold-total 90 > gooze.sarif" />
             <Recording name="calc-report-view-sarif-gate" title="Recorded gooze report view --format sarif below a threshold" />
+            <p>The same with <code>codeclimate</code>, for GitLab Code Quality:</p>
+            <CodeBlock lang="bash" code="gooze report view --format codeclimate --threshold-total 90 > gl-code-quality-report.json" />
+            <Recording name="calc-report-view-codeclimate" title="Recorded gooze report view --format codeclimate below a threshold" />
             <p>
               <code>--all</code> always lists mutations as text, so <code>--all</code> with any
               other format exits with code <code>2</code>. An unknown

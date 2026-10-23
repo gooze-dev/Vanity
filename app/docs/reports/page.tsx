@@ -208,12 +208,17 @@ export default function ReportsPage() {
             </div>
           </div>
           <div id="codeclimate">
-            <h3>Code Climate (--format codeclimate or gitlab)</h3>
+            <h3>Code Climate (--format codeclimate)</h3>
             <p>
-              A JSON array of issues instead of the summary, in the Code Climate format that
-              GitLab reads as a Code Quality report (<code>artifacts: reports: codequality</code>).{" "}
-              <code>gitlab</code> is the same format under the name of the platform. Without
-              survivors, the report is <code>[]</code>. The <code>calc</code> survivors give:
+              A JSON array of issues instead of the summary, in the Code Climate format. GitLab
+              reads it as a Code Quality report (<code>artifacts: reports: codequality</code>), and
+              other tools that read Code Climate issues can too:
+            </p>
+            <CodeBlock lang="bash" code="gooze report view --format codeclimate > gl-code-quality-report.json" />
+            <p>
+              <code>--format gitlab</code> writes the same report, under the name of the platform
+              that reads it. Without survivors, the report is <code>[]</code>. The{" "}
+              <code>calc</code> survivors give:
             </p>
             <Recording name="calc-report-view-gitlab" title="Recorded gooze report view --format gitlab on calc" />
             <p>Each issue is one line with survivors:</p>

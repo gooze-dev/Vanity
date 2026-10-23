@@ -195,7 +195,7 @@ const faqs = [
   },
   {
     q: "Can Gooze show surviving mutants in a GitLab merge request?",
-    a: "Yes. `gooze report view --format gitlab > gl-code-quality-report.json` writes a Code Quality report (the Code Climate JSON format), one finding per line with surviving mutants. Declare it as `artifacts: reports: codequality` and the merge request lists the findings. Gooze doesn't post MR notes.",
+    a: "Yes. `gooze report view --format gitlab > gl-code-quality-report.json` writes a Code Quality report in the Code Climate JSON format (`--format codeclimate` is the same), one finding per line with surviving mutants. Declare it as `artifacts: reports: codequality` and the merge request lists the findings. Gooze doesn't post MR notes.",
   },
 ]
 
@@ -305,8 +305,9 @@ export default function GitlabPage() {
             A failed gate tells the author that the score dropped, but not where. GitLab reads
             findings from a Code Quality report, and{" "}
             <code>gooze report view --format gitlab</code> writes the surviving mutants in that
-            format (the Code Climate JSON format, also available as{" "}
-            <code>--format codeclimate</code>). Write it in the diff job and declare it as a{" "}
+            format. The format itself is Code Climate JSON, so{" "}
+            <code>--format codeclimate</code> writes the same report; use whichever name reads
+            better in your pipeline. Write it in the diff job and declare it as a{" "}
             <code>codequality</code> report:
           </p>
           <CodeBlock lang="yaml" code={codeQuality} />

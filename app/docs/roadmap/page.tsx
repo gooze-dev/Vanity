@@ -303,15 +303,26 @@ const themes: Theme[] = [
         href: "/docs/reports#sarif",
       },
       {
-        title: "Code Climate report",
+        title: "GitLab Code Quality",
         detail: (
           <>
-            Surviving mutants in the Code Climate JSON format, which GitLab Code Quality reads, with{" "}
-            <code>gooze report view --format gitlab</code> (or <code>codeclimate</code>).
+            Show surviving mutants in the merge request&apos;s code quality report with{" "}
+            <code>gooze report view --format gitlab</code>.
           </>
         ),
         shipped: true,
         href: "/docs/ci/gitlab#survivors",
+      },
+      {
+        title: "Code Climate report",
+        detail: (
+          <>
+            Surviving mutants in the Code Climate JSON format, which GitLab Code Quality and other
+            Code Climate tools read, with <code>gooze report view --format codeclimate</code>.
+          </>
+        ),
+        shipped: true,
+        href: "/docs/reports#codeclimate",
       },
       {
         title: "LLM training dataset",
