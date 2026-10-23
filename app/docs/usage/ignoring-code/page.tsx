@@ -150,8 +150,13 @@ boilerplate-file: .mockery-boilerplate.txt`}
           <CodeBlock
             lang="yaml"
             code={`paths:
-  exclude: ['^vendor/', '^mock_', '\\.pb\\.go$', '_string\\.go$']`}
+  exclude: ['^vendor/', '^mock_', '\\.pb\\.go$', '_string\\.go$', '_generated\\.go$', 'zz_generated\\.']`}
           />
+          <p>
+            Exclude large generated files even when their mutants don&apos;t bother you. A data
+            table generated into Go, such as a 7 MB catalog, can keep{" "}
+            <code>gooze run --estimate</code> busy for minutes before the first mutant runs.
+          </p>
         </div>
       </div>
     </section>
