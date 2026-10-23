@@ -132,30 +132,41 @@ export default function CliReportPage() {
                       A SARIF 2.1.0 log for code scanning, instead of the summary.
                     </TableCell>
                   </TableRow>
+                  <TableRow>
+                    <TableCell><code>codeclimate</code>, <code>gitlab</code></TableCell>
+                    <TableCell>
+                      A Code Climate JSON report for GitLab Code Quality, instead of the summary.
+                      Both names write the same report.
+                    </TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </div>
             <CodeBlock lang="bash" code="gooze report view --format github" />
             <Recording name="calc-report-view-github" title="Recorded gooze report view --format github on calc" />
             <p>
-              Paths in both formats are relative to the git repository root, so they match the
-              files on GitHub even when the module is in a subdirectory. Outside a git
-              repository, Gooze uses the working directory&apos;s path inside{" "}
-              <code>$GITHUB_WORKSPACE</code> when it is set.
+              Paths in every format but <code>text</code> are relative to the git repository
+              root, so they match the files on GitHub and GitLab even when the module is in a
+              subdirectory. Outside a git repository, Gooze uses the working directory&apos;s path
+              inside <code>$GITHUB_WORKSPACE</code> or, on GitLab, <code>$CI_PROJECT_DIR</code>.
             </p>
             <p>
-              Thresholds work as with <code>text</code>. With <code>sarif</code>, the log is
-              written first, so a gate that fails still leaves a complete file:
+              Thresholds work as with <code>text</code>. With <code>sarif</code> and{" "}
+              <code>codeclimate</code>, the file is written first, so a gate that fails still
+              leaves a complete file:
             </p>
             <CodeBlock lang="bash" code="gooze report view --format sarif --threshold-total 90 > gooze.sarif" />
             <Recording name="calc-report-view-sarif-gate" title="Recorded gooze report view --format sarif below a threshold" />
+            <p>The same with <code>codeclimate</code>, for GitLab Code Quality:</p>
+            <CodeBlock lang="bash" code="gooze report view --format codeclimate --threshold-total 90 > gl-code-quality-report.json" />
+            <Recording name="calc-report-view-codeclimate" title="Recorded gooze report view --format codeclimate below a threshold" />
             <p>
-              <code>--all</code> always lists mutations as text, so{" "}
-              <code>--all --format github</code> or <code>--all --format sarif</code> exits with
-              code <code>2</code>. An unknown format also exits with <code>2</code>. The fields of
-              both formats are in <Link href="/docs/reports#formats">Report format</Link>, and the
-              workflows that use them are in{" "}
-              <Link href="/docs/ci/github#survivors">GitHub Actions</Link>.
+              <code>--all</code> always lists mutations as text, so <code>--all</code> with any
+              other format exits with code <code>2</code>. An unknown
+              format also exits with <code>2</code>. The fields of each format are in{" "}
+              <Link href="/docs/reports#formats">Report format</Link>, and the pipelines that use
+              them are in <Link href="/docs/ci/github#survivors">GitHub Actions</Link> and{" "}
+              <Link href="/docs/ci/gitlab#survivors">GitLab CI</Link>.
             </p>
           </div>
 
