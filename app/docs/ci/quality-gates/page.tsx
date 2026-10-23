@@ -44,7 +44,7 @@ const faqs = [
   },
   {
     q: "What do Gooze's exit codes mean?",
-    a: "Gooze has one exit code per outcome: `3` means the run finished with a score below a threshold, and the other non-zero codes are errors (bad flags, git, the registry, missing reports, an interrupt). The CLI reference lists each code and what to do about it.",
+    a: "Gooze has one exit code per outcome: `3` means the run finished with a score below a threshold, and the other non-zero codes are errors (bad flags, git, the registry, missing reports, tests that fail without any mutation, an interrupt). The CLI reference lists each code and what to do about it.",
   },
 ]
 

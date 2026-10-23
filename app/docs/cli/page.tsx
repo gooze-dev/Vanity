@@ -30,6 +30,7 @@ const exitCodes: { code: string; meaning: string; action: string }[] = [
   { code: "4", meaning: "--diff can't compare against git: no git, not a repository, unknown ref.", action: "Install git, or fetch the base ref (fetch-depth: 0)." },
   { code: "5", meaning: "report push or pull failed at the registry.", action: "Check the reference and credentials." },
   { code: "6", meaning: "No reports to view or merge.", action: "Run gooze run first, or point -o at the reports." },
+  { code: "7", meaning: "A package's tests fail without any mutation, so its mutants weren't tested. Other packages are scored and saved.", action: "Make go test pass for the packages listed, then rerun." },
   { code: "130", meaning: "Interrupted (Ctrl-C, SIGINT or SIGTERM).", action: "Rerun the command." },
 ]
 

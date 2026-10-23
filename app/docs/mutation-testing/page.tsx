@@ -131,6 +131,12 @@ export default function MutationTestingPage() {
           <code>calc.go</code> runs only the tests of <code>example.com/calc</code>, and{" "}
           <code>--parallel</code> workers test several mutants at once.
         </p>
+        <p>
+          Before the first mutant of a package, Gooze runs that package&apos;s tests once without
+          any mutation. A test that already fails would kill every mutant, so a broken suite
+          would score 100%. Gooze skips the mutants of such a package instead, still scores the
+          others, and exits with code <code>7</code>.
+        </p>
         <p>You can make a run as small as the change you want to check:</p>
         <ul>
           <li>
