@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Records the samples of report view's output formats (--format github,
-# --format sarif). Same style as record-casts.sh; see
+# --format sarif, --format gitlab). Same style as record-casts.sh; see
 # .claude/rules/tool-output.md.
 #
 # Needs asciinema, git, and a gooze with report view --format first on PATH:
@@ -46,5 +46,6 @@ gooze run ./... >/dev/null
 rec calc-report-view-github 'gooze report view --format github | cat'
 rec calc-report-view-sarif 'gooze report view --format sarif | cat'
 rec calc-report-view-sarif-gate 'gooze report view --format sarif --threshold-total 90 >gooze.sarif; echo "exit code $?"; ls gooze.sarif'
+rec calc-report-view-gitlab 'gooze report view --format gitlab | cat'
 
 echo "recorded the format casts with $title"

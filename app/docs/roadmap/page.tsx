@@ -304,7 +304,14 @@ const themes: Theme[] = [
       },
       {
         title: "Code Climate report",
-        detail: "Surviving mutants in the Code Climate JSON format, which GitLab's Code Quality merge request widget reads.",
+        detail: (
+          <>
+            Surviving mutants in the Code Climate JSON format, which GitLab Code Quality reads, with{" "}
+            <code>gooze report view --format gitlab</code> (or <code>codeclimate</code>).
+          </>
+        ),
+        shipped: true,
+        href: "/docs/ci/gitlab#survivors",
       },
       {
         title: "LLM training dataset",

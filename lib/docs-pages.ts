@@ -165,8 +165,8 @@ export const docsPages: DocsPage[] = [
       "GitLab CI for Go Mutation Testing · Gooze",
     section: "CI/CD",
     description:
-      "Run Gooze in GitLab CI pipelines: shard across parallel jobs and fail the pipeline below a minimum mutation score, so weak Go tests don't get merged.",
-    keywords: ["gitlab ci","pipeline","parallel jobs","sharding","quality gate","minimum score","go testing"],
+      "Run Gooze in GitLab CI pipelines: shard across parallel jobs, show surviving mutants in the merge request's Code Quality report, and fail the pipeline below a minimum mutation score.",
+    keywords: ["gitlab ci","pipeline","parallel jobs","sharding","code quality","codeclimate","merge request","quality gate","minimum score","go testing"],
   },
   {
     href: "/docs/ci/cloud-build",
@@ -259,8 +259,8 @@ export const docsPages: DocsPage[] = [
     section: "Reference",
     parent: "/docs/cli",
     description:
-      "Work with Gooze mutation reports: view per-file scores and survivors, write them as GitHub annotations or SARIF, browse every mutant in the TUI, merge sharded runs, and push or pull OCI artifacts.",
-    keywords: ["report view","survivors","per-file score","github annotations","sarif","tui","oci artifacts","merge shards","report push","test results","golang mutation score"],
+      "Work with Gooze mutation reports: view per-file scores and survivors, write them as GitHub annotations, SARIF or a GitLab Code Quality report, browse every mutant in the TUI, merge sharded runs, and push or pull OCI artifacts.",
+    keywords: ["report view","survivors","per-file score","github annotations","sarif","gitlab code quality","codeclimate","tui","oci artifacts","merge shards","report push","test results","golang mutation score"],
   },
   {
     href: "/docs/cli/config",
@@ -302,8 +302,8 @@ export const docsPages: DocsPage[] = [
       "Understanding Output Report Formats · Gooze",
     section: "Reference",
     description:
-      "The layout of the Gooze reports directory, the _index.yaml summary, the YAML result files, and the GitHub annotation and SARIF output of gooze report view.",
-    keywords: ["report format","_index.yaml","structured output","result schemas","sarif","github annotations","code scanning","custom tooling","test data extraction"],
+      "The layout of the Gooze reports directory, the _index.yaml summary, the YAML result files, and the GitHub annotation, SARIF and Code Climate output of gooze report view.",
+    keywords: ["report format","_index.yaml","structured output","result schemas","sarif","github annotations","code scanning","codeclimate","gitlab code quality","custom tooling","test data extraction"],
   },
   {
     href: "/docs/mutations",

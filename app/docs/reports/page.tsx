@@ -22,6 +22,17 @@ const scopeKeys = [
   { key: "mutagens", from: "--mutagens", meaning: "The only mutagens the run generated." },
 ]
 
+// Code Climate issue fields written by gooze report view --format codeclimate.
+const codeClimateFields = [
+  { field: "type", meaning: "Always issue." },
+  { field: "check_name", meaning: "gooze/survived, gooze/not-covered, gooze/timeout or gooze/skipped: the first of these that a mutant on the line has, as in SARIF." },
+  { field: "description", meaning: "The title, then one sentence per mutant, such as Surviving mutant (comparison): Tests still pass with `if n < lo {` changed to `if n <= lo {`." },
+  { field: "categories", meaning: "Always Bug Risk." },
+  { field: "severity", meaning: "major when a mutant on the line survived, minor otherwise." },
+  { field: "fingerprint", meaning: "A hash of the line's sorted mutation IDs, the same as the SARIF fingerprint." },
+  { field: "location", meaning: "path, relative to the repository root, and lines.begin. A mutation without a line points at line 1, because GitLab needs one." },
+]
+
 // SARIF result fields written by gooze report view --format sarif.
 const sarifFields = [
   { field: "ruleId", meaning: "gooze/survived, gooze/not-covered, gooze/timeout or gooze/skipped: the first of these that a mutant on the line has." },
@@ -38,7 +49,7 @@ export default function ReportsPage() {
       <h1 className="mt-0 text-4xl font-bold tracking-tight mb-4">Report format</h1>
       <p className="text-lg text-muted-foreground mb-8">
         You want to know what a run leaves on disk, for example to cache it in CI, or what{" "}
-        <code>gooze report view</code> writes for GitHub. Gooze writes reports after a run, and the
+        <code>gooze report view</code> writes for GitHub and GitLab. Gooze writes reports after a run, and the
         reports are also used as a cache for incremental runs.
       </p>
 
@@ -135,7 +146,7 @@ export default function ReportsPage() {
           <p>
             The report files are for Gooze and your own tools. For GitHub,{" "}
             <Link href="/docs/cli/report#view-format"><code>gooze report view --format</code></Link>{" "}
-            turns the same reports into two formats GitHub reads. Both list the mutations that
+            turns the same reports into the formats GitHub and GitLab read. Both list the mutations that
             count against the score (survived, not covered, timed out, skipped), grouped by line:
             several mutants on one line make one entry.
           </p>
@@ -196,6 +207,37 @@ export default function ReportsPage() {
               </Table>
             </div>
           </div>
+          <div id="codeclimate">
+            <h3>Code Climate (--format codeclimate or gitlab)</h3>
+            <p>
+              A JSON array of issues instead of the summary, in the Code Climate format that
+              GitLab reads as a Code Quality report (<code>artifacts: reports: codequality</code>).{" "}
+              <code>gitlab</code> is the same format under the name of the platform. Without
+              survivors, the report is <code>[]</code>. The <code>calc</code> survivors give:
+            </p>
+            <Recording name="calc-report-view-gitlab" title="Recorded gooze report view --format gitlab on calc" />
+            <p>Each issue is one line with survivors:</p>
+            <div className="mt-3 rounded border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Field</TableHead>
+                    <TableHead>Meaning</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody className="text-muted-foreground">
+                  {codeClimateFields.map((row) => (
+                    <TableRow key={row.field}>
+                      <TableCell>
+                        <code>{row.field}</code>
+                      </TableCell>
+                      <TableCell>{row.meaning}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
         </div>
 
         <div id="tasks">
@@ -215,7 +257,8 @@ export default function ReportsPage() {
             </li>
             <li>
               Show survivors on pull requests and in code scanning:{" "}
-              <Link href="/docs/ci/github#survivors">GitHub Actions</Link>
+              <Link href="/docs/ci/github#survivors">GitHub Actions</Link>; in merge requests:{" "}
+              <Link href="/docs/ci/gitlab#survivors">GitLab CI</Link>
             </li>
           </ul>
         </div>

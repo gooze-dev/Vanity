@@ -154,6 +154,24 @@ const keepCache = `test:
     paths: [.gooze-reports/]`
 
 
+const codeQuality = `diff:
+  stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    GIT_DEPTH: 0
+  script:
+    - git fetch origin "+refs/heads/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME:refs/remotes/origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    # No threshold here, so the next line always runs.
+    - gooze run --diff "origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" ./...
+    # Writes the report, then fails the job (exit code 3) when the changed
+    # lines score below 80%.
+    - gooze report view -o .gooze-reports/run --format gitlab --threshold-diff-total 80 > gl-code-quality-report.json
+  artifacts:
+    reports:
+      codequality: gl-code-quality-report.json`
+
+
 const faqs = [
   {
     q: "How do I run Gooze mutation tests in GitLab CI?",
@@ -176,8 +194,8 @@ const faqs = [
     a: "In a merge request pipeline, set `GIT_DEPTH: 0`, fetch the target branch, and run `gooze run --diff \"origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME\" --threshold-diff-total 80 ./...`. Keep a full run on `main`, which pushes the baseline.",
   },
   {
-    q: "Does Gooze post results as a GitLab merge-request note?",
-    a: "No. Gooze does not post MR notes. Surface results by failing the job with the mutation-score gate, or by storing the report as an artifact or OCI baseline.",
+    q: "Can Gooze show surviving mutants in a GitLab merge request?",
+    a: "Yes. `gooze report view --format gitlab > gl-code-quality-report.json` writes a Code Quality report (the Code Climate JSON format), one finding per line with surviving mutants. Declare it as `artifacts: reports: codequality` and the merge request lists the findings. Gooze doesn't post MR notes.",
   },
 ]
 
@@ -197,7 +215,8 @@ export default function GitlabPage() {
         You want every merge request to keep your mutation score. These are the same three
         setups as the{" "}
         <Link href="/docs/ci/github">GitHub Actions</Link> guide, written for{" "}
-        <code>.gitlab-ci.yml</code>: one job, then shards, then a shared baseline, plus a gate.
+        <code>.gitlab-ci.yml</code>: one job, then shards, then a shared baseline, plus the
+        surviving mutants in the merge request and a gate.
       </p>
 
       <div>
@@ -278,6 +297,56 @@ export default function GitlabPage() {
               may not.
             </li>
           </ul>
+        </div>
+
+        <div id="survivors">
+          <h2>5. Show survivors in the merge request</h2>
+          <p>
+            A failed gate tells the author that the score dropped, but not where. GitLab reads
+            findings from a Code Quality report, and{" "}
+            <code>gooze report view --format gitlab</code> writes the surviving mutants in that
+            format (the Code Climate JSON format, also available as{" "}
+            <code>--format codeclimate</code>). Write it in the diff job and declare it as a{" "}
+            <code>codequality</code> report:
+          </p>
+          <CodeBlock lang="yaml" code={codeQuality} />
+          <p>
+            For the <code>calc</code> survivors, the report has one finding per line:
+          </p>
+          <Recording name="calc-report-view-gitlab" title="Recorded gooze report view --format gitlab on calc" />
+          <ul>
+            <li>
+              GitLab shows the findings in the merge request&apos;s code quality report on every
+              tier. GitLab Ultimate also marks the lines in the merge request&apos;s changes view.
+            </li>
+            <li>
+              GitLab compares the findings with the target branch&apos;s pipeline to mark them
+              new or resolved. The <code>fingerprint</code> is a hash of the line&apos;s mutation
+              IDs, so a finding stays the same while its mutants do.
+            </li>
+            <li>
+              A line with a surviving mutant is <code>major</code>. A line whose mutants are only
+              not covered, timed out or skipped is <code>minor</code>.
+            </li>
+            <li>
+              The report is complete before the gate checks the score, and GitLab uploads{" "}
+              <code>artifacts: reports</code> even when the job fails, so a failed gate still
+              shows its findings.
+            </li>
+            <li>
+              Paths are relative to the repository root, so a module in a subdirectory works when
+              the job runs Gooze there.
+            </li>
+            <li>
+              <code>GOOZE_REPORT_FORMAT: gitlab</code> in the job&apos;s <code>variables</code>{" "}
+              works instead of the flag. Don&apos;t put <code>report.format: gitlab</code> in{" "}
+              <code>gooze.yaml</code>: local <code>gooze report view</code> would print JSON too.
+            </li>
+          </ul>
+          <p>
+            The format only changes what <code>view</code> prints. Thresholds and exit codes work
+            the same, as the next section shows.
+          </p>
         </div>
 
         <div id="gate">
