@@ -1,2 +1,2 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792666573, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-func-rerun (gooze v1.3.0, goozels v0.3.0, go1.27.3)"}
-[3.085431, "o", "Mutation score: 100.00% (13 killed, 0 survived; 0 cached, 13 tested; functions matching ^InRange$)\r\nReports of this run are in .gooze-reports/run; add them to the main reports with gooze report merge.\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792845746, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-func-rerun (gooze v1.4.1, goozels v0.4.0, go1.27.3)"}
+[1.693107, "o", "Mutation score: 100.00% (13 killed, 0 survived; 0 cached, 13 tested; functions matching ^InRange$)\r\nReports of this run are in .gooze-reports/run; add them to the main reports with gooze report merge.\r\n"]

@@ -1,3 +1,3 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792666569, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-func-estimate (gooze v1.3.0, goozels v0.3.0, go1.27.3)"}
-[0.017719, "o", "Only functions matching ^InRange$.\r\n"]
-[0.018672, "o", "\r\n PATH          │ MUTATIONS \r\n───────────────┼───────────\r\n calc.go       │    13     \r\n───────────────┼───────────\r\n TOTAL FILES 1 │    13     \r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792845744, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-func-estimate (gooze v1.4.1, goozels v0.4.0, go1.27.3)"}
+[0.012062, "o", "Only functions matching ^InRange$.\r\n"]
+[0.012718, "o", "\r\n PATH          │ MUTATIONS \r\n───────────────┼───────────\r\n calc.go       │    13     \r\n───────────────┼───────────\r\n TOTAL FILES 1 │    13     \r\n"]

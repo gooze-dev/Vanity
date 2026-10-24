@@ -1,3 +1,3 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792666584, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-threshold-shard (gooze v1.3.0 (go1.27.3))"}
-[1.147639, "o", "Mutation score: 83.33% (5 killed, 1 survived; 0 cached, 6 tested)\r\nThresholds are not checked on a shard; gooze report merge checks them on all the results.\r\n"]
-[1.148341, "o", "exit code 0\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792845752, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-threshold-shard (gooze v1.4.1 (go1.27.3))"}
+[0.855446, "o", "Mutation score: 83.33% (5 killed, 1 survived; 0 cached, 6 tested)\r\nThresholds are not checked on a shard; gooze report merge checks them on all the results.\r\n"]
+[0.856055, "o", "exit code 0\r\n"]

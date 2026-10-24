@@ -1,2 +1,2 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792666577, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-func-goozels-check (gooze v1.3.0, goozels v0.3.0, go1.27.3)"}
-[0.011506, "o", "calc.go:1:1: info: gooze: partly tested (functions matching ^InRange$) — score 100.00% — 13 killed; rerun the whole file: gooze run .\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792845748, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-func-goozels-check (gooze v1.4.1, goozels v0.4.0, go1.27.3)"}
+[0.006809, "o", "calc.go:1:1: info: gooze: partly tested (functions matching ^InRange$) — score 100.00% — 13 killed; rerun the whole file: gooze run .\r\n"]
