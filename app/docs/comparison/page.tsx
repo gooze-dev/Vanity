@@ -42,7 +42,7 @@ const rows: Row[] = [
   },
   {
     feature: "Fail the build below a score",
-    gooze: ["yes", "total, average and per-file (`--threshold-*`), plus diff-only ones"],
+    gooze: ["yes", "total, average and per-file (`--threshold-*`), plus diff-only ones and a survivor cap"],
     gremlins: ["yes", "`--threshold-efficacy`, `--threshold-mcover`"],
     goMutesting: ["unknown", ""],
     avito: ["unknown", ""],
@@ -122,7 +122,7 @@ const rows: Row[] = [
   },
   {
     feature: "Ignore code with comments",
-    gooze: ["yes", "`//gooze:ignore`, per file/func/line/mutator"],
+    gooze: ["yes", "`//gooze:ignore`, per file/func/line/mutator or single replacement"],
     gremlins: ["no", "file regex only (`--exclude-files`)"],
     goMutesting: ["partial", "checksum blacklist"],
     avito: ["yes", "`mutator-disable-*` directives"],

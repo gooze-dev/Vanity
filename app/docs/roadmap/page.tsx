@@ -32,7 +32,7 @@ const limitations = [
   {
     id: "json",
     title: "JSON and HTML reports",
-    detail: "Results are YAML files plus `_index.yaml`; JSON and HTML output are on the way.",
+    detail: "Results are YAML files plus `_index.yaml`, and `report view --format sarif|codeclimate` writes the survivors as JSON; JSON and HTML reports of every mutation are on the way.",
     workaround: { text: "the report format", href: "/docs/reports" },
   },
 ]

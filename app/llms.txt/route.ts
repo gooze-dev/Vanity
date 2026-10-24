@@ -48,7 +48,7 @@ const facts = `**Key facts (gooze ${DOCS_FACTS_VERSION}):**
 
 - No plugin API for custom mutators (adding one means a small function in the gooze source).
 - No custom test runner command (go-mutesting --exec equivalent).
-- No JSON or HTML report (YAML report files + _index.yaml).
+- No JSON or HTML report of every mutation (YAML report files + _index.yaml); \`report view --format sarif|codeclimate\` writes JSON for the surviving mutants only.
 `;
 
 export async function GET() {
