@@ -99,6 +99,20 @@ const runFlags: RunFlag[] = [
     configKey: "threshold.diff.total",
   },
   {
+    flag: "--threshold-max-survivors",
+    description:
+      "Exit with code `3` when more mutants than this survive. A `--diff` run counts the ones on its changed lines. Only `survived` counts. Not checked on a shard. Env: `GOOZE_THRESHOLD_MAX_SURVIVORS`.",
+    defaultValue: "0 (off)",
+    configKey: "threshold.max_survivors",
+  },
+  {
+    flag: "--fail-fast",
+    description:
+      "Stop before testing every mutant: `gate` once a quality gate can no longer be met, `file` skips the rest of a file once it can no longer meet `--threshold-file`, `first` at the first survivor. The next run tests what was left. Env: `GOOZE_RUN_FAIL_FAST`.",
+    defaultValue: "off",
+    configKey: "run.fail_fast",
+  },
+  {
     flag: "--parallel",
     alias: "-p",
     description: "Number of parallel workers for mutation testing (at least `1`).",

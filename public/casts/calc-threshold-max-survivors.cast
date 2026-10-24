@@ -1,0 +1,3 @@
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792820178, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-threshold-max-survivors (gooze v1.3.1-0.20261024053501-323a52c039ac (go1.27.3))"}
+[0.036276, "o", "Mutation score: 84.62% (11 killed, 2 survived)\r\nError: 2 surviving mutants are above threshold.max_survivors 1\r\n"]
+[0.037881, "o", "exit code 3\r\n"]

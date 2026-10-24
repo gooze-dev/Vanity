@@ -69,6 +69,20 @@ const themes: Theme[] = [
         href: "/docs/ci/quality-gates",
       },
       {
+        id: "max-survivors",
+        title: "Survivor cap",
+        detail: "A quality gate on the number of surviving mutants, `threshold.max_survivors`, next to the score thresholds.",
+        shipped: true,
+        href: "/docs/ci/quality-gates#max-survivors",
+      },
+      {
+        id: "fail-fast",
+        title: "Fail fast",
+        detail: "Stop a run as soon as a quality gate can no longer be met, skip files that already failed theirs, or stop at the first survivor, with `run.fail_fast`.",
+        shipped: true,
+        href: "/docs/ci/quality-gates#fail-fast",
+      },
+      {
         title: "Custom exec hook",
         detail: (
           <>

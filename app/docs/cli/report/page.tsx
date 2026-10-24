@@ -207,7 +207,8 @@ export default function CliReportPage() {
             <code>--threshold-file</code> (or <code>threshold.*</code> in{" "}
             <code>gooze.yaml</code>) make <code>view</code> exit with code <code>3</code> when
             a score of the viewed reports is below them, so a last CI step can gate on the
-            reports. Paths limit which files count. See{" "}
+            reports. <code>--threshold-max-survivors</code> does the same when more mutants
+            than it allows survive. Paths limit which files count. See{" "}
             <Link href="/docs/ci/quality-gates">Quality gates</Link>.
           </p>
         </div>
