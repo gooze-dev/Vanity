@@ -40,6 +40,10 @@ const faqs = [
     a: "Yes. `threshold.diff.total`, `threshold.diff.average` and `threshold.diff.file` (flags `--threshold-diff-*`) apply only to `gooze run --diff` runs, which score the changed lines. They replace the plain thresholds there, so one `gooze.yaml` can ask for 80% on main and 100% on the changed lines.",
   },
   {
+    q: "Can Gooze stop a run as soon as a threshold fails?",
+    a: "Yes. `--fail-fast gate` (or `run.fail_fast: gate`) stops `gooze run` once a threshold can no longer be met, counting every untested mutant as killed, and exits with code `3`. `file` skips the rest of a file that can't meet `threshold.file`, and `first` stops at the first surviving mutant. The results so far are saved, and the next run tests the rest.",
+  },
+  {
     q: "Does a sharded run check thresholds?",
     a: "No. A shard holds only part of the results, so it prints a note instead. Put the thresholds on `gooze report merge` in the job that merges the shards.",
   },
@@ -68,8 +72,9 @@ export default function QualityGatesPage() {
         Your CI runs Gooze on every push, but the job passes at any score, so tests can get
         weaker without anyone noticing. A threshold turns the score into a gate: below it, Gooze
         exits with code <code>3</code> and the job fails. This page shows the three score
-        thresholds, a cap on surviving mutants, a stricter bar for pull requests, where sharded
-        runs check them, and how to handle each exit code in your pipeline.
+        thresholds, a cap on surviving mutants, a stricter bar for pull requests, how to stop a
+        run once a gate fails, where sharded runs check them, and how to handle each exit code
+        in your pipeline.
       </p>
 
       <div>
@@ -193,6 +198,73 @@ export default function QualityGatesPage() {
           </p>
           <CodeBlock lang="bash" code="gooze run --diff main ./..." />
           <Recording name="calc-threshold-diff" title="Recorded diff run that meets threshold.diff.total" />
+        </div>
+
+        <div id="fail-fast">
+          <h2>Stop early once a gate fails</h2>
+          <p>
+            A run tests every mutant before it checks the gates, so a pull request whose first
+            survivor already fails a 100% diff gate still waits for all the others.{" "}
+            <code>--fail-fast</code> (or <code>run.fail_fast</code> in <code>gooze.yaml</code>)
+            stops as soon as the answer is known:
+          </p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Policy</TableHead>
+                <TableHead>Stops</TableHead>
+                <TableHead>Fits</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody className="text-muted-foreground">
+              <TableRow>
+                <TableCell><code>off</code></TableCell>
+                <TableCell>Never: every mutant is tested, then the gates are checked. The default.</TableCell>
+                <TableCell>Full reports on <code>main</code>.</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell><code>gate</code></TableCell>
+                <TableCell>
+                  The run, once a threshold can no longer be met even if every untested mutant
+                  is killed.
+                </TableCell>
+                <TableCell>Pull requests: the same verdict, sooner.</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell><code>file</code></TableCell>
+                <TableCell>
+                  A file, once it can no longer meet <code>threshold.file</code>; the other
+                  files are still tested.
+                </TableCell>
+                <TableCell>A per-file floor, with a score for every other file.</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell><code>first</code></TableCell>
+                <TableCell>The run, at the first surviving mutant. Needs no threshold.</TableCell>
+                <TableCell>A quick yes or no after an edit.</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+          <p>
+            In the calc story, a total threshold of <code>90</code> can still be met after the
+            first survivor (12 of 13 is 92.31%), but not after the second, so the run stops there:
+          </p>
+          <CodeBlock lang="bash" code="gooze run --fail-fast gate --threshold-total 90 ./..." />
+          <Recording name="calc-fail-fast-gate" title="Recorded gooze run stopped by fail-fast gate" />
+          <p>
+            The breach lines are the ones the full run would print, since the results so far
+            fail the same gate, and the exit code is <code>3</code>. With <code>first</code>, the
+            run names the survivor it stopped at:
+          </p>
+          <CodeBlock lang="bash" code="gooze run --fail-fast first ./..." />
+          <Recording name="calc-fail-fast-first" title="Recorded gooze run stopped by fail-fast first" />
+          <p className="text-sm text-muted-foreground">
+            The results tested before the stop are saved, and a file left unfinished is marked
+            so the next run tests only its other mutants. With <code>--parallel</code>, the
+            tests still running at the stop are canceled and not counted. A shard can&apos;t
+            judge the merged scores, so there <code>gate</code> checks only{" "}
+            <code>threshold.max_survivors</code> and <code>file</code> does nothing.
+          </p>
         </div>
 
         <div id="shards">

@@ -211,6 +211,16 @@ export default function ConfigPage() {
                 </TableRow>
                 <TableRow>
                   <TableCell>
+                    <code>GOOZE_RUN_FAIL_FAST</code>
+                  </TableCell>
+                  <TableCell>
+                    When a run stops before testing every mutant: <code>off</code> (default),{" "}
+                    <code>gate</code>, <code>file</code> or <code>first</code>. See{" "}
+                    <Link href="/docs/ci/quality-gates#fail-fast">fail fast</Link>.
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
                     <code>GOOZE_THRESHOLD_TOTAL</code>, <code>_AVERAGE</code>, <code>_FILE</code>
                   </TableCell>
                   <TableCell>
@@ -333,6 +343,7 @@ run:
   diff: ''                    # git ref, e.g. origin/main: mutate only changed lines (needs git)
   mutagens: []                # e.g. [comparison, boolean]; empty runs the nine defaults
   workspace: overlay          # overlay (go test -overlay) or deep-copy (a project copy per worker)
+  fail_fast: "off"            # off | gate | file | first: stop once the quality gates have their answer
 
 threshold:                    # quality gates; 0 is off; failing one, exit code 3
   total: 0                    # the score of all mutations
@@ -388,6 +399,10 @@ log:
             <li><code>run.mutation_timeout</code> must be at least <code>1</code> (seconds)</li>
             <li><code>version</code> must be <code>1</code></li>
             <li><code>run.workspace</code> must be <code>overlay</code> or <code>deep-copy</code></li>
+            <li>
+              <code>run.fail_fast</code> must be <code>off</code>, <code>gate</code>,{" "}
+              <code>file</code> or <code>first</code>
+            </li>
             <li>every <code>threshold</code> score must be a number from <code>0</code> to <code>100</code></li>
             <li><code>threshold.max_survivors</code> must be a whole number, at least <code>0</code></li>
             <li>

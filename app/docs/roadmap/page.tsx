@@ -78,8 +78,9 @@ const themes: Theme[] = [
       {
         id: "fail-fast",
         title: "Fail fast",
-        detail: "Stop a run as soon as a quality gate can no longer be met, skip files that already failed theirs, or stop at the first survivor.",
-        issue: 85,
+        detail: "Stop a run as soon as a quality gate can no longer be met, skip files that already failed theirs, or stop at the first survivor, with `run.fail_fast`.",
+        shipped: true,
+        href: "/docs/ci/quality-gates#fail-fast",
       },
       {
         title: "Custom exec hook",
