@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Records the samples of score thresholds (--threshold-*, threshold.* in
+# Records the samples of quality gates (--threshold-*, threshold.* in
 # gooze.yaml) and gooze's exit codes. Same style as record-casts.sh; see
 # .claude/rules/tool-output.md.
 #
@@ -54,6 +54,7 @@ rec calc-threshold-merge 'gooze report merge --threshold-total 90 2>&1 | cat; ec
 rec calc-threshold-total 'gooze run --threshold-total 90 ./... 2>&1 | tail -n 2; echo "exit code ${PIPESTATUS[0]}"'
 rec calc-threshold-met 'gooze run --threshold-total 80 ./... | tail -n 1; echo "exit code ${PIPESTATUS[0]}"'
 rec calc-threshold-file 'gooze report view --threshold-file 90 2>&1 | tail -n 2; echo "exit code ${PIPESTATUS[0]}"'
+rec calc-threshold-max-survivors 'gooze report view --threshold-max-survivors 1 2>&1 | tail -n 2; echo "exit code ${PIPESTATUS[0]}"'
 rec threshold-out-of-range 'gooze run --threshold-total 101 ./... 2>&1 | cat; echo "exit code ${PIPESTATUS[0]}"'
 
 # --- Diff thresholds: main at 84.62%, a branch adds the boundary tests ----

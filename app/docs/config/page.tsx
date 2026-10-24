@@ -222,6 +222,15 @@ export default function ConfigPage() {
                 </TableRow>
                 <TableRow>
                   <TableCell>
+                    <code>GOOZE_THRESHOLD_MAX_SURVIVORS</code>
+                  </TableCell>
+                  <TableCell>
+                    Most surviving mutants allowed (default <code>0</code>, off); see{" "}
+                    <a href="#threshold">quality gates</a>.
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
                     <code>GOOZE_REPORT_FORMAT</code>
                   </TableCell>
                   <TableCell>
@@ -325,10 +334,11 @@ run:
   mutagens: []                # e.g. [comparison, boolean]; empty runs the nine defaults
   workspace: overlay          # overlay (go test -overlay) or deep-copy (a project copy per worker)
 
-threshold:                    # minimum scores in percent; 0 is off; below one, exit code 3
+threshold:                    # quality gates; 0 is off; failing one, exit code 3
   total: 0                    # the score of all mutations
   average: 0                  # the mean of the file scores
   file: 0                     # the score every file must reach
+  max_survivors: 0            # the most surviving mutants allowed
   diff:                       # used instead of the above by gooze run --diff
     total: 0
     average: 0
@@ -350,14 +360,17 @@ log:
         </div>
 
         <div id="threshold">
-          <h2>Score thresholds</h2>
+          <h2>Quality gates</h2>
           <p>
             The <code>threshold</code> keys make <code>gooze run</code>,{" "}
             <code>gooze report view</code> and <code>gooze report merge</code> exit with code{" "}
             <code>3</code> when a score is below them: <code>total</code> for the score of all
             mutations, <code>average</code> for the mean of the file scores, and{" "}
-            <code>file</code> for every file&apos;s own score. The <code>threshold.diff</code>{" "}
-            keys replace them for <code>gooze run --diff</code>, on the changed lines. Flags{" "}
+            <code>file</code> for every file&apos;s own score. <code>max_survivors</code> is a
+            count, not a percent: more surviving mutants than it allows fail the same way. The{" "}
+            <code>threshold.diff</code> keys replace the scores for{" "}
+            <code>gooze run --diff</code>, on the changed lines; there,{" "}
+            <code>max_survivors</code> counts the changed lines&apos; survivors. Flags{" "}
             <code>--threshold-total</code> and <code>--threshold-diff-total</code> (and the
             others) override them for one command. How to pick and use them:{" "}
             <Link href="/docs/ci/quality-gates">Quality gates</Link>.
@@ -375,7 +388,8 @@ log:
             <li><code>run.mutation_timeout</code> must be at least <code>1</code> (seconds)</li>
             <li><code>version</code> must be <code>1</code></li>
             <li><code>run.workspace</code> must be <code>overlay</code> or <code>deep-copy</code></li>
-            <li>every <code>threshold</code> value must be a number from <code>0</code> to <code>100</code></li>
+            <li>every <code>threshold</code> score must be a number from <code>0</code> to <code>100</code></li>
+            <li><code>threshold.max_survivors</code> must be a whole number, at least <code>0</code></li>
             <li>
               <code>report.format</code> must be <code>text</code>, <code>github</code>,{" "}
               <code>gitlab</code>, <code>sarif</code> or <code>codeclimate</code>

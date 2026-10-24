@@ -18,6 +18,7 @@ const config = `threshold:
   total: 80       # the score of all mutations
   average: 75     # the mean of the file scores
   file: 50        # the score every file must reach
+  max_survivors: 5 # the most surviving mutants allowed
   diff:           # --diff runs only, on the changed lines
     total: 100`
 
@@ -29,6 +30,10 @@ const faqs = [
   {
     q: "What is the difference between the total, average and file thresholds?",
     a: "`total` is the score of all mutations, so large files weigh more. `average` is the mean of the per-file scores, so every file weighs the same. `file` is a floor every file must reach on its own.",
+  },
+  {
+    q: "Can Gooze fail CI on the number of surviving mutants?",
+    a: "Yes. `--threshold-max-survivors` (or `threshold.max_survivors` in `gooze.yaml`) is the most surviving mutants allowed. With more, `gooze run`, `gooze report view` and `gooze report merge` exit with code `3`. Only `survived` mutants count: `not_covered` and `timeout` lower the score instead. A `--diff` run counts the survivors on its changed lines.",
   },
   {
     q: "Can pull requests have a stricter threshold than main?",
@@ -62,9 +67,9 @@ export default function QualityGatesPage() {
       <p className="text-lg text-muted-foreground mb-8">
         Your CI runs Gooze on every push, but the job passes at any score, so tests can get
         weaker without anyone noticing. A threshold turns the score into a gate: below it, Gooze
-        exits with code <code>3</code> and the job fails. This page shows the three kinds of
-        threshold, a stricter one for pull requests, where sharded runs check them, and how
-        to handle each exit code in your pipeline.
+        exits with code <code>3</code> and the job fails. This page shows the three score
+        thresholds, a cap on surviving mutants, a stricter bar for pull requests, where sharded
+        runs check them, and how to handle each exit code in your pipeline.
       </p>
 
       <div>
@@ -124,6 +129,26 @@ export default function QualityGatesPage() {
           </p>
         </div>
 
+        <div id="max-survivors">
+          <h2>A cap on surviving mutants</h2>
+          <p>
+            A score is a ratio, so it can stay above a threshold while the number of surviving
+            mutants grows with the code. <code>--threshold-max-survivors</code> counts them
+            instead: with more survivors than it allows, Gooze exits with code <code>3</code>.
+            It is a whole number, and <code>0</code> turns it off. The calc story has two
+            survivors, so a cap of <code>1</code> fails:
+          </p>
+          <CodeBlock lang="bash" code="gooze report view --threshold-max-survivors 1" />
+          <Recording name="calc-threshold-max-survivors" title="Recorded gooze report view above threshold.max_survivors" />
+          <p>
+            Only <code>survived</code> mutants count. <code>not_covered</code> and{" "}
+            <code>timeout</code> lower the score, so the score thresholds catch them. The cap
+            has no <code>diff</code> copy: a <code>--diff</code> run, and{" "}
+            <code>gooze report view</code> of its reports, count the survivors on the changed
+            lines against the same number.
+          </p>
+        </div>
+
         <div id="config">
           <h2>Set them once in gooze.yaml</h2>
           <p>
@@ -134,8 +159,9 @@ export default function QualityGatesPage() {
           <p>
             A flag overrides the file for one run (<code>--threshold-total 0</code> turns the
             total off), and so does an environment variable such as{" "}
-            <code>GOOZE_THRESHOLD_TOTAL</code> or <code>GOOZE_THRESHOLD_DIFF_FILE</code>. A value
-            outside <code>0</code> to <code>100</code> is a usage error:
+            <code>GOOZE_THRESHOLD_TOTAL</code>, <code>GOOZE_THRESHOLD_DIFF_FILE</code> or{" "}
+            <code>GOOZE_THRESHOLD_MAX_SURVIVORS</code>. A score outside <code>0</code> to{" "}
+            <code>100</code>, or a negative cap, is a usage error:
           </p>
           <Recording name="threshold-out-of-range" title="Recorded threshold out of range" />
           <p className="text-sm text-muted-foreground">
@@ -200,7 +226,7 @@ export default function QualityGatesPage() {
               </TableRow>
               <TableRow>
                 <TableCell><code>gooze run --diff REF</code></TableCell>
-                <TableCell><code>threshold.diff.*</code> on the changed lines</TableCell>
+                <TableCell><code>threshold.diff.*</code> and <code>threshold.max_survivors</code> on the changed lines</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell><code>gooze run -s INDEX/TOTAL</code></TableCell>

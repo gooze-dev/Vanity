@@ -186,7 +186,7 @@ export const docsPages: DocsPage[] = [
       "Mutation Score Thresholds and Exit Codes in CI · Gooze",
     section: "CI/CD",
     description:
-      "Fail CI below a mutation score with Gooze thresholds: total, average and per file, a stricter bar for pull request diffs, gates on sharded runs, and every exit code.",
+      "Fail CI below a mutation score with Gooze thresholds: total, average and per file, a cap on surviving mutants, a stricter bar for pull request diffs, gates on sharded runs, and every exit code.",
     keywords: ["quality gate","mutation score threshold","minimum score","exit codes","fail ci","pull request","diff threshold","per-file score","allow_failure","allowExitCodes"],
   },
   {
