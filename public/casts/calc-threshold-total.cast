@@ -1,3 +1,3 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792666585, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-threshold-total (gooze v1.3.0 (go1.27.3))"}
-[0.024868, "o", "Mutation score: 84.62% (11 killed, 2 survived; 13 cached, 0 tested)\r\nError: mutation score 84.62% is below threshold.total 90%\r\n"]
-[0.026046, "o", "exit code 3\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792845753, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-threshold-total (gooze v1.4.1 (go1.27.3))"}
+[0.01639, "o", "Mutation score: 84.62% (11 killed, 2 survived; 13 cached, 0 tested)\r\nError: mutation score 84.62% is below threshold.total 90%\r\n"]
+[0.016967, "o", "exit code 3\r\n"]

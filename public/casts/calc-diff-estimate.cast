@@ -1,3 +1,2 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792666559, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-diff-estimate (gooze v1.3.0, goozels v0.3.0, go1.27.3)"}
-[0.019697, "o", "Diff mode: 1 file changed since main (merge base f5ff61d); counts cover changed lines only.\r\n"]
-[0.020536, "o", "\r\n PATH          │ MUTATIONS \r\n───────────────┼───────────\r\n calc.go       │    13     \r\n───────────────┼───────────\r\n TOTAL FILES 1 │    13     \r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792845738, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-diff-estimate (gooze v1.4.1, goozels v0.4.0, go1.27.3)"}
+[0.015856, "o", "Diff mode: 1 file changed since main (merge base f5ff61d); counts cover changed lines only.\r\n\r\n PATH          │ MUTATIONS \r\n───────────────┼───────────\r\n calc.go       │    13     \r\n───────────────┼───────────\r\n TOTAL FILES 1 │    13     \r\n"]

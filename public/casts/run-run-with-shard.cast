@@ -1,2 +1,2 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792666582, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "run-run-with-shard (gooze v1.3.0, goozels v0.3.0, go1.27.3)"}
-[0.014442, "o", "Error: --run can't be combined with --shard: a function-level run is small, so run it in one job\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792845751, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "run-run-with-shard (gooze v1.4.1, goozels v0.4.0, go1.27.3)"}
+[0.008364, "o", "Error: --run can't be combined with --shard: a function-level run is small, so run it in one job\r\n"]

@@ -1,3 +1,3 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792666592, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "exit-code-no-reports (gooze v1.3.0 (go1.27.3))"}
-[0.014377, "o", "Error: no reports directory at missing; run `gooze run` first, or pass -o with the reports directory\r\n"]
-[0.015732, "o", "exit code 6\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792845759, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "exit-code-no-reports (gooze v1.4.1 (go1.27.3))"}
+[0.009051, "o", "Error: no reports directory at missing; run `gooze run` first, or pass -o with the reports directory\r\n"]
+[0.009977, "o", "exit code 6\r\n"]

@@ -1,3 +1,3 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792822988, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-fail-fast-gate (gooze v1.3.1-0.20261024062253-d826193b5eee (go1.27.3))"}
-[6.782993, "o", "Mutation score: 81.82% (9 killed, 2 survived; 0 cached, 11 tested; stopped early by fail-fast gate after 11 of 13)\r\nError: mutation score 81.82% is below threshold.total 90%\r\n"]
-[6.784379, "o", "exit code 3\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792845753, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-fail-fast-gate (gooze v1.4.1 (go1.27.3))"}
+[1.364197, "o", "Mutation score: 81.82% (9 killed, 2 survived; 0 cached, 11 tested; stopped early by fail-fast gate after 11 of 13)\r\nError: mutation score 81.82% is below threshold.total 90%\r\n"]
+[1.364892, "o", "exit code 3\r\n"]

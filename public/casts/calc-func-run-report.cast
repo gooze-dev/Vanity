@@ -1,2 +1,2 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792666573, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-func-run-report (gooze v1.3.0, goozels v0.3.0, go1.27.3)"}
-[0.007296, "o", "diff: null\r\nline: 10\r\nscope:\r\n    run: ^InRange$\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1792845746, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-func-run-report (gooze v1.4.1, goozels v0.4.0, go1.27.3)"}
+[0.004915, "o", "diff: null\r\nline: 10\r\nscope:\r\n    run: ^InRange$\r\n"]
