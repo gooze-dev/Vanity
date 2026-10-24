@@ -37,7 +37,7 @@ const faqs = [
   },
   {
     q: "Why does a `--run` run print `no mutations`?",
-    a: "The file has stored results in the main reports and neither it nor its test file changed, so the run skips it. Change the test file, or pass `--no-cache` to test the function anyway.",
+    a: "The file has stored results in the main reports and neither it nor its package's test files changed, so the run skips it. Change a test file, or pass `--no-cache` to test the function anyway.",
   },
   {
     q: "Which names does `--mutagens` accept?",

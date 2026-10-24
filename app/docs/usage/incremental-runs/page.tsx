@@ -136,7 +136,7 @@ export default function IncrementalRunsPage() {
           <ul>
             <li>it has no stored reports yet,</li>
             <li>its content changed,</li>
-            <li>its test file (<code>&lt;name&gt;_test.go</code>) changed,</li>
+            <li>a test file of its package (any <code>_test.go</code>) changed,</li>
             <li>
               the mutators that produced its reports changed (a Gooze upgrade; for example <code>v1.2.0</code>{" "}
               re-tests reports from version 1 of the <code>comparison</code> mutator), or

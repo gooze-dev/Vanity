@@ -258,7 +258,7 @@ const faqs = [
   },
   {
     q: "Does Gooze only test changed code?",
-    a: "Yes. By default Gooze detects changes through incremental execution, without git: it hashes each file and its test file and re-tests only what changed since the stored reports. Results for the rest are reused, so the score covers the whole codebase. No base branch, commit, or git history is needed, and uncommitted edits count. Granularity is per file. Changes in other files don't invalidate cached results, so run `--no-cache` periodically. `gooze run --diff REF` mutates only the lines changed against a git ref, and its score describes the change.",
+    a: "Yes. By default Gooze detects changes through incremental execution, without git: it hashes each file and its package's test files and re-tests only what changed since the stored reports. Results for the rest are reused, so the score covers the whole codebase. No base branch, commit, or git history is needed, and uncommitted edits count. Granularity is per file. Changes in other files don't invalidate cached results, so run `--no-cache` periodically. `gooze run --diff REF` mutates only the lines changed against a git ref, and its score describes the change.",
   },
   {
     q: "Can I write custom mutators for Gooze?",
@@ -443,7 +443,7 @@ export default function ComparisonPage() {
               and the right base ref, and the score describes the change, not the codebase.
             </li>
             <li>
-              <strong>Incremental execution</strong> (Gooze by default): hash every file and its test file,
+              <strong>Incremental execution</strong> (Gooze by default): hash every file and its package's test files,
               re-test only what changed since the stored reports, and reuse the rest. No git, base
               ref, or fetch depth needed, uncommitted edits count, and the score after a one-file
               change is still the score for the whole project.
