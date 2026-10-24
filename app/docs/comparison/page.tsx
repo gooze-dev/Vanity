@@ -443,7 +443,7 @@ export default function ComparisonPage() {
               and the right base ref, and the score describes the change, not the codebase.
             </li>
             <li>
-              <strong>Incremental execution</strong> (Gooze by default): hash every file and its package's test files,
+              <strong>Incremental execution</strong> (Gooze by default): hash every file and its package&apos;s test files,
               re-test only what changed since the stored reports, and reuse the rest. No git, base
               ref, or fetch depth needed, uncommitted edits count, and the score after a one-file
               change is still the score for the whole project.
