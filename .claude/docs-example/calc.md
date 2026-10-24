@@ -2,8 +2,8 @@
 
 The running example for the docs (see "Tell it as a story" in `../rules/writing.md`). Every
 output below is real: gooze v1.4.1 and goozels v0.4.0 on Go 1.27.3, 2026-10-24. The code lives in
-`examples/calc/`, and `scripts/record-casts.sh` records every step below into `public/casts/`
-(`calc-*.cast`); copy outputs from there instead of writing them by hand. If gooze output changes, rerun the steps and update
+`examples/calc/`, and `npm run record:casts` (`scripts/record-casts.mts`) records every step
+below into `public/casts/` (`calc-*.cast`); copy outputs from there instead of writing them by hand. If gooze output changes, rerun the steps and update
 this file and the pages that quote it.
 
 ## Code
@@ -147,7 +147,7 @@ Mutation score: 100.00% (13 killed, 0 survived; 13 cached, 0 tested)
 
 ## Narrowed runs: diff mode, `--run`, `--mutagens`
 
-`scripts/record-narrowed-casts.sh` records these in `/tmp/calc`.
+`npm run record:narrowed-casts` (`scripts/record-narrowed-casts.mts`) records these in `/tmp/calc`.
 
 - Diff mode (`calc-diff-*`, `diff-*`): a git repo whose `main` has the starting tests and a
   full run as the baseline (84.62%); the branch `boundary-tests` adds the two boundary tests.

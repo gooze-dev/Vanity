@@ -27,22 +27,21 @@ describe (`DOCS_FACTS_VERSION` in `lib/version.ts` for gooze; the goozels and pl
 named on the page). Use the running example from `.claude/docs-example/calc.md` unless the page
 needs something it can't show.
 
-`scripts/record-casts.sh` records every sample of the calc story and the error and setup
-outputs into `public/casts/` (it checks that `gooze version` matches `DOCS_FACTS_VERSION` first).
-Add new samples to that script instead of recording by hand, so one command re-records them all:
+`npm run record:casts` (`scripts/record-casts.mts`) records every sample of the calc story and
+the error and setup outputs into `public/casts/` (it checks that `gooze version` matches
+`DOCS_FACTS_VERSION` first). Add new samples to that script instead of recording by hand, so one
+command re-records them all:
 
 ```bash
-scripts/record-casts.sh                       # static samples, works headless
-RECORD_TUI=1 scripts/record-casts.sh          # also the TUI, from a real terminal
+npm run record:casts                          # every sample, the TUI too, works headless
 node scripts/cast-text.mjs public/casts/calc-report-view.cast   # the text to copy
 ```
 
-Each sample is one `rec NAME "COMMAND"` line, which runs
+Each sample is one `rec("NAME", "COMMAND")` line, which runs
 `asciinema rec -q --overwrite -i 1 -t "NAME (versions)" -c "COMMAND"`.
 
 - Static samples pipe through `| cat`: in a terminal, `gooze run` and `--estimate` open an
-  interactive view that waits for a key. Only `*-tui` casts record the TUI, and they need a real
-  terminal (the TUI queries it at startup), so record them with `RECORD_TUI=1` yourself.
+  interactive view that waits for a key. Only `*-tui` casts record the TUI.
 - `-i 1` caps idle pauses at one second; `-t` records the versions in the file.
 - Record from a clean state (`rm -rf .gooze-reports` when the step expects a first run) so the
   output matches the story step.
@@ -61,7 +60,7 @@ Each sample is one `rec NAME "COMMAND"` line, which runs
   lines of a report), record exactly that command (`| tail -n 1`, `| tail -n 4`) instead of
   cutting text.
 - Full-screen TUI recordings use `<Recording … tui />` and are recorded with `tui` lines in the
-  script (`scripts/record-tui.py` plays the terminal and presses the keys).
+  script (`tuiRecorder` in `scripts/record.mts` plays the terminal and presses the keys).
 - The landing page keeps its own styled terminal (no player there). Its text comes from
   `recordingText(name)`, never typed.
 - Recordings keep a clear gap from the text and code blocks around them (`TerminalCast` has

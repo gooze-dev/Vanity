@@ -35,7 +35,7 @@ export function recordingText(name: string) {
 }
 
 // Real tool output on a page: plays public/casts/<name>.cast (recorded by
-// scripts/record-casts.sh) and puts its text in the HTML for search engines,
+// scripts/record-casts.mts) and puts its text in the HTML for search engines,
 // readers without JavaScript and find-in-page. Pages never copy output by
 // hand; see .claude/rules/tool-output.md.
 export function Recording({
