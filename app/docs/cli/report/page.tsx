@@ -322,7 +322,10 @@ gooze report push ghcr.io/your-org/your-repo/gooze-reports:main`}
 
           <p>
             It takes the same threshold flags as <code>view</code>, checked on the merged
-            reports. A shard doesn&apos;t check thresholds, so put them here when you shard.
+            reports. A shard doesn&apos;t check thresholds, so put them here when you shard. For the
+            shards of a <code>--diff</code> run (<code>gooze report merge -o .gooze-reports/run</code>),
+            the diff minimums apply (<code>--threshold-diff-*</code>, <code>threshold.diff.*</code>), as
+            for <code>view</code>.
           </p>
 
           <h3>When you need this</h3>

@@ -22,7 +22,7 @@ const faqs = [
   },
   {
     q: "Why did a test change put a whole source file in scope?",
-    a: "A changed or new `_test.go` file can kill mutants anywhere in the source file it tests, so Gooze tests that source file in full. It pairs test and source files the same way its cache does.",
+    a: "A changed or new `x_test.go` can kill mutants anywhere in `x.go`, so Gooze tests `x.go` in full. A source without its own test file is never pulled in by a test change; only its own changed lines are in scope.",
   },
   {
     q: "Which score should a CI gate read in diff mode?",
@@ -152,10 +152,10 @@ run:
         <div id="tests">
           <h2>Test changes test the whole file</h2>
           <p>
-            A changed or new <code>_test.go</code> file puts the source files it tests in scope{" "}
-            <strong>in full</strong>. New tests can kill survivors anywhere in that file, not
-            only next to the lines you touched. Gooze pairs test and source files the same way
-            its <Link href="/docs/usage/incremental-runs#invalidation">cache</Link> does.
+            A changed or new <code>x_test.go</code> puts its source file <code>x.go</code> in
+            scope <strong>in full</strong>. New tests can kill survivors anywhere in that file, not
+            only next to the lines you touched. A source without its own test file is never pulled
+            in by a test change: only its own changed lines are in scope.
           </p>
           <p>
             That is what happens on the <code>calc</code> branch above: the branch changes only{" "}

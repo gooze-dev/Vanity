@@ -120,6 +120,17 @@ func f() int {
           </div>
         </div>
 
+        <div id="build-constraints">
+          <h2>Files left out of the build</h2>
+          <p>
+            Gooze skips files the build leaves out: a <code>{"//go:build"}</code> line, or a file
+            name such as <code>conn_windows.go</code> that doesn&apos;t match <code>GOOS</code> or{" "}
+            <code>GOARCH</code>. Their mutants could never reach a test binary. To test another
+            variant, run with its tags:
+          </p>
+          <CodeBlock lang="bash" code="GOFLAGS=-tags=strict gooze run ./..." />
+        </div>
+
         <div id="generated">
           <h2>Generated files</h2>
           <p>
