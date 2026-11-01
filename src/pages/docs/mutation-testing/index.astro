@@ -20,7 +20,7 @@ const metadata = docsMetadata("/docs/mutation-testing")
 const faqs = [
   {
     q: "What is mutation testing?",
-    a: "Mutation testing measures the quality of your test suite. It injects tiny, deliberate bugs (mutants) into your source code and runs your tests to see whether they catch the change.",
+    a: "Mutation testing measures the quality of your test suite. It injects small, deliberate bugs (mutants) into your code and checks whether your tests catch them.",
   },
   {
     q: "What is the difference between code coverage and mutation testing?",
@@ -28,7 +28,7 @@ const faqs = [
   },
   {
     q: "What does it mean when a mutant survives?",
-    a: "A survived mutant means a bug was injected into your code but your tests still passed, which points to a gap in your assertions or missing coverage for that logic.",
+    a: "A survived mutant means a bug was injected into your code but your tests still passed, which points to a gap in your assertions or missing coverage for that logic. Add a test that would fail on that behavior change.",
   },
   {
     q: "What does it mean when a mutant is killed?",
@@ -60,7 +60,7 @@ const faqs = [
   },
   {
     q: "Our coverage is high but bugs still reach production. How does Gooze help?",
-    a: "High line coverage only proves your code was executed, not that your assertions check the result. Gooze injects deliberate faults into your code and checks that your tests fail. A survived mutant shows code your tests run but don't check. For example, tests for a range check can run every line without trying a value exactly on a bound, and Gooze reports `if n < lo {` -> `if n <= lo {` as survived.",
+    a: "High line coverage only proves your code was executed, not that your assertions check the result. Gooze injects small, deliberate bugs into your code and checks whether your tests catch them. A survived mutant shows code your tests run but don't check. For example, tests for a range check can run every line without trying a value exactly on a bound, and Gooze reports `if n < lo {` -> `if n <= lo {` as survived.",
   },
   {
     q: "Mutation testing is slow. Will it block our CI/CD pipeline?",
