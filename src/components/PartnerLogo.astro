@@ -2,7 +2,7 @@
 // A partner's official logo from public/partners, unchanged. Black marks swap to
 // their white files in dark mode. Decorative: the name is always next to it.
 const { name, size = 16, class: className } = Astro.props as {
-  name: "claude" | "github" | "github-actions" | "gitlab" | "vscode" | "neovim" | "goland" | "opencode"
+  name: "claude" | "github" | "github-actions" | "gitlab" | "vscode" | "neovim" | "goland" | "opencode" | "codex"
   size?: number
   class?: string
 }
@@ -12,5 +12,5 @@ const swaps = name === "github" || name === "goland" || name === "opencode"
 {swaps ? (
   <Fragment><img src={`${base}partners/${name}.svg`} alt="" width={size} height={size} class:list={["shrink-0 dark:hidden", className]} /><img src={`${base}partners/${name}-white.svg`} alt="" width={size} height={size} class:list={["hidden shrink-0 dark:block", className]} /></Fragment>
 ) : (
-  <img src={`${base}partners/${name}.svg`} alt="" width={size} height={size} class:list={["shrink-0", className]} />
+  <img src={`${base}partners/${name}.${name === "codex" ? "png" : "svg"}`} alt="" width={size} height={size} class:list={["shrink-0", className]} />
 )}
