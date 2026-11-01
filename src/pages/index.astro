@@ -66,7 +66,7 @@ const rows = [
   <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
   <NavHeader />
   <main class="gz-l">
-    <section class="gz-l__sec gz-l__hero">
+    <section class="gz-l__sec gz-l__sec--center gz-l__hero">
       <div class="gz-l__in">
         <p class="gz-l__label">Mutation testing for Go</p>
         <h1 class="gz-l__h1">Test your tests.</h1>
@@ -112,7 +112,7 @@ const rows = [
       </div>
     </section>
 
-    <section class="gz-l__sec gz-l__sec--subtle">
+    <section class="gz-l__sec gz-l__sec--subtle gz-l__sec--center">
       <div class="gz-l__in">
         <h2 class="gz-l__h2">Run it on your module.</h2>
         <CodeBlock code={"gooze run ./...\ngooze report view"} lang="bash" prompt class="max-w-[560px]" />
@@ -121,7 +121,7 @@ const rows = [
     </section>
 
     <section id="faq" class="gz-l__sec scroll-mt-8">
-      <div class="gz-l__in">
+      <div class="gz-l__in gz-l__in--narrow">
         <h2 class="gz-l__h2">Questions</h2>
         <FaqList faqs={faqs} />
         <a href="/docs/mutation-testing/#faq" class="gz-l__link gz-l__more self-start">More questions <Icon name="arrow-right" class="size-3.5" aria-hidden="true" /></a>

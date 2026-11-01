@@ -653,6 +653,22 @@
     .gz-l__hero {
       padding-top: 160px;
     }
+    /* The two statement sections are centred. Phones stay left-aligned. */
+    .gz-l__sec--center .gz-l__in {
+      align-items: center;
+      text-align: center;
+    }
+    .gz-l__sec--center .gz-l__lead,
+    .gz-l__sec--center .gz-l__p {
+      max-width: 64ch;
+      text-wrap: balance;
+    }
+    .gz-l__sec--center .gz-l__actions {
+      justify-content: center;
+    }
+    .gz-l__in--narrow {
+      max-width: 760px;
+    }
     .gz-l__split {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
