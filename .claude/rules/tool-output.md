@@ -53,17 +53,18 @@ Each sample is one `rec("NAME", "COMMAND")` line, which runs
 ## Show it on the page
 
 - Every tool output on a page is `<Recording name="…" title="…" />`
-  (`src/components/Recording.astro`). It reads `public/casts/<name>.cast` at build time, plays it
-  with asciinema-player (sized to the output), and puts the recorded text in the HTML for search
-  engines, find-in-page and readers without JavaScript. Never paste output into a `CodeBlock`.
+  (`src/components/Recording.astro`). It reads `public/casts/<name>.cast` at build time and shows
+  the recorded text, so search engines, readers without JavaScript and find-in-page all get it.
+  Never paste output into a `CodeBlock`.
 - Record one cast per sample. If a page shows only part of an output (the score line, the last
   lines of a report), record exactly that command (`| tail -n 1`, `| tail -n 4`) instead of
   cutting text.
-- Full-screen TUI recordings use `<Recording … tui />` and are recorded with `tui` lines in the
+- Full-screen TUI recordings, the UI modes, are the only ones played with asciinema-player. They
+  use `<Recording … tui />` and are recorded with `tui` lines in the
   script (`tuiRecorder` in `scripts/record.mts` plays the terminal and presses the keys).
 - The landing page keeps its own styled terminal (no player there). Its text comes from
   `recordingText(name)`, never typed.
-- Recordings keep a clear gap from the text and code blocks around them (`TerminalCast` has
+- Recordings keep a clear gap from the text and code blocks around them (`Recording` has
   `my-6`); don't remove it or squeeze a recording against a code block.
 - Real output keeps characters the writing rules ban in prose (goozels prints `—`).
 
