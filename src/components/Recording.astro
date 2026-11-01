@@ -1,5 +1,4 @@
 ---
-import "asciinema-player/dist/bundle/asciinema-player.css"
 import { castText, readCast } from "@/lib/recording"
 
 type Props = {
@@ -7,27 +6,32 @@ type Props = {
   name: string
   /** What the recording shows, for screen readers. */
   title: string
-  /** Full-screen TUI recording: keep the recorded terminal size. */
+  /** Full-screen TUI recording: play it instead of showing its text. */
   tui?: boolean
 }
 
-// Real tool output on a page: plays public/casts/<name>.cast (recorded by
-// scripts/record-casts.mts) and puts its text in the HTML for search engines,
-// readers without JavaScript and find-in-page. Pages never copy output by
-// hand; see .claude/rules/tool-output.md.
+// Real tool output on a page, from public/casts/<name>.cast (recorded by
+// scripts/record-casts.mts). Pages never copy output by hand; see
+// .claude/rules/tool-output.md. Plain output is text; only a TUI needs a player.
 const { name, title, tui = false } = Astro.props
 const cast = readCast(name)
 const header = JSON.parse(cast.slice(0, cast.indexOf("\n"))) as { height: number }
 const text = castText(cast)
-const rows = tui ? header.height : Math.min(header.height, Math.max(2, text.split("\n").length + 1))
-const poster = tui ? "npt:0:2" : "npt:0:10"
 ---
-<figure data-slot="terminal-cast" data-src={`/casts/${name}.cast`} data-rows={rows} data-poster={poster} aria-label={title} class="my-6 overflow-hidden rounded-lg border"><div data-player></div>{tui ? null : <pre class="m-0 overflow-hidden whitespace-pre-wrap p-4 font-mono text-xs">{text}</pre>}</figure>
+{tui ? (
+  <figure data-slot="terminal-cast" data-src={`/casts/${name}.cast`} data-rows={header.height} aria-label={title} class="not-typeset my-6 overflow-hidden rounded-lg border">
+    <div data-player></div>
+  </figure>
+) : (
+  <figure data-slot="terminal-output" aria-label={title} class="my-6 overflow-hidden rounded-lg border">
+    <pre class="m-0 overflow-x-auto whitespace-pre p-4 font-mono text-xs">{text}</pre>
+  </figure>
+)}
 
 <script>
-  // Mounts asciinema-player on each recording. Until the player loads (and
-  // without JavaScript) the figure shows the recording's text, which stays for
-  // screen readers afterwards.
+  // Mounts asciinema-player on each TUI recording. The player and its styles
+  // load only on pages that have one.
+  const posterSeconds = 2
   let players: { dispose: () => void }[] = []
 
   document.addEventListener("astro:before-swap", () => {
@@ -35,25 +39,26 @@ const poster = tui ? "npt:0:2" : "npt:0:10"
     players = []
   })
 
-  document.addEventListener("astro:page-load", () => {
+  document.addEventListener("astro:page-load", async () => {
     const figures = document.querySelectorAll<HTMLElement>('[data-slot="terminal-cast"]')
     if (figures.length === 0) return
-    import("asciinema-player").then((AsciinemaPlayer) => {
-      for (const figure of figures) {
-        const target = figure.querySelector<HTMLElement>("[data-player]")
-        if (!target || !figure.isConnected || target.childElementCount > 0) continue
-        players.push(
-          AsciinemaPlayer.create(figure.dataset.src ?? "", target, {
-            rows: Number(figure.dataset.rows),
-            poster: figure.dataset.poster,
-            idleTimeLimit: 1,
-            fit: "width",
-            theme: "auto/asciinema",
-          }),
-        )
-        const text = figure.querySelector("pre")
-        if (text) text.className = "sr-only"
-      }
-    })
+    const [AsciinemaPlayer] = await Promise.all([
+      import("asciinema-player"),
+      import("asciinema-player/dist/bundle/asciinema-player.css"),
+    ])
+    for (const figure of figures) {
+      const target = figure.querySelector<HTMLElement>("[data-player]")
+      if (!target || !figure.isConnected || target.childElementCount > 0) continue
+      const player = AsciinemaPlayer.create(figure.dataset.src ?? "", target, {
+        rows: Number(figure.dataset.rows),
+        poster: `npt:0:${posterSeconds}`,
+        idleTimeLimit: 1,
+        fit: "width",
+        theme: "auto/asciinema",
+      })
+      // A TUI recording ends by quitting, which clears the screen: don't rest on that.
+      player.addEventListener("ended", () => player.seek(posterSeconds))
+      players.push(player)
+    }
   })
 </script>
