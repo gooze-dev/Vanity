@@ -109,7 +109,7 @@
       margin-block-start: 1em;
     }
     &:where(:is(h1, h2, h3, h4) :is(code)) {
-      font-size: 0.9em;
+      font-size: 14px;
     }
 
     /* Links. */
@@ -247,7 +247,7 @@
     /* Keyboard keys. */
     &:where(kbd) {
       font-family: inherit;
-      font-size: 0.85em;
+      font-size: 13px;
       font-weight: 500;
       border: 1px solid var(--typeset-rule);
       border-block-end-width: 2px;
@@ -279,7 +279,7 @@
       background-color: var(--inline-code-bg);
       border: 1px solid var(--border);
       font-family: var(--typeset-font-mono);
-      font-size: 0.9em;
+      font-size: 14px;
       border-radius: var(--radius-token-sm);
       padding: 0.15em 0.4em;
     }

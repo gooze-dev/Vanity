@@ -61,7 +61,7 @@ const goozeTheme: ThemeRegistration = {
   name: "gooze",
   type: "dark",
   fg: syntax.fg,
-  bg: "#000000",
+  bg: "#0c100d",
   colorReplacements: {
     [syntax.fg]: "var(--code-fg)",
     [syntax.keyword]: "var(--syn-keyword)",
@@ -71,7 +71,7 @@ const goozeTheme: ThemeRegistration = {
     [syntax.func]: "var(--syn-func)",
   },
   settings: [
-    { settings: { foreground: syntax.fg, background: "#000000" } },
+    { settings: { foreground: syntax.fg, background: "#0c100d" } },
     { scope: ["comment", "punctuation.definition.comment"], settings: { foreground: syntax.comment, fontStyle: "italic" } },
     { scope: ["keyword", "storage", "entity.name.tag", "support.type.property-name"], settings: { foreground: syntax.keyword } },
     { scope: ["keyword.operator", "punctuation"], settings: { foreground: syntax.fg } },
