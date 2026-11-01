@@ -63,12 +63,12 @@ const metadata: Metadata = {
       <main class="flex-1 flex items-center justify-center px-4 py-16">
         <div class="w-full min-w-0 max-w-2xl mx-auto text-center space-y-8">
           <div class="space-y-4">
-            <h1 class="text-5xl font-extrabold"><GoozeLogo class="text-inherit" /><span class="font-extrabold" style={{ color: "var(--gooze-teal)", fontFamily: "var(--font-oxanium)", letterSpacing: "-0.02em" }}>ls</span></h1>
-            <p class="text-xl text-muted-foreground">Editor support (LSP) for Gooze</p>
+            <h1 class="text-5xl"><GoozeLogo>ls</GoozeLogo></h1>
+            <p class="text-lg text-muted-foreground">Editor support (LSP) for Gooze</p>
           </div>
           {/* Import Path */}
           <div class="rounded-lg border bg-card p-6 space-y-4 min-w-0">
-            <div class="flex items-center justify-center gap-2 text-muted-foreground"><Icon name="terminal" class="h-5 w-5 text-[color:var(--gooze-teal)]" /><span class="font-semibold">Installation</span></div>
+            <div class="flex items-center justify-center gap-2 text-muted-foreground"><Icon name="terminal" class="h-5 w-5" /><span class="font-semibold">Installation</span></div>
             <CodeBlock code={`go install ${INSTALL_PATH}@latest`} lang="bash" />
             <p class="text-sm text-muted-foreground">This vanity import path points to the official Git repository.</p>
           </div>

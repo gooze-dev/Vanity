@@ -505,15 +505,15 @@ const metadata = docsMetadata("/docs/roadmap")
         <div class="flex flex-wrap items-end justify-between gap-4">
           <div>
             <div class="text-sm text-muted-foreground">Progress</div>
-            <div class="text-3xl font-bold tracking-tight text-foreground">{percent}%</div>
+            <div class="font-display text-4xl font-bold text-foreground">{percent}%</div>
           </div>
           <div class="flex gap-6 text-sm">
-            <div class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-[color:var(--gooze-green)]"></span><span class="font-semibold text-foreground">{shippedCount}</span><span class="text-muted-foreground">shipped</span></div>
-            <div class="flex items-center gap-2"><span class="size-2.5 rounded-full border-2 border-[color:var(--gooze-teal)]"></span><span class="font-semibold text-foreground">{plannedCount}</span><span class="text-muted-foreground">planned</span></div>
+            <div class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-highlight"></span><span class="font-semibold text-foreground">{shippedCount}</span><span class="text-muted-foreground">shipped</span></div>
+            <div class="flex items-center gap-2"><span class="size-2.5 rounded-full border-2 border-dashed border-input"></span><span class="font-semibold text-foreground">{plannedCount}</span><span class="text-muted-foreground">planned</span></div>
           </div>
         </div>
         <div class="mt-4 h-2 overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100} aria-label="Roadmap progress">
-          <div class="h-full rounded-full bg-gradient-to-r from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)]" style={{ width: `${percent}%` }}></div>
+          <div class="h-full rounded-full bg-highlight" style={{ width: `${percent}%` }}></div>
         </div>
       </div>{themes.map((theme) => {
         const done = theme.items.filter((item) => item.shipped).length
@@ -533,7 +533,7 @@ const metadata = docsMetadata("/docs/roadmap")
             <li id={item.id} class="p-4">
               <div class="font-medium text-foreground">{item.title}</div>
               <p class="mt-1 text-sm leading-relaxed text-muted-foreground [&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.8125rem] [&_code]:text-foreground"><Fragment set:html={withCode(item.detail)} />{item.workaround && (
-                  <>{" "}Until then, use{" "}<a href={withSlash(item.workaround.href)} class="font-medium text-[color:var(--gooze-teal)] underline-offset-4 hover:text-[color:var(--gooze-green)] hover:underline">{item.workaround.text}</a>.</>
+                  <>{" "}Until then, use{" "}<a href={withSlash(item.workaround.href)} class="font-medium text-accent underline-offset-4 hover:text-foreground hover:underline">{item.workaround.text}</a>.</>
                 )}</p>
             </li>
           ))}</ul>

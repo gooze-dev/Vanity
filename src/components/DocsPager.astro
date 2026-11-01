@@ -11,17 +11,17 @@ const next = index === -1 ? undefined : docsPages[index + 1]
 {index !== -1 && (
   <nav aria-label="Pagination" class="flex flex-col gap-3 border-t pt-6 sm:flex-row sm:justify-between">
     {previous ? (
-      <a href={withSlash(previous.href)} class="group flex flex-1 flex-col gap-1 rounded-lg border p-4 transition-colors hover:border-[color:var(--gooze-teal)]">
+      <a href={withSlash(previous.href)} class="group flex flex-1 flex-col gap-1 rounded-lg border p-4 transition-colors hover:border-input">
         <span class="flex items-center gap-1 text-xs text-muted-foreground"><Icon name="chevron-left" class="h-3.5 w-3.5" />Previous</span>
-        <span class="font-medium group-hover:text-[color:var(--gooze-teal)]">{previous.title}</span>
+        <span class="font-medium group-hover:text-accent">{previous.title}</span>
       </a>
     ) : (
       <span class="flex-1"></span>
     )}
     {next ? (
-      <a href={withSlash(next.href)} class="group flex flex-1 flex-col gap-1 rounded-lg border p-4 text-right transition-colors hover:border-[color:var(--gooze-teal)]">
+      <a href={withSlash(next.href)} class="group flex flex-1 flex-col gap-1 rounded-lg border p-4 text-right transition-colors hover:border-input">
         <span class="flex items-center justify-end gap-1 text-xs text-muted-foreground">Next<Icon name="chevron-right" class="h-3.5 w-3.5" /></span>
-        <span class="font-medium group-hover:text-[color:var(--gooze-teal)]">{next.title}</span>
+        <span class="font-medium group-hover:text-accent">{next.title}</span>
       </a>
     ) : (
       <span class="flex-1"></span>

@@ -102,7 +102,7 @@ const metadata = docsMetadata("/docs/cli")
         <div id="commands">
           <h2>Commands</h2>
           <div class="grid gap-4 md:grid-cols-2">{commands.map((cmd) => (
-              <Item variant="outline" class="hover:border-[color:var(--gooze-teal)]" href={withSlash(cmd.href)}>
+              <Item variant="outline" class="hover:border-input" href={withSlash(cmd.href)}>
                   <ItemContent>
                     <ItemTitle>{cmd.title}</ItemTitle>
                     <ItemDescription><Fragment set:html={withCode(cmd.desc)} /></ItemDescription>

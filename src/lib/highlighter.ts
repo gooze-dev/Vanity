@@ -2,6 +2,7 @@ import {
   createHighlighterCore,
   type GrammarState,
   type HighlighterCore,
+  type ThemeRegistration,
 } from "shiki/core"
 import { createJavaScriptRegexEngine } from "shiki/engine/javascript"
 
@@ -40,14 +41,55 @@ function escapeHtml(text: string) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
 }
 
+// The brand's syntax colours, as tokens. Code blocks are dark in both themes, so
+// there is one theme. Shiki needs real colours while tokenizing; the placeholders
+// are swapped for the CSS variables in its output.
+const syntax = {
+  fg: "#000001",
+  keyword: "#000002",
+  string: "#000003",
+  number: "#000004",
+  comment: "#000005",
+  func: "#000006",
+}
+
+// Shiki's FontStyle flags.
+const italic = 1
+const bold = 2
+
+const goozeTheme: ThemeRegistration = {
+  name: "gooze",
+  type: "dark",
+  fg: syntax.fg,
+  bg: "#000000",
+  colorReplacements: {
+    [syntax.fg]: "var(--code-fg)",
+    [syntax.keyword]: "var(--syn-keyword)",
+    [syntax.string]: "var(--syn-string)",
+    [syntax.number]: "var(--syn-number)",
+    [syntax.comment]: "var(--syn-comment)",
+    [syntax.func]: "var(--syn-func)",
+  },
+  settings: [
+    { settings: { foreground: syntax.fg, background: "#000000" } },
+    { scope: ["comment", "punctuation.definition.comment"], settings: { foreground: syntax.comment, fontStyle: "italic" } },
+    { scope: ["keyword", "storage", "entity.name.tag", "support.type.property-name"], settings: { foreground: syntax.keyword } },
+    { scope: ["keyword.operator", "punctuation"], settings: { foreground: syntax.fg } },
+    { scope: ["string", "punctuation.definition.string"], settings: { foreground: syntax.string } },
+    { scope: ["constant", "support.constant"], settings: { foreground: syntax.number } },
+    { scope: ["entity.name.function", "support.function"], settings: { foreground: syntax.func, fontStyle: "bold" } },
+    // Shell commands are plain text: an argument is not a string literal.
+    { scope: ["source.shell", "source.shell entity.name.command", "source.shell support.function", "string.unquoted.argument"], settings: { foreground: syntax.fg, fontStyle: "" } },
+    { scope: ["source.shell string.quoted", "source.shell comment"], settings: { foreground: syntax.string } },
+    { scope: ["source.shell comment"], settings: { foreground: syntax.comment, fontStyle: "italic" } },
+  ],
+}
+
 let highlighter: Promise<HighlighterCore> | undefined
 
 function getHighlighter() {
   highlighter ??= createHighlighterCore({
-    themes: [
-      import("shiki/themes/github-light.mjs"),
-      import("shiki/themes/github-dark.mjs"),
-    ],
+    themes: [goozeTheme],
     langs: [],
     engine: createJavaScriptRegexEngine({ forgiving: true }),
   })
@@ -91,8 +133,7 @@ export async function loadHighlighter(language: string) {
       const tokenize = (text: string) =>
         shiki.codeToTokens(text, {
           lang,
-          themes: { light: "github-light", dark: "github-dark" },
-          defaultColor: false,
+          theme: "gooze",
           grammarState: state,
         }).tokens
 
@@ -107,10 +148,14 @@ export async function loadHighlighter(language: string) {
         lines: tokens.map((line) =>
           line
             .map((token) => {
-              const style = Object.entries(token.htmlStyle ?? {})
-                .map(([key, value]) => `${key}:${value}`)
+              const style = [
+                token.color && `color:${token.color}`,
+                (token.fontStyle ?? 0) & italic && "font-style:italic",
+                (token.fontStyle ?? 0) & bold && "font-weight:600",
+              ]
+                .filter(Boolean)
                 .join(";")
-              // Short class; colors come from .sk in src/styles/globals.css.
+              // .sk lets diff lines override the color (src/styles/globals.css).
               return `<span style="${escapeHtml(style)}" class="sk">${escapeHtml(token.content)}</span>`
             })
             .join("")

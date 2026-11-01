@@ -50,19 +50,19 @@ const body = highlighted
   })
   .join("")
 
-const preClass = "min-h-0 min-w-0 scroll-fade-x scrollbar-thin overflow-auto px-5 py-5 text-start font-mono leading-relaxed outline-none group-has-data-[slot=code-block-footer]/code-block:pb-2 group-has-data-[slot=code-block-header]/code-block:pt-2 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:py-3 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5 data-wrap:scroll-fade-y data-wrap:wrap-break-word data-wrap:whitespace-pre-wrap"
+const preClass = "min-h-0 min-w-0 scroll-fade-x scrollbar-thin overflow-auto px-4 py-3 text-start font-mono text-sm leading-[1.6] outline-none group-has-data-[slot=code-block-footer]/code-block:pb-2 group-has-data-[slot=code-block-header]/code-block:pt-2 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:py-3 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5 data-wrap:scroll-fade-y data-wrap:wrap-break-word data-wrap:whitespace-pre-wrap"
 const codeClass = "grid min-h-lh min-w-max content-start in-data-numbered:grid-cols-[auto_1fr] in-data-wrap:min-w-0"
-const actionsClass = "-my-1 ms-auto -me-1.5 flex shrink-0 items-center gap-1 *:data-[slot=button]:hover:bg-foreground/5 dark:*:data-[slot=button]:hover:bg-foreground/10 [[data-slot=code-block]>&]:absolute [[data-slot=code-block]>&]:end-4 [[data-slot=code-block]>&]:top-4 [[data-slot=code-block]>&]:z-10 [[data-slot=code-block]>&]:m-0 [[data-slot=code-block]>&]:opacity-0 [[data-slot=code-block]>&]:transition-opacity [[data-slot=code-block]>&]:group-focus-within/code-block:opacity-100 [[data-slot=code-block]>&]:group-hover/code-block:opacity-100 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-2 [[data-slot=code-block]>&]:pointer-coarse:opacity-100 [[data-slot=code-block]>&]:*:[button]:bg-background [[data-slot=code-block]>&]:*:[button]:ring-1 [[data-slot=code-block]>&]:*:[button]:ring-foreground/10"
+const actionsClass = "-my-1 ms-auto -me-2 flex shrink-0 items-center gap-1 [[data-slot=code-block]>&]:absolute [[data-slot=code-block]>&]:end-2 [[data-slot=code-block]>&]:top-2 [[data-slot=code-block]>&]:z-10 [[data-slot=code-block]>&]:m-0"
 ---
-<div data-slot="code-block" data-variant="default" data-size="default" class={cn(codeBlockVariants({ variant: "default" }), compact && "flex-row items-center", className)}>
+<div data-slot="code-block" data-variant="default" data-size="default" data-prompt={(compact && lang === "bash") || undefined} class={cn(codeBlockVariants({ variant: "default" }), compact && "flex-row items-center", className)}>
   {title ? (
-    <div data-slot="code-block-header" class="flex min-w-0 shrink-0 items-center gap-2 px-5 pt-5 text-muted-foreground group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pt-3 group-data-[variant=destructive]/code-block:text-destructive *:has-[>[data-slot=code-block-title]]:min-w-0">
+    <div data-slot="code-block-header" class="flex min-w-0 shrink-0 items-center gap-2 px-4 pt-3 text-muted-foreground group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pt-3 group-data-[variant=destructive]/code-block:text-destructive *:has-[>[data-slot=code-block-title]]:min-w-0">
       <div data-slot="code-block-title" class="min-w-0 truncate font-sans text-sm font-medium text-foreground group-data-[size=sm]/code-block:text-xs group-data-[variant=destructive]/code-block:text-destructive [&_svg]:pointer-events-none [&_svg]:inline-block [&_svg]:align-middle [&_svg:not([class*='size-'])]:size-4 group-data-[size=sm]/code-block:[&_svg:not([class*='size-'])]:size-3.5 *:[svg]:me-1.5">{title}</div>
       <div data-slot="code-block-actions" class={actionsClass}><CodeBlockCopyButton /></div>
     </div>
   ) : !compact && (
     <div data-slot="code-block-actions" class={actionsClass}><CodeBlockCopyButton /></div>
   )}
-  <pre data-slot="code-block-content" data-numbered={lineNumbers || undefined} dir="ltr" tabindex="0" style="counter-reset:line 0" class={cn(preClass, compact && "min-w-0 flex-auto py-3")}><code data-slot="code-block-code" class={codeClass} set:html={body} /></pre>
+  <pre data-slot="code-block-content" data-numbered={lineNumbers || undefined} dir="ltr" tabindex="0" style="counter-reset:line 0" class={cn(preClass, compact && "min-w-0 flex-auto")}><code data-slot="code-block-code" class={codeClass} set:html={body} /></pre>
   {compact && <CodeBlockCopyButton class="me-2 shrink-0" />}
 </div>

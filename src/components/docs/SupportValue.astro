@@ -14,14 +14,13 @@ const supportLabel: Record<Support, string> = {
   unknown: "Not documented",
 }
 
-const supportBadge: Record<Support, { variant: "secondary" | "destructive" | "outline"; class?: string }> = {
-  yes: {
-    variant: "secondary",
-    class: "bg-[color:var(--gooze-green)]/15 text-[color:var(--gooze-green)]",
-  },
-  no: { variant: "destructive" },
-  partial: { variant: "secondary" },
-  unknown: { variant: "outline", class: "text-muted-foreground" },
+// Tags, as in IntegrationCard: the word carries the meaning, and "no" is neutral
+// because a missing feature is not an error.
+const supportBadge: Record<Support, { variant: "default" | "secondary" | "outline"; class?: string }> = {
+  yes: { variant: "default" },
+  no: { variant: "secondary" },
+  partial: { variant: "outline" },
+  unknown: { variant: "outline", class: "border-dashed text-muted-foreground" },
 }
 ---
 <Badge {...supportBadge[support]}>{supportLabel[support]}</Badge>{note && <div class="mt-1 text-xs text-muted-foreground" set:html={withCode(note)} />}

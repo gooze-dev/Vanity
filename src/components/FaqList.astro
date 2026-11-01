@@ -1,18 +1,17 @@
 ---
-import Icon from "@/components/Icon.astro"
 import { faqId, withCode, type Faq } from "@/lib/faq"
 
-// The FAQ card list, shared by docs pages and the landing page. Native
+// The FAQ list, shared by docs pages and the landing page. Native
 // <details> keeps every answer in the HTML (search engines, AI crawlers and
 // find-in-page still see it) and needs no JS; name="faq" keeps one answer open
-// at a time. data-slot makes typeset leave it alone, so it gets its own card
+// at a time. data-slot makes typeset leave it alone, so it gets its own hairline
 // style.
-const { faqs, class: className = "bg-muted/40" } = Astro.props as { faqs: Faq[]; class?: string }
+const { faqs, class: className } = Astro.props as { faqs: Faq[]; class?: string }
 ---
-<div data-slot="faq" class={`divide-y rounded-lg border ${className}`}>
+<div data-slot="faq" class:list={["divide-y border-y", className]}>
   {faqs.map((faq) => (
-    <details id={faqId(faq.q)} name="faq" class="group group/faq scroll-mt-20 px-5">
-      <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 [&::-webkit-details-marker]:hidden"><h3 class="m-0 flex-1 text-base font-medium leading-snug" set:html={withCode(faq.q)} /><Icon name="chevron-down" aria-hidden="true" class="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" /></summary>
+    <details id={faqId(faq.q)} name="faq" class="group group/faq scroll-mt-20">
+      <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 [&::-webkit-details-marker]:hidden"><h3 class="m-0 flex-1 font-sans text-base font-semibold leading-snug" set:html={withCode(faq.q)} /><span aria-hidden="true" class="gz-faq-toggle shrink-0"></span></summary>
       <p class="m-0 pb-4 leading-relaxed text-muted-foreground" set:html={withCode(faq.a)} />
     </details>
   ))}

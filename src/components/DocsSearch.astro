@@ -1,17 +1,17 @@
 ---
 import Icon from "@/components/Icon.astro"
 
-const kbd = "pointer-events-none inline-flex h-5.5 w-fit min-w-5.5 items-center justify-center gap-1 rounded-lg bg-muted px-1.5 font-sans text-xs font-medium text-muted-foreground select-none in-data-[slot=input-group]:bg-input in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3"
+const kbd = "pointer-events-none inline-flex h-5.5 w-fit min-w-5.5 items-center justify-center gap-1 rounded-sm bg-muted px-1.5 font-sans text-xs font-medium text-muted-foreground select-none in-data-[slot=input-group]:bg-input in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3"
 ---
-<button data-search-open type="button" aria-label="Search documentation" class="inline-flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-md border border-input bg-transparent px-0 text-sm text-muted-foreground shadow-xs transition-colors hover:bg-accent hover:text-accent-foreground lg:w-56 lg:justify-start lg:px-3">
+<button data-search-open type="button" aria-label="Search documentation" class="inline-flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-md border border-input bg-transparent px-0 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground lg:w-56 lg:justify-start lg:px-3">
   <Icon name="search" class="h-4 w-4 shrink-0" />
   <span class="hidden flex-1 truncate whitespace-nowrap text-left lg:block">Search</span>
   <kbd data-slot="kbd-group" class="pointer-events-none hidden items-center gap-1 lg:inline-flex"><kbd data-slot="kbd" data-search-mod class={kbd}>⌘</kbd><kbd data-slot="kbd" class={kbd}>K</kbd></kbd>
 </button>
 
 <dialog data-search-dialog aria-label="Search documentation" class="m-0 size-full max-h-none max-w-none overflow-hidden bg-transparent backdrop:bg-transparent">
-  <div data-search-overlay data-state="open" class="fixed inset-0 z-50 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div>
-  <div data-search-content data-state="open" class="fixed left-1/2 top-[15vh] z-50 w-[calc(100%-2rem)] max-w-xl -translate-x-1/2 overflow-hidden rounded-xl border bg-popover text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
+  <div data-search-overlay data-state="open" class="fixed inset-0 z-50 bg-brand-ink/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div>
+  <div data-search-content data-state="open" class="fixed left-1/2 top-[15vh] z-50 w-[calc(100%-2rem)] max-w-xl -translate-x-1/2 overflow-hidden rounded-lg border bg-popover text-popover-foreground shadow-pop data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
   <div class="flex items-center gap-2 border-b px-4">
     <Icon name="search" class="h-4 w-4 shrink-0 text-muted-foreground" />
     <input data-search-input placeholder="Search docs and flags…" aria-label="Search the documentation" class="h-12 w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground" />
@@ -22,7 +22,7 @@ const kbd = "pointer-events-none inline-flex h-5.5 w-fit min-w-5.5 items-center 
     <li>
       <div data-slot="empty" class="flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 rounded-2xl border-dashed p-12 text-center text-balance py-8">
         <div data-slot="empty-header" class="flex max-w-sm flex-col items-center gap-2">
-          <div data-slot="empty-icon" data-variant="icon" class="mb-2 flex size-10 shrink-0 items-center justify-center rounded-xl bg-muted text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5"><Icon name="search-x" /></div>
+          <div data-slot="empty-icon" data-variant="icon" class="mb-2 flex size-10 shrink-0 items-center justify-center rounded-md bg-muted text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5"><Icon name="search-x" /></div>
           <div data-slot="empty-title" class="text-lg font-medium tracking-tight">No results for “<span data-search-query></span>”</div>
           <div data-slot="empty-description" class="text-sm/relaxed text-muted-foreground">Try a command (<code>report merge</code>), a flag (<code>--shard</code>), or a topic (<code>cache</code>).</div>
         </div>
@@ -105,7 +105,7 @@ const kbd = "pointer-events-none inline-flex h-5.5 w-fit min-w-5.5 items-center 
   let active = 0
 
   function linkClass(index: number) {
-    return cn("block rounded-md px-3 py-2 transition-colors", index === active ? "bg-accent text-accent-foreground" : "hover:bg-accent/50")
+    return cn("block rounded-md px-3 py-2 transition-colors", index === active ? "bg-muted shadow-[inset_3px_0_0_var(--highlight)]" : "hover:bg-muted")
   }
 
   function entryHref(entry: SearchEntry) {
@@ -128,9 +128,9 @@ const kbd = "pointer-events-none inline-flex h-5.5 w-fit min-w-5.5 items-center 
 
     const row = document.createElement("div")
     row.className = "flex items-center justify-between gap-2"
-    const meta = span("flex shrink-0 items-center gap-1.5 text-[10px] uppercase tracking-wide text-muted-foreground", "")
+    const meta = span("flex shrink-0 items-center gap-1.5 text-xs uppercase tracking-label text-muted-foreground", "")
     if (entry.kind === "flag") {
-      meta.append(span("rounded bg-[color:var(--gooze-teal)]/15 px-1 py-px font-medium text-[color:var(--gooze-teal)]", "flag"))
+      meta.append(span("rounded-sm bg-status-neutral px-1 py-px font-medium text-status-neutral-foreground", "flag"))
     }
     meta.append(entry.meta)
     row.append(span(cn("text-sm font-medium", entry.kind === "flag" && "font-mono"), entry.title), meta)
