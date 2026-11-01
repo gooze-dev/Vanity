@@ -1,8 +1,10 @@
 ---
-// A full-screen TUI recording, played with asciinema-player.
-const { src, rows, title } = Astro.props as { src: string; rows: number; title: string }
+// A full-screen TUI recording, played with asciinema-player inside the
+// TerminalWindow frame: the player is the body, its controls sit under it.
+const { src, rows, title, dir } = Astro.props as { src: string; rows: number; title: string; dir?: string }
 ---
-<figure data-slot="terminal-cast" data-src={src} data-rows={rows} aria-label={title} class="gz-cast not-typeset my-6">
+<figure data-slot="terminal-cast" data-src={src} data-rows={rows} aria-label={title} class="gz-cast gz-term not-typeset my-6">
+  <div class="gz-term__bar" aria-hidden="true"><i></i><i></i><i></i>{dir && <span class="gz-term__title">{dir}</span>}</div>
   <div data-player></div>
 </figure>
 

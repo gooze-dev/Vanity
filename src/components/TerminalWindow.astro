@@ -1,9 +1,30 @@
 ---
-// Real output in a terminal frame, dark in both themes. html is the output from
-// terminalHtml (lib/recording.ts); it never comes from typed text.
-const { title, html } = Astro.props as { title: string; html: string }
+import { recordingDir, recordingText, terminalHtml } from "@/lib/recording"
+
+type Props = {
+  /** Cast name in public/casts, without .cast. The text always comes from it. */
+  name: string
+  /** What the window shows, for screen readers. */
+  title: string
+  /** The command that ran, shown as the first line. */
+  command?: string
+  /** Show only the last lines of the recording. */
+  tail?: number
+  class?: string
+}
+
+// The one terminal frame for the landing page and the docs: real output, dark in
+// both themes. An optional caption goes in the default slot.
+const { name, title, command, tail, class: className } = Astro.props
+const dir = recordingDir(name)
+const lines = recordingText(name).split("\n")
+const html = terminalHtml((tail ? lines.slice(-tail) : lines).join("\n"))
+const hasCaption = Astro.slots.has("default")
 ---
-<figure data-slot="terminal-output" aria-label={title} class="gz-term my-6">
-  <div class="gz-term__bar" aria-hidden="true"><i></i><i></i><i></i></div>
-  <pre class="gz-term__body" set:html={html} />
+<figure data-slot="terminal-output" aria-label={title} class:list={["gz-term-figure my-6", className]}>
+  <div class="gz-term">
+    <div class="gz-term__bar" aria-hidden="true"><i></i><i></i><i></i>{dir && <span class="gz-term__title">{dir}</span>}</div>
+    <pre class="gz-term__body">{command && <span class="ln"><span class="t-cwd">{dir} $</span> <span class="t-cmd">{command}</span>{"\n"}</span>}<Fragment set:html={html} /></pre>
+  </div>
+  {hasCaption && <figcaption class="gz-term__caption"><slot /></figcaption>}
 </figure>

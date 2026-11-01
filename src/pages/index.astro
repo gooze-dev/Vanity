@@ -1,7 +1,7 @@
 ---
 import AgentLoop from "@/components/AgentLoop.astro"
 import CodeBlock from "@/components/CodeBlock.astro"
-import LandingTerminal from "@/components/LandingTerminal.astro"
+import TerminalWindow from "@/components/TerminalWindow.astro"
 import Lockup from "@/components/Lockup.astro"
 import MutationDiff from "@/components/MutationDiff.astro"
 import NavHeader from "@/components/NavHeader.astro"
@@ -73,7 +73,6 @@ const faqs = [
 const faqJsonLd = faqPageJsonLd(faqs);
 // Real output only: the terminal and the diff read the recordings.
 const reportLines = recordingText("calc-report-view").split("\n")
-const reportTail = reportLines.slice(-5).join("\n")
 const firstSurvivor = reportLines.find((line) => line.includes(": survived (")) ?? ""
 
 const mechanisms = [
@@ -106,10 +105,9 @@ const card = "flex flex-col gap-3 rounded-lg border bg-muted p-6"
         <div class="flex flex-wrap gap-3"><Button size="lg" href="/docs/">Get started</Button><Button variant="outline" size="lg" href="https://github.com/gooze-dev/gooze" target="_blank" rel="noopener noreferrer">View on GitHub</Button></div>
         <CodeBlock code="go install gooze.dev/pkg/gooze@latest" lang="bash" class="max-w-[440px]" />
       </div>
-      <figure class="m-0 flex min-w-0 flex-col gap-3">
-        <LandingTerminal command="gooze report view" output={reportTail} title="Terminal: gooze report view shows two survivors and a mutation score of 84.62%" />
-        <figcaption class="text-sm text-muted-foreground">Two boundary tests, <code>InRange(0, 0, 10)</code> and <code>InRange(10, 0, 10)</code>, kill both mutants and the score goes to <code>100.00%</code>.</figcaption>
-      </figure>
+      <div class="min-w-0">
+        <TerminalWindow name="calc-report-view" tail={5} command="gooze report view" title="Terminal: gooze report view shows two survivors and a mutation score of 84.62%" class="my-0">Two boundary tests, <code>InRange(0, 0, 10)</code> and <code>InRange(10, 0, 10)</code>, kill both mutants and the score goes to <code>100.00%</code>.</TerminalWindow>
+      </div>
     </section>
 
     <section class="border-y bg-muted">
