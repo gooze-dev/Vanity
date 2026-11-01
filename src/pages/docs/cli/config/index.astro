@@ -14,7 +14,7 @@ const metadata = docsMetadata("/docs/cli/config")
         <div id="usage">
           <h2>Usage</h2>
           <CodeBlock lang="bash" code="gooze config <subcommand>" />
-          <p>Subcommands: <a href="#init"><code>init</code></a>.</p>
+          <p>Subcommands: <a href="#init"><code>init</code></a>,{" "}<a href="#show"><code>show</code></a> and <a href="#schema"><code>schema</code></a>.</p>
         </div>
         <div id="init">
           <h2>gooze config init</h2>
@@ -38,6 +38,21 @@ const metadata = docsMetadata("/docs/cli/config")
           <h3>Next step</h3>
           <p>After you have a config file, run:</p>
           <CodeBlock lang="bash" code="gooze run ./..." />
+        </div>
+        <div id="show">
+          <h2>gooze config show</h2>
+          <p>A value isn&apos;t what you expected, and you want to know which setting won. This command
+            prints every config key with its effective value, where that value comes from
+            (<code>flag</code>, <code>env</code>, <code>gooze.yaml</code> or <code>default</code>) and its environment variable.</p>
+          <CodeBlock lang="bash" code="gooze config show" />
+          <p>Only flags available to every command can show here. Flags of{" "}<code>gooze run</code> apply to <code>gooze run</code>.</p>
+        </div>
+        <div id="schema">
+          <h2>gooze config schema</h2>
+          <p>Your editor can validate and complete <code>gooze.yaml</code> if it has the file&apos;s schema.
+            This command prints it as JSON Schema, so save it and point your editor at the file,
+            for example through <code>yaml-language-server</code>.</p>
+          <CodeBlock lang="bash" code="gooze config schema > gooze.schema.json" />
         </div>
       </div>
     </section>
