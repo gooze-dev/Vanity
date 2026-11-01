@@ -30,7 +30,7 @@ const firstVisible = Math.max(0, crumbs.length - 2)
   return (
     <Fragment>
       {index > 0 && <li data-slot="breadcrumb-separator" role="presentation" aria-hidden="true" class={cn("[&>svg]:size-3.5", index <= firstVisible && "hidden md:inline-flex")}><Icon name="chevron-right" /></li>}
-      <li data-slot="breadcrumb-item" class={cn("inline-flex items-center gap-1.5", index === crumbs.length - 1 ? "shrink-0" : "min-w-0", collapsed && "hidden md:inline-flex")}>{crumb.href ? <a data-slot="breadcrumb-link" href={withSlash(crumb.href)} class="truncate transition-colors hover:text-[color:var(--gooze-teal)]">{crumb.label}</a> : <span data-slot="breadcrumb-page" role="link" aria-disabled="true" aria-current="page" class="font-normal text-foreground truncate">{crumb.label}</span>}</li>
+      <li data-slot="breadcrumb-item" class={cn("inline-flex items-center gap-1.5", index === crumbs.length - 1 ? "shrink-0" : "min-w-0", collapsed && "hidden md:inline-flex")}>{crumb.href ? <a data-slot="breadcrumb-link" href={withSlash(crumb.href)} class="transition-colors hover:text-foreground truncate hover:text-[color:var(--gooze-teal)]">{crumb.label}</a> : <span data-slot="breadcrumb-page" role="link" aria-disabled="true" aria-current="page" class="font-normal text-foreground truncate">{crumb.label}</span>}</li>
     </Fragment>
   )
 })}</ol></nav>
