@@ -4,7 +4,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
-:root {
+/* On body, not :root: the root font-family can't see them, so body text keeps
+   the system font and only what names these variables uses Geist or Oxanium. */
+body {
   --font-geist-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
   --font-geist-mono: "Geist Mono Variable", ui-monospace, monospace;
   --font-oxanium: "Oxanium Variable", ui-sans-serif, system-ui, sans-serif;

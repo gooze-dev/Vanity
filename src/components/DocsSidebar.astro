@@ -1,6 +1,4 @@
 ---
-import { cva } from "class-variance-authority"
-
 import GoozeLogo from "@/components/GoozeLogo.astro"
 import Icon from "@/components/Icon.astro"
 import {
@@ -14,6 +12,7 @@ import {
 import type { IconName } from "@/lib/icons"
 import { withSlash } from "@/lib/links"
 import { cn } from "@/lib/utils"
+import { sidebarMenuButtonVariants } from "@/lib/variants"
 
 const sectionIcons: Record<DocsSection, IconName> = {
   "Get started": "house",
@@ -68,20 +67,8 @@ const navMain = docsSections.map((section) => {
   }
 })
 
-const menuButtonVariants = cva(
-  "peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden rounded-xl px-3 py-2 text-left text-sm ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground data-active:bg-sidebar-accent data-active:font-medium data-active:text-sidebar-accent-foreground [&_svg]:size-4 [&_svg]:shrink-0 [&>span:last-child]:truncate",
-  {
-    variants: {
-      size: {
-        default: "h-9 text-sm",
-        lg: "h-14 px-3 text-sm group-data-[collapsible=icon]:p-0!",
-      },
-    },
-  },
-)
-
 // cn drops the base classes a size overrides, such as p-2! for lg's p-0!.
-const menuButton = (options: { size: "default" | "lg" }) => cn(menuButtonVariants(options))
+const menuButton = (options: { size: "default" | "lg" }) => cn(sidebarMenuButtonVariants(options))
 
 const subButton = "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-xl px-3 text-sidebar-foreground ring-sidebar-ring outline-hidden group-data-[collapsible=icon]:hidden hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[size=md]:text-sm data-[size=sm]:text-xs data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground"
 const menuSub = "mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l border-sidebar-border px-2.5 py-0.5 group-data-[collapsible=icon]:hidden"

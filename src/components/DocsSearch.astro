@@ -1,7 +1,7 @@
 ---
 import Icon from "@/components/Icon.astro"
 
-const kbd = "pointer-events-none inline-flex h-5.5 w-fit min-w-5.5 items-center justify-center gap-1 rounded-lg bg-muted px-1.5 font-sans text-xs font-medium text-muted-foreground select-none"
+const kbd = "pointer-events-none inline-flex h-5.5 w-fit min-w-5.5 items-center justify-center gap-1 rounded-lg bg-muted px-1.5 font-sans text-xs font-medium text-muted-foreground select-none in-data-[slot=input-group]:bg-input in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3"
 ---
 <button data-search-open type="button" aria-label="Search documentation" class="inline-flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-md border border-input bg-transparent px-0 text-sm text-muted-foreground shadow-xs transition-colors hover:bg-accent hover:text-accent-foreground lg:w-56 lg:justify-start lg:px-3">
   <Icon name="search" class="h-4 w-4 shrink-0" />
