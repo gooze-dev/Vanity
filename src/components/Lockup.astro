@@ -9,9 +9,10 @@ import { cn } from "@/lib/utils"
 const { class: className, mark = true } = Astro.props
 const ColorMark = colorMark
 const LightMark = lightMark
+const ls = Astro.slots.has("default")
 ---
 {mark ? (
-  <span class={cn("gz-lockup", className)}><ColorMark class="hidden dark:block" aria-hidden="true" /><LightMark class="dark:hidden" aria-hidden="true" /><span class="gz-wordmark"><span class="go">Go</span><span class="oze">oze<slot /></span></span></span>
+  <span class={cn("gz-lockup", className)}><ColorMark class="hidden dark:block" aria-hidden="true" /><LightMark class="dark:hidden" aria-hidden="true" /><span class:list={["gz-wordmark", ls && "gz-wordmark--ls"]}><span class="go">Go</span><span class="oze">oze<slot /></span></span></span>
 ) : (
-  <span class={cn("gz-wordmark", className)}><span class="go">Go</span><span class="oze">oze<slot /></span></span>
+  <span class={cn("gz-wordmark", ls && "gz-wordmark--ls", className)}><span class="go">Go</span><span class="oze">oze<slot /></span></span>
 )}
