@@ -611,11 +611,6 @@
     flex-direction: column;
     gap: var(--space-4);
     width: 100%;
-    max-width: 960px;
-    padding: var(--space-6) var(--space-4);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    background-color: var(--bg);
   }
   .gz-l__cta-steps {
     display: grid;
@@ -694,9 +689,6 @@
     }
     .gz-l__hero {
       padding-top: 144px;
-    }
-    .gz-l__cta {
-      padding: var(--space-12);
     }
     .gz-l__cta-steps {
       grid-template-columns: repeat(3, minmax(0, 1fr));
