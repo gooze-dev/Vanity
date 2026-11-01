@@ -1,4 +1,6 @@
 ---
+import TerminalCast from "@/components/TerminalCast.astro"
+import TerminalWindow from "@/components/TerminalWindow.astro"
 import { castText, readCast, terminalHtml } from "@/lib/recording"
 
 type Props = {
@@ -19,54 +21,7 @@ const header = JSON.parse(cast.slice(0, cast.indexOf("\n"))) as { height: number
 const text = castText(cast)
 ---
 {tui ? (
-  <figure data-slot="terminal-cast" data-src={`/casts/${name}.cast`} data-rows={header.height} aria-label={title} class="gz-cast not-typeset my-6">
-    <div data-player></div>
-  </figure>
+  <TerminalCast src={`/casts/${name}.cast`} rows={header.height} title={title} />
 ) : (
-  <figure data-slot="terminal-output" aria-label={title} class="gz-term my-6">
-    <div class="gz-term__bar" aria-hidden="true"><i></i><i></i><i></i></div>
-    <pre class="gz-term__body" set:html={terminalHtml(text)} />
-  </figure>
+  <TerminalWindow title={title} html={terminalHtml(text)} />
 )}
-
-<script>
-  // Mounts asciinema-player on each TUI recording. The player and its styles
-  // load only on pages that have one.
-  const posterSeconds = 2
-  const terminalFont = "Geist Mono Variable"
-  let players: { dispose: () => void }[] = []
-
-  document.addEventListener("astro:before-swap", () => {
-    players.forEach((player) => player.dispose())
-    players = []
-  })
-
-  document.addEventListener("astro:page-load", async () => {
-    const figures = document.querySelectorAll<HTMLElement>('[data-slot="terminal-cast"]')
-    if (figures.length === 0) return
-    const [AsciinemaPlayer] = await Promise.all([
-      import("asciinema-player"),
-      import("asciinema-player/dist/bundle/asciinema-player.css"),
-      // The player measures a character once, so the font has to be ready.
-      document.fonts.load(`13px "${terminalFont}"`),
-    ])
-    for (const figure of figures) {
-      const target = figure.querySelector<HTMLElement>("[data-player]")
-      if (!target || !figure.isConnected || target.childElementCount > 0) continue
-      const player = AsciinemaPlayer.create(figure.dataset.src ?? "", target, {
-        rows: Number(figure.dataset.rows),
-        poster: `npt:0:${posterSeconds}`,
-        idleTimeLimit: 1,
-        fit: "width",
-        theme: "gooze",
-        terminalFontFamily: `"${terminalFont}", ui-monospace, monospace`,
-        // Geist Mono's vertical box line is 1.32em tall but starts below the top
-        // of the default 1.33em row. A row of 1.25em lets it meet the next one.
-        terminalLineHeight: 1.25,
-      })
-      // A TUI recording ends by quitting, which clears the screen: don't rest on that.
-      player.addEventListener("ended", () => player.seek(posterSeconds))
-      players.push(player)
-    }
-  })
-</script>

@@ -9,7 +9,7 @@ const metadata = docsMetadata("/docs/usage/ui-modes")
 <DocsLayout metadata={metadata}>
     <section>
       <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4">UI modes</h1>
-      <p class="text-lg text-muted-foreground mb-8">The same <code>gooze run ./...</code> behaves differently on your laptop and in CI. Gooze
+      <p class="gz-prose gz-prose--lead mb-8">The same <code>gooze run ./...</code> behaves differently on your laptop and in CI. Gooze
         picks its UI from whether output is a TTY (interactive) or not (for example CI or
         redirected output), so you get a live view locally and plain logs in pipelines.</p>
       <div>
@@ -21,7 +21,7 @@ const metadata = docsMetadata("/docs/usage/ui-modes")
             Here <code>gooze report view --all</code> moves to the first survivor and opens its diff:</p>
           <Recording name="calc-report-view-all-tui" title="Recorded gooze report view --all session opening a survivor's diff" tui />
           <div class="mt-4">
-            <p class="text-muted-foreground mb-2">Common keys in the viewer (<code>gooze report view --all</code>):</p>
+            <p class="mb-2">Common keys in the viewer (<code>gooze report view --all</code>):</p>
             <ul>
               <li><code>↑/↓</code> or <code>j/k</code> to move</li>
               <li><code>/</code> to filter</li>

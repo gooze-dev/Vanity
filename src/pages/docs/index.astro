@@ -1,6 +1,6 @@
 ---
 import CodeBlock from "@/components/CodeBlock.astro"
-import GoozeLogo from "@/components/GoozeLogo.astro"
+import Lockup from "@/components/Lockup.astro"
 import GoozePrimaryCtaButton from "@/components/GoozePrimaryCtaButton.astro"
 import DocsLayout from "@/layouts/DocsLayout.astro"
 import { docsMetadata } from "@/lib/docs-meta"
@@ -19,8 +19,8 @@ const metadata = docsMetadata("/docs")
 ---
 <DocsLayout metadata={metadata}>
     <section>
-      <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4"><GoozeLogo /></h1>
-      <p class="text-lg text-muted-foreground mb-10">Your tests pass, but would they fail if the code were wrong? Gooze is mutation testing for
+      <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4"><Lockup /></h1>
+      <p class="gz-prose gz-prose--lead mb-10">Your tests pass, but would they fail if the code were wrong? Gooze is mutation testing for
         Go: it makes small changes to your source, runs your tests against each one and shows you
         the changes they miss. The name is Go + ooze, after the{" "}<a href="https://turtlepedia.fandom.com/wiki/Mutagen" target="_blank" rel="noopener noreferrer" class="underline underline-offset-4">mutagen</a>{" "}that mutates the turtles in Teenage Mutant Ninja Turtles.</p>
       <div class="rounded-lg border bg-card p-5 mb-12">
@@ -33,7 +33,7 @@ const metadata = docsMetadata("/docs")
         <CodeBlock lang="bash" code={`go install gooze.dev/pkg/gooze@latest
 gooze run ./...
 gooze report view`} />
-        <p class="text-sm text-muted-foreground mb-4">The Quick start walks through a first run on a small package, from the surviving mutants
+        <p class="mb-4">The Quick start walks through a first run on a small package, from the surviving mutants
           to the tests that kill them, plus faster runs with <code>--coverage-profile</code> and
           parallel workers.</p><GoozePrimaryCtaButton href="/docs/quick-start/">Open Quick start</GoozePrimaryCtaButton></div>
       <div id="sections" class="mt-12">

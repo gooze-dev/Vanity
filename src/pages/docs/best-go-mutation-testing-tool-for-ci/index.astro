@@ -34,7 +34,7 @@ const faqJsonLd = faqPageJsonLd(faqs)
     <section>
       <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
       <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4">Best Go mutation testing tool for CI/CD</h1>
-      <p class="text-lg text-muted-foreground mb-8">You want mutation testing in your pipeline without making every job
+      <p class="gz-prose gz-prose--lead mb-8">You want mutation testing in your pipeline without making every job
         slow. For CI/CD, <strong>Gooze</strong> fits well: it shards across
         parallel runners, caches results so only changed files re-run, can gate
         pull requests on the mutation score with a short shell step, and shares

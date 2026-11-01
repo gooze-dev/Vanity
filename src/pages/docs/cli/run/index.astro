@@ -205,7 +205,7 @@ const runFlags: RunFlag[] = [
     <section>
       <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
       <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4">gooze run</h1>
-      <p class="text-lg text-muted-foreground mb-8">You want to know whether your tests catch real bugs, not only run the code.{" "}<code>gooze run</code> is the main command: it runs mutation testing and writes reports.</p>
+      <p class="gz-prose gz-prose--lead mb-8">You want to know whether your tests catch real bugs, not only run the code.{" "}<code>gooze run</code> is the main command: it runs mutation testing and writes reports.</p>
       <div>
         <div id="usage">
           <h2>Usage</h2>
@@ -224,7 +224,7 @@ const runFlags: RunFlag[] = [
                 <div class="flex flex-wrap items-center gap-1 font-mono"><code>{row.flag}</code>{row.alias && (
                     <><span class="text-muted-foreground">,</span><code>{row.alias}</code></>
                   )}</div>
-                <p class="mt-2 text-muted-foreground"><Fragment set:html={withCode(row.description)} /></p><dl class="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-xs text-muted-foreground"><dt>Default</dt><dd>{row.defaultValue ? <code>{row.defaultValue}</code> : "—"}</dd><dt>Config key</dt><dd>{row.configKey ? <code>{row.configKey}</code> : "—"}</dd></dl></li>
+                <p class="mt-2"><Fragment set:html={withCode(row.description)} /></p><dl class="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-xs text-muted-foreground"><dt>Default</dt><dd>{row.defaultValue ? <code>{row.defaultValue}</code> : "—"}</dd><dt>Config key</dt><dd>{row.configKey ? <code>{row.configKey}</code> : "—"}</dd></dl></li>
             ))}</ul>
           <div class="hidden rounded border lg:block">
             <Table>
@@ -267,7 +267,7 @@ const runFlags: RunFlag[] = [
           <p>Run it again without changes (here after the boundary tests were added) and every
             result comes from the cache:</p>
           <Recording name="calc-cached-run" title="Recorded last line of a gooze run with nothing changed" />
-          <p class="text-sm text-muted-foreground">With <code>--no-cache</code> it scores only what it tested; a sharded run scores its
+          <p class="">With <code>--no-cache</code> it scores only what it tested; a sharded run scores its
             shard (<code>gooze report merge</code> gives the full score). A{" "}<a href="#narrowed">narrowed run</a> scores only its selection.</p>
         </div>
         <div id="estimate">
@@ -275,7 +275,7 @@ const runFlags: RunFlag[] = [
           <p>See which source files would be mutated and how many mutations apply, without
             running any tests. This is a safe first command.</p>
           <CodeBlock lang="bash" code="gooze run --estimate ./..." />
-          <p class="mt-4 mb-2 text-muted-foreground">Scan only one sub-tree:</p>
+          <p class="mt-4 mb-2">Scan only one sub-tree:</p>
           <CodeBlock lang="bash" code="gooze run --estimate ./internal/domain/..." />
           <p class="text-sm text-muted-foreground">In a TTY you get an interactive, filterable list; in CI you get a table with
             per-file mutation counts:</p>

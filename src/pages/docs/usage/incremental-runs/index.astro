@@ -89,7 +89,7 @@ const faqJsonLd = faqPageJsonLd(faqs)
     <section>
       <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
       <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4">Incremental runs</h1>
-      <p class="text-lg text-muted-foreground mb-8">Mutation testing runs your tests once per mutant, so a full run on a large module is slow.
+      <p class="gz-prose gz-prose--lead mb-8">Mutation testing runs your tests once per mutant, so a full run on a large module is slow.
         Gooze caches results per file and, on the next run, re-tests only what changed. Use{" "}<code>--no-cache</code> to force a full re-test.</p>
       <Alert><Icon name="book-open" /><AlertDescription>
           <p>Related pages: <a href="/docs/reports/">Report format</a> and{" "}<a href="/docs/cli/run/#cache"><code>gooze run</code></a>.</p>

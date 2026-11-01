@@ -218,7 +218,7 @@ const metadata = docsMetadata("/docs/ci/gitlab")
     <section>
       <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
       <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4">GitLab CI</h1>
-      <p class="text-lg text-muted-foreground mb-8">You want every merge request to keep your mutation score. These are the same three
+      <p class="gz-prose gz-prose--lead mb-8">You want every merge request to keep your mutation score. These are the same three
         setups as the{" "}<a href="/docs/ci/github/">GitHub Actions</a> guide, written for{" "}<code>.gitlab-ci.yml</code>: one job, then shards, then a shared baseline, plus the
         surviving mutants in the merge request and a gate.</p>
       <div>
@@ -304,7 +304,7 @@ const metadata = docsMetadata("/docs/ci/gitlab")
           <CodeBlock lang="yaml" code={gate} />
           <p>The <code>calc</code> run at <code>84.62%</code> passes a minimum of{" "}<code>60</code> and fails a minimum of <code>90</code>, until the two boundary
             tests bring it to <code>100.00%</code>.</p>
-          <p class="text-sm text-muted-foreground">A shard doesn&apos;t check thresholds, so gate only in the merge job. To show a low
+          <p class="">A shard doesn&apos;t check thresholds, so gate only in the merge job. To show a low
             score as a warning instead of failing the pipeline, add{" "}<code>allow_failure: exit_codes: [3]</code>; every other code still fails it. More
             in <a href="#exit-codes">exit codes</a>.</p>
         </div>
@@ -332,7 +332,7 @@ const metadata = docsMetadata("/docs/ci/gitlab")
           <p>GitLab saves caches and artifacts only for jobs that pass, unless you say{" "}<code>when: always</code>. Set it so a run below a threshold still keeps its
             reports:</p>
           <CodeBlock lang="yaml" code={keepCache} />
-          <p class="text-sm text-muted-foreground">The usual causes of the other codes in GitLab CI: <code>4</code>, a shallow clone
+          <p class="">The usual causes of the other codes in GitLab CI: <code>4</code>, a shallow clone
             without <code>GIT_DEPTH: 0</code> and the target branch; <code>5</code>, a job
             token without registry access; <code>6</code>, a merge job without{" "}<code>dependencies</code> on the shard jobs. Every code:{" "}<a href="/docs/cli/#exit-codes">CLI reference</a>.</p>
         </div>

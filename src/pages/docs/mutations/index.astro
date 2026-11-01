@@ -138,7 +138,7 @@ const metadata = docsMetadata("/docs/mutations")
 <DocsLayout metadata={metadata}>
     <section>
       <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4">Mutation operators</h1>
-      <p class="text-lg text-muted-foreground mb-8">A report says a <code>comparison</code> mutant survived, and you want to know what
+      <p class="gz-prose gz-prose--lead mb-8">A report says a <code>comparison</code> mutant survived, and you want to know what
         exactly Gooze changed. A mutation is a tiny change in your code. Gooze applies one
         mutation and runs your tests to see if they notice.
         For what each result status means, see{" "}<a href="/docs/usage/results/">Reading results</a>.</p>
@@ -175,7 +175,7 @@ const metadata = docsMetadata("/docs/mutations")
           <div class="mt-6 space-y-8">{mutationTypes.map((t) => (
               <div id={t.name}>
                 <h3><code>{t.name}</code>{" "}<span class="text-sm font-normal text-muted-foreground"><Fragment set:html={withCode(t.ops)} /></span></h3>
-                <p class="mt-1 mb-1 text-muted-foreground"><Fragment set:html={withCode(t.desc)} /></p>
+                <p class="mt-1 mb-1"><Fragment set:html={withCode(t.desc)} /></p>
                 <p class="mb-2 text-sm text-muted-foreground"><span class="font-medium">Rule:</span> <Fragment set:html={withCode(t.rule)} /></p>
                 <CodeBlock lang="diff" code={t.example} />
                 <p class="mt-2 text-sm text-muted-foreground"><span class="font-medium">If it survives:</span> {t.survives}</p>

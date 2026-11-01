@@ -1,0 +1,99 @@
+/* Generated from the Gooze design system's tokens.json (version 1793547662-f49b).
+   Dark is the default; light overrides it. The second block holds values
+   bundle.css uses for its frames, named here so components never hold a hex. */
+:root,
+[data-theme="dark"] {
+  --bg: #0c100d;
+  --bg-subtle: #151a16;
+  --bg-raised: #1d231f;
+  --border: #2a312c;
+  --border-strong: #5b625c;
+  --fg: #eef1ea;
+  --fg-muted: #9aa39b;
+  --accent: #00add8;
+  --highlight: #b6f23a;
+  --highlight-fg: #0c100d;
+  --code-bg: #151a16;
+  --code-border: #2a312c;
+  --inline-code-bg: #151a16;
+  --status-error: #ff6b6b;
+  --status-error-fg: #0c100d;
+  --status-neutral: #2a312c;
+  --status-neutral-fg: #c9cfc6;
+  --shadow-pop: 0 8px 24px rgb(0 0 0 / 50%);
+}
+
+[data-theme="light"] {
+  --bg: #ffffff;
+  --bg-subtle: #f4f5f0;
+  --bg-raised: #ffffff;
+  --border: #e2e5dc;
+  --border-strong: #7a827b;
+  /* Deliberately pure black, not the tokens.json #0c100d: the owner's decision. */
+  --fg: #000000;
+  --fg-muted: #5b625c;
+  --accent: #0077a8;
+  --highlight: #0c100d;
+  --highlight-fg: #b6f23a;
+  --code-bg: #0c100d;
+  --code-border: #0c100d;
+  --inline-code-bg: #eef0ea;
+  --status-error: #d93636;
+  --status-error-fg: #ffffff;
+  --status-neutral: #eceee8;
+  --status-neutral-fg: #3f4740;
+  --shadow-pop: 0 8px 24px rgb(12 16 13 / 12%);
+}
+
+:root {
+  /* The same in both themes. */
+  --brand-gopher: #00add8;
+  --brand-toxic: #b6f23a;
+  --brand-ink: #0c100d;
+  --brand-paper: #f5f6f0;
+  --brand-blue-deep: #007e9e;
+  --brand-orange: #f59e2c;
+  --code-fg: #eef1ea;
+  --code-muted: #8a938b;
+  --code-chrome: #1d231f;
+  --terminal-bg: #0c100d;
+  --terminal-chrome: #1d231f;
+  --terminal-fg: #d4dad1;
+  --original: #00add8;
+  --mutant: #b6f23a;
+  --mutant-bg: #b6f23a1a;
+  --syn-keyword: #00add8;
+  --syn-string: #b6f23a;
+  --syn-number: #f59e2c;
+  --syn-comment: #8a938b;
+  --syn-func: #eef1ea;
+  --status-killed: #b6f23a;
+  --status-killed-fg: #0c100d;
+  --status-survived: #f59e2c;
+  --status-survived-fg: #0c100d;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  /* Frame values from bundle.css. */
+  --terminal-border: #2a312c;
+  --terminal-dot: #3a403b;
+  --landing-border: rgb(255 255 255 / 10%);
+  --landing-bar: #171b18;
+  --landing-bar-border: rgb(255 255 255 / 6%);
+  --landing-dot-1: #ff5f57;
+  --landing-dot-2: #febc2e;
+  --landing-dot-3: #28c840;
+  --cast-bar: #151a16;
+  --shield-left: #2a312c;
+  --shield-left-fg: #f5f6f0;
+}

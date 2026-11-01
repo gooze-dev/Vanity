@@ -12,7 +12,7 @@ const metadata = docsMetadata("/docs/usage/ignoring-code")
 <DocsLayout metadata={metadata}>
     <section>
       <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4">Ignoring code</h1>
-      <p class="text-lg text-muted-foreground mb-8">Sometimes a run reports mutants in code you don&apos;t want to test: vendored or generated
+      <p class="gz-prose gz-prose--lead mb-8">Sometimes a run reports mutants in code you don&apos;t want to test: vendored or generated
         files, mocks, debug helpers. Skip those paths or regions, so the survivors that remain point
         to tests you should write.</p>
       <Alert><Icon name="lightbulb" /><AlertTitle>Ignore as little as possible</AlertTitle>
@@ -24,7 +24,7 @@ const metadata = docsMetadata("/docs/usage/ignoring-code")
           <h2>Exclude files with <code>-x/--exclude</code></h2>
           <p>Skip files by regex. You can pass <code>-x</code> multiple times.</p>
           <CodeBlock lang="bash" code="gooze run -x '^vendor/' -x '^mock_' ./..." />
-          <p class="text-sm text-muted-foreground">The regex matches the path relative to the working directory (so{" "}<code>^vendor/</code> works), the absolute path, or the base filename.{" "}<code>vendor/</code>, <code>testdata/</code>, directories starting with{" "}<code>.</code> or <code>_</code>, and nested modules are skipped automatically.</p>
+          <p class="">The regex matches the path relative to the working directory (so{" "}<code>^vendor/</code> works), the absolute path, or the base filename.{" "}<code>vendor/</code>, <code>testdata/</code>, directories starting with{" "}<code>.</code> or <code>_</code>, and nested modules are skipped automatically.</p>
         </div>
         <div>
           <h2>Skip code with <code>{"//gooze:ignore"}</code></h2>

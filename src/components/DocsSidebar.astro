@@ -1,5 +1,5 @@
 ---
-import GoozeLogo from "@/components/GoozeLogo.astro"
+import Lockup from "@/components/Lockup.astro"
 import GoozeMark from "@/components/GoozeMark.astro"
 import Icon from "@/components/Icon.astro"
 import {
@@ -76,7 +76,7 @@ const menuSub = "mx-2 flex min-w-0 translate-x-px flex-col gap-1 border-l border
 
 // Only the current page is highlighted: raised, with the highlight bar. Sections and
 // groups just start expanded when they contain it.
-const pageLinkClass = "data-active:font-medium data-active:shadow-[inset_3px_0_0_var(--highlight)]"
+const pageLinkClass = "data-active:font-medium data-active:shadow-[inset_2px_0_0_var(--highlight)]"
 const state = (open: boolean) => (open ? "open" : "closed")
 ---
 <div data-docs-sidebar transition:persist="docs-sidebar" class="group peer hidden text-sidebar-foreground md:block data-mobile-open:block" data-state="expanded" data-collapsible="" data-variant="sidebar" data-side="left" data-slot="sidebar">
@@ -88,7 +88,7 @@ const state = (open: boolean) => (open ? "open" : "closed")
           <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
             <a data-slot="sidebar-menu-button" data-sidebar="menu-button" data-size="lg" href="/" class={menuButton({ size: "lg" })}>
               <div class="flex aspect-square size-8 shrink-0 items-center justify-center"><GoozeMark class="size-8!" /></div>
-              <div class="grid flex-1 text-left text-sm leading-tight"><GoozeLogo mark={false} class="truncate text-lg" /><span class="truncate text-xs text-muted-foreground">Documentation</span></div>
+              <div class="grid flex-1 text-left text-sm leading-tight"><Lockup mark={false} class="truncate text-lg" /><span class="truncate text-xs text-muted-foreground">Documentation</span></div>
             </a>
           </li>
         </ul>

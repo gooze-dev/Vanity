@@ -51,7 +51,7 @@ const faqJsonLd = faqPageJsonLd(faqs)
     <section>
       <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
       <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4">Changed lines only (git diff mode)</h1>
-      <p class="text-lg text-muted-foreground mb-8">Your pull request changes three lines of a large file. An{" "}<a href="/docs/usage/incremental-runs/">incremental run</a> re-tests that whole file,
+      <p class="gz-prose gz-prose--lead mb-8">Your pull request changes three lines of a large file. An{" "}<a href="/docs/usage/incremental-runs/">incremental run</a> re-tests that whole file,
         and every mutant in it runs the package tests again. With <code>--diff</code>, Gooze
         mutates only the lines your branch changed, and the score tells you how well the tests
         check that change.</p>
