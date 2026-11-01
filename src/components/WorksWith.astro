@@ -1,28 +1,31 @@
 ---
-// A quiet strip: names as text, grouped, each linking to its docs page.
+import PartnerLogo from "@/components/PartnerLogo.astro"
+
+// Where Gooze runs. Shipped tools only, as official-logo chips linking to their
+// docs; planned tools are one muted line under them.
 const groups = [
   { label: "Agents", items: [
-    { name: "Claude Code", href: "/docs/claude-code/" },
-    { name: "Codex · planned", href: "/docs/roadmap/", planned: true },
-    { name: "opencode · planned", href: "/docs/roadmap/", planned: true },
+    { name: "Claude Code", logo: "claude", href: "/docs/claude-code/" },
   ] },
   { label: "CI", items: [
-    { name: "GitHub Actions", href: "/docs/ci/github/" },
-    { name: "GitLab CI", href: "/docs/ci/gitlab/" },
+    { name: "GitHub Actions", logo: "github-actions", href: "/docs/ci/github/" },
+    { name: "GitLab CI", logo: "gitlab", href: "/docs/ci/gitlab/" },
   ] },
-  { label: "Editors", items: [
-    { name: "VS Code", href: "/docs/editor-support/" },
-    { name: "Neovim", href: "/docs/editor-support/" },
-    { name: "GoLand", href: "/docs/editor-support/" },
+  { label: "Editors, via goozels", items: [
+    { name: "VS Code", logo: "vscode", href: "/docs/editor-support/" },
+    { name: "Neovim", logo: "neovim", href: "/docs/editor-support/" },
+    { name: "GoLand", logo: "goland", href: "/docs/editor-support/" },
   ] },
-]
+] as const
 ---
-<div class="flex flex-wrap items-baseline gap-x-10 gap-y-4">
-  <span class="gz-eyebrow">Works with</span>
-  {groups.map((group) => (
-    <span class="flex flex-wrap items-baseline gap-x-5 gap-y-2">
-      <span class="gz-eyebrow tracking-label">{group.label}</span>
-      {group.items.map((item) => <a href={item.href} class:list={["hover:text-accent", item.planned ? "gz-works__name--planned" : "text-[17px] font-semibold"]}>{item.name}</a>)}
-    </span>
-  ))}
+<div class="flex flex-col gap-3">
+  <dl class="gz-l__works">
+    {groups.map((group) => (
+      <div>
+        <dt>{group.label}</dt>
+        <dd>{group.items.map((item) => <a href={item.href} class="gz-works__name"><PartnerLogo name={item.logo} />{item.name}</a>)}</dd>
+      </div>
+    ))}
+  </dl>
+  <p class="gz-works__more">Codex and opencode are planned. <a href="/docs/roadmap/" class="text-accent hover:underline">Roadmap</a></p>
 </div>
