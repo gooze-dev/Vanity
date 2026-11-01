@@ -698,7 +698,7 @@
     border-color: var(--border-strong);
     color: var(--fg);
   }
-  .gz-tag--planned {
+  .gz-tag--soon {
     border-style: dashed;
     border-color: var(--border-strong);
   }
