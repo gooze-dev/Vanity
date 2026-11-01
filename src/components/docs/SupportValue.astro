@@ -1,5 +1,4 @@
 ---
-import Badge from "@/components/ui/Badge.astro"
 import { withCode } from "@/lib/faq"
 
 type Support = "yes" | "no" | "partial" | "unknown"
@@ -16,11 +15,15 @@ const supportLabel: Record<Support, string> = {
 
 // Tags, as in IntegrationCard: the word carries the meaning, and "no" is neutral
 // because a missing feature is not an error.
-const supportBadge: Record<Support, { variant: "default" | "secondary" | "outline"; class?: string }> = {
-  yes: { variant: "default" },
-  no: { variant: "secondary" },
-  partial: { variant: "outline" },
-  unknown: { variant: "outline", class: "border-dashed text-muted-foreground" },
+// The ComparisonTable answer: a symbol from CSS, then the word.
+const supportClass: Record<Support, string> = {
+  yes: "gz-v--yes",
+  no: "gz-v--no",
+  partial: "gz-v--partly",
+  unknown: "gz-v--unknown",
 }
+
+// A one-word flag or file name stays whole; code with spaces wraps between words.
+const noteHtml = note && withCode(note).replace(/<code>([^\s<]+)<\/code>/g, '<code class="whitespace-nowrap">$1</code>')
 ---
-<Badge {...supportBadge[support]}>{supportLabel[support]}</Badge>{note && <div class="mt-1 text-xs text-muted-foreground" set:html={withCode(note)} />}
+<span class={`gz-v ${supportClass[support]}`}>{supportLabel[support]}</span>{note && <span class="gz-note" set:html={noteHtml} />}
