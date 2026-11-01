@@ -61,6 +61,12 @@ const rows = [
   { title: "Split across CI jobs", text: "Shard one run over several jobs, then merge the reports.", flag: "-s 1/4" },
   { title: "Fail below a score", text: "The job exits with code 3 when the score drops under your threshold.", flag: "--threshold-total 80" },
 ]
+
+const closingSteps = [
+  { title: "Install", text: "With the Go toolchain.", command: "go install gooze.dev/pkg/gooze@latest" },
+  { title: "Run", text: "Mutate every package and run its tests.", command: "gooze run ./..." },
+  { title: "Read the report", text: "Survivors with file, line and diff.", command: "gooze report view" },
+]
 ---
 <BaseLayout metadata={metadata}>
   <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
@@ -114,9 +120,17 @@ const rows = [
 
     <section class="gz-l__sec gz-l__sec--subtle gz-l__sec--center">
       <div class="gz-l__in">
-        <h2 class="gz-l__h2">Run it on your module.</h2>
-        <CodeBlock code={"gooze run ./...\ngooze report view"} lang="bash" prompt class="max-w-[560px]" />
-        <div class="gz-l__actions"><Button size="lg" href="/docs/quick-start/">Read the quick start</Button></div>
+        <div class="gz-l__cta">
+          <p class="gz-l__label">Get started</p>
+          <h2 class="gz-l__h2">Run it on your module.</h2>
+          <p class="gz-l__p">Three commands from your module root. The report lists every mutant your tests miss, with the file, line and diff.</p>
+          <ol class="gz-l__cta-steps">
+            {closingSteps.map((step) => (
+              <li><span class="t">{step.title}</span><p class="d">{step.text}</p><CodeBlock code={step.command} lang="bash" class="mt-auto" /></li>
+            ))}
+          </ol>
+          <div class="gz-l__actions"><Button size="lg" href="/docs/quick-start/">Read the quick start</Button><a href="https://github.com/gooze-dev/gooze" target="_blank" rel="noopener noreferrer" class="gz-l__link">View on GitHub <Icon name="arrow-right" class="size-3.5" aria-hidden="true" /></a></div>
+        </div>
       </div>
     </section>
 
