@@ -1,0 +1,21 @@
+---
+import Icon from "@/components/Icon.astro"
+
+// One tool Gooze works with, on neutral surfaces. No partner colours; a neutral
+// outline icon until there is an official mark. Planned cards have no command.
+const { name, kind, status, href, icon = "terminal", command } = Astro.props as {
+  name: string
+  kind: string
+  status: "Available" | "Beta" | "Planned"
+  href: string
+  icon?: "terminal" | "workflow"
+  command?: string
+}
+const tag = { Available: "gz-tag--available", Beta: "gz-tag--beta", Planned: "gz-tag--planned" }[status]
+---
+<a href={href} class="flex flex-col gap-3 rounded-lg border bg-background p-4 text-foreground hover:border-input">
+  <div class="flex items-center justify-between"><span class="grid size-9 place-items-center rounded-md border bg-muted"><Icon name={icon} class="size-5" /></span><span class={`gz-tag ${tag}`}>{status}</span></div>
+  <div><div class="leading-[1.3] font-semibold">{name}</div><div class="text-[13px] text-muted-foreground">{kind}</div></div>
+  <p class="text-sm text-muted-foreground"><slot /></p>
+  {command && <code class="mt-auto truncate">{command}</code>}
+</a>

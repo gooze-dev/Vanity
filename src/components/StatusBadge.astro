@@ -1,0 +1,8 @@
+---
+import Badge from "@/components/ui/Badge.astro"
+
+// The word as the CLI prints it, never colour alone.
+const { status } = Astro.props as { status: "killed" | "survived" | "error" | "not_covered" | "timeout" | "skipped" }
+const variant = status === "killed" || status === "survived" || status === "error" ? status : "neutral"
+---
+<Badge variant={variant}>{status}</Badge>

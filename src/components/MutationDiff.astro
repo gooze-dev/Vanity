@@ -1,0 +1,16 @@
+---
+import StatusBadge from "@/components/StatusBadge.astro"
+import { survivorLine } from "@/lib/recording"
+
+// One mutant from a real report line: where it is, what changed, whether a test
+// caught it. The - and + signs stay, so colour is never the only cue.
+const { line } = Astro.props as { line: string }
+const mutant = survivorLine(line)
+---
+{mutant && (
+  <div class="gz-diff">
+    <div class="gz-diff__head"><span><strong>{mutant.where}</strong> <span>{mutant.mutagen}</span></span><StatusBadge status="survived" /></div>
+    <span class="gz-diff__line gz-diff__line--orig"><span class="gz-diff__sign">-</span>{mutant.original}</span>
+    <span class="gz-diff__line gz-diff__line--mut"><span class="gz-diff__sign">+</span>{mutant.mutated}</span>
+  </div>
+)}
