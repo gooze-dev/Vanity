@@ -1,0 +1,7 @@
+---
+// The README shield. Below the threshold it's orange, not red: a low score is a
+// to-do, not an error.
+const { score, passing = true } = Astro.props as { score: string; passing?: boolean }
+const base = import.meta.env.BASE_URL
+---
+<span class="gz-shield"><span class="gz-shield__l"><img src={`${base}logo/gooze-mark-white.svg`} alt="" />mutation</span><span class:list={["gz-shield__r", !passing && "gz-shield__r--warn"]}>{score}</span></span>

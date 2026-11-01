@@ -1,19 +1,19 @@
 ---
-import Button from "@/components/ui/Button.astro"
-import GoozeOutlineCtaButton from "@/components/GoozeOutlineCtaButton.astro"
-import GoozePrimaryCtaButton from "@/components/GoozePrimaryCtaButton.astro"
-import ThemeToggle from "@/components/ThemeToggle.astro"
-import GoozeLogo from "@/components/GoozeLogo.astro"
-import LatestReleaseBadge from "@/components/LatestReleaseBadge.astro"
+import AgentLoop from "@/components/AgentLoop.astro"
 import CodeBlock from "@/components/CodeBlock.astro"
+import LandingTerminal from "@/components/LandingTerminal.astro"
+import Lockup from "@/components/Lockup.astro"
+import MutationDiff from "@/components/MutationDiff.astro"
+import NavHeader from "@/components/NavHeader.astro"
+import WorksWith from "@/components/WorksWith.astro"
+import Button from "@/components/ui/Button.astro"
 import ClaudeCodeAnnouncement from "@/components/ClaudeCodeAnnouncement.astro"
 import FaqList from "@/components/FaqList.astro"
 import HeadingAnchors from "@/components/HeadingAnchors.astro"
 import BaseLayout from "@/layouts/BaseLayout.astro"
-import Icon from "@/components/Icon.astro"
 import type { Metadata } from "@/lib/metadata"
 import { faqPageJsonLd } from "@/lib/faq"
-import { recordingText, terminalHtml } from "@/lib/recording"
+import { recordingText } from "@/lib/recording"
 
 // Self-canonical for the homepage. The root layout no longer sets a default
 // canonical (it would leak onto every other page).
@@ -71,125 +71,122 @@ const faqs = [
 
 
 const faqJsonLd = faqPageJsonLd(faqs);
+// Real output only: the terminal and the diff read the recordings.
+const reportLines = recordingText("calc-report-view").split("\n")
+const reportTail = reportLines.slice(-5).join("\n")
+const firstSurvivor = reportLines.find((line) => line.includes(": survived (")) ?? ""
+
+const mechanisms = [
+  { title: "Re-test only what changed", text: "Results are cached per file. Gooze re-tests a file when its source or its test changes. No git needed.", command: "gooze run ./..." },
+  { title: "Test only the diff", text: "On a pull request, mutate only the lines changed against a ref.", command: "gooze run --diff origin/main ./..." },
+  { title: "Split across CI jobs", text: "Shard one run over several jobs, then merge the reports.", command: "gooze run -s INDEX/TOTAL ./..." },
+  { title: "Share a baseline", text: "Push reports to any OCI registry; teammates and CI pull them.", command: "gooze report push ghcr.io/org/repo/gooze-reports:main" },
+]
+
+const steps = [
+  { title: "Install", text: "With the Go toolchain.", command: "go install gooze.dev/pkg/gooze@latest" },
+  { title: "Run", text: "From your module root. Each mutant runs only its own package's tests.", command: "gooze run ./..." },
+  { title: "Read the survivors", text: "Per-file scores, each surviving mutant with its file and line, and the score.", command: "gooze report view" },
+]
+
+const wrap = "mx-auto w-full max-w-[1200px] px-4 sm:px-8"
+const sectionTitle = "text-[44px] leading-[1.08] tracking-tight"
+const card = "flex flex-col gap-3 rounded-lg border bg-muted p-6"
 ---
 <BaseLayout metadata={metadata}>
-    <div class="flex min-h-screen flex-col">
-      <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
-      {/* Hero Section - Full Height */}
-      <section class="relative flex min-h-screen flex-col items-center justify-center px-4 pt-20 pb-24">
-        {/* Floating Nav */}
-        <div class="absolute inset-x-0 top-0 z-10 flex h-16 items-center justify-end gap-3 border-b bg-background px-4 sm:gap-6 sm:px-6"><a href="/docs/" class="text-sm font-medium transition-colors text-muted-foreground hover:text-foreground">Documentation</a><a href="#faq" class="text-sm font-medium transition-colors text-muted-foreground hover:text-foreground">FAQ</a><div class="flex items-center gap-2"><a href="https://github.com/gooze-dev/gooze" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 text-sm font-medium transition-colors text-muted-foreground hover:text-foreground"><Icon name="github" class="h-4 w-4" />GitHub</a><LatestReleaseBadge /></div><ThemeToggle /></div>
-        {/* Hero Content */}
-        <div class="flex w-full max-w-[980px] flex-col items-center gap-8 text-center">
-          <h1 class="text-6xl md:text-8xl"><GoozeLogo /></h1>
-          <p class="max-w-[750px] text-lg text-muted-foreground">Gooze is an open-source mutation testing tool for Go that measures
-            how good your tests really are: it injects small bugs into your
-            code and checks whether your tests catch them.</p>
-          <div class="flex flex-col gap-4 sm:flex-row"><GoozePrimaryCtaButton size="lg" href="/docs/">Get Started</GoozePrimaryCtaButton><GoozeOutlineCtaButton variant="outline" size="lg" href="https://github.com/gooze-dev/gooze" target="_blank" rel="noopener noreferrer" linkClass="flex items-center gap-2"><Icon name="github" class="h-5 w-5" />View on GitHub</GoozeOutlineCtaButton></div>
-          <div class="min-w-0 max-w-full text-left">
-            <CodeBlock code="go install gooze.dev/pkg/gooze@latest" lang="bash" />
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+  <NavHeader />
+  <main>
+    <section class={`${wrap} grid items-center gap-14 pt-28 pb-24 min-[1100px]:grid-cols-2`}>
+      <div class="flex min-w-0 flex-col gap-6">
+        <ClaudeCodeAnnouncement class="self-start" />
+        <span class="gz-eyebrow">Mutation testing for Go</span>
+        <h1 class="text-6xl tracking-tight md:text-8xl">Test your tests.</h1>
+        <p class="gz-prose gz-prose--lead">Coverage shows which lines ran. Gooze changes your code one operator at a time, runs your tests, and shows every mutant they miss, with the file, line and diff.</p>
+        <div class="flex flex-wrap gap-3"><Button size="lg" href="/docs/">Get started</Button><Button variant="outline" size="lg" href="https://github.com/gooze-dev/gooze" target="_blank" rel="noopener noreferrer">View on GitHub</Button></div>
+        <CodeBlock code="go install gooze.dev/pkg/gooze@latest" lang="bash" class="max-w-[440px]" />
+      </div>
+      <figure class="m-0 flex min-w-0 flex-col gap-3">
+        <LandingTerminal command="gooze report view" output={reportTail} title="Terminal: gooze report view shows two survivors and a mutation score of 84.62%" />
+        <figcaption class="text-sm text-muted-foreground">Two boundary tests, <code>InRange(0, 0, 10)</code> and <code>InRange(10, 0, 10)</code>, kill both mutants and the score goes to <code>100.00%</code>.</figcaption>
+      </figure>
+    </section>
+
+    <section class="border-y bg-muted">
+      <div class={`${wrap} grid items-center gap-14 py-24 lg:grid-cols-2`}>
+        <div class="flex flex-col gap-5">
+          <span class="gz-eyebrow">How it works</span>
+          <h2 class={sectionTitle}>Every <span class="font-mono text-accent">&lt;</span> could be a <span class="font-mono">≤</span>.</h2>
+          <p class="gz-prose gz-prose--lead">Gooze makes one small change to your code, a mutant, and runs your tests. If a test fails, the mutant is killed. If every test still passes, it survived: your tests didn&apos;t notice a behavior change.</p>
+          <p class="gz-prose">The mutation score is the share of mutants your tests kill. It measures what coverage can&apos;t.</p>
+        </div>
+        <MutationDiff line={firstSurvivor} />
+      </div>
+    </section>
+
+    <section data-theme="dark" class="bg-brand-ink text-foreground">
+      <div class={`${wrap} flex flex-col gap-8 py-24`}>
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <div class="flex max-w-[720px] flex-col gap-4">
+            <span class="gz-eyebrow">Why now</span>
+            <h2 class={sectionTitle}>Agents write tests fast. Gooze checks them.</h2>
+            <p class="gz-prose gz-prose--lead">Coverage goes up either way: a test that runs a line counts even if it checks nothing. The Claude Code plugin shows Claude the mutation score and every surviving mutant right after it edits a file.</p>
           </div>
-          <ClaudeCodeAnnouncement />
+          <span class="gz-tag gz-tag--beta">Claude Code plugin · Beta</span>
         </div>
-        {/* Scroll Indicator */}
-        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce motion-reduce:animate-none">
-          <div class="h-8 w-0.5 rounded-full bg-input"></div>
-        </div>
-      </section>
-      {/* What is Mutation Testing Section */}
-      <section class="border-t bg-muted py-24">
-        <div class="container mx-auto max-w-screen-xl px-4">
-          <div class="mx-auto max-w-3xl text-center">
-            <h2 class="text-4xl md:text-6xl mb-6">What is Mutation Testing?</h2>
-            <p class="text-lg text-muted-foreground leading-relaxed mb-8">Mutation testing measures how good your tests are at catching real bugs.
-              It works by making small, intentional changes (mutations) to your code and
-              rerunning your test suite. If a test fails, the mutation is &quot;killed&quot;.
-              If tests still pass, the mutation &quot;survived&quot;: your tests didn&apos;t notice a behavior change.</p>
-            <p class="text-base text-muted-foreground leading-relaxed mb-8">The research backs this up. Just et al. (FSE 2014) found that a test
-              suite&apos;s ability to{" "}<a href="https://dl.acm.org/doi/10.1145/2635868.2635929" target="_blank" rel="noopener noreferrer" class="text-accent underline underline-offset-4">kill mutants correlates with detecting real faults</a>, while Inozemtseva &amp; Holmes (ICSE 2014) showed that{" "}<a href="https://dl.acm.org/doi/10.1145/2568225.2568271" target="_blank" rel="noopener noreferrer" class="text-accent underline underline-offset-4">code coverage alone is not strongly correlated with test-suite
-                effectiveness</a>. Mutation score measures what coverage can&apos;t.</p>
-            <div class="mx-auto max-w-2xl text-center mb-10">
-              <p class="text-lg text-muted-foreground leading-relaxed mb-3">Here’s what mutation testing does on each run:</p>
-              <ol class="mx-auto inline-block list-decimal pl-5 space-y-2 text-left text-lg text-muted-foreground leading-relaxed">
-                <li>Generate a mutant (a small code change).</li>
-                <li>Run the test suite against that mutant.</li>
-                <li>Report <code>killed</code> vs{' '}<code>survived</code> and compute a mutation score.</li>
-              </ol>
-            </div>
-            {/* Mutation Example */}
-            <div class="rounded-lg  p-6 text-center mb-12">
-              <h3 class="text-lg font-semibold mb-2">A mutant your tests miss</h3>
-              <p class="text-sm text-muted-foreground mb-4"><code>InRange(n, lo, hi)</code> checks
-                that <code>n</code> is inside{" "}<code>[lo, hi]</code>. Its tests pass,
-                but none of them tries a value exactly on a bound. Gooze changes{" "}<code>&lt;</code> to{" "}<code>&lt;=</code>, the tests still
-                pass, and the report shows it:</p>
-              <div class="gz-term gz-term--landing mx-auto text-left">
-                <div class="gz-term__bar" aria-hidden="true"><i></i><i></i><i></i></div>
-                {/* The last lines of the real recording (public/casts), read at build time. */}
-                <pre class="gz-term__body"><span class="t-cwd">~/calc $</span> <span class="t-mute">gooze report view</span>{"\n"}<Fragment set:html={terminalHtml(recordingText("calc-report-view").split("\n").slice(-5).join("\n"))} /></pre>
-              </div>
-              <p class="text-sm text-muted-foreground mt-4">Two boundary tests,{" "}<code>InRange(0, 0, 10)</code> and{" "}<code>InRange(10, 0, 10)</code>, kill
-                both mutants, and the score goes to{" "}<code>100.00%</code>.</p>
-            </div>
+        <AgentLoop />
+      </div>
+    </section>
+
+    <section class={`${wrap} flex flex-col gap-10 py-24`}>
+      <div class="flex max-w-[720px] flex-col gap-4">
+        <span class="gz-eyebrow">Built for CI</span>
+        <h2 class={sectionTitle}>Stays fast as the codebase grows.</h2>
+        <p class="gz-prose gz-prose--lead">Every claim here has a mechanism behind it, and a flag you can try.</p>
+      </div>
+      <div class="grid gap-4 md:grid-cols-2">
+        {mechanisms.map((item) => (
+          <div class={`${card} min-w-0`}><span class="text-[17px] font-semibold">{item.title}</span><p class="text-[15px] leading-[1.55]">{item.text}</p><CodeBlock code={item.command} lang="bash" class="mt-auto" /></div>
+        ))}
+      </div>
+      <p class="gz-prose">Set a threshold and Gooze becomes a quality gate: below your score, it exits with code <code>3</code> and the job fails.</p>
+    </section>
+
+    <section class="border-y">
+      <div class={`${wrap} py-10`}><WorksWith /></div>
+    </section>
+
+    <section class={`${wrap} flex flex-col gap-10 py-24`}>
+      <div class="flex flex-col gap-4"><span class="gz-eyebrow">Get started</span><h2 class={sectionTitle}>Three commands.</h2></div>
+      <div class="grid gap-4 lg:grid-cols-3">
+        {steps.map((step, index) => (
+          <div class={`${card} min-w-0`}>
+            <div class="flex items-center gap-2.5"><span class="grid size-7 place-items-center rounded-full bg-highlight font-mono text-[13px] font-semibold text-highlight-foreground">{index + 1}</span><span class="text-[17px] font-semibold">{step.title}</span></div>
+            <p class="text-[15px] leading-[1.55]">{step.text}</p>
+            <CodeBlock code={step.command} lang="bash" class="mt-auto" />
           </div>
+        ))}
+      </div>
+      <a href="/docs/quick-start/" class="self-start font-medium text-accent hover:text-foreground">Read the quick start →</a>
+    </section>
+
+    <section id="faq" class="scroll-mt-8 border-t bg-muted">
+      <div class={`${wrap} grid gap-12 py-24 lg:grid-cols-[1fr_2fr]`}>
+        <div class="flex flex-col gap-4">
+          <span class="gz-eyebrow">FAQ</span>
+          <h2 class={sectionTitle}>Questions</h2>
+          <p class="gz-prose">Choosing a tool? See the <a href="/docs/comparison/" class="text-accent underline underline-offset-4 hover:text-foreground">comparison of Go mutation testing tools</a>.</p>
         </div>
-      </section>
-      {/* 3 Steps Section */}
-      <section class="py-24">
-        <div class="container mx-auto max-w-screen-xl px-4">
-          <div class="mx-auto max-w-3xl">
-            <h2 class="text-4xl md:text-6xl text-center mb-16">Get Started in 3 Steps</h2>
-            <div class="space-y-16">
-              {/* Step 1 */}
-              <div class="flex flex-col gap-4 items-stretch sm:flex-row sm:gap-8 sm:items-start">
-                <div class="flex-shrink-0 flex size-6 items-center justify-center rounded-full bg-highlight font-mono text-xs font-semibold text-highlight-foreground sm:mt-0.5">1</div>
-                <div class="flex-1 min-w-0">
-                  <h3 class="text-xl font-semibold mb-3">Install Gooze</h3>
-                  <p class="text-muted-foreground mb-4">Install it with the Go toolchain.</p>
-                  <CodeBlock code="go install gooze.dev/pkg/gooze@latest" lang="bash" />
-                </div>
-              </div>
-              {/* Step 2 */}
-              <div class="flex flex-col gap-4 items-stretch sm:flex-row sm:gap-8 sm:items-start">
-                <div class="flex-shrink-0 flex size-6 items-center justify-center rounded-full bg-highlight font-mono text-xs font-semibold text-highlight-foreground sm:mt-0.5">2</div>
-                <div class="flex-1 min-w-0">
-                  <h3 class="text-xl font-semibold mb-3">Run Mutation Tests</h3>
-                  <p class="text-muted-foreground mb-4">From your module root, Gooze mutates each file and runs its package&apos;s tests against every mutant.</p>
-                  <CodeBlock code="gooze run ./..." lang="bash" />
-                </div>
-              </div>
-              {/* Step 3 */}
-              <div class="flex flex-col gap-4 items-stretch sm:flex-row sm:gap-8 sm:items-start">
-                <div class="flex-shrink-0 flex size-6 items-center justify-center rounded-full bg-highlight font-mono text-xs font-semibold text-highlight-foreground sm:mt-0.5">3</div>
-                <div class="flex-1 min-w-0">
-                  <h3 class="text-xl font-semibold mb-3">View Results</h3>
-                  <p class="text-muted-foreground mb-4">See per-file scores, each surviving mutant with its file and line, and the mutation score.</p>
-                  <CodeBlock code="gooze report view" lang="bash" />
-                </div>
-              </div>
-            </div>
-            {/* Link to Documentation */}
-            <div class="mt-12 text-center"><Button variant="outline" size="lg" href="/docs/" linkClass="flex items-center gap-2">Read Full Documentation<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width={1.75} d="M9 5l7 7-7 7"></path></svg></Button></div>
-          </div>
-        </div>
-      </section>
-      {/* FAQ */}
-      <section id="faq" class="scroll-mt-8 border-t bg-muted py-24">
-        <div class="container mx-auto max-w-screen-xl px-4">
-          <div class="mx-auto max-w-3xl">
-            <h2 class="text-4xl md:text-6xl text-center mb-12">Frequently asked questions</h2>
-            <FaqList faqs={faqs} />
-            <p class="mt-12 text-center text-muted-foreground">See how Gooze compares with other Go mutation testing tools in the{" "}<a href="/docs/comparison/" class="text-accent underline underline-offset-4">comparison</a>.</p>
-          </div>
-        </div>
-        <HeadingAnchors rootId="faq" />
-      </section>
-      {/* Footer */}
-      <footer class="border-t py-8 mt-auto">
-        <div class="container mx-auto flex max-w-screen-xl flex-col items-center justify-between gap-4 px-4 md:flex-row">
-          <p class="text-sm text-muted-foreground">Built by the Gooze team. Open source on GitHub.</p>
-          <div class="flex gap-4"><a href="https://github.com/gooze-dev/gooze" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"><Icon name="github" class="h-4 w-4" />GitHub</a><a href="/docs/" class="text-sm text-muted-foreground hover:text-foreground">Documentation</a></div>
-        </div>
-      </footer>
+        <FaqList faqs={faqs} />
+      </div>
+      <HeadingAnchors rootId="faq" />
+    </section>
+  </main>
+
+  <footer class="border-t">
+    <div class={`${wrap} flex flex-wrap items-center justify-between gap-4 py-10`}>
+      <span class="flex flex-wrap items-center gap-2"><Lockup mark={false} class="text-lg" /><span class="ml-2 text-sm text-muted-foreground">Open source, MIT. Built by the Gooze team.</span></span>
+      <span class="flex gap-5 text-sm"><a href="/docs/" class="text-accent hover:text-foreground">Documentation</a><a href="https://github.com/gooze-dev/gooze" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-foreground">GitHub</a><a href="/docs/comparison/" class="text-accent hover:text-foreground">Comparison</a></span>
     </div>
+  </footer>
 </BaseLayout>

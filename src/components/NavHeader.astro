@@ -1,0 +1,49 @@
+---
+import Icon from "@/components/Icon.astro"
+import LatestReleaseBadge from "@/components/LatestReleaseBadge.astro"
+import Lockup from "@/components/Lockup.astro"
+import ThemeToggle from "@/components/ThemeToggle.astro"
+---
+{/* The landing page's top bar: lockup left, links right. No line under it, and it
+    fades out as the page scrolls. */}
+<header data-landing-nav class="gz-landing-nav fixed inset-x-0 top-0 z-20 bg-background">
+  <nav aria-label="Main" class="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-3 px-4 sm:px-8">
+    <a href="/" aria-label="Gooze home" class="flex shrink-0"><Lockup class="text-xl sm:text-2xl" /></a>
+    <div class="flex items-center gap-3 text-sm sm:gap-6">
+      <a href="/docs/" class="text-muted-foreground hover:text-foreground">Documentation</a>
+      <a href="#faq" class="text-muted-foreground hover:text-foreground">FAQ</a>
+      <a href="https://github.com/gooze-dev/gooze" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="flex items-center gap-1.5 text-muted-foreground hover:text-foreground"><Icon name="github" class="h-4 w-4" /><span class="hidden sm:inline">GitHub</span></a>
+      <LatestReleaseBadge class="max-sm:hidden" />
+      <ThemeToggle />
+    </div>
+  </nav>
+</header>
+
+<script>
+  // Fades the menu with the scroll position: a passive, rAF-throttled listener
+  // that runs once for the whole visit and looks the menu up each time, so client
+  // navigation adds no listeners and other pages have nothing to fade.
+  const FADE_DISTANCE = 200
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)")
+  let queued = false
+
+  function update() {
+    queued = false
+    const nav = document.querySelector<HTMLElement>("[data-landing-nav]")
+    if (!nav) return
+    const opacity = reduced.matches ? 1 : Math.max(0, 1 - window.scrollY / FADE_DISTANCE)
+    nav.style.opacity = String(opacity)
+    nav.toggleAttribute("data-faded", opacity === 0)
+  }
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (queued) return
+      queued = true
+      requestAnimationFrame(update)
+    },
+    { passive: true },
+  )
+  document.addEventListener("astro:page-load", update)
+</script>

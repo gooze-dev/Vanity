@@ -1,0 +1,11 @@
+---
+import Icon from "@/components/Icon.astro"
+import Alert from "@/components/ui/Alert.astro"
+import AlertDescription from "@/components/ui/AlertDescription.astro"
+import AlertTitle from "@/components/ui/AlertTitle.astro"
+
+// A note (accent icon) or a caution (orange icon): a bold title that says the
+// point, then one or two sentences.
+const { title, caution = false, icon = "lightbulb" } = Astro.props
+---
+<Alert variant={caution ? "destructive" : "default"}><Icon name={icon} /><AlertTitle>{title}</AlertTitle><AlertDescription><slot /></AlertDescription></Alert>

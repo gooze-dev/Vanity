@@ -1,0 +1,28 @@
+---
+// A quiet strip: names as text, grouped, each linking to its docs page.
+const groups = [
+  { label: "Agents", items: [
+    { name: "Claude Code", href: "/docs/claude-code/" },
+    { name: "Codex · planned", href: "/docs/roadmap/", planned: true },
+    { name: "opencode · planned", href: "/docs/roadmap/", planned: true },
+  ] },
+  { label: "CI", items: [
+    { name: "GitHub Actions", href: "/docs/ci/github/" },
+    { name: "GitLab CI", href: "/docs/ci/gitlab/" },
+  ] },
+  { label: "Editors", items: [
+    { name: "VS Code", href: "/docs/editor-support/" },
+    { name: "Neovim", href: "/docs/editor-support/" },
+    { name: "GoLand", href: "/docs/editor-support/" },
+  ] },
+]
+---
+<div class="flex flex-wrap items-baseline gap-x-10 gap-y-4">
+  <span class="gz-eyebrow">Works with</span>
+  {groups.map((group) => (
+    <span class="flex flex-wrap items-baseline gap-x-5 gap-y-2">
+      <span class="gz-eyebrow tracking-label">{group.label}</span>
+      {group.items.map((item) => <a href={item.href} class:list={["hover:text-accent", item.planned ? "gz-works__name--planned" : "text-[17px] font-semibold"]}>{item.name}</a>)}
+    </span>
+  ))}
+</div>

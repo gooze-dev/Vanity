@@ -1,0 +1,10 @@
+---
+import { terminalHtml } from "@/lib/recording"
+
+// The marketing window: the command, then the real output of its recording.
+const { command, output, title } = Astro.props as { command: string; output: string; title: string }
+---
+<div role="img" aria-label={title} class="gz-term gz-term--landing text-left">
+  <div class="gz-term__bar" aria-hidden="true"><i></i><i></i><i></i></div>
+  <pre class="gz-term__body"><span class="t-cwd">~/calc $</span> <span class="t-mute">{command}</span>{"\n"}<Fragment set:html={terminalHtml(output)} /></pre>
+</div>
