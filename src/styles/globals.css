@@ -562,6 +562,15 @@
     color: var(--fg-muted);
     font-size: 14px;
   }
+  /* Clear of the fixed menu on phones, where the section padding is smaller than the
+     menu. Not a utility class, for the reason under .gooze-docs #docs-content [id]. */
+  #how {
+    scroll-margin-top: 16px;
+  }
+  /* Scroll cue: only where the hero fills the screen. It sits in the hero's bottom padding. */
+  .gz-l__cue {
+    display: none;
+  }
   .gz-l__link {
     display: inline-flex;
     align-items: center;
@@ -751,6 +760,22 @@
       flex-direction: column;
       justify-content: center;
       min-height: 100svh;
+    }
+    .gz-l__cue {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transform: translateX(-50%);
+      color: var(--fg-muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .gz-l__cue:hover {
+      color: var(--fg);
     }
     /* The two statement sections are centred. Phones stay left-aligned. */
     .gz-l__sec--center .gz-l__in {
