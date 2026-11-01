@@ -472,9 +472,9 @@
 @layer components {
   .gz-l {
     --gutter: 16px;
-    --l-h1: 40px;
-    --l-h2: 28px;
-    --l-lead: 18px;
+    --l-h1: 44px;
+    --l-h2: 30px;
+    --l-lead: 17px;
   }
   .gz-l__sec {
     padding: 48px var(--gutter);
@@ -537,6 +537,30 @@
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-4);
+  }
+  /* Landing actions are larger than the docs' buttons, with 44px touch targets. */
+  .gz-l__actions [data-slot="button"] {
+    /* !important: the Button's size utilities sit in a later layer. */
+    height: 48px !important;
+    padding-inline: var(--space-6) !important;
+    font-size: 16px !important;
+  }
+  .gz-l__actions .gz-l__link,
+  .gz-landing-nav nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .gz-l__actions .gz-l__link {
+    font-size: 16px;
+  }
+  .gz-l__hero .gz-l__label {
+    color: var(--fg);
+    font-size: 14px;
+  }
+  .gz-l__note {
+    color: var(--fg-muted);
+    font-size: 14px;
   }
   .gz-l__link {
     display: inline-flex;
@@ -659,7 +683,7 @@
   }
   .gz-l__cta-steps .d {
     color: var(--fg-muted);
-    font-size: 14px;
+    font-size: 16px;
   }
   .gz-l__cta-steps [data-slot="code-block-content"] {
     font-size: 12.5px !important;
@@ -678,7 +702,7 @@
   }
   .gz-l__row p {
     color: var(--fg-muted);
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.5;
   }
   .gz-l__row code {
@@ -690,6 +714,7 @@
       --gutter: 32px;
       --l-h1: 64px;
       --l-h2: 40px;
+      --l-lead: 18px;
     }
     .gz-l__sec {
       padding-block: 80px;
