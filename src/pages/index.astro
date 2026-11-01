@@ -28,20 +28,20 @@ const faqs = [
     a: "Gooze is an open-source mutation testing tool for Go (Golang) that measures the quality of your test suite by injecting small, deliberate bugs (mutations) into your code and checking whether your tests catch them.",
   },
   {
-    q: "Our coverage is high but bugs still reach production. How does Gooze help?",
-    a: "High line coverage only proves your code was executed, not that your assertions check the result. Gooze injects deliberate faults into your code and checks that your tests fail. A survived mutant shows code your tests run but don't check. For example, tests for a range check can run every line without trying a value exactly on a bound, and Gooze reports `if n < lo {` -> `if n <= lo {` as survived.",
-  },
-  {
-    q: "Mutation testing is slow. Will it block our CI/CD pipeline?",
-    a: "It doesn't have to. Passing a Go coverage profile skips tests for uncovered lines, the incremental cache reuses results for unchanged files, and parallel workers and sharding split the remaining work.",
+    q: "Why use Gooze for Go mutation testing?",
+    a: "Gooze is built for CI/CD. It has an incremental cache that re-tests only changed files, sharding across parallel CI runners, coverage-profile support that skips tests for uncovered lines, and OCI registry support to share baseline reports across teams.",
   },
   {
     q: "Does Gooze run the whole test suite for every mutant?",
     a: "No. Each mutant runs `go test` only for its own package, never the whole module. A run can also be as small as you need: the cache re-tests only files that changed, `--diff origin/main` mutates only the lines a pull request changes, and `--run '^InRange$'` mutates one function. That keeps runs short enough for AI coding agents to check every edit they make.",
   },
   {
-    q: "Why use Gooze for Go mutation testing?",
-    a: "Gooze is built for CI/CD. It has an incremental cache that re-tests only changed files, sharding across parallel CI runners, coverage-profile support that skips tests for uncovered lines, and OCI registry support to share baseline reports across teams.",
+    q: "Our coverage is high but bugs still reach production. How does Gooze help?",
+    a: "High line coverage only proves your code was executed, not that your assertions check the result. Gooze injects deliberate faults into your code and checks that your tests fail. A survived mutant shows code your tests run but don't check. For example, tests for a range check can run every line without trying a value exactly on a bound, and Gooze reports `if n < lo {` -> `if n <= lo {` as survived.",
+  },
+  {
+    q: "Mutation testing is slow. Will it block our CI/CD pipeline?",
+    a: "It doesn't have to. Passing a Go coverage profile skips tests for uncovered lines, the incremental cache reuses results for unchanged files, and parallel workers and sharding split the remaining work.",
   },
 ];
 
@@ -136,7 +136,7 @@ const closingSteps = [
 
     <section id="faq" class="gz-l__sec scroll-mt-8">
       <div class="gz-l__in gz-l__in--narrow">
-        <h2 class="gz-l__h2">Questions</h2>
+        <h2 id="frequently-asked-questions" class="gz-l__h2 scroll-mt-8">Frequently asked questions</h2>
         <FaqList faqs={faqs} />
         <a href="/docs/mutation-testing/#faq" class="gz-l__link gz-l__more self-start">More questions <Icon name="arrow-right" class="size-3.5" aria-hidden="true" /></a>
       </div>
