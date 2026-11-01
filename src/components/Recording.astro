@@ -1,7 +1,7 @@
 ---
 import TerminalCast from "@/components/TerminalCast.astro"
 import TerminalWindow from "@/components/TerminalWindow.astro"
-import { castText, readCast, terminalHtml } from "@/lib/recording"
+import { readCast, recordingDir } from "@/lib/recording"
 
 type Props = {
   /** Cast name in public/casts, without .cast. */
@@ -18,10 +18,9 @@ type Props = {
 const { name, title, tui = false } = Astro.props
 const cast = readCast(name)
 const header = JSON.parse(cast.slice(0, cast.indexOf("\n"))) as { height: number }
-const text = castText(cast)
 ---
 {tui ? (
-  <TerminalCast src={`/casts/${name}.cast`} rows={header.height} title={title} />
+  <TerminalCast src={`/casts/${name}.cast`} rows={header.height} title={title} dir={recordingDir(name)} />
 ) : (
-  <TerminalWindow title={title} html={terminalHtml(text)} />
+  <TerminalWindow name={name} title={title} />
 )}

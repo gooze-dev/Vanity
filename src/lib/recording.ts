@@ -26,8 +26,7 @@ export function readCast(name: string) {
   return readFileSync(path.join(process.cwd(), "public", "casts", `${name}.cast`), "utf8")
 }
 
-// The text of public/casts/<name>.cast, read at build time. For places that
-// style output themselves (the landing page terminal) instead of playing it.
+// The text of public/casts/<name>.cast, read at build time.
 export function recordingText(name: string) {
   return castText(readCast(name))
 }
@@ -42,22 +41,44 @@ function span(className: string, text: string) {
 
 // Colours only what the brand gives meaning: the survivors heading, the original
 // code, the mutation and the score. It adds spans and never changes a character.
-// Returns HTML, for set:html in a .gz-term body.
+function colourLine(line: string) {
+  if (/^Survivors \(\d+\):$/.test(line)) return span("t-surv", line)
+  const survivor = line.match(/^(.* survived \([^)]*\): )(.*)( -> )(.*)$/)
+  if (survivor) {
+    const [, where, original, arrow, mutant] = survivor
+    return `${escapeHtml(where)}${span("t-orig", original)}${escapeHtml(arrow)}${span("t-mut", mutant)}`
+  }
+  const score = line.match(/^(Mutation score: )(\d+(?:\.\d+)?%)(.*)$/)
+  if (score) return `${escapeHtml(score[1])}${span("t-score", score[2])}${escapeHtml(score[3])}`
+  return escapeHtml(line)
+}
+
+// A row of a report table, drawn with box characters.
+const isTableLine = (line: string) => /[│┼]/.test(line)
+
+// Returns HTML for a .gz-term body: one <span class="ln"> per output line, so the
+// window can reflow it on phones. Report tables keep their columns in one block
+// that scrolls by itself. The newlines stay, for copying and for search engines.
 export function terminalHtml(text: string) {
-  return text
-    .split("\n")
-    .map((line) => {
-      if (/^Survivors \(\d+\):$/.test(line)) return span("t-surv", line)
-      const survivor = line.match(/^(.* survived \([^)]*\): )(.*)( -> )(.*)$/)
-      if (survivor) {
-        const [, where, original, arrow, mutant] = survivor
-        return `${escapeHtml(where)}${span("t-orig", original)}${escapeHtml(arrow)}${span("t-mut", mutant)}`
-      }
-      const score = line.match(/^(Mutation score: )(\d+(?:\.\d+)?%)(.*)$/)
-      if (score) return `${escapeHtml(score[1])}${span("t-score", score[2])}${escapeHtml(score[3])}`
-      return escapeHtml(line)
-    })
-    .join("\n")
+  const lines = text.split("\n")
+  const parts: string[] = []
+  for (let i = 0; i < lines.length; i++) {
+    if (!isTableLine(lines[i])) {
+      parts.push(`<span class="ln">${colourLine(lines[i])}\n</span>`)
+      continue
+    }
+    const table: string[] = []
+    while (i < lines.length && isTableLine(lines[i])) table.push(escapeHtml(lines[i++]))
+    i--
+    parts.push(`<span class="gz-term__table gz-scroll-fade" tabindex="0">${table.join("\n")}\n</span>`)
+  }
+  return parts.join("")
+}
+
+// The working directory shown in a window's title bar. The calc story is the only
+// one recorded in a named project; other samples show no title.
+export function recordingDir(name: string) {
+  return name.startsWith("calc-") ? "~/calc" : undefined
 }
 
 // The parts of a report line like

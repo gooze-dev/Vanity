@@ -87,12 +87,6 @@
   /* Frame values from bundle.css. */
   --terminal-border: #2a312c;
   --terminal-dot: #3a403b;
-  --landing-border: rgb(255 255 255 / 10%);
-  --landing-bar: #171b18;
-  --landing-bar-border: rgb(255 255 255 / 6%);
-  --landing-dot-1: #ff5f57;
-  --landing-dot-2: #febc2e;
-  --landing-dot-3: #28c840;
   --cast-bar: #151a16;
   --shield-left: #2a312c;
   --shield-left-fg: #f5f6f0;
