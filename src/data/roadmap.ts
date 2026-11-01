@@ -25,13 +25,15 @@ export const laterThemes = {
   reports: "Reports",
 } as const
 
+// One or two sentences per card, covering every feature on it. The features have
+// no description of their own, so the page never says the same thing twice.
 export const nextCards = [
-  { id: "custom-mutators", title: "Custom mutator plugins", detail: "Adding an operator to Gooze itself is one small function, and caching, sharding, and reporting work with it unchanged. A plugin API for your own operators is planned." },
-  { id: "config", title: "Config show and consistent keys", detail: "`gooze config show` and snake_case key names are built and ship in the next release. The old key names keep working with a warning." },
+  { id: "custom-mutators", title: "Custom mutator plugins", detail: "A plugin API for writing your own operators outside the Gooze source is planned. Adding an operator to Gooze itself is one small function, and caching, sharding, and reporting work with it unchanged." },
+  { id: "config", title: "Config show and consistent keys", detail: "`gooze config show` prints every key with its effective value, where it came from, and its env var, and keys and flags get one naming style, with snake_case key names. Both are built and ship in the next release; the old key names keep working with a warning for a release." },
   { id: "build-tags", title: "Build tags", detail: "Passing `-tags` through to `go test` is planned, so files behind build constraints get mutated too." },
   { id: "exec", title: "Custom test runner", detail: "Gooze runs `go test` on the package that owns each mutated file; plugging in your own test command is planned." },
-  { id: "agents", title: "Codex and opencode", detail: "Support for Codex and opencode is on the way: their setups exist and are being verified with each agent." },
-  { id: "json", title: "JSON and HTML reports", detail: "Results are YAML files plus `_index.yaml`, and `report view --format sarif|codeclimate` writes the survivors as JSON; JSON and HTML reports of every mutation are on the way." },
+  { id: "agents", title: "Codex and opencode", detail: "Mutation results after every edit through a post-edit hook; the hooks exist in goozels and are being verified with each agent." },
+  { id: "json", title: "JSON and HTML reports", detail: "JSON reports in the Stryker mutation-testing-report schema and a static HTML page from `gooze report html` are on the way, both covering every mutation." },
 ] as const
 
 export interface RoadmapItem {
@@ -39,7 +41,8 @@ export interface RoadmapItem {
   /** The area of the product. Shipped features are grouped by it. */
   area: keyof typeof areas
   milestone: Milestone
-  description: string
+  /** Every milestone but Next, whose text lives on the card. */
+  description?: string
   /** Later only: the theme it's listed under. */
   theme?: keyof typeof laterThemes
   /** Next only: the card it's shown on. Features landing together share one. */
@@ -85,7 +88,6 @@ export const roadmap: RoadmapItem[] = [
     area: "core",
     milestone: "next",
     card: "exec",
-    description: "Run your own test command instead of `go test`.",
   },
   {
     name: "Function selection",
@@ -101,7 +103,6 @@ export const roadmap: RoadmapItem[] = [
     milestone: "next",
     card: "custom-mutators",
     until: { text: "the built-in operators", href: "/docs/mutations" },
-    description: "A plugin API for writing your own mutation operators outside the Gooze source.",
   },
   {
     name: "Mutagen selection",
@@ -138,14 +139,12 @@ export const roadmap: RoadmapItem[] = [
     area: "core",
     milestone: "next",
     card: "config",
-    description: "`gooze config show` prints every key with its effective value, where it came from, and its env var.",
   },
   {
     name: "Consistent config keys",
     area: "core",
     milestone: "next",
     card: "config",
-    description: "One naming style for every key and flag, with the old names kept as deprecated aliases for a release.",
   },
   {
     name: "Git diff mode",
@@ -234,7 +233,6 @@ export const roadmap: RoadmapItem[] = [
     milestone: "next",
     card: "json",
     until: { text: "the report format", href: "/docs/reports" },
-    description: "Machine-readable output in the Stryker mutation-testing-report schema, for dashboards and other tools.",
   },
   {
     name: "HTML report",
@@ -242,7 +240,6 @@ export const roadmap: RoadmapItem[] = [
     milestone: "next",
     card: "json",
     until: { text: "the report format", href: "/docs/reports" },
-    description: "Extend the `report` command with `gooze report html`, which renders the report directory as a static page you can open locally or publish from CI.",
   },
   {
     name: "GitHub annotations",
@@ -320,7 +317,6 @@ export const roadmap: RoadmapItem[] = [
     area: "execution",
     milestone: "next",
     card: "build-tags",
-    description: "Pass `-tags` through to `go test` so files behind build constraints get tested.",
   },
   {
     name: "Cross-package coverage",
@@ -458,7 +454,6 @@ export const roadmap: RoadmapItem[] = [
     milestone: "next",
     card: "agents",
     until: { text: "the Claude Code plugin", href: "/docs/claude-code" },
-    description: "Mutation results after every Codex edit through a post-edit hook. The hook exists in goozels; support lands once it's verified with Codex.",
   },
   {
     name: "opencode",
@@ -466,7 +461,6 @@ export const roadmap: RoadmapItem[] = [
     milestone: "next",
     card: "agents",
     until: { text: "the Claude Code plugin", href: "/docs/claude-code" },
-    description: "Mutation results after every opencode edit through a plugin for opencode `1.x` and `2.x`. The plugins exist in goozels; support lands once they're verified with opencode.",
   },
 ]
 

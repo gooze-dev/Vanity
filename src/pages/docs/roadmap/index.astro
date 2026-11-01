@@ -30,6 +30,8 @@ const itemId = (item: RoadmapItem) => slugify(item.name)
 
 const aliasId = (item: RoadmapItem) => (item.anchor && item.anchor !== itemId(item) ? item.anchor : undefined)
 
+const description = (item: RoadmapItem) => withCode(item.description ?? "")
+
 const milestoneClass = "relative flex flex-col gap-3 pl-11"
 const nodeClass = "absolute left-0 top-0.5 grid size-7 place-items-center rounded-full border-2 bg-background"
 const headClass = "flex flex-wrap items-baseline gap-3"
@@ -90,7 +92,7 @@ const metadata = docsMetadata("/docs/roadmap")
                     <span class="inline-flex w-fit items-center gap-1.5 rounded-full border border-dashed px-2.5 py-1 text-[0.8125rem] leading-snug text-foreground"><Icon name="check" class="size-3 shrink-0 text-muted-foreground" aria-hidden="true" />{item.name}</span>
                   )}
                   <span class="sr-only">: </span>
-                  <span class="block text-sm leading-normal text-muted-foreground" set:html={withCode(item.description)} />
+                  <span class="block text-sm leading-normal text-muted-foreground" set:html={description(item)} />
                 </li>
               ))}</ul>
             </details>
@@ -106,7 +108,7 @@ const metadata = docsMetadata("/docs/roadmap")
           <div class="grid gap-3 md:grid-cols-2">{byMilestone("beta").map((item) => (
             <div id={itemId(item)} class={cardClass}>
               <h3 class={cardTitleClass}><PartnerLogo name="claude" />{item.name}</h3>
-              <p class={cardTextClass} set:html={withCode(item.description)} />
+              <p class={cardTextClass} set:html={description(item)} />
               {item.docs && <a href={withSlash(item.docs)} class="mt-auto inline-flex w-fit items-center gap-1 text-sm font-medium text-accent hover:text-foreground">Docs<Icon name="arrow-right" class="size-3.5" aria-hidden="true" /></a>}
             </div>
           ))}</div>
@@ -125,9 +127,8 @@ const metadata = docsMetadata("/docs/roadmap")
             return (
               <div id={card.id} class={cardClass}>
                 <h3 class={cardTitleClass}>{card.title}</h3>
-                {card.items.map((item) => (
-                  <p id={itemId(item) === card.id ? undefined : itemId(item)} class={cardTextClass}>{item.name !== card.title && <Fragment><b class="font-semibold text-foreground">{item.name}:</b>{" "}</Fragment>}<Fragment set:html={withCode(item.description)} /></p>
-                ))}
+                {/* Each feature keeps its old anchor. */}
+                {card.items.filter((item) => itemId(item) !== card.id).map((item) => <span id={itemId(item)} class="absolute"></span>)}
                 <p class={cardTextClass} set:html={withCode(card.detail)} />
                 {until && <p class="mt-auto rounded-md bg-muted px-2.5 py-2 text-[0.8125rem] leading-snug text-foreground"><b class="mr-1 font-semibold text-muted-foreground">Until then:</b>{" "}use{" "}<a href={withSlash(until.href)} class={linkClass}>{until.text}</a>.</p>}
               </div>
@@ -146,7 +147,7 @@ const metadata = docsMetadata("/docs/roadmap")
             <div>
               <h3 id={`later-${theme.id}`} class="mb-2 text-xs font-medium uppercase tracking-[0.06em] text-muted-foreground">{theme.title}</h3>
               <ul class="flex flex-col gap-2.5">{theme.items.map((item) => (
-                <li id={itemId(item)} class="text-sm leading-normal text-muted-foreground"><b class="font-semibold text-foreground" set:html={`${withCode(item.name)}:`} />{" "}<Fragment set:html={withCode(item.description)} />{item.issue && <Fragment>{" "}<a href={`https://github.com/gooze-dev/gooze/issues/${item.issue}`} class={linkClass}>Issue #{item.issue}</a></Fragment>}</li>
+                <li id={itemId(item)} class="text-sm leading-normal text-muted-foreground"><b class="font-semibold text-foreground" set:html={`${withCode(item.name)}:`} />{" "}<Fragment set:html={description(item)} />{item.issue && <Fragment>{" "}<a href={`https://github.com/gooze-dev/gooze/issues/${item.issue}`} class={linkClass}>Issue #{item.issue}</a></Fragment>}</li>
               ))}</ul>
             </div>
           ))}</div>
