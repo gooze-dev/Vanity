@@ -94,7 +94,7 @@ const faqJsonLd = faqPageJsonLd(faqs)
                 <TableRow>
                   <TableCell>3</TableCell>
                   <TableCell><code>gooze.yaml</code></TableCell>
-                  <TableCell><code>no-cache: true</code></TableCell>
+                  <TableCell><code>no_cache: true</code></TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>4 (lowest)</TableCell>
@@ -218,9 +218,9 @@ gooze run ./...`} />
           <p>Every supported key, with its default value. All keys are optional:
             Gooze falls back to these defaults when a key is omitted.</p>
           <CodeBlock lang="yaml" code={`# gooze.yaml
-version: 1                    # config schema version
 output: .gooze-reports        # where reports and the incremental cache live
-no-cache: false               # set true to force a full re-run
+no_cache: false               # set true to force a full re-run
+no_update_check: false        # set true to skip checking for a newer release
 
 paths:
   exclude: []                 # regex patterns of files to skip, e.g. '^vendor/'
@@ -233,6 +233,9 @@ run:
   mutagens: []                # e.g. [comparison, boolean]; empty runs the nine defaults
   workspace: overlay          # overlay (go test -overlay) or deep-copy (a project copy per worker)
   fail_fast: "off"            # off | gate | file | first: stop once the quality gates have their answer
+  go_cache: isolated          # isolated (Gooze's own cache, reads GOCACHE) or shared (GOCACHE)
+  go_cache_size: 2048         # MB that Gooze's own build cache is trimmed to after a run
+  go_cache_prewarm: false     # build each package's tests in GOCACHE before its mutants
 
 threshold:                    # quality gates; 0 is off; failing one, exit code 3
   total: 0                    # the score of all mutations
@@ -271,7 +274,6 @@ log:
           <ul>
             <li><code>run.parallel</code> must be at least <code>1</code></li>
             <li><code>run.mutation_timeout</code> must be at least <code>1</code> (seconds)</li>
-            <li><code>version</code> must be <code>1</code></li>
             <li><code>run.workspace</code> must be <code>overlay</code> or <code>deep-copy</code></li>
             <li><code>run.fail_fast</code> must be <code>off</code>, <code>gate</code>,{" "}<code>file</code> or <code>first</code></li>
             <li>every <code>threshold</code> score must be a number from <code>0</code> to <code>100</code></li>
@@ -279,6 +281,9 @@ log:
             <li><code>report.format</code> must be <code>text</code>, <code>github</code>,{" "}<code>gitlab</code>, <code>sarif</code> or <code>codeclimate</code></li>
           </ul>
           <p>An invalid value exits with code <code>2</code>.</p>
+          <p>Three old keys still work and print a warning: <code>no-cache</code> is now{" "}<code>no_cache</code>,{" "}
+            <code>no-update-check</code> is now <code>no_update_check</code>, and <code>version</code> is no longer needed.
+            If an old and a new key disagree, or you want to see which setting won, run{" "}<a href="/docs/cli/config/#show"><code>gooze config show</code></a>.</p>
           <Recording name="run-invalid-parallel" title="Recorded gooze run with --parallel 0" />
         </div>
         <div id="cli-vs-config">

@@ -117,6 +117,25 @@ const runFlags: RunFlag[] = [
     configKey: "run.fail_fast",
   },
   {
+    flag: "--go-cache",
+    description:
+      "Where the builds of mutants are cached. `isolated` uses Gooze's own cache, which reads `GOCACHE` but never writes to it, so a long run doesn't fill your Go build cache. `shared` uses `GOCACHE`, which makes a re-test of the same mutants faster. Gooze falls back to `shared` on Go before 1.24 or when `GOCACHEPROG` is already set.",
+    defaultValue: "isolated",
+    configKey: "run.go_cache",
+  },
+  {
+    flag: "--go-cache-size",
+    description: "Size in MB that a run trims Gooze's own build cache to when it ends, least recently used first. Entries used in the last hour are kept.",
+    defaultValue: "2048",
+    configKey: "run.go_cache_size",
+  },
+  {
+    flag: "--go-cache-prewarm",
+    description: "Build each package's tests once in `GOCACHE` before its mutants, so their dependencies are cached there. Only with `--go-cache isolated`.",
+    defaultValue: "false",
+    configKey: "run.go_cache_prewarm",
+  },
+  {
     flag: "--parallel",
     alias: "-p",
     description: "Number of parallel workers for mutation testing (at least `1`).",

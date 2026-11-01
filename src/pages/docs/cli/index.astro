@@ -19,7 +19,7 @@ import { withSlash } from "@/lib/links"
 const commands = [
   { title: "run", href: "/docs/cli/run", desc: "Run mutation testing (use `--estimate` to preview)" },
   { title: "report", href: "/docs/cli/report", desc: "View, merge, push, and pull reports" },
-  { title: "config", href: "/docs/cli/config", desc: "Manage configuration (`config init`)" },
+  { title: "config", href: "/docs/cli/config", desc: "Manage configuration (`config init`, `show`, `schema`)" },
   { title: "version", href: "/docs/cli/version", desc: "Print version/build info" },
 ]
 
@@ -64,6 +64,8 @@ const metadata = docsMetadata("/docs/cli")
             <li><code>-x, --exclude &lt;regex&gt;</code>: exclude files by regex (you can repeat this)</li>
             <li><code>-v, --verbose</code>: write extra debug logs</li>
             <li><code>--log-output &lt;path&gt;</code>: write logs to a specific file</li>
+            <li><code>--log-level &lt;level&gt;</code>: log severity: <code>debug</code>, <code>info</code>,{" "}<code>warn</code> or <code>error</code> (default <code>info</code>); <code>--verbose</code> overrides it</li>
+            <li><code>--version</code>: print the same line as <a href="/docs/cli/version/"><code>gooze version</code></a></li>
           </ul>
           <p>Flags that only apply to one command, such as <code>--coverage-profile</code>, are listed on that
             command&apos;s page (see <a href="/docs/cli/run/#flags"><code>gooze run</code></a>).</p>
