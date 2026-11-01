@@ -105,7 +105,7 @@ const kbd = "pointer-events-none inline-flex h-5.5 w-fit min-w-5.5 items-center 
   let active = 0
 
   function linkClass(index: number) {
-    return cn("block rounded-md px-3 py-2 transition-colors", index === active ? "bg-muted shadow-[inset_3px_0_0_var(--highlight)]" : "hover:bg-muted")
+    return cn("block rounded-md px-3 py-2 transition-colors", index === active ? "bg-muted shadow-[inset_2px_0_0_var(--highlight)]" : "hover:bg-muted")
   }
 
   function entryHref(entry: SearchEntry) {

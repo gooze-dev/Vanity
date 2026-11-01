@@ -64,7 +64,7 @@ const faqJsonLd = faqPageJsonLd(faqs)
     <section>
       <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
       <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4">One function at a time (--run and --mutagens)</h1>
-      <p class="text-lg text-muted-foreground mb-8">You, or an agent, are killing the survivors of one function. Each try means a new test
+      <p class="gz-prose gz-prose--lead mb-8">You, or an agent, are killing the survivors of one function. Each try means a new test
         and another run, and a full run tests every mutant in the file and rewrites the project
         report each time. <code>--run</code> mutates only the functions you name,{" "}<code>--mutagens</code> only the mutagens you pick, and the results go to a separate
         directory, so the project report stays as it was until you merge them.</p>

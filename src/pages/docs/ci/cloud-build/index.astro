@@ -202,7 +202,7 @@ const metadata = docsMetadata("/docs/ci/cloud-build")
     <section>
       <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
       <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4">Google Cloud Build</h1>
-      <p class="text-lg text-muted-foreground mb-8">You want every pull request built by Cloud Build to keep your mutation score. This
+      <p class="gz-prose gz-prose--lead mb-8">You want every pull request built by Cloud Build to keep your mutation score. This
         page adds Gooze to a <code>cloudbuild.yaml</code>: one step first, then a baseline in
         Artifact Registry so pull requests test only what changed, then triggers and a gate.
         The setups mirror the <a href="/docs/ci/github/">GitHub Actions</a> and{" "}<a href="/docs/ci/gitlab/">GitLab CI</a> guides.</p>
@@ -214,7 +214,7 @@ const metadata = docsMetadata("/docs/ci/cloud-build")
             with the line you saw locally, and the build passes, because no threshold is set:</p>
           <CodeBlock lang="yaml" code={simple} />
           <Recording name="calc-first-run" title="Recorded last line of the first gooze run on calc" />
-          <p class="text-sm text-muted-foreground">The <code>script</code> field runs the lines as a shell script; it needs no{" "}<code>entrypoint</code> or <code>args</code>. Pin a release (<code>gooze@vX.Y.Z</code>) instead of <code>@latest</code> once the pipeline
+          <p class="">The <code>script</code> field runs the lines as a shell script; it needs no{" "}<code>entrypoint</code> or <code>args</code>. Pin a release (<code>gooze@vX.Y.Z</code>) instead of <code>@latest</code> once the pipeline
             works, so a new Gooze release can&apos;t change results unannounced.</p>
         </div>
         <div id="registry">
@@ -225,7 +225,7 @@ const metadata = docsMetadata("/docs/ci/cloud-build")
             in an Artifact Registry gcr.io repository works the same way. Create the
             repository once and let your build&apos;s service account write to it:</p>
           <CodeBlock lang="bash" code={registrySetup} />
-          <p class="text-sm text-muted-foreground"><code>BUILD_SERVICE_ACCOUNT</code> is the service account shown on your trigger.
+          <p class=""><code>BUILD_SERVICE_ACCOUNT</code> is the service account shown on your trigger.
             Projects whose first build ran after mid-2024 use the Compute Engine default
             service account (<code>PROJECT_NUMBER-compute@developer.gserviceaccount.com</code>);
             earlier projects keep{" "}<code>PROJECT_NUMBER@cloudbuild.gserviceaccount.com</code>.</p>
@@ -277,7 +277,7 @@ const metadata = docsMetadata("/docs/ci/cloud-build")
           <p>Connect the repository to Cloud Build, then create one trigger for pull requests
             and one for pushes to <code>main</code>, both using the same{" "}<code>cloudbuild.yaml</code>. You can do this in the console or with{" "}<code>gcloud</code>:</p>
           <CodeBlock lang="bash" code={triggers} />
-          <p class="text-sm text-muted-foreground">These commands are for a GitHub repository connected through the Cloud Build
+          <p class="">These commands are for a GitHub repository connected through the Cloud Build
             GitHub app. For a 2nd gen repository connection, pass{" "}<code>--repository=projects/PROJECT/locations/REGION/connections/CONNECTION/repositories/REPO</code>{" "}and <code>--region=REGION</code> instead of <code>--repo-owner</code> and{" "}<code>--repo-name</code>. A trigger that
             runs as a user-managed service account also needs{" "}<code>options.logging</code> set, for example to{" "}<code>CLOUD_LOGGING_ONLY</code>.</p>
         </div>
@@ -288,7 +288,7 @@ const metadata = docsMetadata("/docs/ci/cloud-build")
           <CodeBlock lang="yaml" code={gate} />
           <p>The <code>calc</code> run at <code>84.62%</code> passes a minimum of{" "}<code>60</code> and fails a minimum of <code>90</code>, until the two boundary
             tests bring it to <code>100.00%</code>.</p>
-          <p class="text-sm text-muted-foreground">A failed step stops the build, so the gate comes after the <code>push</code> step:
+          <p class="">A failed step stops the build, so the gate comes after the <code>push</code> step:
             a <code>main</code> build below the minimum still pushes its baseline. To record a
             low score without failing the build, add <code>allowExitCodes: [3]</code> to the
             step; every other code still fails it. More in{" "}<a href="#exit-codes">exit codes</a>.</p>
@@ -302,7 +302,7 @@ const metadata = docsMetadata("/docs/ci/cloud-build")
             never costs the baseline. To record a low score without failing the build, list
             the code in <code>allowExitCodes</code>:</p>
           <CodeBlock lang="yaml" code={allowLowScore} />
-          <p class="text-sm text-muted-foreground">The usual causes of the other codes in Cloud Build: <code>4</code>, a build without
+          <p class="">The usual causes of the other codes in Cloud Build: <code>4</code>, a build without
             the <code>history</code> step, since builds clone one commit; <code>5</code>, an
             expired token or a missing <code>roles/artifactregistry.writer</code>;{" "}<code>6</code>, a step that runs before Gooze wrote reports to{" "}<code>/workspace</code>. Every code: <a href="/docs/cli/#exit-codes">CLI reference</a>.</p>
         </div>

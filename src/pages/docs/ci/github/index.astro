@@ -268,7 +268,7 @@ const metadata = docsMetadata("/docs/ci/github")
     <section>
       <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
       <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4">GitHub Actions</h1>
-      <p class="text-lg text-muted-foreground mb-8">Your mutation score is good on your machine, and you want every push to keep it
+      <p class="gz-prose gz-prose--lead mb-8">Your mutation score is good on your machine, and you want every push to keep it
         that way. Start with the one-job workflow, then add shards when the run gets slow, a
         shared baseline so unchanged files are skipped, annotations that show each surviving
         mutant on the pull request, and a gate that fails the build below a score.</p>
@@ -365,7 +365,7 @@ const metadata = docsMetadata("/docs/ci/github")
           <p>With <code>60</code>, the <code>calc</code> run at <code>84.62%</code> passes. Raise
             it to <code>90</code> and the same run fails until you add the two boundary tests
             that bring it to <code>100.00%</code>.</p>
-          <p class="text-sm text-muted-foreground">A shard doesn&apos;t check thresholds, so gate only in the merge job. The average and
+          <p class="">A shard doesn&apos;t check thresholds, so gate only in the merge job. The average and
             per-file thresholds and <code>gooze.yaml</code> settings are in{" "}<a href="/docs/ci/quality-gates/">Quality gates</a>; how to let a low score
             pass while errors still fail is in <a href="#exit-codes">exit codes</a>.</p>
         </div>
@@ -378,7 +378,7 @@ const metadata = docsMetadata("/docs/ci/github")
           <CodeBlock lang="yaml" code={tolerate} />
           <p>Steps that must run after a failed gate, such as uploading reports, take{" "}<code>if: {"${{ !cancelled() }}"}</code>:</p>
           <CodeBlock lang="yaml" code={keepReports} />
-          <p class="text-sm text-muted-foreground">The usual causes of the other codes in GitHub Actions: <code>4</code>, a checkout
+          <p class="">The usual causes of the other codes in GitHub Actions: <code>4</code>, a checkout
             without <code>fetch-depth: 0</code>; <code>5</code>, missing{" "}<code>GOOZE_REGISTRY_*</code> or <code>packages: write</code>; <code>6</code>, a
             merge job that ran before the shard artifacts were downloaded. Every code:{" "}<a href="/docs/cli/#exit-codes">CLI reference</a>.</p>
         </div>

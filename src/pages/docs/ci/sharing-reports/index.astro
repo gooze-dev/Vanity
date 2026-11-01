@@ -96,7 +96,7 @@ const metadata = docsMetadata("/docs/ci/sharing-reports")
     <section>
       <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
       <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4">Report artifacts</h1>
-      <p class="text-lg text-muted-foreground mb-8">Store the reports directory as an OCI artifact (e.g. in GHCR) so CI and teammates start
+      <p class="gz-prose gz-prose--lead mb-8">Store the reports directory as an OCI artifact (e.g. in GHCR) so CI and teammates start
         from the same baseline and only re-test what changed.</p>
       <div>
         <p>Locally, Gooze keeps its results in <code>.gooze-reports</code> and the next run only
@@ -132,7 +132,7 @@ gooze report push ghcr.io/your-org/your-repo/gooze-reports:main
 
 # later: pull and extract into the reports dir
 gooze report pull ghcr.io/your-org/your-repo/gooze-reports:main`} />
-          <p class="text-sm text-muted-foreground">Both commands use the reports dir set by <code>-o/--output</code> (default{" "}<code>.gooze-reports</code>). Flags:{" "}<a href="/docs/cli/report/#push"><code>gooze report push</code></a>,{" "}<a href="/docs/cli/report/#pull"><code>gooze report pull</code></a>.</p>
+          <p class="">Both commands use the reports dir set by <code>-o/--output</code> (default{" "}<code>.gooze-reports</code>). Flags:{" "}<a href="/docs/cli/report/#push"><code>gooze report push</code></a>,{" "}<a href="/docs/cli/report/#pull"><code>gooze report pull</code></a>.</p>
           <p><code>push</code> needs a tag and fails on an empty reports dir. <code>pull</code>{" "}takes a tag or a digest, so you can also restore one exact version:</p>
           <CodeBlock lang="bash" code={`gooze report pull ghcr.io/your-org/your-repo/gooze-reports@sha256:<digest>`} />
           <p class="text-sm text-muted-foreground"><code>&lt;digest&gt;</code> is the digest your registry shows for a pushed version.</p>
@@ -206,7 +206,7 @@ gooze report push ghcr.io/org/repo/gooze-reports:main   # publish updated`} />
             <li>For a non-TLS registry add <code>--plain-http</code>;
               to skip TLS verification (self-signed certs) add{" "}<code>--insecure</code>.</li>
           </ul>
-          <p class="text-sm text-muted-foreground">Platform-specific credentials (<code>GITHUB_TOKEN</code>,{" "}<code>CI_JOB_TOKEN</code>, an Artifact Registry access token) are covered on the{" "}<a href="/docs/ci/github/#auth">GitHub</a>,{" "}<a href="/docs/ci/gitlab/#auth">GitLab</a> and{" "}<a href="/docs/ci/cloud-build/#cached">Cloud Build</a> pages.</p>
+          <p class="">Platform-specific credentials (<code>GITHUB_TOKEN</code>,{" "}<code>CI_JOB_TOKEN</code>, an Artifact Registry access token) are covered on the{" "}<a href="/docs/ci/github/#auth">GitHub</a>,{" "}<a href="/docs/ci/gitlab/#auth">GitLab</a> and{" "}<a href="/docs/ci/cloud-build/#cached">Cloud Build</a> pages.</p>
         </div>
         <div id="limits">
           <h2>Limitations</h2>

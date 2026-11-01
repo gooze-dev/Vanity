@@ -79,7 +79,7 @@ const goozeTheme: ThemeRegistration = {
     { scope: ["constant", "support.constant"], settings: { foreground: syntax.number } },
     { scope: ["entity.name.function", "support.function"], settings: { foreground: syntax.func, fontStyle: "bold" } },
     // Shell commands are plain text: an argument is not a string literal.
-    { scope: ["source.shell", "source.shell entity.name.command", "source.shell support.function", "string.unquoted.argument"], settings: { foreground: syntax.fg, fontStyle: "" } },
+    { scope: ["source.shell", "source.shell entity.name.command", "source.shell support.function", "source.shell constant", "string.unquoted.argument"], settings: { foreground: syntax.fg, fontStyle: "" } },
     { scope: ["source.shell string.quoted", "source.shell comment"], settings: { foreground: syntax.string } },
     { scope: ["source.shell comment"], settings: { foreground: syntax.comment, fontStyle: "italic" } },
   ],

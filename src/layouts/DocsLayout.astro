@@ -13,7 +13,9 @@ import Separator from "@/components/ui/Separator.astro"
 import BaseLayout from "@/layouts/BaseLayout.astro"
 import type { Metadata } from "@/lib/metadata"
 
-const { metadata } = Astro.props as { metadata?: Metadata }
+// wide: the page has a matrix that takes the full width, with the list of
+// sections above it instead of beside it.
+const { metadata, wide = false } = Astro.props as { metadata?: Metadata; wide?: boolean }
 ---
 <BaseLayout metadata={metadata}>
   <div class="gooze-docs">
@@ -33,18 +35,18 @@ const { metadata } = Astro.props as { metadata?: Metadata }
           </div>
         </header>
         <div class="flex flex-1 flex-col gap-4 p-4 pt-6">
-          <div class="mx-auto flex w-full max-w-[760px] gap-10 xl:max-w-[1008px]">
+          <div class:list={["mx-auto flex w-full gap-10", wide ? "max-w-[1120px]" : "max-w-[760px] xl:max-w-[1008px]"]}>
             <div class="min-w-0 flex-1 space-y-8">
-              <DocsToc collapsible class="xl:hidden" />
-              <article id="docs-content" class="typeset typeset-docs"><slot /></article>
+              <DocsToc collapsible open={wide} class={wide ? undefined : "xl:hidden"} />
+              <article id="docs-content" data-wide={wide || undefined} class="typeset typeset-docs"><slot /></article>
               <HeadingAnchors />
               <DocsPager />
             </div>
-            <aside class="hidden w-52 shrink-0 xl:block">
+            {!wide && <aside class="hidden w-52 shrink-0 xl:block">
               <div class="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto">
                 <DocsToc />
               </div>
-            </aside>
+            </aside>}
           </div>
         </div>
       </main>

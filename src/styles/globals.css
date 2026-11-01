@@ -2,10 +2,9 @@
 @import "tw-animate-css";
 @import "./typeset.css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* Gooze design system. Every colour, size and radius a component uses is a
-   token defined in this file; hex values live here and nowhere else. Tailwind's
+/* Gooze design system. Colours are tokens from tokens.css. Tailwind's
    named sizes and radii are remapped onto the scale, so text-4xl is the 40px h1
    and rounded-lg the 14px card radius. */
 @theme static {
@@ -98,90 +97,20 @@
   --color-status-error-foreground: var(--status-error-fg);
   --color-status-neutral: var(--status-neutral);
   --color-status-neutral-foreground: var(--status-neutral-fg);
-  --radius-sm: var(--radius-token-sm);
-  --radius-md: var(--radius-token-md);
-  --radius-lg: var(--radius-token-lg);
-  --radius-xl: var(--radius-token-lg);
-  --radius-2xl: var(--radius-token-lg);
-  --radius-3xl: var(--radius-token-lg);
-  --radius-4xl: var(--radius-token-lg);
-  --shadow-pop: var(--pop-shadow);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --radius-xl: 14px;
+  --radius-2xl: 14px;
+  --radius-3xl: 14px;
+  --radius-4xl: 14px;
+  --shadow-pop: var(--shadow-pop);
 }
 
-:root {
-  /* Brand: the same in both themes. */
-  --brand-gopher: #00add8;
-  --brand-toxic: #b6f23a;
-  --brand-ink: #0c100d;
-  --brand-paper: #f5f6f0;
-  --brand-blue-deep: #007e9e;
-  --brand-orange: #f59e2c;
-
-  /* Dark islands: code, diffs, terminals and casts in both themes. */
-  --code-fg: #eef1ea;
-  --code-muted: #8a938b;
-  --code-chrome: #1d231f;
-  --terminal-bg: #0c100d;
-  --terminal-chrome: #1d231f;
-  --terminal-fg: #d4dad1;
-  --terminal-border: #2a312c;
-  --terminal-dot: #3a403b;
-  --terminal-title: #9aa39b;
-  --landing-border: rgb(255 255 255 / 10%);
-  --landing-bar: #171b18;
-  --landing-bar-border: rgb(255 255 255 / 6%);
-  --landing-dot-1: #ff5f57;
-  --landing-dot-2: #febc2e;
-  --landing-dot-3: #28c840;
-  --cast-bar: #151a16;
-  --original: #00add8;
-  --mutant: #b6f23a;
-  --mutant-bg: #b6f23a1a;
-  --syn-keyword: #00add8;
-  --syn-string: #b6f23a;
-  --syn-number: #f59e2c;
-  --syn-comment: #8a938b;
-  --syn-func: #eef1ea;
-
-  --status-killed: #b6f23a;
-  --status-killed-fg: #0c100d;
-  --status-survived: #f59e2c;
-  --status-survived-fg: #0c100d;
-
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-6: 24px;
-  --space-8: 32px;
-  --space-12: 48px;
-  --space-16: 64px;
-  --radius-token-sm: 4px;
-  --radius-token-md: 8px;
-  --radius-token-lg: 14px;
-  --radius-pill: 999px;
-
-  /* Light theme. */
-  --bg: #ffffff;
-  --bg-subtle: #f3f6f8;
-  --bg-raised: #ffffff;
-  --border: #dfe6ea;
-  --border-strong: #7f8c93;
-  --fg: #0c100d;
-  --fg-muted: #5a676e;
-  --accent: #0077a8;
-  --highlight: #00add8;
-  --highlight-fg: #0c100d;
-  --code-bg: #0c100d;
-  --code-border: #0c100d;
-  --inline-code-bg: #eef2f4;
-  --status-error: #d93636;
-  --status-error-fg: #ffffff;
-  --status-neutral: #e6ecef;
-  --status-neutral-fg: #3f4a50;
-  --pop-shadow: 0 8px 24px rgb(12 16 13 / 12%);
-
-  /* Design tokens under the names the components use. */
+:root,
+[data-theme] {
+  /* Design tokens under the names the components use. Declared on [data-theme]
+     too, so a section with its own theme (the landing band) recomputes them. */
   --focus-ring: var(--accent);
   --background: var(--bg);
   --foreground: var(--fg);
@@ -206,27 +135,6 @@
   --sidebar-accent-foreground: var(--fg);
   --sidebar-border: var(--border);
   --sidebar-ring: var(--focus-ring);
-}
-
-.dark {
-  --bg: #0c100d;
-  --bg-subtle: #151a16;
-  --bg-raised: #1d231f;
-  --border: #2a312c;
-  --border-strong: #5b625c;
-  --fg: #eef1ea;
-  --fg-muted: #9aa39b;
-  --accent: #00add8;
-  --highlight: #b6f23a;
-  --highlight-fg: #0c100d;
-  --code-bg: #151a16;
-  --code-border: #2a312c;
-  --inline-code-bg: #151a16;
-  --status-error: #ff6b6b;
-  --status-error-fg: #0c100d;
-  --status-neutral: #2a312c;
-  --status-neutral-fg: #c9cfc6;
-  --pop-shadow: 0 8px 24px rgb(0 0 0 / 50%);
 }
 
 @layer base {
@@ -256,11 +164,11 @@
   code:not(pre code, .gz-island code) {
     background-color: var(--inline-code-bg);
     border: 1px solid var(--border);
-    border-radius: var(--radius-token-sm);
+    border-radius: var(--radius-sm);
     color: var(--fg);
     font-family: var(--font-mono);
-    font-size: 0.875em;
-    padding: 0.1em 0.35em;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
   }
 
   /* Keep anchored sections clear of the sticky header. Set here instead of a
@@ -283,7 +191,7 @@
 @layer components {
   .typeset-docs {
     --typeset-flow: 1.1em;
-    --typeset-leading: 1.6;
+    --typeset-leading: 1.65;
     --typeset-font-heading: var(--font-display);
     --typeset-font-mono: var(--font-mono);
   }
@@ -320,10 +228,173 @@
     letter-spacing: -0.01em;
     line-height: 1;
     text-transform: lowercase;
+  }
+  /* The colour lives in the ink tile beside it; the wordmark stays readable. */
+  .gz-wordmark .go {
+    color: var(--accent);
+  }
+  .gz-wordmark .oze {
+    color: var(--fg);
+  }
+  [data-theme="dark"] .gz-wordmark .go {
     color: var(--brand-gopher);
   }
-  .dark .gz-wordmark .oze {
+  [data-theme="dark"] .gz-wordmark .oze {
     color: var(--brand-toxic);
+  }
+}
+
+/* Reading text: body copy in fg at 16px or more. fg-muted is for captions. */
+@layer components {
+  .gz-prose {
+    color: var(--fg);
+    font-size: 16px;
+    line-height: 1.65;
+    max-width: 68ch;
+  }
+  .gz-prose--lead {
+    font-size: 18px;
+  }
+  .gz-caption {
+    color: var(--fg-muted);
+    font-size: 14px;
+    margin-inline: auto;
+    max-width: 720px;
+    text-align: center;
+  }
+}
+
+/* The landing page's top menu fades out as the page scrolls (script in
+   NavHeader.astro). A focused link brings it back. */
+@layer components {
+  .gz-landing-nav[data-faded] {
+    pointer-events: none;
+  }
+  .gz-landing-nav:focus-within {
+    opacity: 1 !important;
+    pointer-events: auto;
+  }
+}
+
+/* Landing page sections and MutationDiff, AgentLoop, WorksWith. */
+@layer components {
+  .gz-eyebrow {
+    color: var(--fg-muted);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    line-height: 1.35;
+    text-transform: uppercase;
+  }
+  .gz-diff {
+    overflow: hidden;
+    border: 1px solid var(--code-border);
+    border-radius: var(--radius-md);
+    background-color: var(--terminal-bg);
+    color: var(--code-fg);
+    font-family: var(--font-mono);
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .gz-diff__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    border-bottom: 1px solid var(--terminal-border);
+    font-family: var(--font-sans);
+    font-size: 14px;
+  }
+  .gz-diff__head span span {
+    color: var(--code-muted);
+  }
+  .gz-diff__line {
+    display: block;
+    overflow-x: auto;
+    padding: var(--space-1) var(--space-4);
+    white-space: pre;
+  }
+  .gz-diff__line--orig {
+    color: var(--original);
+  }
+  .gz-diff__line--mut {
+    background-color: var(--mutant-bg);
+    color: var(--mutant);
+  }
+  .gz-diff__sign {
+    display: inline-block;
+    width: 1.5em;
+    color: var(--code-muted);
+    user-select: none;
+  }
+  .gz-diff__line--mut .gz-diff__sign {
+    color: inherit;
+  }
+  .gz-diag {
+    margin: 0;
+    color: var(--terminal-fg);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+  .gz-diag .w {
+    color: var(--brand-orange);
+  }
+  .gz-diag .o {
+    color: var(--brand-gopher);
+  }
+  .gz-diag .m {
+    color: var(--brand-toxic);
+  }
+  .gz-cmd {
+    border: 1px solid var(--terminal-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-subtle);
+    color: var(--code-fg);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1;
+    padding: 6px 10px;
+  }
+  .gz-cmd .s {
+    color: var(--brand-toxic);
+  }
+  .gz-works__name--planned {
+    color: var(--fg-muted);
+    font-weight: 400;
+  }
+  .gz-shield {
+    display: inline-flex;
+    height: 22px;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 22px;
+  }
+  .gz-shield__l {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 var(--space-2);
+    background-color: var(--shield-left);
+    color: var(--shield-left-fg);
+  }
+  .gz-shield__l img {
+    width: 12px;
+    height: 12px;
+  }
+  .gz-shield__r {
+    padding: 0 var(--space-2);
+    background-color: var(--brand-toxic);
+    color: var(--brand-ink);
+    font-weight: 600;
+  }
+  .gz-shield__r--warn {
+    background-color: var(--brand-orange);
   }
 }
 
@@ -450,7 +521,7 @@
   .gz-term {
     overflow: hidden;
     border: 1px solid var(--terminal-border);
-    border-radius: var(--radius-token-md);
+    border-radius: var(--radius-md);
     background-color: var(--terminal-bg);
     color: var(--terminal-fg);
     color-scheme: dark;
@@ -529,7 +600,7 @@
   .gz-cast {
     overflow: hidden;
     border: 1px solid var(--terminal-border);
-    border-radius: var(--radius-token-md);
+    border-radius: var(--radius-md);
     background-color: var(--terminal-bg);
     color-scheme: dark;
   }
@@ -552,6 +623,166 @@
         overflow-wrap: normal;
       }
     }
+  }
+
+  /* ComparisonTable: wide and neutral, with every tool's column alike. Answers are
+     a symbol and a word; colour is never the cue. Sticky under the docs header,
+     which is shorter while the sidebar is collapsed. */
+  .gz-cmp {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+  .gz-cmp col.feature {
+    width: 200px;
+  }
+  .gz-cmp thead th {
+    position: sticky;
+    top: 4rem;
+    z-index: 2;
+    padding: var(--space-3) var(--space-3) var(--space-2);
+    border-bottom: 2px solid var(--fg);
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.25;
+    text-align: left;
+    vertical-align: bottom;
+  }
+  [data-collapsible="icon"] ~ [data-slot="sidebar-inset"] .gz-cmp thead th {
+    top: 3rem;
+  }
+  .gz-cmp thead th:first-child {
+    left: 0;
+    z-index: 3;
+  }
+  .gz-cmp tbody th {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    padding: var(--space-3);
+    border-bottom: 1px solid var(--border);
+    background-color: var(--bg);
+    color: var(--fg);
+    font-weight: 500;
+    overflow-wrap: break-word;
+    text-align: left;
+    vertical-align: top;
+  }
+  .gz-cmp td {
+    padding: var(--space-3);
+    border-bottom: 1px solid var(--border);
+    overflow-wrap: break-word;
+    vertical-align: top;
+  }
+  .gz-cmp tbody tr:not(.group):hover > * {
+    background-color: var(--bg-subtle);
+  }
+  /* Tokens stay whole; a code span with several words wraps between them. */
+  .gz-cmp code {
+    border: 0;
+    background: none;
+    font-size: 12px;
+    padding: 0;
+  }
+  .gz-cmp tr.group th {
+    position: static;
+    padding: var(--space-6) var(--space-3) var(--space-2);
+    color: var(--fg-muted);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  .gz-cmp thead .ver {
+    display: block;
+    margin-top: 2px;
+    color: var(--fg-muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.3;
+  }
+  .gz-cmp caption {
+    padding-bottom: var(--space-2);
+    caption-side: top;
+    color: var(--fg-muted);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+  .gz-cmp-foot {
+    margin-top: var(--space-3);
+    color: var(--fg-muted);
+    font-size: 13px;
+  }
+  .gz-v {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--fg);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .gz-v::before {
+    width: 14px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+  }
+  .gz-v--yes::before {
+    content: "\2713";
+  }
+  .gz-v--partly::before {
+    content: "";
+    box-sizing: border-box;
+    width: 10px;
+    height: 10px;
+    margin: 0 2px;
+    border: 1.5px solid currentColor;
+    border-radius: 50%;
+    /* A half-filled disc, the "partly" symbol: a shape, not a colour blend. */
+    background: linear-gradient(90deg, currentColor 50%, transparent 50%);
+  }
+  .gz-v--no {
+    color: var(--fg-muted);
+    font-weight: 500;
+  }
+  .gz-v--no::before {
+    content: "\2013";
+  }
+  .gz-v--unknown {
+    color: var(--fg-muted);
+    font-style: italic;
+    font-weight: 400;
+  }
+  .gz-v--unknown::before {
+    content: "?";
+    font-style: normal;
+  }
+  .gz-note {
+    display: block;
+    margin-top: var(--space-1);
+    color: var(--fg-muted);
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  /* A wide docs page: prose keeps the 760px column, the matrix takes the rest. */
+  [data-wide] > section > :not(div),
+  [data-wide] > section > div > div:not(#matrix),
+  [data-wide] > section > div:not(:has(#matrix)) {
+    max-width: 760px;
   }
 
   /* FAQ: hairlines, with + and − in muted mono as the toggle. */

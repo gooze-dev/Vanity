@@ -12,7 +12,7 @@ const { faqs, class: className } = Astro.props as { faqs: Faq[]; class?: string 
   {faqs.map((faq) => (
     <details id={faqId(faq.q)} name="faq" class="group group/faq scroll-mt-20">
       <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 [&::-webkit-details-marker]:hidden"><h3 class="m-0 flex-1 font-sans text-base font-semibold leading-snug" set:html={withCode(faq.q)} /><span aria-hidden="true" class="gz-faq-toggle shrink-0"></span></summary>
-      <p class="m-0 pb-4 leading-relaxed text-muted-foreground" set:html={withCode(faq.a)} />
+      <p class="m-0 pb-4 leading-[1.65]" set:html={withCode(faq.a)} />
     </details>
   ))}
 </div>

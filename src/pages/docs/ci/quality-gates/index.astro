@@ -66,7 +66,7 @@ const faqJsonLd = faqPageJsonLd(faqs)
     <section>
       <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
       <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4">Quality gates</h1>
-      <p class="text-lg text-muted-foreground mb-8">Your CI runs Gooze on every push, but the job passes at any score, so tests can get
+      <p class="gz-prose gz-prose--lead mb-8">Your CI runs Gooze on every push, but the job passes at any score, so tests can get
         weaker without anyone noticing. A threshold turns the score into a gate: below it, Gooze
         exits with code <code>3</code> and the job fails. This page shows the three score
         thresholds, a cap on surviving mutants, a stricter bar for pull requests, how to stop a
@@ -112,7 +112,7 @@ const faqJsonLd = faqPageJsonLd(faqs)
           <Recording name="calc-threshold-met" title="Recorded gooze run that meets threshold.total" />
           <p>A file threshold names each file below it:</p>
           <Recording name="calc-threshold-file" title="Recorded gooze report view below threshold.file" />
-          <p class="text-sm text-muted-foreground">A file whose mutations all fail to compile has no score: it never fails the file
+          <p class="">A file whose mutations all fail to compile has no score: it never fails the file
             threshold and doesn&apos;t count towards the average. A set without any scored
             mutation meets every threshold.</p>
         </div>
@@ -137,7 +137,7 @@ const faqJsonLd = faqPageJsonLd(faqs)
           <p>A flag overrides the file for one run (<code>--threshold-total 0</code> turns the
             total off), and so does an environment variable such as{" "}<code>GOOZE_THRESHOLD_TOTAL</code>, <code>GOOZE_THRESHOLD_DIFF_FILE</code> or{" "}<code>GOOZE_THRESHOLD_MAX_SURVIVORS</code>. A score outside <code>0</code> to{" "}<code>100</code>, or a negative cap, is a usage error:</p>
           <Recording name="threshold-out-of-range" title="Recorded threshold out of range" />
-          <p class="text-sm text-muted-foreground">All keys: <a href="/docs/config/#threshold">configuration</a>. goozels marks a
+          <p class="">All keys: <a href="/docs/config/#threshold">configuration</a>. goozels marks a
             bad threshold in <code>gooze.yaml</code> while you type, and an editor run below a
             threshold shows as a warning, with the markers refreshed.</p>
         </div>
@@ -204,7 +204,7 @@ const faqJsonLd = faqPageJsonLd(faqs)
             run names the survivor it stopped at:</p>
           <CodeBlock lang="bash" code="gooze run --fail-fast first ./..." />
           <Recording name="calc-fail-fast-first" title="Recorded gooze run stopped by fail-fast first" />
-          <p class="text-sm text-muted-foreground">The results tested before the stop are saved, and a file left unfinished is marked
+          <p class="">The results tested before the stop are saved, and a file left unfinished is marked
             so the next run tests only its other mutants. With <code>--parallel</code>, the
             tests still running at the stop are canceled and not counted. A shard can&apos;t
             judge the merged scores, so there <code>gate</code> checks only{" "}<code>threshold.max_survivors</code> and <code>file</code> does nothing.</p>

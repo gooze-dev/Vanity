@@ -1,0 +1,9 @@
+---
+// Real output in a terminal frame, dark in both themes. html is the output from
+// terminalHtml (lib/recording.ts); it never comes from typed text.
+const { title, html } = Astro.props as { title: string; html: string }
+---
+<figure data-slot="terminal-output" aria-label={title} class="gz-term my-6">
+  <div class="gz-term__bar" aria-hidden="true"><i></i><i></i><i></i></div>
+  <pre class="gz-term__body" set:html={html} />
+</figure>

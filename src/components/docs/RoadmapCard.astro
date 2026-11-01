@@ -11,7 +11,7 @@ const { item } = Astro.props
     <h3 class="text-base font-semibold leading-snug text-foreground" set:html={withCode(item.title)} />
     <RoadmapStatus shipped={item.shipped} beta={item.beta} />
   </div>
-  <p class="text-sm leading-relaxed text-muted-foreground">{typeof item.detail === "string" ? item.detail : <Fragment set:html={item.detail.html} />}</p>
+  <p class="leading-[1.65]">{typeof item.detail === "string" ? item.detail : <Fragment set:html={item.detail.html} />}</p>
   {item.issue && <a href={`https://github.com/gooze-dev/gooze/issues/${item.issue}`} class="mt-auto inline-flex w-fit items-center gap-1 text-sm font-medium text-accent hover:text-foreground">Issue #{item.issue}<Icon name="arrow-right" class="size-3.5" aria-hidden="true" /></a>}
   {item.href && <a href={withSlash(item.href)} class="mt-auto inline-flex w-fit items-center gap-1 text-sm font-medium text-accent hover:text-foreground">Docs<Icon name="arrow-right" class="size-3.5" aria-hidden="true" /></a>}
 </li>

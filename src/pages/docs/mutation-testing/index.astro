@@ -51,7 +51,7 @@ const faqJsonLd = faqPageJsonLd(faqs)
     <section>
       <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
       <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4">What is mutation testing?</h1>
-      <p class="text-lg text-muted-foreground mb-8">Your tests are green and coverage is high, but a bug in a bound check can still reach
+      <p class="gz-prose gz-prose--lead mb-8">Your tests are green and coverage is high, but a bug in a bound check can still reach
         production. Mutation testing asks a direct question: if the code breaks, do the tests
         fail? It injects small, deliberate bugs (mutations) into your code and checks whether your
         tests catch them.</p>

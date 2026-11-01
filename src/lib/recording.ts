@@ -59,3 +59,12 @@ export function terminalHtml(text: string) {
     })
     .join("\n")
 }
+
+// The parts of a report line like
+// "calc.go:10: survived (comparison): if n < lo { -> if n <= lo {".
+export function survivorLine(line: string) {
+  const match = line.match(/^(\S+): survived \(([^)]*)\): (.*) -> (.*)$/)
+  if (!match) return undefined
+  const [, where, mutagen, original, mutated] = match
+  return { where, mutagen, original, mutated }
+}
