@@ -174,7 +174,7 @@
     padding: 0.15em 0.4em;
   }
   /* In small text, inline code takes the smaller code size. */
-  :is(.text-sm, .text-xs, figcaption, .gz-l__row, .gz-works__more, .gz-l__more) code:not(pre code, .gz-island code) {
+  :is(.text-sm, .text-xs, figcaption, .gz-l__row, .gz-l__more) code:not(pre code, .gz-island code) {
     font-size: 13px;
   }
 
@@ -391,9 +391,20 @@
     height: 16px;
     width: auto;
   }
-  .gz-works__more {
+  /* Coming soon: shown, never clickable. */
+  .gz-works__name--soon,
+  .gz-works__name--soon:hover {
+    border-style: dashed;
+    border-color: var(--border-strong);
+    background: none;
     color: var(--fg-muted);
-    font-size: 14px;
+    cursor: default;
+    font-weight: 500;
+  }
+  .gz-works__name--soon .soon {
+    color: var(--fg-muted);
+    font-size: 12px;
+    font-weight: 400;
   }
   .gz-l__works {
     display: grid;
