@@ -215,8 +215,7 @@
   }
 }
 
-/* The Lockup: the mark beside the lowercase wordmark. The text stays "Gooze" for
-   readers and search engines; CSS sets the case. */
+/* The Lockup: the mark beside the wordmark Gooze, capital G: "Go" + "oze". */
 @layer components {
   .gz-lockup {
     display: inline-flex;
@@ -234,9 +233,12 @@
     font-weight: 700;
     letter-spacing: -0.01em;
     line-height: 1;
+  }
+  /* goozels, the language server, is lowercase, one word. */
+  .gz-wordmark--ls {
     text-transform: lowercase;
   }
-  /* One blue for the mark's "<" and "go" in both themes. Logos are exempt from
+  /* One blue for the mark's "<" and "Go" in both themes. Logos are exempt from
      text contrast; links and body text use --accent. */
   .gz-wordmark .go {
     color: var(--brand-gopher);
