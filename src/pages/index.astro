@@ -5,7 +5,6 @@ import NavHeader from "@/components/NavHeader.astro"
 import TerminalWindow from "@/components/TerminalWindow.astro"
 import WorksWith from "@/components/WorksWith.astro"
 import Button from "@/components/ui/Button.astro"
-import PartnerLogo from "@/components/PartnerLogo.astro"
 import ClaudeCodeAnnouncement from "@/components/ClaudeCodeAnnouncement.astro"
 import FaqList from "@/components/FaqList.astro"
 import HeadingAnchors from "@/components/HeadingAnchors.astro"
@@ -69,7 +68,6 @@ const rows = [
   <main class="gz-l">
     <section class="gz-l__sec gz-l__hero">
       <div class="gz-l__in">
-        <ClaudeCodeAnnouncement class="self-start" />
         <p class="gz-l__label">Mutation testing for Go</p>
         <h1 class="gz-l__h1">Test your tests.</h1>
         <p class="gz-l__lead">Coverage shows which lines ran. Gooze injects small, deliberate bugs into your code, one at a time, and shows every one your tests miss, with the file, line and diff.</p>
@@ -99,7 +97,7 @@ const rows = [
           <li><span>After each edit, Claude sees the survivors.<span class="out">{hookWhere}<span class="w">warning:</span>{hookRest.replace("warning:", "")}`<span class="o">{hookOriginal}</span>`{hookArrow}`<span class="m">{hookMutant}</span>`</span></span></li>
           <li><span>Two boundary tests later:<span class="gz-l__score">{fixedScore}</span></span></li>
         </ol>
-        <a href="/docs/claude-code/" class="gz-l__link self-start"><PartnerLogo name="claude" /> Set up the Claude Code plugin <Icon name="arrow-right" class="size-3.5" aria-hidden="true" /></a>
+        <ClaudeCodeAnnouncement class="self-start" />
       </div>
     </section>
 
