@@ -1,10 +1,5 @@
 ---
 import { ClientRouter } from "astro:transitions"
-import geistSans from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url"
-import oxanium from "@fontsource-variable/oxanium/files/oxanium-latin-wght-normal.woff2?url"
-import "@fontsource-variable/geist/index.css"
-import "@fontsource-variable/geist-mono/index.css"
-import "@fontsource-variable/oxanium/index.css"
 import "@/styles/tokens.css"
 import "@/styles/globals.css"
 import {
@@ -29,6 +24,18 @@ const { openGraph: og, twitter } = meta
 // Astro would drop the "/".
 const otherTags = Object.entries(meta.other ?? {})
   .map(([name, content]) => `<meta name="${name}" content="${content}"/>`)
+  .join("")
+
+// The three typefaces, self-hosted. Oxanium and Geist show above the fold, so they
+// are preloaded.
+const base = import.meta.env.BASE_URL
+const fonts = [
+  { family: "Oxanium", file: "Oxanium.ttf", weight: "200 800" },
+  { family: "Geist", file: "Geist.ttf", weight: "100 900" },
+  { family: "Geist Mono", file: "GeistMono.ttf", weight: "100 900" },
+]
+const fontFaces = fonts
+  .map((font) => `@font-face{font-family:"${font.family}";src:url("${base}fonts/${font.file}") format("truetype");font-weight:${font.weight};font-style:normal;font-display:swap}`)
   .join("")
 
 // Structured data so search engines can render a rich result for the tool and
@@ -75,7 +82,7 @@ const jsonLd = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {[oxanium, geistSans].map((href) => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin="" />)}
+    {["Oxanium.ttf", "Geist.ttf"].map((file) => <link rel="preload" href={`${base}fonts/${file}`} as="font" type="font/ttf" crossorigin="" />)}
     {meta.refresh && <meta http-equiv="refresh" content={`0;url=${meta.refresh}`} />}
     <title>{meta.title?.absolute}</title>
     {meta.description && <meta name="description" content={meta.description} />}
@@ -126,6 +133,7 @@ const jsonLd = {
     <link rel="icon" href={`${import.meta.env.BASE_URL}favicon-32.png`} sizes="32x32" type="image/png" />
     <link rel="icon" href={`${import.meta.env.BASE_URL}favicon-16.png`} sizes="16x16" type="image/png" />
     <link rel="apple-touch-icon" href={`${import.meta.env.BASE_URL}apple-touch-icon.png`} />
+    <style is:inline set:html={fontFaces} />
     {/* Sets data-theme before the first paint, and on each page a client
         navigation brings in. It stays after the meta tags and
         holds no "<": `go get` parses this head with an XML decoder. */}

@@ -12,7 +12,7 @@ const { src, rows, title, dir } = Astro.props as { src: string; rows: number; ti
   // Mounts asciinema-player on each TUI recording. The player and its styles
   // load only on pages that have one.
   const posterSeconds = 2
-  const terminalFont = "Geist Mono Variable"
+  const terminalFont = "Geist Mono"
   let players: { dispose: () => void }[] = []
 
   document.addEventListener("astro:before-swap", () => {
