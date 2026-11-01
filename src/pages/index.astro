@@ -5,6 +5,7 @@ import NavHeader from "@/components/NavHeader.astro"
 import TerminalWindow from "@/components/TerminalWindow.astro"
 import WorksWith from "@/components/WorksWith.astro"
 import Button from "@/components/ui/Button.astro"
+import PartnerLogo from "@/components/PartnerLogo.astro"
 import ClaudeCodeAnnouncement from "@/components/ClaudeCodeAnnouncement.astro"
 import FaqList from "@/components/FaqList.astro"
 import HeadingAnchors from "@/components/HeadingAnchors.astro"
@@ -98,7 +99,7 @@ const rows = [
           <li><span>After each edit, Claude sees the survivors.<span class="out">{hookWhere}<span class="w">warning:</span>{hookRest.replace("warning:", "")}`<span class="o">{hookOriginal}</span>`{hookArrow}`<span class="m">{hookMutant}</span>`</span></span></li>
           <li><span>Two boundary tests later:<span class="gz-l__score">{fixedScore}</span></span></li>
         </ol>
-        <a href="/docs/claude-code/" class="gz-l__link self-start">Set up the Claude Code plugin <Icon name="arrow-right" class="size-3.5" aria-hidden="true" /></a>
+        <a href="/docs/claude-code/" class="gz-l__link self-start"><PartnerLogo name="claude" /> Set up the Claude Code plugin <Icon name="arrow-right" class="size-3.5" aria-hidden="true" /></a>
       </div>
     </section>
 
