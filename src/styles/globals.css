@@ -148,6 +148,9 @@
     outline: 2px solid var(--focus-ring);
     outline-offset: 2px;
   }
+  dialog {
+    color: var(--fg);
+  }
   ::selection {
     background-color: var(--highlight);
     color: var(--highlight-fg);
@@ -167,8 +170,12 @@
     border-radius: var(--radius-sm);
     color: var(--fg);
     font-family: var(--font-mono);
-    font-size: 0.9em;
+    font-size: 14px;
     padding: 0.15em 0.4em;
+  }
+  /* In small text, inline code takes the smaller code size. */
+  :is(.text-sm, .text-xs, figcaption, .gz-l__row, .gz-works__more, .gz-l__more) code:not(pre code, .gz-island code) {
+    font-size: 13px;
   }
 
   /* Keep anchored sections clear of the sticky header. Set here instead of a
@@ -291,7 +298,7 @@
     background-color: var(--terminal-bg);
     color: var(--code-fg);
     font-family: var(--font-mono);
-    font-size: 15px;
+    font-size: 14px;
     line-height: 1.8;
   }
   .gz-diff__head {
@@ -536,7 +543,7 @@
     gap: var(--space-3);
     align-items: start;
     counter-increment: s;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1.5;
   }
   .gz-l__steps li::before {
@@ -589,7 +596,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
-    padding: var(--space-4) 0;
+    padding: var(--space-3) 0;
     border-bottom: 1px solid var(--border);
   }
   .gz-l__row h3 {
@@ -1086,6 +1093,9 @@
   .gz-v--unknown::before {
     content: "?";
     font-style: normal;
+  }
+  .gz-note code {
+    font-size: 12px;
   }
   .gz-note {
     display: block;

@@ -20,7 +20,7 @@
   --status-error-fg: #0c100d;
   --status-neutral: #2a312c;
   --status-neutral-fg: #c9cfc6;
-  --shadow-pop: 0 8px 24px rgb(0 0 0 / 50%);
+  --shadow-pop: 0 8px 24px rgb(12 16 13 / 50%);
 }
 
 [data-theme="light"] {
@@ -29,8 +29,7 @@
   --bg-raised: #ffffff;
   --border: #e2e5dc;
   --border-strong: #7a827b;
-  /* Deliberately pure black, not the tokens.json #0c100d: the owner's decision. */
-  --fg: #000000;
+  --fg: #0c100d;
   --fg-muted: #5b625c;
   --accent: #0077a8;
   --highlight: #0c100d;
