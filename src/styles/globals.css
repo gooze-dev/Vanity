@@ -790,6 +790,12 @@
     .gz-l__sec--center .gz-l__actions {
       justify-content: center;
     }
+    /* Why now: the steps keep their scanning line under the centred heading. */
+    .gz-l__sec--center .gz-l__steps {
+      width: 100%;
+      margin-top: var(--space-4);
+      text-align: left;
+    }
     .gz-l__in--narrow {
       max-width: 760px;
     }
