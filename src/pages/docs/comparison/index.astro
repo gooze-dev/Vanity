@@ -1,11 +1,5 @@
 ---
 import DocsFaq from "@/components/DocsFaq.astro"
-import Table from "@/components/ui/Table.astro"
-import TableBody from "@/components/ui/TableBody.astro"
-import TableCell from "@/components/ui/TableCell.astro"
-import TableHead from "@/components/ui/TableHead.astro"
-import TableHeader from "@/components/ui/TableHeader.astro"
-import TableRow from "@/components/ui/TableRow.astro"
 import DocsLayout from "@/layouts/DocsLayout.astro"
 import SupportCell from "@/components/docs/SupportCell.astro"
 import SupportValue from "@/components/docs/SupportValue.astro"
@@ -24,6 +18,7 @@ type Support = "yes" | "no" | "partial" | "unknown"
 
 type Row = {
   feature: string
+  group: string
   gooze: [Support, string]
   gremlins: [Support, string]
   goMutesting: [Support, string]
@@ -35,6 +30,7 @@ type Row = {
 const rows: Row[] = [
   {
     feature: "Config file in the repo",
+    group: "Setup",
     gooze: ["yes", "`gooze.yaml` + `GOOZE_*` env vars"],
     gremlins: ["yes", "`.gremlins.yaml`"],
     goMutesting: ["no", "flags only"],
@@ -43,6 +39,7 @@ const rows: Row[] = [
   },
   {
     feature: "Fail the build below a score",
+    group: "CI",
     gooze: ["yes", "total, average and per-file (`--threshold-*`), plus diff-only ones and a survivor cap"],
     gremlins: ["yes", "`--threshold-efficacy`, `--threshold-mcover`"],
     goMutesting: ["unknown", ""],
@@ -51,6 +48,7 @@ const rows: Row[] = [
   },
   {
     feature: "Test only changed code",
+    group: "Speed",
     gooze: ["yes", "incremental execution per file (no git needed), or changed lines against a ref (`--diff`)"],
     gremlins: ["yes", "git diff against a ref (`--diff`)"],
     goMutesting: ["unknown", ""],
@@ -59,6 +57,7 @@ const rows: Row[] = [
   },
   {
     feature: "Mutate only some functions",
+    group: "Scope",
     gooze: ["yes", "`--run REGEX`, like `go test -run`"],
     gremlins: ["no", "file regex only (`--exclude-files`)"],
     goMutesting: ["unknown", ""],
@@ -67,6 +66,7 @@ const rows: Row[] = [
   },
   {
     feature: "Pick the mutators for one run",
+    group: "Scope",
     gooze: ["yes", "`--mutagens` or `run.mutagens`, including the opt-in `branch`, `statement`, `loop`"],
     gremlins: ["yes", "one flag per mutator, or `mutants.<name>.enabled`"],
     goMutesting: ["unknown", ""],
@@ -75,6 +75,7 @@ const rows: Row[] = [
   },
   {
     feature: "Incremental cache between runs",
+    group: "Speed",
     gooze: ["yes", "per-file, reused on any machine"],
     gremlins: ["unknown", ""],
     goMutesting: ["partial", "manual MD5 blacklist"],
@@ -83,6 +84,7 @@ const rows: Row[] = [
   },
   {
     feature: "Whole-codebase score without re-running everything",
+    group: "Speed",
     gooze: ["yes", "cached results + re-tested changed files"],
     gremlins: ["partial", "`--diff` tests only changed code; otherwise a full run"],
     goMutesting: ["no", "full run every time"],
@@ -91,6 +93,7 @@ const rows: Row[] = [
   },
   {
     feature: "Split one run across CI jobs",
+    group: "CI",
     gooze: ["yes", "`-s INDEX/TOTAL` + `report merge`"],
     gremlins: ["unknown", ""],
     goMutesting: ["unknown", ""],
@@ -99,6 +102,7 @@ const rows: Row[] = [
   },
   {
     feature: "Shared baseline for CI and teammates",
+    group: "CI",
     gooze: ["yes", "`report push`/`pull` to any OCI registry"],
     gremlins: ["unknown", ""],
     goMutesting: ["unknown", ""],
@@ -107,6 +111,7 @@ const rows: Row[] = [
   },
   {
     feature: "Parallel workers",
+    group: "Speed",
     gooze: ["yes", "`-p/--parallel`"],
     gremlins: ["yes", "`--workers`"],
     goMutesting: ["partial", "via a custom `--exec` script"],
@@ -115,6 +120,7 @@ const rows: Row[] = [
   },
   {
     feature: "Skip code tests never execute",
+    group: "Scope",
     gooze: ["yes", "`--coverage-profile`"],
     gremlins: ["yes", "`NOT COVERED` status"],
     goMutesting: ["unknown", ""],
@@ -123,6 +129,7 @@ const rows: Row[] = [
   },
   {
     feature: "Ignore code with comments",
+    group: "Scope",
     gooze: ["yes", "`//gooze:ignore`, per file/func/line/mutator or single replacement"],
     gremlins: ["no", "file regex only (`--exclude-files`)"],
     goMutesting: ["partial", "checksum blacklist"],
@@ -131,6 +138,7 @@ const rows: Row[] = [
   },
   {
     feature: "Write your own mutators",
+    group: "Scope",
     gooze: ["partial", "one small function in the gooze source; no plugin API"],
     gremlins: ["partial", "toggle built-ins only"],
     goMutesting: ["yes", "`Mutator` interface + `Register`"],
@@ -139,6 +147,7 @@ const rows: Row[] = [
   },
   {
     feature: "Custom test runner command",
+    group: "Scope",
     gooze: ["no", "on the roadmap"],
     gremlins: ["partial", "`--integration` runs the full suite"],
     goMutesting: ["yes", "`--exec`"],
@@ -147,6 +156,7 @@ const rows: Row[] = [
   },
   {
     feature: "Machine-readable results",
+    group: "Results",
     gooze: ["yes", "YAML report dir + `_index.yaml`; SARIF and Code Climate (`report view --format sarif|codeclimate`)"],
     gremlins: ["yes", "JSON (`-o`)"],
     goMutesting: ["partial", "stdout"],
@@ -155,6 +165,7 @@ const rows: Row[] = [
   },
   {
     feature: "Interactive results viewer",
+    group: "Results",
     gooze: ["yes", "TUI with diffs (`report view --all`)"],
     gremlins: ["unknown", ""],
     goMutesting: ["unknown", ""],
@@ -163,6 +174,7 @@ const rows: Row[] = [
   },
   {
     feature: "Results in your editor",
+    group: "Editors and agents",
     gooze: ["yes", "goozels language server: survivor markers, run-function lens"],
     gremlins: ["unknown", ""],
     goMutesting: ["unknown", ""],
@@ -171,6 +183,7 @@ const rows: Row[] = [
   },
   {
     feature: "AI coding agent plugin",
+    group: "Editors and agents",
     gooze: ["yes", "Claude Code plugin (beta): setup, kill-survivors loop, results after every edit"],
     gremlins: ["unknown", ""],
     goMutesting: ["unknown", ""],
@@ -179,6 +192,7 @@ const rows: Row[] = [
   },
   {
     feature: "Stable (1.x) CLI and config",
+    group: "Maturity",
     gooze: ["yes", "`v1.x`"],
     gremlins: ["no", "`v0.x`; config may change between minors"],
     goMutesting: ["unknown", ""],
@@ -247,18 +261,21 @@ const faqs = [
 ]
 
 
+const groupNames = ["Setup", "CI", "Speed", "Scope", "Results", "Editors and agents", "Maturity"]
+const groupedRows = groupNames.map((group) => ({ group, rows: rows.filter((row) => row.group === group) }))
+
 const faqJsonLd = faqPageJsonLd(faqs)
 
 
 const metadata = docsMetadata("/docs/comparison")
 ---
-<DocsLayout metadata={metadata}>
+<DocsLayout metadata={metadata} wide>
     <section>
       <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
       <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4">Gooze vs other Go mutation testing tools</h1>
-      <p class="text-lg text-muted-foreground mb-4">You&apos;re choosing a Go mutation testing tool and want the facts side by side. This page compares
+      <p class="gz-prose gz-prose--lead mb-4">You&apos;re choosing a Go mutation testing tool and want the facts side by side. This page compares
         Gooze, Gremlins, go-mutesting, and go-mutants feature by feature, including what Gooze does not do yet.</p>
-      <p class="text-sm text-muted-foreground mb-8">Last verified {VERIFIED} against Gooze <code>{DOCS_FACTS_VERSION}</code> and each tool&apos;s own documentation
+      <p class="mb-8">Last verified {VERIFIED} against Gooze <code>{DOCS_FACTS_VERSION}</code> and each tool&apos;s own documentation
         (<a href="https://gremlins.dev">gremlins.dev</a>,{" "}<a href="https://github.com/zimmski/go-mutesting">zimmski/go-mutesting</a>,{" "}<a href="https://github.com/avito-tech/go-mutesting">avito-tech/go-mutesting</a>,{" "}<a href="https://pkg.go.dev/github.com/P4suta/go-mutants">P4suta/go-mutants</a>).
         &ldquo;Not documented&rdquo; means we found no mention of it, not that it&apos;s impossible.
         Spotted a mistake? Open an issue.</p>
@@ -283,37 +300,47 @@ const metadata = docsMetadata("/docs/comparison")
             <li><strong>go-mutants</strong> is feature-rich (threshold, git-based diff mode, sharding, outcome
               cache, JSON/HTML) but pre-release at the time of writing.</li>
           </ul>
-          <p class="text-sm text-muted-foreground">Why bother at all: Just et al. (FSE 2014) found a test suite&apos;s
+          <p class="">Why bother at all: Just et al. (FSE 2014) found a test suite&apos;s
             ability to{" "}<a href="https://dl.acm.org/doi/10.1145/2635868.2635929" target="_blank" rel="noopener noreferrer">kill mutants correlates with catching real faults</a>, while Inozemtseva &amp; Holmes (ICSE 2014) found{" "}<a href="https://dl.acm.org/doi/10.1145/2568225.2568271" target="_blank" rel="noopener noreferrer">code coverage alone is not strongly correlated with test-suite
               effectiveness</a>, which is the gap every tool here targets.</p>
         </div>
         <div id="matrix">
           <h2>Feature matrix</h2>
-          {/* Six columns don't fit narrow screens without scrolling, so below lg
+          {/* Six columns don't fit narrow screens without scrolling, so below 1400px, where they have too little width
               each feature is a card with one line per tool. */}
-          <ul data-slot="feature-cards" class="space-y-3 lg:hidden">{rows.map((row) => (
+          <ul data-slot="feature-cards" class="space-y-3 min-[1400px]:hidden">{groupedRows.map(({ group, rows: groupRows }) => (
+              <Fragment><li class="gz-eyebrow pt-4">{group}</li>{groupRows.map((row) => (
               <li class="rounded-lg border p-4">
                 <div class="font-medium">{row.feature}</div><dl class="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">{tools.map((tool) => (
                     <div class="contents"><dt class="text-muted-foreground">{tool.name}</dt><dd><SupportValue value={row[tool.key]} /></dd></div>
                   ))}</dl></li>
+              ))}</Fragment>
             ))}</ul>
-          <div class="hidden rounded-lg border lg:block">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Feature</TableHead>
-                  <TableHead>Gooze</TableHead>
-                  <TableHead>Gremlins</TableHead>
-                  <TableHead>go-mutesting</TableHead>
-                  <TableHead>go-mutesting (avito-tech)</TableHead>
-                  <TableHead>go-mutants</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>{rows.map((row) => (
-                  <TableRow>
-                    <TableCell class="align-top whitespace-normal font-medium">{row.feature}</TableCell><SupportCell value={row.gooze} /><SupportCell value={row.gremlins} /><SupportCell value={row.goMutesting} /><SupportCell value={row.avito} /><SupportCell value={row.goMutants} /></TableRow>
-                ))}</TableBody>
-            </Table>
+          <div data-slot="comparison-table" class="hidden min-[1400px]:block">
+            <table class="gz-cmp">
+              <caption>Feature matrix · last verified {VERIFIED}</caption>
+              <colgroup><col class="feature" /><col /><col /><col /><col /><col /></colgroup>
+              <thead>
+                <tr>
+                  <th scope="col">Feature</th>
+                  <th scope="col">Gooze<span class="ver">{DOCS_FACTS_VERSION}</span></th>
+                  <th scope="col">Gremlins</th>
+                  <th scope="col">go-mutesting</th>
+                  <th scope="col">go-mutesting <br />(avito-tech)</th>
+                  <th scope="col">go-mutants</th>
+                </tr>
+              </thead>
+              <tbody>{groupedRows.map(({ group, rows: groupRows }) => (
+                  <Fragment>
+                    <tr class="group"><th colspan="6" scope="colgroup">{group}</th></tr>
+                    {groupRows.map((row) => (
+                      <tr>
+                        <th scope="row">{row.feature}</th><SupportCell value={row.gooze} /><SupportCell value={row.gremlins} /><SupportCell value={row.goMutesting} /><SupportCell value={row.avito} /><SupportCell value={row.goMutants} /></tr>
+                    ))}
+                  </Fragment>
+                ))}</tbody>
+            </table>
+            <p class="gz-cmp-foot">&ldquo;Not documented&rdquo; means we found no mention of it, not that it&apos;s impossible.</p>
           </div>
         </div>
         <div id="choose">
