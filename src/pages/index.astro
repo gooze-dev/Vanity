@@ -24,24 +24,24 @@ const metadata: Metadata = {
 // same array. The rest are on the mutation testing page.
 const faqs = [
   {
-    q: "What is mutation testing?",
-    a: "Mutation testing measures the quality of your test suite. It injects small, deliberate bugs into your code and checks whether your tests catch them.",
+    q: "What is Gooze?",
+    a: "Gooze is an open-source mutation testing tool for Go (Golang) that measures the quality of your test suite by injecting small, deliberate bugs (mutations) into your code and checking whether your tests catch them.",
   },
   {
-    q: "My coverage is high. Why do I need this?",
-    a: "High line coverage only proves your code was executed, not that your assertions check the result. A survived mutant shows code your tests run but don't check.",
+    q: "Our coverage is high but bugs still reach production. How does Gooze help?",
+    a: "High line coverage only proves your code was executed, not that your assertions check the result. Gooze injects deliberate faults into your code and checks that your tests fail. A survived mutant shows code your tests run but don't check. For example, tests for a range check can run every line without trying a value exactly on a bound, and Gooze reports `if n < lo {` -> `if n <= lo {` as survived.",
   },
   {
-    q: "Will it slow down CI?",
+    q: "Mutation testing is slow. Will it block our CI/CD pipeline?",
     a: "It doesn't have to. Passing a Go coverage profile skips tests for uncovered lines, the incremental cache reuses results for unchanged files, and parallel workers and sharding split the remaining work.",
   },
   {
-    q: "Does it work with tests written by AI agents?",
-    a: "Yes. Mutation score shows whether tests catch a bug, whoever wrote them. Each mutant runs `go test` only for its own package, and `--diff origin/main` or `--run '^InRange$'` make a run smaller still, so runs stay short enough for agents to check their edits. The Claude Code plugin (beta) does this after each edit.",
+    q: "Does Gooze run the whole test suite for every mutant?",
+    a: "No. Each mutant runs `go test` only for its own package, never the whole module. A run can also be as small as you need: the cache re-tests only files that changed, `--diff origin/main` mutates only the lines a pull request changes, and `--run '^InRange$'` mutates one function. That keeps runs short enough for AI coding agents to check every edit they make.",
   },
   {
-    q: "How is Gooze different from other Go tools?",
-    a: "Gooze is built for CI/CD. It has an incremental cache that re-tests only changed files, sharding across parallel CI runners, coverage-profile support that skips tests for uncovered lines, and OCI registry support to share baseline reports across teams. The [comparison of Go mutation testing tools](/docs/comparison/) covers every tool the same way.",
+    q: "Why use Gooze for Go mutation testing?",
+    a: "Gooze is built for CI/CD. It has an incremental cache that re-tests only changed files, sharding across parallel CI runners, coverage-profile support that skips tests for uncovered lines, and OCI registry support to share baseline reports across teams.",
   },
 ];
 
