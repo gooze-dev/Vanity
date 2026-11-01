@@ -3,14 +3,23 @@ import Icon from "@/components/Icon.astro"
 import { cn } from "@/lib/utils"
 
 // Built in the browser from the article's h2s; stays hidden on pages with fewer
-// than two sections.
+// than two sections. open: from 768px only; closed on a phone, to keep the page short.
 const { collapsible = false, open = false, class: className } = Astro.props
 ---
 {collapsible ? (
-  <details data-toc hidden open={open} class={cn("group rounded-md border px-4 py-3 text-sm", className)}>
+  <Fragment>
+  <details data-toc hidden data-open-from-md={open || undefined} class={cn("group rounded-md border px-4 py-3 text-sm", className)}>
     <summary class="flex cursor-pointer list-none items-center justify-between font-medium [&::-webkit-details-marker]:hidden">On this page<Icon name="chevron-right" class="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-90" /></summary>
     <div class="mt-3"><ul data-toc-list class="space-y-2 border-l"></ul></div>
   </details>
+  {open && <script is:inline>
+    if (matchMedia("(min-width: 768px)").matches) {
+      document.querySelectorAll("details[data-open-from-md]").forEach(function (area) {
+        area.open = true
+      })
+    }
+  </script>}
+  </Fragment>
 ) : (
   <nav data-toc hidden aria-label="On this page" class={cn("text-sm", className)}>
     <p class="mb-3 font-medium">On this page</p>

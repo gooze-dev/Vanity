@@ -1112,6 +1112,57 @@
   /* ComparisonTable: wide and neutral, with every tool's column alike. Answers are
      a symbol and a word; colour is never the cue. Sticky under the docs header,
      which is shorter while the sidebar is collapsed. */
+  /* The comparison's cards. Under 1024px each group is a disclosure, with the first
+     one open. From 1024px, where there's room, every group shows as a flat list under
+     its label; a browser without ::details-content keeps the disclosures. */
+  .gz-cmp-groups {
+    border-top: 1px solid var(--border);
+  }
+  .gz-cmp-groups details {
+    border-bottom: 1px solid var(--border);
+    padding-block: 10px;
+  }
+  .gz-cmp-groups summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    color: var(--fg);
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    list-style: none;
+  }
+  .gz-cmp-groups summary::-webkit-details-marker {
+    display: none;
+  }
+  .gz-cmp-groups ul {
+    margin-top: var(--space-3);
+  }
+  @supports selector(::details-content) {
+    @media (min-width: 1024px) {
+      .gz-cmp-groups {
+        border-top: 0;
+      }
+      .gz-cmp-groups details {
+        border-bottom: 0;
+        padding-block: 16px 0;
+      }
+      .gz-cmp-groups details::details-content {
+        content-visibility: visible;
+      }
+      .gz-cmp-groups summary {
+        color: var(--fg-muted);
+        cursor: default;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        line-height: 1.35;
+        pointer-events: none;
+        text-transform: uppercase;
+      }
+    }
+  }
   .gz-cmp {
     width: 100%;
     border-collapse: separate;

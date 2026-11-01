@@ -109,7 +109,7 @@ function toMarkdown(html) {
     })
     .replace(/<(strong|b)\b[^>]*>([\s\S]*?)<\/\1>/gi, "**$2**")
     .replace(/<li\b[^>]*>/gi, "\n- ")
-    .replace(/<(p|div|ul|ol|table|section)\b[^>]*>/gi, "\n\n")
+    .replace(/<(p|div|ul|ol|table|section|summary)\b[^>]*>/gi, "\n\n")
     .replace(/<br\b[^>]*>/gi, "\n")
 
   s = stripTags(s)
