@@ -158,6 +158,12 @@ const jsonLd = {
         // On the incoming page, before it swaps in, so it never paints unthemed.
         document.addEventListener("astro:before-swap", function (event) {
           apply(event.newDocument.documentElement)
+          // Sections that start open only on wider screens (the roadmap), so they don't jump.
+          if (matchMedia("(min-width: 768px)").matches) {
+            event.newDocument.querySelectorAll("details[data-open-from-md]").forEach(function (area) {
+              area.open = true
+            })
+          }
         })
       })()
     </script>

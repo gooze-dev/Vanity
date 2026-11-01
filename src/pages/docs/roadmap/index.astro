@@ -78,7 +78,7 @@ const metadata = docsMetadata("/docs/roadmap")
           </div>
           <p class={descClass}>Everything here is in the current release.</p>
           <div class="flex flex-col border-t">{shippedAreas.map((area, index) => (
-            <details id={area.id} open={index === 0} class="group border-b py-2.5">
+            <details id={area.id} data-open-from-md={index === 0 || undefined} class="group border-b py-2.5">
               <summary class="flex cursor-pointer list-none items-center justify-between gap-3 text-[0.9375rem] font-semibold text-foreground [&::-webkit-details-marker]:hidden">
                 <span class="flex items-center gap-1.5"><Icon name="chevron-right" class="size-4 text-muted-foreground transition-transform group-open:rotate-90" aria-hidden="true" />{area.title}</span>
                 {" "}<span class="font-mono text-[0.8125rem] font-medium text-muted-foreground">{area.items.length}</span>
@@ -97,6 +97,16 @@ const metadata = docsMetadata("/docs/roadmap")
               ))}</ul>
             </details>
           ))}</div>
+          {/* Every area is closed in the HTML, so phones never see one open. This runs
+              before the page below it is parsed, so nothing moves on a wide screen. A
+              client navigation does the same in BaseLayout, before the swap. */}
+          <script is:inline>
+            if (matchMedia("(min-width: 768px)").matches) {
+              document.querySelectorAll("details[data-open-from-md]").forEach(function (area) {
+                area.open = true
+              })
+            }
+          </script>
         </li>
 
         <li class={milestoneClass}>
