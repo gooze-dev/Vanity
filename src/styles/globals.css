@@ -397,6 +397,214 @@
   }
 }
 
+/* Landing page, written for 390px; wider screens only add columns. One idea and
+   at most one dark block per section. Sizes are from the type scale. */
+@layer components {
+  .gz-l {
+    --gutter: 16px;
+    --l-h1: 40px;
+    --l-h2: 28px;
+    --l-lead: 18px;
+  }
+  .gz-l__sec {
+    padding: 48px var(--gutter);
+  }
+  .gz-l__hero {
+    /* Clear of the fixed menu. */
+    padding-top: 112px;
+  }
+  .gz-l__sec--subtle {
+    background-color: var(--bg-subtle);
+  }
+  .gz-l__band {
+    background-color: var(--bg);
+    color: var(--fg);
+  }
+  .gz-l__in {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+  .gz-l__label {
+    color: var(--fg-muted);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    line-height: 1.35;
+    text-transform: uppercase;
+  }
+  .gz-l__h1 {
+    font-size: var(--l-h1);
+    letter-spacing: -0.01em;
+    line-height: 1.02;
+  }
+  .gz-l__h2 {
+    font-size: var(--l-h2);
+    line-height: 1.08;
+  }
+  .gz-l__h2 .lt {
+    color: var(--accent);
+  }
+  .gz-l__lead {
+    max-width: 60ch;
+    font-size: var(--l-lead);
+    line-height: 1.6;
+  }
+  .gz-l__p {
+    max-width: 60ch;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .gz-l__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  .gz-l__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .gz-l__link:hover {
+    text-decoration: underline;
+  }
+  .gz-l__more {
+    font-size: 14px;
+  }
+  .gz-l__steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    counter-reset: s;
+  }
+  .gz-l__steps li {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: var(--space-3);
+    align-items: start;
+    counter-increment: s;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .gz-l__steps li::before {
+    content: counter(s);
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    margin-top: 1px;
+    border-radius: 50%;
+    background-color: var(--highlight);
+    color: var(--highlight-fg);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .gz-l__steps .out {
+    display: block;
+    margin-top: 6px;
+    color: var(--fg-muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+  .gz-l__steps .w {
+    color: var(--brand-orange);
+  }
+  .gz-l__steps .o {
+    color: var(--brand-gopher);
+  }
+  .gz-l__steps .m {
+    color: var(--brand-toxic);
+  }
+  .gz-l__score {
+    display: block;
+    margin-top: 6px;
+    color: var(--brand-toxic);
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .gz-l__rows {
+    display: grid;
+    border-top: 1px solid var(--border);
+  }
+  .gz-l__row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .gz-l__row h3 {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .gz-l__row p {
+    color: var(--fg-muted);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .gz-l__row code {
+    align-self: flex-start;
+    margin-top: var(--space-1);
+  }
+  @media (min-width: 768px) {
+    .gz-l {
+      --gutter: 32px;
+      --l-h1: 64px;
+      --l-h2: 40px;
+    }
+    .gz-l__sec {
+      padding-block: 80px;
+    }
+    .gz-l__hero {
+      padding-top: 144px;
+    }
+    .gz-l__rows {
+      grid-template-columns: 1fr 1fr;
+      column-gap: var(--space-8);
+    }
+  }
+  @media (min-width: 1024px) {
+    .gz-l {
+      --l-h1: 96px;
+    }
+    .gz-l__sec {
+      padding-block: 96px;
+    }
+    .gz-l__hero {
+      padding-top: 160px;
+    }
+    .gz-l__split {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+      gap: var(--space-12);
+      align-items: center;
+    }
+    .gz-l__split > .gz-l__in {
+      margin: 0;
+    }
+    .gz-l__steps {
+      flex-direction: row;
+    }
+    .gz-l__steps li {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+}
+
 /* Status tags: Available, Beta, Planned. */
 @layer components {
   .gz-tag {
