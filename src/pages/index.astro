@@ -20,16 +20,23 @@ const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-// Five questions, rendered on the page AND emitted as FAQPage JSON-LD from the
-// same array. The rest are on the mutation testing page.
+// Rendered on the page AND emitted as FAQPage JSON-LD from the same array.
 const faqs = [
   {
     q: "What is Gooze?",
     a: "Gooze is an open-source mutation testing tool for Go (Golang) that measures the quality of your test suite by injecting small, deliberate bugs (mutations) into your code and checking whether your tests catch them.",
   },
   {
+    q: "Why is it called Gooze?",
+    a: "Go + ooze. The name comes from the [mutagen ooze](https://turtlepedia.fandom.com/wiki/Mutagen) in Teenage Mutant Ninja Turtles: Gooze mutates your code to see if your tests notice. It has always been called Gooze; it was never named Ooze.",
+  },
+  {
     q: "Why use Gooze for Go mutation testing?",
     a: "Gooze is built for CI/CD. It has an incremental cache that re-tests only changed files, sharding across parallel CI runners, coverage-profile support that skips tests for uncovered lines, and OCI registry support to share baseline reports across teams.",
+  },
+  {
+    q: "How can I speed up Go mutation testing with Gooze?",
+    a: "Use incremental runs (Gooze caches results and re-tests only files whose source, test, or mutators changed), raise the `--parallel` worker count, or pass `--coverage-profile` so mutations on uncovered lines are reported as `not_covered` without running tests.",
   },
   {
     q: "Does Gooze run the whole test suite for every mutant?",
@@ -42,6 +49,18 @@ const faqs = [
   {
     q: "Mutation testing is slow. Will it block our CI/CD pipeline?",
     a: "It doesn't have to. Passing a Go coverage profile skips tests for uncovered lines, the incremental cache reuses results for unchanged files, and parallel workers and sharding split the remaining work.",
+  },
+  {
+    q: "How can we use mutation testing as an automated quality gate?",
+    a: "Set a threshold: `gooze run --threshold-total 80 ./...`, or `threshold.total: 80` in `gooze.yaml`. Below it, Gooze exits with code `3` and the CI job fails, which blocks pull requests that weaken your tests. A diff threshold sets a stricter bar for the lines a pull request changes.",
+  },
+  {
+    q: "How do we store reports across ephemeral CI runners?",
+    a: "Gooze packages the reports directory as an OCI artifact. CI jobs can push and pull it to your existing container registry (such as GHCR) with `gooze report push` and `gooze report pull`, so runs share one baseline.",
+  },
+  {
+    q: "How can developers see mutation results without waiting for CI?",
+    a: "Gooze ships goozels, a language server (LSP) that surfaces mutation results inline in editors such as VS Code, Neovim and GoLand, so developers can fix weak tests before they commit.",
   },
 ];
 
@@ -138,7 +157,6 @@ const closingSteps = [
       <div class="gz-l__in gz-l__in--narrow">
         <h2 id="frequently-asked-questions" class="gz-l__h2 scroll-mt-8">Frequently asked questions</h2>
         <FaqList faqs={faqs} />
-        <a href="/docs/mutation-testing/#faq" class="gz-l__link gz-l__more self-start">More questions <Icon name="arrow-right" class="size-3.5" aria-hidden="true" /></a>
       </div>
       <HeadingAnchors rootId="faq" />
     </section>
