@@ -226,6 +226,9 @@
     display: block;
     width: 1.15em;
     height: 1.15em;
+    /* The mark's 64-unit grid is empty at its sides: sit the drawing itself on
+       the left edge and next to the wordmark. */
+    margin-inline: -0.25em -0.2em;
     flex-shrink: 0;
   }
   .gz-wordmark {
