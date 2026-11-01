@@ -605,6 +605,63 @@
     display: grid;
     border-top: 1px solid var(--border);
   }
+  /* The closing panel: three numbered steps, each with its own command. */
+  .gz-l__cta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    width: 100%;
+    max-width: 960px;
+    padding: var(--space-6) var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background-color: var(--bg);
+  }
+  .gz-l__cta-steps {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-2);
+    counter-reset: c;
+    text-align: left;
+  }
+  .gz-l__cta-steps li {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 0;
+    counter-increment: c;
+  }
+  .gz-l__cta-steps .t {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 16px;
+    font-weight: 600;
+  }
+  /* Highlight is toxic with ink on dark. On light the band's dark tokens don't
+     apply, so the badge sets toxic with ink itself. */
+  .gz-l__cta-steps .t::before {
+    content: counter(c);
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: var(--brand-toxic);
+    color: var(--brand-ink);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .gz-l__cta-steps .d {
+    color: var(--fg-muted);
+    font-size: 14px;
+  }
+  .gz-l__cta-steps [data-slot="code-block-content"] {
+    font-size: 12.5px !important;
+  }
   .gz-l__row {
     display: flex;
     flex-direction: column;
@@ -638,6 +695,14 @@
     .gz-l__hero {
       padding-top: 144px;
     }
+    .gz-l__cta {
+      padding: var(--space-12);
+    }
+    .gz-l__cta-steps {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-6);
+      width: 100%;
+    }
     .gz-l__rows {
       grid-template-columns: 1fr 1fr;
       column-gap: var(--space-8);
@@ -652,6 +717,9 @@
     }
     .gz-l__hero {
       padding-top: 160px;
+    }
+    .gz-l__sec--center .gz-l__cta {
+      align-items: center;
     }
     /* The two statement sections are centred. Phones stay left-aligned. */
     .gz-l__sec--center .gz-l__in {
