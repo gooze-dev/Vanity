@@ -1,498 +1,45 @@
 ---
 import DocsLayout from "@/layouts/DocsLayout.astro"
-import RoadmapCard from "@/components/docs/RoadmapCard.astro"
+import Icon from "@/components/Icon.astro"
+import PartnerLogo from "@/components/PartnerLogo.astro"
+import { areas, byMilestone, counts, laterThemes, nextCards, percent, released, shippedVersion, type RoadmapItem } from "@/data/roadmap"
 import { docsMetadata } from "@/lib/docs-meta"
 import { withCode } from "@/lib/faq"
+import { slugify } from "@/lib/heading-id"
 import { withSlash } from "@/lib/links"
 
-// Roadmap details with inline markup, set as HTML by RoadmapCard.
-const html = (html: string) => ({ html })
+const features = (count: number) => `${count} ${count === 1 ? "feature" : "features"}`
 
+const percentOf = (count: number) => `${(count / counts.total) * 100}%`
 
-// Stated plainly so readers (and search/AI summaries) don't have to guess.
-// Keep in sync with the comparison page when a limitation is lifted.
-const limitations = [
-  {
-    id: "custom-mutators",
-    title: "Custom mutator plugins",
-    detail: "Adding an operator to Gooze itself is one small function, and caching, sharding, and reporting work with it unchanged. A plugin API for your own operators is planned.",
-    workaround: { text: "the built-in operators", href: "/docs/mutations" },
-  },
-  {
-    id: "build-tags",
-    title: "Build tags",
-    detail: "Passing `-tags` through to `go test` is planned, so files behind build constraints get mutated too.",
-  },
-  {
-    id: "exec",
-    title: "Custom test runner",
-    detail: "Gooze runs `go test` on the package that owns each mutated file; plugging in your own test command is planned.",
-  },
-  {
-    id: "agents",
-    title: "Codex and opencode",
-    detail: "Support for Codex and opencode is on the way: their setups exist and are being verified with each agent.",
-    workaround: { text: "the Claude Code plugin", href: "/docs/claude-code" },
-  },
-  {
-    id: "json",
-    title: "JSON and HTML reports",
-    detail: "Results are YAML files plus `_index.yaml`, and `report view --format sarif|codeclimate` writes the survivors as JSON; JSON and HTML reports of every mutation are on the way.",
-    workaround: { text: "the report format", href: "/docs/reports" },
-  },
-]
+const shippedAreas = Object.entries(areas)
+  .map(([id, title]) => ({ id, title, items: byMilestone("shipped").filter((item) => item.area === id) }))
+  .filter((area) => area.items.length > 0)
 
+const cards = nextCards
+  .map((card) => ({ ...card, items: byMilestone("next").filter((item) => item.card === card.id) }))
+  .filter((card) => card.items.length > 0)
 
-type Item = {
-  /** Anchor kept for old links (for example a limitation that has shipped). */
-  id?: string
-  title: string
-  detail: string | { html: string }
-  shipped?: boolean
-  /** Shipped but still changing; shows a Beta badge. */
-  beta?: boolean
-  href?: string
-  /** Tracking issue in gooze-dev/gooze. */
-  issue?: number
-}
+const themes = Object.entries(laterThemes)
+  .map(([id, title]) => ({ id, title, items: byMilestone("later").filter((item) => item.theme === id) }))
+  .filter((theme) => theme.items.length > 0)
 
+// Anchors of the old page: an item's explicit id, and the slug of its name that
+// the copy-link button gave its heading.
+const itemId = (item: RoadmapItem) => slugify(item.name)
 
-type Theme = {
-  id: string
-  title: string
-  items: Item[]
-}
+const aliasId = (item: RoadmapItem) => (item.anchor && item.anchor !== itemId(item) ? item.anchor : undefined)
 
-
-const themes: Theme[] = [
-  {
-    id: "core",
-    title: "Core features",
-    items: [
-      {
-        id: "threshold",
-        title: "Score thresholds",
-        detail: "Total, average and per-file minimum scores, a separate bar for diff runs, and a distinct exit code for each outcome.",
-        shipped: true,
-        href: "/docs/ci/quality-gates",
-      },
-      {
-        id: "max-survivors",
-        title: "Survivor cap",
-        detail: "A quality gate on the number of surviving mutants, `threshold.max_survivors`, next to the score thresholds.",
-        shipped: true,
-        href: "/docs/ci/quality-gates#max-survivors",
-      },
-      {
-        id: "fail-fast",
-        title: "Fail fast",
-        detail: "Stop a run as soon as a quality gate can no longer be met, skip files that already failed theirs, or stop at the first survivor, with `run.fail_fast`.",
-        shipped: true,
-        href: "/docs/ci/quality-gates#fail-fast",
-      },
-      {
-        title: "Custom exec hook",
-        detail: (
-          html(`Run your own test command instead of <code>go test</code>.`)
-        ),
-      },
-      {
-        id: "function-selection",
-        title: "Function selection",
-        detail: (
-          html(`Mutate only the functions or methods matching a regex with <code>gooze run --run</code>, into a separate <code>run/</code> directory that <code>gooze report merge</code> folds in.`)
-        ),
-        shipped: true,
-        href: "/docs/usage/single-function",
-      },
-      {
-        title: "Custom mutator plugins",
-        detail: "A plugin API for writing your own mutation operators outside the Gooze source.",
-      },
-      {
-        id: "mutagen-selection",
-        title: "Mutagen selection",
-        detail: (
-          html(`Run only some mutagens, or add the ones that are off by default, with <code>--mutagens</code> or <code>run.mutagens</code>.`)
-        ),
-        shipped: true,
-        href: "/docs/usage/single-function#mutagens",
-      },
-      {
-        id: "mutator-selection",
-        title: "Opt-in mutagens",
-        detail: (
-          html(`<code>branch</code>, <code>statement</code> and <code>loop</code> run when named in <code>--mutagens</code>. <code>branch</code> inverts and forces conditions and
-            removes <code>if</code> blocks (such as <code>if err != nil { return err }</code>)
-            and switch cases; <code>statement</code> deletes assignments, calls, <code>defer</code>, <code>go</code> and channel sends; <code>loop</code> changes loop
-            bounds and removes loop bodies, <code>break</code> and <code>continue</code>.`)
-        ),
-        shipped: true,
-        href: "/docs/mutations#opt-in",
-      },
-      {
-        title: "Config path",
-        detail: (
-          html(`A <code>--config</code> flag to load a config file other than <code>./gooze.yaml</code>.`)
-        ),
-      },
-      {
-        title: "JSON Schema for `gooze.yaml`",
-        detail: "A published schema, registered in SchemaStore, so any YAML-aware editor validates and completes the config.",
-      },
-      {
-        title: "Config show",
-        detail: (
-          html(`<code>gooze config show</code> prints every key with its effective value, where it came from, and its env var.`)
-        ),
-      },
-      {
-        title: "Consistent config keys",
-        detail: "One naming style for every key and flag, with the old names kept as deprecated aliases for a release.",
-      },
-      {
-        id: "git-diff",
-        title: "Git diff mode",
-        detail: (
-          html(`Mutate only the lines changed against a base ref with <code>gooze run --diff</code>,
-            for pull request checks.`)
-        ),
-        shipped: true,
-        href: "/docs/usage/diff-mode",
-      },
-      {
-        title: "Annotation skipping",
-        detail: (
-          html(`<code>//gooze:ignore</code> at file, function, or line scope, optionally per mutagen.`)
-        ),
-        shipped: true,
-        href: "/docs/usage/ignoring-code",
-      },
-      {
-        title: "Timeouts",
-        detail: (
-          html(`Per-mutation execution budgets with <code>--mutation-timeout</code>.`)
-        ),
-        shipped: true,
-        href: "/docs/cli/run#timeout",
-      },
-      {
-        title: "Config file",
-        detail: (
-          html(`<code>gooze.yaml</code> in the repo, generated by <code>gooze config init</code>.`)
-        ),
-        shipped: true,
-        href: "/docs/config",
-      },
-    ],
-  },
-  {
-    id: "operators",
-    title: "Mutation operators",
-    items: [
-      {
-        title: "Return values",
-        detail: (
-          html(`Replace a returned value with its zero value, <code>nil</code> or an empty
-            collection (<code>return x</code> to <code>return 0</code>, <code>return items</code> to <code>return nil</code>).`)
-        ),
-      },
-      {
-        title: "Number parsing",
-        detail: (
-          html(`A <code>parse</code> mutagen for <code>strconv</code> calls: base <code>10</code> to <code>0</code> and back, <code>Atoi</code> to a base-<code>0</code> parse, and bit size <code>64</code> to <code>32</code>. It asks for tests with inputs like <code>&quot;010&quot;</code>, where the base or size changes the result.`)
-        ),
-        issue: 59,
-      },
-      {
-        title: "String literals",
-        detail: (
-          html(`<code>&quot;&quot;</code> to <code>&quot;x&quot;</code> and back, and other string
-            constant changes. Today only integer and float literals are mutated.`)
-        ),
-      },
-      {
-        title: "Assignment operators",
-        detail: (
-          html(`<code>+=</code> and <code>-=</code>, <code>*=</code> and <code>/=</code>, and the
-            other compound assignments. Today only binary <code>+ - * / %</code> expressions are
-            mutated.`)
-        ),
-      },
-      {
-        title: "Increment and decrement",
-        detail: (
-          html(`<code>i++</code> to <code>i--</code> and back.`)
-        ),
-      },
-      {
-        title: "Index and slice bounds",
-        detail: (
-          html(`<code>s[i]</code> to <code>s[i+1]</code>, <code>s[1:]</code> to <code>s[:]</code>.`)
-        ),
-      },
-      {
-        title: "Default operators",
-        detail: (
-          html(`Comparison, arithmetic, logical, negation, numeric constant, nil check, bitwise,
-            increment and compound assignment mutations, in the nine default mutagens.`)
-        ),
-        shipped: true,
-        href: "/docs/mutations",
-      },
-    ],
-  },
-  {
-    id: "reporting",
-    title: "Reporting",
-    items: [
-      {
-        title: "JSON report",
-        detail: "Machine-readable output in the Stryker mutation-testing-report schema, for dashboards and other tools.",
-      },
-      {
-        title: "HTML report",
-        detail: (
-          html(`Extend the <code>report</code> command with <code>gooze report html</code>, which renders
-            the report directory as a static page you can open locally or publish from CI.`)
-        ),
-      },
-      {
-        title: "GitHub annotations",
-        detail: (
-          html(`Show surviving mutants on the pull request&apos;s changed lines with <code>gooze report view --format github</code>.`)
-        ),
-        shipped: true,
-        href: "/docs/ci/github#survivors",
-      },
-      {
-        title: "SARIF report",
-        detail: (
-          html(`Surface surviving mutants in GitHub code scanning and other SARIF tools with <code>gooze report view --format sarif</code>.`)
-        ),
-        shipped: true,
-        href: "/docs/reports#sarif",
-      },
-      {
-        title: "GitLab Code Quality",
-        detail: (
-          html(`Show surviving mutants in the merge request&apos;s code quality report with <code>gooze report view --format gitlab</code>.`)
-        ),
-        shipped: true,
-        href: "/docs/ci/gitlab#survivors",
-      },
-      {
-        title: "Code Climate report",
-        detail: (
-          html(`Surviving mutants in the Code Climate JSON format, which GitLab Code Quality and other
-            Code Climate tools read, with <code>gooze report view --format codeclimate</code>.`)
-        ),
-        shipped: true,
-        href: "/docs/reports#codeclimate",
-      },
-      {
-        title: "LLM training dataset",
-        detail: (
-          html(`Export mutants and the tests that kill them as chat-format JSONL (<code>messages</code>, with <code>rejected_response</code> for preference pairs), the format Qwen&apos;s fine-tuning tools
-            such as ms-swift, LLaMA-Factory, Axolotl and Unsloth read, to train models that write stronger
-            tests.`)
-        ),
-      },
-      {
-        title: "Status filter",
-        detail: "Choose which mutant statuses appear in the output, for example only survivors.",
-      },
-      {
-        title: "Incremental testing",
-        detail: "Cache and reuse results for unchanged files.",
-        shipped: true,
-        href: "/docs/usage/incremental-runs",
-      },
-      {
-        title: "Per-file reports",
-        detail: "One report per source file for granular analysis.",
-        shipped: true,
-        href: "/docs/reports",
-      },
-      {
-        title: "Summary index",
-        detail: (
-          html(`An <code>_index.yaml</code> with the score and totals.`)
-        ),
-        shipped: true,
-        href: "/docs/reports",
-      },
-      {
-        title: "OCI artifacts",
-        detail: (
-          html(`Share reports through any OCI registry with <code>gooze report push</code> and <code>pull</code>.`)
-        ),
-        shipped: true,
-        href: "/docs/ci/sharing-reports",
-      },
-    ],
-  },
-  {
-    id: "execution",
-    title: "Smart test execution",
-    items: [
-      {
-        title: "Build tags",
-        detail: (
-          html(`Pass <code>-tags</code> through to <code>go test</code> so files behind build constraints get tested.`)
-        ),
-      },
-      {
-        title: "Cross-package coverage",
-        detail: (
-          html(`A <code>--coverpkg</code>-style option that counts coverage from tests in other packages.`)
-        ),
-      },
-      {
-        title: "Automatic coverage",
-        detail: (
-          html(`Generate the coverage profile during the run instead of requiring your own <code>--coverage-profile</code>.`)
-        ),
-      },
-      {
-        title: "Package-owned tests",
-        detail: "Run the tests of the package that owns each mutated source file.",
-        shipped: true,
-      },
-      {
-        title: "Relevant tests only",
-        detail: (
-          html(`Run only the tests that cover the mutated line (<code>-run</code>), not every test of
-            the package.`)
-        ),
-        issue: 54,
-      },
-    ],
-  },
-  {
-    id: "performance",
-    title: "Performance & scalability",
-    items: [
-      {
-        title: "CPU-based parallelism",
-        detail: (
-          html(`Default <code>--parallel</code> to the number of CPU cores instead of <code>1</code>.`)
-        ),
-      },
-      {
-        title: "No project copies",
-        detail: (
-          html(`Each mutant is built with <code>go test -overlay</code> in your project, reusing its
-            build cache. <code>--workspace deep-copy</code> keeps a copy per worker for tests that need
-            one.`)
-        ),
-        shipped: true,
-        href: "/docs/cli/run#workspace",
-      },
-      {
-        title: "Compile once per package",
-        detail: "Build all mutants of a package into one test binary and switch between them at run time (mutant schemata), instead of recompiling for every mutant.",
-        issue: 55,
-      },
-      {
-        title: "Parallel workers",
-        detail: (
-          html(`Concurrent mutation testing with <code>--parallel</code>.`)
-        ),
-        shipped: true,
-        href: "/docs/cli/run#parallel",
-      },
-      {
-        title: "Sharding",
-        detail: "Distribute one run across multiple machines, with parallel workers inside each shard.",
-        shipped: true,
-        href: "/docs/ci/sharding",
-      },
-      {
-        title: "Report merging",
-        detail: (
-          html(`Combine shard results with <code>gooze report merge</code>.`)
-        ),
-        shipped: true,
-        href: "/docs/cli/report",
-      },
-    ],
-  },
-  {
-    id: "workflow",
-    title: "CI/CD & editors",
-    items: [
-      {
-        title: "Go tool install",
-        detail: (
-          html(`Pin Gooze in your <code>go.mod</code> with <code>go get -tool</code> and run <code>go tool gooze</code>, documented on the install and CI pages.`)
-        ),
-        issue: 52,
-      },
-      {
-        title: "Official GitHub Action",
-        detail: "A published action that installs and runs Gooze in one step.",
-      },
-      {
-        title: "Docker image",
-        detail: "An official container image for running Gooze in any CI system.",
-      },
-      {
-        title: "GitHub Actions",
-        detail: "Ready-made workflow templates, including sharding and a score gate.",
-        shipped: true,
-        href: "/docs/ci/github",
-      },
-      {
-        title: "GitLab CI",
-        detail: "Ready-made pipeline configuration.",
-        shipped: true,
-        href: "/docs/ci/gitlab",
-      },
-      {
-        title: "Interactive viewer",
-        detail: (
-          html(`A TUI with diffs for every mutant, via <code>gooze report view --all</code>.`)
-        ),
-        shipped: true,
-        href: "/docs/usage/ui-modes",
-      },
-      {
-        title: "Editor integration",
-        detail: "Surviving mutants as diagnostics in your editor through the goozels language server.",
-        shipped: true,
-        href: "/docs/editor-support",
-      },
-      {
-        title: "Claude Code",
-        detail: "A plugin that sets a project up, runs the kill-survivors loop, adds gooze to existing CI, and shows mutation results after every edit.",
-        shipped: true,
-        beta: true,
-        href: "/docs/claude-code",
-      },
-      {
-        title: "Codex",
-        detail: "Mutation results after every Codex edit through a post-edit hook. The hook exists in goozels; support lands once it's verified with Codex.",
-      },
-      {
-        title: "opencode",
-        detail: (
-          html(`Mutation results after every opencode edit through a plugin for opencode <code>1.x</code> and <code>2.x</code>. The plugins exist in goozels; support lands once they&apos;re verified with opencode.`)
-        ),
-      },
-    ],
-  },
-]
-
-
-const allItems = themes.flatMap((theme) => theme.items)
-
-const shippedCount = allItems.filter((item) => item.shipped).length
-
-const plannedCount = allItems.length - shippedCount
-
-const percent = Math.round((shippedCount / allItems.length) * 100)
-
+const milestoneClass = "relative flex flex-col gap-3 pl-11"
+const nodeClass = "absolute left-0 top-0.5 grid size-7 place-items-center rounded-full border-2 bg-background"
+const headClass = "flex flex-wrap items-baseline gap-3"
+const titleClass = "font-display text-2xl font-bold leading-tight text-foreground max-sm:text-xl"
+const countClass = "rounded-full border px-2 py-1 font-mono text-xs leading-none text-muted-foreground"
+const descClass = "max-w-[62ch] text-[0.9375rem] text-muted-foreground"
+const cardClass = "flex flex-col gap-2 rounded-lg border bg-background p-4"
+const cardTitleClass = "flex items-center gap-2 text-base font-semibold leading-snug text-foreground"
+const cardTextClass = "text-sm leading-normal text-muted-foreground"
+const linkClass = "font-medium text-accent underline-offset-4 hover:text-foreground hover:underline"
 
 const metadata = docsMetadata("/docs/roadmap")
 ---
@@ -501,43 +48,126 @@ const metadata = docsMetadata("/docs/roadmap")
       <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4">Roadmap</h1>
       <p class="gz-prose gz-prose--lead mb-8">Missing a feature you need? Check whether it has shipped, whether it&apos;s coming
         next, and what to use in the meantime.</p>
-      <div class="not-typeset rounded-2xl border bg-card p-5">
-        <div class="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <div class="text-sm text-muted-foreground">Progress</div>
-            <div class="font-display text-4xl font-bold text-foreground">{percent}%</div>
-          </div>
-          <div class="flex gap-6 text-sm">
-            <div class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-highlight"></span><span class="font-semibold text-foreground">{shippedCount}</span><span class="text-muted-foreground">shipped</span></div>
-            <div class="flex items-center gap-2"><span class="size-2.5 rounded-full border-2 border-dashed border-input"></span><span class="font-semibold text-foreground">{plannedCount}</span><span class="text-muted-foreground">planned</span></div>
-          </div>
+
+      <div class="not-typeset flex flex-col gap-3 rounded-lg border bg-card p-4">
+        <p class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+          <span class="font-display text-[2rem] font-bold leading-none text-foreground">{percent}%</span>{" "}
+          <span class="text-sm font-medium text-muted-foreground">{released} of {counts.total} features shipped, {counts.beta} of them in beta</span>
+        </p>
+        <div class="flex h-2 overflow-hidden rounded-full bg-border" role="img" aria-label={`${counts.shipped} shipped, ${counts.beta} in beta, ${counts.next + counts.later} planned`}>
+          <span class="bg-highlight" style={{ width: percentOf(counts.shipped) }}></span>
+          <span class="bg-accent" style={{ width: percentOf(counts.beta) }}></span>
         </div>
-        <div class="mt-4 h-2 overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100} aria-label="Roadmap progress">
-          <div class="h-full rounded-full bg-highlight" style={{ width: `${percent}%` }}></div>
-        </div>
-      </div>{themes.map((theme) => {
-        const done = theme.items.filter((item) => item.shipped).length
-        return (
-          <div id={theme.id}>
-            <h2>{theme.title}</h2>
-            <p class="text-sm text-muted-foreground">{done} of {theme.items.length} shipped</p>
-            <ul class="not-typeset mt-4 grid gap-3 sm:grid-cols-2">{theme.items.map((item) => (
-                <RoadmapCard item={item} />
-              ))}</ul>
-          </div>
-        )
-      })}<div id="limitations">
-        <h2>Coming next</h2>
-        <p class="text-sm text-muted-foreground">Features on the way, and what to use until they land.</p>
-        <ul class="not-typeset mt-4 divide-y rounded-xl border bg-card">{limitations.map((item) => (
-            <li id={item.id} class="p-4">
-              <div class="font-medium text-foreground">{item.title}</div>
-              <p class="mt-1 text-sm leading-relaxed text-muted-foreground [&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.8125rem] [&_code]:text-foreground"><Fragment set:html={withCode(item.detail)} />{item.workaround && (
-                  <>{" "}Until then, use{" "}<a href={withSlash(item.workaround.href)} class="font-medium text-accent underline-offset-4 hover:text-foreground hover:underline">{item.workaround.text}</a>.</>
-                )}</p>
-            </li>
-          ))}</ul>
-        <p class="text-sm text-muted-foreground">How this compares with other tools:{" "}<a href="/docs/comparison/">Gooze vs other Go mutation testing tools</a>.</p>
+        <ul class="flex flex-wrap gap-x-4 gap-y-2 text-[0.8125rem] text-muted-foreground">
+          <li class="inline-flex items-center gap-1.5"><span class="gz-tag gz-tag--available">Shipped</span>{" "}{counts.shipped}</li>
+          <li class="inline-flex items-center gap-1.5"><span class="gz-tag gz-tag--beta">Beta</span>{" "}{counts.beta}</li>
+          <li class="inline-flex items-center gap-1.5"><span class="gz-tag border-accent text-accent">Next</span>{" "}{counts.next}</li>
+          <li class="inline-flex items-center gap-1.5"><span class="gz-tag gz-tag--soon">Later</span>{" "}{counts.later}</li>
+        </ul>
+        <p class="text-[0.8125rem] text-muted-foreground">No dates. Next is being worked on now; Later is planned, in no fixed order.</p>
       </div>
+
+      <ol class="not-typeset relative mt-8 flex flex-col gap-10 before:absolute before:bottom-3.5 before:left-[13px] before:top-3.5 before:w-0.5 before:bg-border [&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.8125rem] [&_code]:text-foreground">
+        <li class:list={[milestoneClass, "before:absolute before:-bottom-10 before:left-[13px] before:top-3.5 before:w-0.5 before:bg-highlight"]}>
+          <span class:list={[nodeClass, "border-highlight bg-highlight text-highlight-foreground"]} aria-hidden="true"><Icon name="check" class="size-3.5" stroke-width="3" /></span>
+          <div class={headClass}>
+            <h2 id="shipped" class={titleClass}>Shipped</h2>
+            <span class={countClass}>{shippedVersion} · {features(counts.shipped)}</span>
+          </div>
+          <p class={descClass}>Everything here is in the current release.</p>
+          <div class="flex flex-col border-t">{shippedAreas.map((area, index) => (
+            <details id={area.id} open={index === 0} class="group border-b py-2.5">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-3 text-[0.9375rem] font-semibold text-foreground [&::-webkit-details-marker]:hidden">
+                <span class="flex items-center gap-1.5"><Icon name="chevron-right" class="size-4 text-muted-foreground transition-transform group-open:rotate-90" aria-hidden="true" />{area.title}</span>
+                {" "}<span class="font-mono text-[0.8125rem] font-medium text-muted-foreground">{area.items.length}</span>
+              </summary>
+              <ul class="mt-3 flex flex-col gap-3 sm:gap-2">{area.items.map((item) => (
+                <li id={itemId(item)} class="grid items-baseline gap-1 sm:grid-cols-[11.5rem_minmax(0,1fr)] sm:gap-3">
+                  {aliasId(item) && <span id={aliasId(item)} class="absolute"></span>}
+                  {item.docs ? (
+                    <a href={withSlash(item.docs)} class="inline-flex w-fit items-center gap-1.5 rounded-full border bg-card px-2.5 py-1 text-[0.8125rem] leading-snug text-foreground hover:border-input hover:bg-muted"><Icon name="check" class="size-3 shrink-0 text-muted-foreground" aria-hidden="true" />{item.name}</a>
+                  ) : (
+                    <span class="inline-flex w-fit items-center gap-1.5 rounded-full border border-dashed px-2.5 py-1 text-[0.8125rem] leading-snug text-foreground"><Icon name="check" class="size-3 shrink-0 text-muted-foreground" aria-hidden="true" />{item.name}</span>
+                  )}
+                  <span class="sr-only">: </span>
+                  <span class="block text-sm leading-normal text-muted-foreground" set:html={withCode(item.description)} />
+                </li>
+              ))}</ul>
+            </details>
+          ))}</div>
+        </li>
+
+        <li class={milestoneClass}>
+          <span class:list={[nodeClass, "border-foreground bg-[linear-gradient(90deg,var(--fg)_50%,var(--bg)_50%)]"]} aria-hidden="true"></span>
+          <div class={headClass}>
+            <h2 id="beta" class={titleClass}>Beta</h2>
+            <span class={countClass}>{features(counts.beta)}</span>
+          </div>
+          <div class="grid gap-3 md:grid-cols-2">{byMilestone("beta").map((item) => (
+            <div id={itemId(item)} class={cardClass}>
+              <h3 class={cardTitleClass}><PartnerLogo name="claude" />{item.name}</h3>
+              <p class={cardTextClass} set:html={withCode(item.description)} />
+              {item.docs && <a href={withSlash(item.docs)} class="mt-auto inline-flex w-fit items-center gap-1 text-sm font-medium text-accent hover:text-foreground">Docs<Icon name="arrow-right" class="size-3.5" aria-hidden="true" /></a>}
+            </div>
+          ))}</div>
+        </li>
+
+        <li class={milestoneClass}>
+          <span class:list={[nodeClass, "border-accent after:size-2.5 after:rounded-full after:bg-accent after:content-['']"]} aria-hidden="true"></span>
+          <span id="limitations" class="absolute"></span>
+          <div class={headClass}>
+            <h2 id="next" class={titleClass}>Next</h2>
+            <span class={countClass}>{features(counts.next)}</span>
+          </div>
+          <p class={descClass}>Being worked on now, with what to use until each one lands.</p>
+          <div class="grid gap-3 md:grid-cols-2">{cards.map((card) => {
+            const until = card.items.find((item) => item.until)?.until
+            return (
+              <div id={card.id} class={cardClass}>
+                <h3 class={cardTitleClass}>{card.title}</h3>
+                {card.items.map((item) => (
+                  <p id={itemId(item) === card.id ? undefined : itemId(item)} class={cardTextClass}>{item.name !== card.title && <Fragment><b class="font-semibold text-foreground">{item.name}:</b>{" "}</Fragment>}<Fragment set:html={withCode(item.description)} /></p>
+                ))}
+                <p class={cardTextClass} set:html={withCode(card.detail)} />
+                {until && <p class="mt-auto rounded-md bg-muted px-2.5 py-2 text-[0.8125rem] leading-snug text-foreground"><b class="mr-1 font-semibold text-muted-foreground">Until then:</b>{" "}use{" "}<a href={withSlash(until.href)} class={linkClass}>{until.text}</a>.</p>}
+              </div>
+            )
+          })}</div>
+        </li>
+
+        <li class={milestoneClass}>
+          <span class:list={[nodeClass, "border-dashed border-input"]} aria-hidden="true"></span>
+          <div class={headClass}>
+            <h2 id="later" class={titleClass}>Later</h2>
+            <span class={countClass}>{features(counts.later)}</span>
+          </div>
+          <p class={descClass}>Planned, grouped by theme. The order is not a commitment.</p>
+          <div class="grid gap-x-8 gap-y-6 md:grid-cols-2">{themes.map((theme) => (
+            <div>
+              <h3 id={`later-${theme.id}`} class="mb-2 text-xs font-medium uppercase tracking-[0.06em] text-muted-foreground">{theme.title}</h3>
+              <ul class="flex flex-col gap-2.5">{theme.items.map((item) => (
+                <li id={itemId(item)} class="text-sm leading-normal text-muted-foreground"><b class="font-semibold text-foreground" set:html={`${withCode(item.name)}:`} />{" "}<Fragment set:html={withCode(item.description)} />{item.issue && <Fragment>{" "}<a href={`https://github.com/gooze-dev/gooze/issues/${item.issue}`} class={linkClass}>Issue #{item.issue}</a></Fragment>}</li>
+              ))}</ul>
+            </div>
+          ))}</div>
+        </li>
+      </ol>
+
+      <p class="mt-8 text-sm text-muted-foreground">How this compares with other tools:{" "}<a href="/docs/comparison/">Gooze vs other Go mutation testing tools</a>.</p>
     </section>
 </DocsLayout>
+
+<script>
+  // Opens the area of a shipped feature when the URL points at it.
+  function openTarget() {
+    const id = decodeURIComponent(window.location.hash.slice(1))
+    const details = id ? document.getElementById(id)?.closest("details") : null
+    if (details && !details.open) {
+      details.open = true
+      document.getElementById(id)?.scrollIntoView({ block: "start" })
+    }
+  }
+
+  document.addEventListener("astro:page-load", openTarget)
+  window.addEventListener("hashchange", openTarget)
+</script>
