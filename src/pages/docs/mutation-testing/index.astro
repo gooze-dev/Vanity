@@ -88,8 +88,10 @@ const faqJsonLd = faqPageJsonLd(faqs)
             The same happens on the upper bound:</p>
           <Recording name="calc-survivors" title="Recorded last lines of gooze report view after the first run" />
           <p>The fix is two test cases exactly on the bounds:</p>
-          <CodeBlock lang="go" code={`		{0, 0, 10, true},  // lower bound is inside
-		{10, 0, 10, true}, // upper bound is inside`} />
+          <CodeBlock lang="go" code={`		// lower bound is inside
+		{0, 0, 10, true},
+		// upper bound is inside
+		{10, 0, 10, true},`} />
           <p>Now both mutants make a test fail, and the score reaches 100%:</p>
           <Recording name="calc-fixed-score" title="Recorded score line of gooze report view after the fix" />
         </div>

@@ -309,9 +309,10 @@
   }
   .gz-diff__line {
     display: block;
-    overflow-x: auto;
-    padding: var(--space-1) var(--space-4);
-    white-space: pre;
+    padding: var(--space-1) var(--space-4) var(--space-1) calc(var(--space-4) + 1.5em);
+    overflow-wrap: anywhere;
+    text-indent: -1.5em;
+    white-space: pre-wrap;
   }
   .gz-diff__line--orig {
     color: var(--original);
@@ -605,6 +606,67 @@
     font-weight: 600;
   }
 
+  /* Under 640px terminal output reflows at 11.5px and commands wrap at 12.5px. */
+  @media (max-width: 639.98px) {
+    .gz-term__body {
+      padding: var(--space-3) 14px;
+      font-size: 11.5px;
+      line-height: 1.6;
+    }
+    [data-slot="code-block-content"]:not([data-wrap]) [data-slot="code-block-line"] {
+      margin-inline: calc(var(--space-2) * -1);
+      padding-inline: var(--space-2);
+    }
+    .gz-diff {
+      font-size: 13px;
+    }
+  }
+
+  /* Wrapped code: one logical line per row, continuations hang 2ch after "$ ". */
+  [data-slot="code-block-content"] {
+    tab-size: 4;
+  }
+  [data-wrap] [data-slot="code-block-line-content"] {
+    display: block;
+    padding-left: 2ch;
+    text-indent: -2ch;
+  }
+
+  /* No scrollbars on dark blocks; a fade at the edge is the only "more" signal. */
+  [data-slot="code-block-content"],
+  .gz-term__body,
+  .gz-term__table,
+  .gz-diff,
+  .gz-diff__line,
+  .gz-cast {
+    scrollbar-width: none;
+  }
+  [data-slot="code-block-content"]::-webkit-scrollbar,
+  .gz-term__body::-webkit-scrollbar,
+  .gz-term__table::-webkit-scrollbar,
+  .gz-diff::-webkit-scrollbar,
+  .gz-diff__line::-webkit-scrollbar,
+  .gz-cast::-webkit-scrollbar {
+    display: none;
+  }
+  .gz-scroll-fade {
+    --gz-fade: 0px;
+    mask-image: linear-gradient(90deg, var(--brand-ink) calc(100% - var(--gz-fade)), transparent);
+  }
+  /* The fade shows only while there is more to the right. Where scroll timelines
+     are missing, it stays on. */
+  @supports (animation-timeline: scroll()) {
+    .gz-scroll-fade {
+      animation: gz-fade-out linear both;
+      animation-timeline: scroll(self inline);
+    }
+  }
+  @supports not (animation-timeline: scroll()) {
+    .gz-scroll-fade {
+      --gz-fade: 24px;
+    }
+  }
+
   /* Tables never scroll sideways, and use the smaller code size. Wide enough for
      it, the first column stays on one line and later columns break code at spaces,
      not mid-word. The second column, usually the longest text, takes the squeeze;
@@ -793,6 +855,20 @@
   }
   details[open] > summary .gz-faq-toggle::after {
     content: "\2212";
+  }
+}
+
+@property --gz-fade {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@keyframes gz-fade-out {
+  from {
+    --gz-fade: 24px;
+  }
+  to {
+    --gz-fade: 0px;
   }
 }
 

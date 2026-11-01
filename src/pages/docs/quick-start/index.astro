@@ -93,8 +93,10 @@ const howToJsonLd = {
         <div id="fix">
           <h2>Kill the survivors</h2>
           <p>Add the two boundary cases to the test table in <code>calc_test.go</code>:</p>
-          <CodeBlock lang="go" code={`		{0, 0, 10, true},  // lower bound is inside
-		{10, 0, 10, true}, // upper bound is inside`} />
+          <CodeBlock lang="go" code={`		// lower bound is inside
+		{0, 0, 10, true},
+		// upper bound is inside
+		{10, 0, 10, true},`} />
           <p>Run Gooze again and view the report. Both mutants are killed now:</p>
           <Recording name="calc-fixed-run" title="Recorded last line of gooze run after adding the boundary tests" />
           <Recording name="calc-fixed-report-view" title="Recorded gooze report view after the fix" />
