@@ -5,19 +5,20 @@ export interface Faq {
   a: string
 }
 
-const LINK = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g
+const LINK = /\[([^\]]+)\]\(((?:https?:\/\/|\/)[^)\s]+)\)/g
 
 function escapeHtml(text: string) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
 }
 
-// Plain text with [label](https://…) links rendered as external links.
+// Plain text with [label](https://…) external links and [label](/path/) site links.
 function withLinks(text: string) {
   let html = ""
   let last = 0
   for (const match of text.matchAll(LINK)) {
     html += escapeHtml(text.slice(last, match.index))
-    html += `<a href="${escapeHtml(match[2])}" target="_blank" rel="noopener noreferrer" class="text-accent underline underline-offset-4 hover:text-foreground">${escapeHtml(match[1])}</a>`
+    const external = match[2].startsWith("/") ? "" : ' target="_blank" rel="noopener noreferrer"'
+    html += `<a href="${escapeHtml(match[2])}"${external} class="text-accent underline underline-offset-4 hover:text-foreground">${escapeHtml(match[1])}</a>`
     last = match.index + match[0].length
   }
   return html + escapeHtml(text.slice(last))
