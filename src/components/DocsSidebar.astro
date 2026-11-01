@@ -87,8 +87,10 @@ const state = (open: boolean) => (open ? "open" : "closed")
         <ul data-slot="sidebar-menu" data-sidebar="menu" class="flex w-full min-w-0 flex-col gap-0.5">
           <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
             <a data-slot="sidebar-menu-button" data-sidebar="menu-button" data-size="lg" href="/" class={menuButton({ size: "lg" })}>
-              <div class="flex aspect-square size-8 shrink-0 items-center justify-center"><GoozeMark class="size-8!" /></div>
-              <div class="grid flex-1 text-left text-sm leading-tight"><Lockup mark={false} class="truncate text-xl" /><span class="truncate text-xs text-muted-foreground">Documentation</span></div>
+              <div class="flex min-w-0 flex-1 flex-col items-center gap-0.5 text-center leading-tight">
+                <div class="flex items-center justify-center gap-1.5"><GoozeMark class="size-7! shrink-0 group-data-[collapsible=icon]:size-8!" /><Lockup mark={false} class="truncate text-xl group-data-[collapsible=icon]:hidden" /></div>
+                <span class="truncate text-xs text-muted-foreground group-data-[collapsible=icon]:hidden">Documentation</span>
+              </div>
             </a>
           </li>
         </ul>
