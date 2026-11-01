@@ -1,0 +1,62 @@
+---
+import DocsFaq from "@/components/DocsFaq.astro"
+import CodeBlock from "@/components/CodeBlock.astro"
+import DocsLayout from "@/layouts/DocsLayout.astro"
+import { faqPageJsonLd } from "@/lib/faq"
+import { docsMetadata } from "@/lib/docs-meta"
+
+const metadata = docsMetadata("/docs/best-go-mutation-testing-tool-for-ci")
+
+
+const faqs = [
+  {
+    q: "What is the best Go mutation testing tool for CI/CD?",
+    a: "Gooze is built for CI/CD: shard a run across parallel jobs with `-s INDEX/TOTAL` and merge with `gooze report merge`, cache results so only changed files re-run, mutate only the lines a pull request changes with `--diff`, skip uncovered lines via a coverage profile, and share one baseline across jobs through an OCI registry.",
+  },
+  {
+    q: "How do I keep mutation testing fast enough for CI?",
+    a: "Combine three levers: pass a Go coverage profile so mutations on uncovered lines are reported as `not_covered` without running, cache the reports directory between runs for incremental execution, and raise `--parallel`. For big suites, shard across runners.",
+  },
+  {
+    q: "Can mutation testing fail a pull request below a score threshold?",
+    a: "Yes. Pass `--threshold-total` (or set `threshold.total` in `gooze.yaml`), and Gooze exits with code `3` when the score is below it, which fails the job. Average and per-file thresholds, and a separate one for a pull request's changed lines, work the same way, so pull requests that weaken tests are blocked. There's no dedicated threshold flag; it's a few lines in your pipeline.",
+  },
+  {
+    q: "How do I share mutation results across ephemeral CI runners?",
+    a: "Use `gooze report push` and `gooze report pull` to store the reports directory as an OCI artifact in a registry such as GHCR, so jobs and teammates reuse one baseline instead of recomputing from scratch.",
+  },
+]
+
+
+const faqJsonLd = faqPageJsonLd(faqs)
+---
+<DocsLayout metadata={metadata}>
+    <section>
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+      <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4">Best Go mutation testing tool for CI/CD</h1>
+      <p class="text-lg text-muted-foreground mb-8">You want mutation testing in your pipeline without making every job
+        slow. For CI/CD, <strong>Gooze</strong> fits well: it shards across
+        parallel runners, caches results so only changed files re-run, can gate
+        pull requests on the mutation score with a short shell step, and shares
+        one baseline across jobs through an OCI registry.</p>
+      <div id="pipeline">
+        <h2>What makes it CI-ready</h2>
+        <ul>
+          <li><strong>Sharding.</strong> <code>gooze run -s INDEX/TOTAL</code>{" "}splits a run across parallel jobs; <code>gooze report merge</code>{" "}recombines them. See{" "}<a href="/docs/ci/sharding/">sharding and merging</a>.</li>
+          <li><strong>Incremental cache.</strong> Persist the reports directory
+            between runs so unchanged files are reused; see{" "}<a href="/docs/usage/incremental-runs/">incremental runs</a>.</li>
+          <li><strong>Pull request runs.</strong> <code>gooze run --diff origin/main</code>{" "}mutates only the lines a pull request changes and scores them on their own, while{" "}<code>main</code> keeps the whole-codebase score; see{" "}<a href="/docs/usage/diff-mode/">diff mode</a>.</li>
+          <li><strong>Coverage gate.</strong> <code>--coverage-profile</code>{" "}reports mutations on uncovered lines as <code>not_covered</code>{" "}without running them.</li>
+          <li><strong>Shared baselines.</strong> <code>gooze report push</code> and{" "}<code>pull</code> store the reports directory in any OCI registry; see{" "}<a href="/docs/ci/sharing-reports/">sharing reports</a>.</li>
+        </ul>
+      </div>
+      <div id="setup">
+        <h2>Minimal GitHub Actions step</h2>
+        <CodeBlock lang="bash" code={`go install gooze.dev/pkg/gooze@latest
+go test -coverprofile=coverage.out ./...
+gooze run --coverage-profile=coverage.out ./...`} />
+        <p>Full workflows (including sharding and the score gate) are on the{" "}<a href="/docs/ci/github/">GitHub Actions</a>,{" "}<a href="/docs/ci/gitlab/">GitLab CI</a> and{" "}<a href="/docs/ci/cloud-build/">Google Cloud Build</a> pages.</p>
+      </div>
+      <DocsFaq faqs={faqs} />
+    </section>
+</DocsLayout>

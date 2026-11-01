@@ -1,0 +1,351 @@
+---
+import Recording from "@/components/Recording.astro"
+import DocsFaq from "@/components/DocsFaq.astro"
+import CodeBlock from "@/components/CodeBlock.astro"
+import DocsLayout from "@/layouts/DocsLayout.astro"
+import { docsMetadata } from "@/lib/docs-meta"
+import { faqPageJsonLd } from "@/lib/faq"
+
+const simple = `# .gitlab-ci.yml
+image: golang:1.27          # official Go image: go is already installed
+
+mutation-testing:
+  script:
+    - go install gooze.dev/pkg/gooze@latest
+    - gooze run ./...`
+
+
+const sharded = `image: golang:1.27
+
+stages: [test, merge]
+
+test:
+  stage: test
+  parallel: 3
+  script:
+    - go install gooze.dev/pkg/gooze@latest
+    # CI_NODE_INDEX is 1-based; gooze shards are 0-based.
+    - gooze run -s "$((CI_NODE_INDEX - 1))/$CI_NODE_TOTAL" ./...
+  artifacts:
+    paths:
+      - .gooze-reports/
+
+merge:
+  stage: merge
+  dependencies: [test]       # pulls every parallel shard's artifacts
+  script:
+    - go install gooze.dev/pkg/gooze@latest
+    - gooze report merge`
+
+
+const cached = `image: golang:1.27
+
+stages: [test, merge]
+
+variables:
+  REPORTS_REF: "$CI_REGISTRY_IMAGE/gooze-reports:main"
+  # CI_JOB_TOKEN can read/write this project's container registry.
+  GOOZE_REGISTRY_USERNAME: "gitlab-ci-token"
+  GOOZE_REGISTRY_PASSWORD: "$CI_JOB_TOKEN"
+
+test:
+  stage: test
+  parallel: 3
+  script:
+    - go install gooze.dev/pkg/gooze@latest
+    # Reuse the main baseline so unchanged files are skipped (the cache).
+    - gooze report pull "$REPORTS_REF" || echo "no baseline yet"
+    - gooze run -s "$((CI_NODE_INDEX - 1))/$CI_NODE_TOTAL" ./...
+  artifacts:
+    paths:
+      - .gooze-reports/        # handed to the merge job; no registry push here
+
+merge:
+  stage: merge
+  dependencies: [test]
+  script:
+    - go install gooze.dev/pkg/gooze@latest
+    - gooze report merge
+    # Only main publishes the merged baseline back to the registry.
+    - |
+      if [ "$CI_COMMIT_BRANCH" = "main" ]; then
+        gooze report push "$REPORTS_REF"
+      fi`
+
+
+const diff = `image: golang:1.27
+
+stages: [test, merge]
+
+# Run merge request pipelines and pipelines for the default branch.
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+variables:
+  REPORTS_REF: "$CI_REGISTRY_IMAGE/gooze-reports:main"
+  GOOZE_REGISTRY_USERNAME: "gitlab-ci-token"
+  GOOZE_REGISTRY_PASSWORD: "$CI_JOB_TOKEN"
+
+default:
+  before_script:
+    - go install gooze.dev/pkg/gooze@latest
+
+# Merge requests: one job that mutates only the changed lines.
+diff:
+  stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    GIT_DEPTH: 0             # full history, so gooze finds the merge base
+  script:
+    # The target branch may not be fetched yet.
+    - git fetch origin "+refs/heads/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME:refs/remotes/origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    # Reports go to .gooze-reports/run; nothing is pushed. Fails the job
+    # (exit code 3) when the changed lines score below 80%.
+    - gooze run --diff "origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" --threshold-diff-total 80 ./...
+
+# The default branch: the sharded full run, which publishes the baseline.
+test:
+  stage: test
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  parallel: 3
+  script:
+    - gooze report pull "$REPORTS_REF" || echo "no baseline yet"
+    - gooze run -s "$((CI_NODE_INDEX - 1))/$CI_NODE_TOTAL" ./...
+  artifacts:
+    paths:
+      - .gooze-reports/
+
+merge:
+  stage: merge
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  dependencies: [test]
+  script:
+    - gooze report merge
+    - gooze report push "$REPORTS_REF"
+    # Last: fails the job (exit code 3) below 60%, after the baseline push.
+    - gooze report view --threshold-total 60`
+
+
+const gate = `merge:
+  # ...or in the single job, as the last line of the script.
+  script:
+    - go install gooze.dev/pkg/gooze@latest
+    - gooze report merge
+    # Fails the job (exit code 3) below 60%.
+    - gooze report view --threshold-total 60`
+
+
+const allowLowScore = `merge:
+  script:
+    - gooze report merge
+    - gooze report push "$REPORTS_REF"
+    - gooze report view --threshold-total 90
+  # A low score marks the job with a warning instead of failing the
+  # pipeline. Any other exit code still fails it.
+  allow_failure:
+    exit_codes: [3]`
+
+
+const keepCache = `test:
+  cache:
+    key: gooze
+    paths: [.gooze-reports/]
+    when: always        # also save the reports of a job that failed
+  artifacts:
+    when: always
+    paths: [.gooze-reports/]`
+
+
+
+const codeQuality = `diff:
+  stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    GIT_DEPTH: 0
+  script:
+    - git fetch origin "+refs/heads/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME:refs/remotes/origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    # No threshold here, so the next line always runs.
+    - gooze run --diff "origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" ./...
+    # Writes the report, then fails the job (exit code 3) when the changed
+    # lines score below 80%.
+    - gooze report view -o .gooze-reports/run --format gitlab --threshold-diff-total 80 > gl-code-quality-report.json
+  artifacts:
+    reports:
+      codequality: gl-code-quality-report.json`
+
+
+
+const faqs = [
+  {
+    q: "How do I run Gooze mutation tests in GitLab CI?",
+    a: "Use a `golang:1.27` image, install the CLI with `go install gooze.dev/pkg/gooze@latest`, and run `gooze run ./...` in the job script.",
+  },
+  {
+    q: "How do I shard Gooze across parallel GitLab runners?",
+    a: "Set `parallel: N` and map GitLab's 1-based `CI_NODE_INDEX` to gooze's 0-based shards: `gooze run -s \"$((CI_NODE_INDEX - 1))/$CI_NODE_TOTAL\" ./...`. Then merge the artifacts with `gooze report merge`.",
+  },
+  {
+    q: "How do I cache incremental Gooze reports in GitLab CI?",
+    a: "Pull a baseline from your container registry with `gooze report pull` before the run so unchanged files are skipped, and push the merged baseline back from the main branch.",
+  },
+  {
+    q: "How do I fail a merge request when the mutation score is too low?",
+    a: "End the job's script with `gooze report view --threshold-total 60` (or set `threshold.total` in `gooze.yaml`). Below it, Gooze exits with code `3` and the job fails. To show a low score as a warning instead, add `allow_failure: exit_codes: [3]`. When you shard, gate in the merge job.",
+  },
+  {
+    q: "How do I test only the lines a merge request changed in GitLab CI?",
+    a: "In a merge request pipeline, set `GIT_DEPTH: 0`, fetch the target branch, and run `gooze run --diff \"origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME\" --threshold-diff-total 80 ./...`. Keep a full run on `main`, which pushes the baseline.",
+  },
+  {
+    q: "Can Gooze show surviving mutants in a GitLab merge request?",
+    a: "Yes. `gooze report view --format gitlab > gl-code-quality-report.json` writes a Code Quality report in the Code Climate JSON format (`--format codeclimate` is the same), one finding per line with surviving mutants. Declare it as `artifacts: reports: codequality` and the merge request lists the findings. Gooze doesn't post MR notes.",
+  },
+]
+
+
+const faqJsonLd = faqPageJsonLd(faqs)
+
+
+const metadata = docsMetadata("/docs/ci/gitlab")
+---
+<DocsLayout metadata={metadata}>
+    <section>
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+      <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4">GitLab CI</h1>
+      <p class="text-lg text-muted-foreground mb-8">You want every merge request to keep your mutation score. These are the same three
+        setups as the{" "}<a href="/docs/ci/github/">GitHub Actions</a> guide, written for{" "}<code>.gitlab-ci.yml</code>: one job, then shards, then a shared baseline, plus the
+        surviving mutants in the merge request and a gate.</p>
+      <div>
+        <div id="simple">
+          <h2>1. Simplest: run</h2>
+          <p>Install Gooze and run the whole suite. No registry, no caching. For the{" "}<a href="/docs/quick-start/"><code>calc</code></a> package, the job log ends
+            with the line you saw locally, and the job passes, because no threshold is set:</p>
+          <CodeBlock lang="yaml" code={simple} />
+          <Recording name="calc-first-run" title="Recorded last line of the first gooze run on calc" />
+        </div>
+        <div id="sharded">
+          <h2>2. Sharded: run in parallel</h2>
+          <p>When one job takes too long, <code>parallel: 3</code> fans it out;
+            each instance tests its slice with{" "}<code>-s INDEX/TOTAL</code> and saves its
+            reports as an artifact. The <code>merge</code>{" "}job collects them all and runs{" "}<a href="/docs/cli/report/#merge"><code>gooze report merge</code></a>.</p>
+          <CodeBlock lang="yaml" code={sharded} />
+        </div>
+        <div id="cached">
+          <h2>3. Sharded + cached baseline</h2>
+          <p>Each shard pulls the <code>:main</code> baseline
+            for the cache (<a href="/docs/usage/incremental-runs/">incremental runs</a>),
+            then hands its reports to the merge job as an artifact; shards never push to the
+            registry. The merge job combines them and, <strong>only on <code>main</code></strong>, publishes the
+            single merged baseline back to <code>:main</code>. Files that didn&apos;t change,
+            such as an untouched <code>calc.go</code>, come from the cache.</p>
+          <CodeBlock lang="yaml" code={cached} />
+        </div>
+        <div id="diff">
+          <h2>4. Merge requests: only the changed lines</h2>
+          <p>A merge request that changes three lines of a large file still re-tests that whole
+            file. With <a href="/docs/usage/diff-mode/">diff mode</a>,
+            merge requests mutate only the lines they change against the target branch, while{" "}<code>main</code> keeps the sharded full run and publishes the baseline. This is the
+            cached pipeline with a diff job and the gate:</p>
+          <CodeBlock lang="yaml" code={diff} />
+          <ul>
+            <li>The <code>workflow</code> rules run merge request pipelines instead of branch
+              pipelines, plus pipelines for the default branch. The job rules pick the{" "}<code>diff</code> job for merge requests and the sharded full run for the default
+              branch.</li>
+            <li>New GitLab projects fetch a shallow clone (<code>20</code> commits), and the target
+              branch may not be fetched.{" "}<code>GIT_DEPTH: 0</code> and the <code>git fetch</code> line give Gooze the merge
+              base and <code>origin/main</code>; without them <code>--diff</code> stops with an
+              unknown ref or no merge base.</li>
+            <li>The <code>diff</code> job runs without shards. A diff run is small, and a shard
+              doesn&apos;t check thresholds.</li>
+            <li>A diff run writes its reports to <code>.gooze-reports/run/</code>, and its score
+              covers the changed lines only. <code>--threshold-diff-total</code> checks that
+              score, so the gate holds the merge request&apos;s own code to its bar (see{" "}<a href="/docs/ci/quality-gates/#diff">diff thresholds</a>). Only the default
+              branch pushes the baseline.</li>
+            <li>Diff mode needs git. The <code>golang</code> image includes it; a minimal image
+              may not.</li>
+          </ul>
+        </div>
+        <div id="survivors">
+          <h2>5. Show survivors in the merge request</h2>
+          <p>A failed gate tells the author that the score dropped, but not where. GitLab reads
+            findings from a Code Quality report, and{" "}<code>gooze report view --format gitlab</code> writes the surviving mutants in that
+            format. The format itself is Code Climate JSON, so{" "}<code>--format codeclimate</code> writes the same report; use whichever name reads
+            better in your pipeline. Write it in the diff job and declare it as a{" "}<code>codequality</code> report:</p>
+          <CodeBlock lang="yaml" code={codeQuality} />
+          <p>For the <code>calc</code> survivors, the report has one finding per line:</p>
+          <Recording name="calc-report-view-gitlab" title="Recorded gooze report view --format gitlab on calc" />
+          <ul>
+            <li>GitLab shows the findings in the merge request&apos;s code quality report on every
+              tier. GitLab Ultimate also marks the lines in the merge request&apos;s changes view.</li>
+            <li>GitLab compares the findings with the target branch&apos;s pipeline to mark them
+              new or resolved. The <code>fingerprint</code> is a hash of the line&apos;s mutation
+              IDs, so a finding stays the same while its mutants do.</li>
+            <li>A line with a surviving mutant is <code>major</code>. A line whose mutants are only
+              not covered, timed out or skipped is <code>minor</code>.</li>
+            <li>The report is complete before the gate checks the score, and GitLab uploads{" "}<code>artifacts: reports</code> even when the job fails, so a failed gate still
+              shows its findings.</li>
+            <li>Paths are relative to the repository root, so a module in a subdirectory works when
+              the job runs Gooze there.</li>
+            <li><code>GOOZE_REPORT_FORMAT: gitlab</code> in the job&apos;s <code>variables</code>{" "}works instead of the flag. Don&apos;t put <code>report.format: gitlab</code> in{" "}<code>gooze.yaml</code>: local <code>gooze report view</code> would print JSON too.</li>
+          </ul>
+          <p>The format only changes what <code>view</code> prints. Thresholds and exit codes work
+            the same, as the next section shows.</p>
+        </div>
+        <div id="gate">
+          <h2>Fail the build below a score (quality gate)</h2>
+          <p>End the script with a threshold: in the merge job, after{" "}<code>gooze report merge</code> and the baseline push, when you shard. Below the{" "}<a href="/docs/usage/results/#score">mutation score</a> you set, Gooze exits
+            with code <code>3</code> and the job fails:</p>
+          <CodeBlock lang="yaml" code={gate} />
+          <p>The <code>calc</code> run at <code>84.62%</code> passes a minimum of{" "}<code>60</code> and fails a minimum of <code>90</code>, until the two boundary
+            tests bring it to <code>100.00%</code>.</p>
+          <p class="text-sm text-muted-foreground">A shard doesn&apos;t check thresholds, so gate only in the merge job. To show a low
+            score as a warning instead of failing the pipeline, add{" "}<code>allow_failure: exit_codes: [3]</code>; every other code still fails it. More
+            in <a href="#exit-codes">exit codes</a>.</p>
+        </div>
+        <div id="exit-codes">
+          <h2>Exit codes</h2>
+          <p>Every Gooze exit code but <code>0</code> fails the job. That is right for errors. A
+            low score (code <code>3</code>) is different: the run finished and wrote its reports,
+            so you choose what it does.</p>
+          <p><code>allow_failure: exit_codes</code> turns a low score into a warning on the job,
+            while every other code still fails the pipeline. Leave it out to block the merge
+            request on a low score:</p>
+          <CodeBlock lang="yaml" code={allowLowScore} />
+          <h3>Warning: a low score</h3>
+          <p>With <code>allow_failure: exit_codes: [3]</code>, the <code>calc</code> merge job at{" "}<code>84.62%</code> against a <code>90</code> threshold ends its log like this:</p>
+          <Recording name="calc-threshold-merge" title="Recorded gooze report merge below threshold.total, exit code 3" />
+          <p>Code <code>3</code> is in <code>exit_codes</code>, so GitLab marks the job as passed
+            with warnings (an orange <strong>!</strong> instead of a red cross) and runs the
+            next stages. The merge request shows the warning, and the reports are written.</p>
+          <h3>Error: anything else</h3>
+          <p>A threshold above <code>100</code> is a usage error:</p>
+          <Recording name="threshold-out-of-range" title="Recorded threshold out of range, exit code 2" />
+          <p>Code <code>2</code> is not in <code>exit_codes</code>, so GitLab fails the job and
+            the pipeline, the same as without <code>allow_failure</code>. So do a missing base
+            ref (<code>4</code>), a registry error (<code>5</code>) and missing reports{" "}(<code>6</code>).</p>
+          <p>GitLab saves caches and artifacts only for jobs that pass, unless you say{" "}<code>when: always</code>. Set it so a run below a threshold still keeps its
+            reports:</p>
+          <CodeBlock lang="yaml" code={keepCache} />
+          <p class="text-sm text-muted-foreground">The usual causes of the other codes in GitLab CI: <code>4</code>, a shallow clone
+            without <code>GIT_DEPTH: 0</code> and the target branch; <code>5</code>, a job
+            token without registry access; <code>6</code>, a merge job without{" "}<code>dependencies</code> on the shard jobs. Every code:{" "}<a href="/docs/cli/#exit-codes">CLI reference</a>.</p>
+        </div>
+        <div id="auth">
+          <h2>Authentication</h2>
+          <ul>
+            <li>For the project&apos;s own container registry, use{" "}<code>gitlab-ci-token</code> with{" "}<code>$CI_JOB_TOKEN</code> (shown above), or{" "}<code>$CI_REGISTRY_USER</code> /{" "}<code>$CI_REGISTRY_PASSWORD</code>.</li>
+            <li>For another registry, set{" "}<code>GOOZE_REGISTRY_USERNAME</code> /{" "}<code>GOOZE_REGISTRY_PASSWORD</code> (the
+              password may be a token/PAT), or rely on the Docker credential store.</li>
+            <li>For a non-TLS or self-signed registry add{" "}<code>--plain-http</code> or{" "}<code>--insecure</code> to <code>push</code>/<code>pull</code>.</li>
+          </ul>
+        </div>
+        <DocsFaq faqs={faqs} />
+      </div>
+    </section>
+</DocsLayout>

@@ -31,7 +31,7 @@ function walk(dir, acc = []) {
   return acc;
 }
 
-// Decode the handful of HTML entities Next emits in attribute values so length
+// Decode the handful of HTML entities Astro emits in attribute values so length
 // checks measure the text a search engine sees, not the encoded byte count.
 const decodeEntities = (s) =>
   s

@@ -1,15 +1,15 @@
 ---
 paths:
-  - "app/**"
-  - "components/**"
-  - "lib/docs-pages.ts"
+  - "src/pages/**"
+  - "src/components/**"
+  - "src/lib/docs-pages.ts"
   - "README.md"
 ---
 
 # Writing site and docs text
 
 These rules apply to every text a reader can see on gooze.dev: page copy, docs, FAQ questions and
-answers, `lib/docs-pages.ts` titles, descriptions and keywords, `app/llms.txt`, alt text and
+answers, `src/lib/docs-pages.ts` titles, descriptions and keywords, `src/pages/llms.txt.ts`, alt text and
 code comments in examples. The readers are Go engineers, many of them using English
 as a second language, and AI answer engines that quote the docs.
 
@@ -101,7 +101,7 @@ marketing (the rules above still win).
 ## Accuracy
 
 - Every fact about gooze (flags, defaults, config keys, output, exit codes, limits) must match the
-  gooze CLI at `DOCS_FACTS_VERSION` in `lib/version.ts`. Check the CLI source or run it. Don't
+  gooze CLI at `DOCS_FACTS_VERSION` in `src/lib/version.ts`. Check the CLI source or run it. Don't
   guess from a flag or function name.
 - Facts about other tools come from their own docs. If you can't confirm one, write "unknown"
   instead of guessing.
@@ -158,7 +158,7 @@ plain text:
 - FAQ answers are shown on the page and emitted as FAQPage JSON-LD from the same array. Write
   them so they read well both on the page and when quoted alone: start with the direct answer
   ("Yes.", "No.", or the fact), then the detail.
-- Titles, descriptions and keywords in `lib/docs-pages.ts` follow the same
+- Titles, descriptions and keywords in `src/lib/docs-pages.ts` follow the same
   rules: plain, accurate, no competitor targeting, no dashes.
 
 ## Editing existing text

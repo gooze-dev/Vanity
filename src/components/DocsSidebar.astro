@@ -1,0 +1,284 @@
+---
+import { cva } from "class-variance-authority"
+
+import GoozeLogo from "@/components/GoozeLogo.astro"
+import Icon from "@/components/Icon.astro"
+import {
+  docsPages,
+  docsSections,
+  getDocsPage,
+  navTitle,
+  type DocsPage,
+  type DocsSection,
+} from "@/lib/docs-pages"
+import type { IconName } from "@/lib/icons"
+import { withSlash } from "@/lib/links"
+import { cn } from "@/lib/utils"
+
+const sectionIcons: Record<DocsSection, IconName> = {
+  "Get started": "house",
+  Guides: "terminal",
+  "CI/CD": "workflow",
+  "Editors & agents": "bot",
+  Reference: "book-open",
+  Compare: "scale",
+  Help: "life-buoy",
+}
+
+// Top-level page of the nesting chain (e.g. /docs/cli for /docs/cli/report#view).
+function rootOf(page: DocsPage): DocsPage {
+  let root = page
+  while (root.parent) {
+    const parent = getDocsPage(root.parent)
+    if (!parent) break
+    root = parent
+  }
+  return root
+}
+
+// Built from the docs registry, so adding a page there is enough to list it.
+// Nested pages (CLI subcommands) are flattened under their top-level page,
+// which is listed first as its "Overview".
+const path = Astro.url.pathname.replace(/\/$/, "") || "/docs"
+const current = getDocsPage(path)
+const currentRoot = current ? rootOf(current) : undefined
+
+const navMain = docsSections.map((section) => {
+  const pages = docsPages.filter((page) => page.section === section)
+  const roots = pages.filter((page) => !page.parent)
+  return {
+    title: section,
+    icon: sectionIcons[section],
+    isActive: current?.section === section,
+    items: roots.map((root) => {
+      const children = pages.filter((page) => page.parent && rootOf(page) === root)
+      return {
+        title: navTitle(root),
+        url: root.href,
+        isActive: currentRoot === root,
+        items: children.length
+          ? [root, ...children].map((page) => ({
+              title: page === root ? "Overview" : navTitle(page),
+              url: page.href,
+              isActive: page.href === path,
+            }))
+          : undefined,
+      }
+    }),
+  }
+})
+
+const menuButton = cva(
+  "peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden rounded-xl px-3 py-2 text-left text-sm ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground data-active:bg-sidebar-accent data-active:font-medium data-active:text-sidebar-accent-foreground [&_svg]:size-4 [&_svg]:shrink-0 [&>span:last-child]:truncate",
+  {
+    variants: {
+      size: {
+        default: "h-9 text-sm",
+        lg: "h-14 px-3 text-sm group-data-[collapsible=icon]:p-0!",
+      },
+    },
+  },
+)
+
+const subButton = "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-xl px-3 text-sidebar-foreground ring-sidebar-ring outline-hidden group-data-[collapsible=icon]:hidden hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[size=md]:text-sm data-[size=sm]:text-xs data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground"
+const menuSub = "mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l border-sidebar-border px-2.5 py-0.5 group-data-[collapsible=icon]:hidden"
+
+// Only the current page is highlighted, in the gooze accent. Sections and
+// groups just start expanded when they contain it.
+const pageLinkClass = "data-active:bg-transparent data-active:font-medium data-active:text-[color:var(--gooze-teal)]"
+const state = (open: boolean) => (open ? "open" : "closed")
+---
+<div data-docs-sidebar transition:persist="docs-sidebar" class="group peer hidden text-sidebar-foreground md:block data-mobile-open:block" data-state="expanded" data-collapsible="" data-variant="sidebar" data-side="left" data-slot="sidebar">
+  <div data-slot="sidebar-gap" class="relative w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear group-data-[collapsible=offcanvas]:w-0 group-data-[side=right]:rotate-180 group-data-[collapsible=icon]:w-(--sidebar-width-icon) max-md:hidden"></div>
+  <div data-slot="sidebar-container" data-side="left" class="fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear data-[side=left]:left-0 md:flex group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-mobile-open:z-50 group-data-mobile-open:flex group-data-mobile-open:w-72 group-data-mobile-open:shadow-xl">
+    <div data-sidebar="sidebar" data-slot="sidebar-inner" class="flex size-full flex-col bg-sidebar">
+      <div data-slot="sidebar-header" data-sidebar="header" class="flex flex-col gap-2 p-2 [--radius:var(--radius-xl)]">
+        <ul data-slot="sidebar-menu" data-sidebar="menu" class="flex w-full min-w-0 flex-col gap-0.5">
+          <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
+            <a data-slot="sidebar-menu-button" data-sidebar="menu-button" data-size="lg" href="/" class={menuButton({ size: "lg" })}>
+              <div class="flex aspect-square size-8 items-center justify-center rounded-lg bg-gradient-to-r from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white"><Icon name="file-text" class="h-4 w-4" /></div>
+              <div class="grid flex-1 text-left text-sm leading-tight"><GoozeLogo variant="gradient" class="truncate font-semibold" /><span class="truncate text-xs">Documentation</span></div>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div data-slot="sidebar-content" data-sidebar="content" class="no-scrollbar flex min-h-0 flex-1 flex-col gap-2 overflow-auto [--radius:var(--radius-xl)] group-data-[collapsible=icon]:overflow-hidden">
+        <div data-slot="sidebar-group" data-sidebar="group" class="relative flex w-full min-w-0 flex-col p-2">
+          <ul data-slot="sidebar-menu" data-sidebar="menu" class="flex w-full min-w-0 flex-col gap-0.5">
+            {navMain.map((group) => (
+              <li data-slot="collapsible" data-sidebar="menu-item" data-state={state(group.isActive)} class="group/menu-item relative group/collapsible">
+                <button data-slot="collapsible-trigger" data-sidebar="menu-button" data-size="default" data-tooltip={group.title} type="button" aria-expanded={group.isActive ? "true" : "false"} data-state={state(group.isActive)} class={cn(menuButton({ size: "default" }), group.isActive && "font-medium")}>
+                  <Icon name={group.icon} class={cn("transition-colors", group.isActive ? "text-[color:var(--gooze-green)]" : "text-[color:var(--gooze-teal)]")} />
+                  <span>{group.title}</span>
+                  <Icon name="chevron-right" class="ml-auto text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                </button>
+                <div data-slot="collapsible-content" data-state={state(group.isActive)} hidden={!group.isActive}>
+                  <ul data-slot="sidebar-menu-sub" data-sidebar="menu-sub" class={menuSub}>
+                    {group.items.map((item) => item.items?.length ? (
+                      <li data-slot="collapsible" data-sidebar="menu-sub-item" data-state={state(item.isActive)} class="group/menu-sub-item relative group/sub">
+                        <button data-slot="collapsible-trigger" data-sidebar="menu-sub-button" data-size="md" type="button" aria-expanded={item.isActive ? "true" : "false"} data-state={state(item.isActive)} class={cn(subButton, "cursor-pointer w-full")}>
+                          <span>{item.title}</span>
+                          <Icon name="chevron-right" class="ml-auto text-muted-foreground transition-transform duration-200 group-data-[state=open]/sub:rotate-90" />
+                        </button>
+                        <div data-slot="collapsible-content" data-state={state(item.isActive)} hidden={!item.isActive}>
+                          <ul data-slot="sidebar-menu-sub" data-sidebar="menu-sub" class={menuSub}>
+                            {item.items.map((leaf) => (
+                              <li data-slot="sidebar-menu-sub-item" data-sidebar="menu-sub-item" class="group/menu-sub-item relative">
+                                <a data-slot="sidebar-menu-sub-button" data-sidebar="menu-sub-button" data-size="md" data-active={leaf.isActive || undefined} aria-current={leaf.isActive ? "page" : undefined} href={withSlash(leaf.url)} class={cn(subButton, pageLinkClass)}><span>{leaf.title}</span></a>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </li>
+                    ) : (
+                      <li data-slot="sidebar-menu-sub-item" data-sidebar="menu-sub-item" class="group/menu-sub-item relative">
+                        <a data-slot="sidebar-menu-sub-button" data-sidebar="menu-sub-button" data-size="md" data-active={item.isActive || undefined} aria-current={item.isActive ? "page" : undefined} href={withSlash(item.url)} class={cn(subButton, pageLinkClass)}><span>{item.title}</span></a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <button data-sidebar="rail" data-slot="sidebar-rail" data-sidebar-toggle aria-label="Toggle Sidebar" tabindex="-1" title="Toggle Sidebar" type="button" class="absolute inset-y-0 z-20 hidden w-4 transition-all ease-linear group-data-[side=left]:-right-4 after:absolute after:inset-y-0 after:start-1/2 after:w-[2px] hover:after:bg-sidebar-border sm:flex ltr:-translate-x-1/2 rtl:-translate-x-1/2 in-data-[side=left]:cursor-w-resize [[data-side=left][data-state=collapsed]_&]:cursor-e-resize max-md:hidden!"></button>
+  </div>
+</div>
+<div data-sidebar-overlay hidden class="fixed inset-0 z-40 bg-black/30 supports-backdrop-filter:backdrop-blur-sm md:hidden"></div>
+
+{/* The collapsed state carries over a full page load, before the first paint.
+    Client navigation keeps the sidebar itself (transition:persist). */}
+<script is:inline data-astro-rerun>
+  (function () {
+    const sidebar = document.querySelector("[data-docs-sidebar]")
+    if (sidebar && document.cookie.indexOf("sidebar_state=false") !== -1 && window.innerWidth >= 768) {
+      sidebar.dataset.state = "collapsed"
+      sidebar.dataset.collapsible = "icon"
+    }
+  })()
+</script>
+
+<script>
+  const COOKIE_MAX_AGE = 60 * 60 * 24 * 7
+  const MOBILE_BREAKPOINT = 768
+  const CONTENT = '[data-slot="sidebar-content"]'
+
+  const getSidebar = () => document.querySelector<HTMLElement>("[data-docs-sidebar]")
+  const getOverlay = () => document.querySelector<HTMLElement>("[data-sidebar-overlay]")
+
+  const isMobile = () => window.innerWidth < MOBILE_BREAKPOINT
+  const getTrigger = () => document.querySelector<HTMLElement>('[data-sidebar="trigger"]')
+
+  // The drawer works like a modal: the page behind it can't scroll or take focus,
+  // and focus goes back to the trigger when it closes.
+  function setMobileOpen(open: boolean) {
+    const sidebar = getSidebar()
+    const overlay = getOverlay()
+    if (!sidebar || !overlay || open === sidebar.hasAttribute("data-mobile-open")) return
+    sidebar.toggleAttribute("data-mobile-open", open)
+    overlay.hidden = !open
+    document.documentElement.style.overflow = open ? "hidden" : ""
+    document.querySelector<HTMLElement>('[data-slot="sidebar-inset"]')?.toggleAttribute("inert", open)
+    getTrigger()?.setAttribute("aria-expanded", String(open))
+    if (open) {
+      sidebar.setAttribute("role", "dialog")
+      sidebar.setAttribute("aria-modal", "true")
+      sidebar.setAttribute("aria-label", "Sidebar")
+      sidebar.querySelector<HTMLElement>("a, button")?.focus()
+    } else {
+      sidebar.removeAttribute("role")
+      sidebar.removeAttribute("aria-modal")
+      sidebar.removeAttribute("aria-label")
+      getTrigger()?.focus()
+    }
+  }
+
+  // Collapsing to icons is desktop only: below the breakpoint the drawer always
+  // shows the full menu, and the desktop choice comes back above it.
+  function syncCollapsed() {
+    const sidebar = getSidebar()
+    if (!sidebar) return
+    const collapsed = !isMobile() && document.cookie.includes("sidebar_state=false")
+    sidebar.dataset.state = collapsed ? "collapsed" : "expanded"
+    sidebar.dataset.collapsible = collapsed ? "icon" : ""
+    syncTooltips()
+  }
+
+  // The label only matters when the sidebar is collapsed to icons.
+  function syncTooltips() {
+    const sidebar = getSidebar()
+    for (const button of sidebar?.querySelectorAll<HTMLElement>("[data-tooltip]") ?? []) {
+      if (sidebar?.dataset.state === "collapsed") button.title = button.dataset.tooltip ?? ""
+      else button.removeAttribute("title")
+    }
+  }
+
+  function toggle() {
+    const sidebar = getSidebar()
+    if (!sidebar) return
+    if (isMobile()) {
+      setMobileOpen(!sidebar.hasAttribute("data-mobile-open"))
+      return
+    }
+    const open = sidebar.dataset.state === "collapsed"
+    sidebar.dataset.state = open ? "expanded" : "collapsed"
+    sidebar.dataset.collapsible = open ? "" : "icon"
+    document.cookie = `sidebar_state=${open}; path=/; max-age=${COOKIE_MAX_AGE}`
+    syncTooltips()
+  }
+
+  function toggleSection(trigger: HTMLElement) {
+    const item = trigger.parentElement
+    const panel = trigger.nextElementSibling as HTMLElement | null
+    if (!item || !panel) return
+    const open = item.dataset.state !== "open"
+    const value = open ? "open" : "closed"
+    item.dataset.state = value
+    trigger.dataset.state = value
+    panel.dataset.state = value
+    panel.hidden = !open
+    trigger.setAttribute("aria-expanded", String(open))
+  }
+
+  // Delegated: the sidebar arrives with the first docs page, and its links change
+  // on every navigation.
+  document.addEventListener("click", (event) => {
+    const target = event.target as Element
+    if (target.closest("[data-sidebar-toggle]")) toggle()
+    else if (target.closest("[data-sidebar-overlay]")) setMobileOpen(false)
+    const trigger = target.closest<HTMLElement>('[data-docs-sidebar] [data-slot="collapsible-trigger"]')
+    if (trigger) toggleSection(trigger)
+    if (target.closest("[data-docs-sidebar] a")) setMobileOpen(false)
+  })
+
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "b" && (event.metaKey || event.ctrlKey) && getSidebar()) {
+      event.preventDefault()
+      toggle()
+    } else if (event.key === "Escape") {
+      setMobileOpen(false)
+    }
+  })
+
+  // The sidebar stays across navigations, with its width transition and scroll
+  // position. Only its links change: they show the current page, and sections
+  // start expanded when they contain it.
+  document.addEventListener("astro:before-swap", (event) => {
+    const current = document.querySelector(CONTENT)
+    const incoming = event.newDocument.querySelector(CONTENT)
+    if (current && incoming) current.replaceChildren(...incoming.childNodes)
+    setMobileOpen(false)
+  })
+
+  window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`).addEventListener("change", () => {
+    setMobileOpen(false)
+    syncCollapsed()
+  })
+
+  document.addEventListener("astro:page-load", () => {
+    syncCollapsed()
+    getTrigger()?.setAttribute("aria-expanded", String(Boolean(getSidebar()?.hasAttribute("data-mobile-open"))))
+  })
+</script>

@@ -1,18 +1,20 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
+import { defineConfig, globalIgnores } from "eslint/config"
+import js from "@eslint/js"
+import astro from "eslint-plugin-astro"
+import tseslint from "typescript-eslint"
+import globals from "globals"
 
-const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
-]);
-
-export default eslintConfig;
+export default defineConfig([
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  ...astro.configs.recommended,
+  {
+    files: ["scripts/**", "astro.config.mjs"],
+    languageOptions: { globals: globals.node },
+  },
+  {
+    // TypeScript already reports undefined names, and casts hold escape codes.
+    rules: { "no-undef": "off", "no-control-regex": "off" },
+  },
+  globalIgnores(["out/**", ".astro/**"]),
+])

@@ -1,0 +1,11 @@
+---
+import FaqList from "@/components/FaqList.astro"
+import type { Faq } from "@/lib/faq"
+
+// FAQ block at the end of a docs page.
+const { faqs } = Astro.props as { faqs: Faq[] }
+---
+<div id="faq">
+  <h2>FAQ</h2>
+  <FaqList faqs={faqs} />
+</div>

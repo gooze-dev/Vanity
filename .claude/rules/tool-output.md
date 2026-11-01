@@ -1,7 +1,7 @@
 ---
 paths:
-  - "app/**"
-  - "components/**"
+  - "src/pages/**"
+  - "src/components/**"
   - ".claude/docs-example/**"
   - "public/casts/**"
 ---
@@ -23,7 +23,7 @@ bug.
 ## Record with asciinema
 
 Record the real command with [asciinema](https://docs.asciinema.org/) at the versions the docs
-describe (`DOCS_FACTS_VERSION` in `lib/version.ts` for gooze; the goozels and plugin versions
+describe (`DOCS_FACTS_VERSION` in `src/lib/version.ts` for gooze; the goozels and plugin versions
 named on the page). Use the running example from `.claude/docs-example/calc.md` unless the page
 needs something it can't show.
 
@@ -53,7 +53,7 @@ Each sample is one `rec("NAME", "COMMAND")` line, which runs
 ## Show it on the page
 
 - Every tool output on a page is `<Recording name="…" title="…" />`
-  (`components/recording.tsx`). It reads `public/casts/<name>.cast` at build time, plays it
+  (`src/components/Recording.astro`). It reads `public/casts/<name>.cast` at build time, plays it
   with asciinema-player (sized to the output), and puts the recorded text in the HTML for search
   engines, find-in-page and readers without JavaScript. Never paste output into a `CodeBlock`.
 - Record one cast per sample. If a page shows only part of an output (the score line, the last

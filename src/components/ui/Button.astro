@@ -1,0 +1,11 @@
+---
+import { buttonVariants } from "@/lib/variants"
+import { cn } from "@/lib/utils"
+
+// Renders a link when given href, otherwise a button. linkClass is appended
+// as is, after the merged variant classes.
+const { class: className, linkClass, variant = "default", size = "default", href, ...props } = Astro.props
+const Tag = href ? "a" : "button"
+const classes = [cn(buttonVariants({ variant, size, className })), linkClass].filter(Boolean).join(" ")
+---
+<Tag data-slot="button" data-variant={variant} data-size={size} class={classes} href={href} {...props}><slot /></Tag>

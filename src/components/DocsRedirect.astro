@@ -1,0 +1,10 @@
+---
+import { withSlash } from "@/lib/links"
+
+// The visible half of a moved page; redirectMetadata adds the meta refresh.
+const { title, to } = Astro.props as { title: string; to: string }
+---
+<section>
+  <h1 class="text-4xl font-bold tracking-tight mb-4">{title}</h1>
+  <p class="text-lg text-muted-foreground">This page moved. If you are not redirected automatically, continue to <a href={withSlash(to)} class="underline underline-offset-4">{title}</a>.</p>
+</section>

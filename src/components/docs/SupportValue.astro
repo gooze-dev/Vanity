@@ -1,0 +1,27 @@
+---
+import Badge from "@/components/ui/Badge.astro"
+import { withCode } from "@/lib/faq"
+
+type Support = "yes" | "no" | "partial" | "unknown"
+
+const { value } = Astro.props as { value: [Support, string] }
+const [support, note] = value
+
+const supportLabel: Record<Support, string> = {
+  yes: "Yes",
+  no: "No",
+  partial: "Partly",
+  unknown: "Not documented",
+}
+
+const supportBadge: Record<Support, { variant: "secondary" | "destructive" | "outline"; class?: string }> = {
+  yes: {
+    variant: "secondary",
+    class: "bg-[color:var(--gooze-green)]/15 text-[color:var(--gooze-green)]",
+  },
+  no: { variant: "destructive" },
+  partial: { variant: "secondary" },
+  unknown: { variant: "outline", class: "text-muted-foreground" },
+}
+---
+<Badge {...supportBadge[support]}>{supportLabel[support]}</Badge>{note && <div class="mt-1 text-xs text-muted-foreground" set:html={withCode(note)} />}

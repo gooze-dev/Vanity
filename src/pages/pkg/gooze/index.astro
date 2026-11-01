@@ -1,0 +1,78 @@
+---
+import GoozeOutlineCtaButton from "@/components/GoozeOutlineCtaButton.astro"
+import GoozePrimaryCtaButton from "@/components/GoozePrimaryCtaButton.astro"
+import GoozeLogo from "@/components/GoozeLogo.astro"
+import CodeBlock from "@/components/CodeBlock.astro"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import Icon from "@/components/Icon.astro"
+import type { Metadata } from "@/lib/metadata"
+import { withSlash } from "@/lib/links"
+
+const GITHUB_REPO = "https://github.com/gooze-dev/gooze";
+
+const IMPORT_PREFIX = "gooze.dev/pkg/gooze";
+
+
+const TITLE = "pkg/gooze: Go Mutation Testing CLI and Module";
+
+const DESCRIPTION =
+  "Install the Gooze CLI from its Go import path. Its public packages read reports, parse //gooze:ignore directives, and list mutagens and config keys.";
+
+const KEYWORDS = [
+  "pkg/gooze",
+  "go module import",
+  "golang api",
+  "go mutation testing",
+  "gooze reports",
+  "integrate gooze",
+];
+
+const metadata: Metadata = {
+    // absolute: this page supplies its own full title, no "· Gooze" suffix.
+    title: { absolute: TITLE },
+    description: DESCRIPTION,
+    keywords: KEYWORDS,
+    alternates: { canonical: "/pkg/gooze/" },
+    openGraph: {
+      type: "website",
+      title: TITLE,
+      description: DESCRIPTION,
+      url: "https://gooze.dev/pkg/gooze/",
+      siteName: "Gooze",
+      images: [
+        { url: "/og-image.png", width: 1200, height: 630, alt: "Gooze", type: "image/png" },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: TITLE,
+      description: DESCRIPTION,
+      images: [{ url: "/og-image.png", alt: "Gooze" }],
+    },
+    other: {
+      "go-import": `${IMPORT_PREFIX} git ${GITHUB_REPO}`,
+      "go-source": `${IMPORT_PREFIX} ${GITHUB_REPO} ${GITHUB_REPO}/tree/main{/dir} ${GITHUB_REPO}/blob/main{/dir}/{file}#L{line}`,
+    },
+  }
+---
+<BaseLayout metadata={metadata}>
+    <div class="flex min-h-screen flex-col">
+      {/* Main Content */}
+      <main class="flex-1 flex items-center justify-center px-4 py-16">
+        <div class="w-full min-w-0 max-w-2xl mx-auto text-center space-y-8">
+          <div class="space-y-4">
+            <h1 class="text-5xl font-extrabold"><GoozeLogo class="text-inherit" /></h1>
+            <p class="text-xl text-muted-foreground">Mutation testing for Go</p>
+          </div>
+          {/* Import Path */}
+          <div class="rounded-lg border bg-card p-6 space-y-4 min-w-0">
+            <div class="flex items-center justify-center gap-2 text-muted-foreground"><Icon name="terminal" class="h-5 w-5 text-[color:var(--gooze-teal)]" /><span class="font-semibold">Installation</span></div>
+            <CodeBlock code={`go install ${IMPORT_PREFIX}@latest`} lang="bash" />
+            <p class="text-sm text-muted-foreground">This vanity import path points to the official Git repository.</p>
+          </div>
+          {/* Actions */}
+          <div class="flex flex-col sm:flex-row gap-4 justify-center"><GoozePrimaryCtaButton size="lg" href="/" linkClass="flex items-center gap-2">Learn More<Icon name="arrow-right" class="h-4 w-4" /></GoozePrimaryCtaButton><GoozeOutlineCtaButton variant="outline" size="lg" href={withSlash(GITHUB_REPO)} target="_blank" rel="noopener noreferrer" linkClass="flex items-center gap-2"><Icon name="github" class="h-5 w-5" />View on GitHub</GoozeOutlineCtaButton></div>
+        </div>
+      </main>
+    </div>
+</BaseLayout>
