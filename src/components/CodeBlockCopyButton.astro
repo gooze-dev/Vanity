@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 
 const { class: className } = Astro.props
 ---
-<Button data-slot="code-block-copy-button" variant="ghost" size="icon-xs" aria-label="Copy" type="button" class={cn("hover:bg-foreground/5 dark:hover:bg-foreground/10", className)}><Icon name="copy" data-copy-icon /><Icon name="check" data-check-icon class="hidden" /></Button><span aria-live="polite" class="sr-only"></span>
+<Button data-slot="code-block-copy-button" variant="ghost" size="icon-xs" aria-label="Copy" type="button" class={cn("size-7 rounded-sm border hover:text-foreground", className)}><Icon name="copy" data-copy-icon /><Icon name="check" data-check-icon class="hidden" /></Button><span aria-live="polite" class="sr-only"></span>
 
 <script>
   // The only interactive part of a code block. One delegated listener; the text

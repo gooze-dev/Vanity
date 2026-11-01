@@ -1,5 +1,6 @@
 ---
 import GoozeLogo from "@/components/GoozeLogo.astro"
+import GoozeMark from "@/components/GoozeMark.astro"
 import Icon from "@/components/Icon.astro"
 import {
   docsPages,
@@ -70,24 +71,24 @@ const navMain = docsSections.map((section) => {
 // cn drops the base classes a size overrides, such as p-2! for lg's p-0!.
 const menuButton = (options: { size: "default" | "lg" }) => cn(sidebarMenuButtonVariants(options))
 
-const subButton = "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-xl px-3 text-sidebar-foreground ring-sidebar-ring outline-hidden group-data-[collapsible=icon]:hidden hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[size=md]:text-sm data-[size=sm]:text-xs data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground"
-const menuSub = "mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l border-sidebar-border px-2.5 py-0.5 group-data-[collapsible=icon]:hidden"
+const subButton = "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-sm px-2 text-muted-foreground ring-sidebar-ring outline-hidden group-data-[collapsible=icon]:hidden hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 focus-visible:ring-inset active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[size=md]:text-sm data-[size=sm]:text-xs data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground"
+const menuSub = "mx-2 flex min-w-0 translate-x-px flex-col gap-1 border-l border-sidebar-border px-1.5 py-0.5 group-data-[collapsible=icon]:hidden"
 
-// Only the current page is highlighted, in the gooze accent. Sections and
+// Only the current page is highlighted: raised, with the highlight bar. Sections and
 // groups just start expanded when they contain it.
-const pageLinkClass = "data-active:bg-transparent data-active:font-medium data-active:text-[color:var(--gooze-teal)]"
+const pageLinkClass = "data-active:font-medium data-active:shadow-[inset_3px_0_0_var(--highlight)]"
 const state = (open: boolean) => (open ? "open" : "closed")
 ---
 <div data-docs-sidebar transition:persist="docs-sidebar" class="group peer hidden text-sidebar-foreground md:block data-mobile-open:block" data-state="expanded" data-collapsible="" data-variant="sidebar" data-side="left" data-slot="sidebar">
   <div data-slot="sidebar-gap" class="relative w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear group-data-[collapsible=offcanvas]:w-0 group-data-[side=right]:rotate-180 group-data-[collapsible=icon]:w-(--sidebar-width-icon) max-md:hidden"></div>
-  <div data-slot="sidebar-container" data-side="left" class="fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear data-[side=left]:left-0 md:flex group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-mobile-open:z-50 group-data-mobile-open:flex group-data-mobile-open:w-72 group-data-mobile-open:shadow-xl">
+  <div data-slot="sidebar-container" data-side="left" class="fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear data-[side=left]:left-0 md:flex group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-mobile-open:z-50 group-data-mobile-open:flex group-data-mobile-open:w-72 group-data-mobile-open:shadow-pop">
     <div data-sidebar="sidebar" data-slot="sidebar-inner" class="flex size-full flex-col bg-sidebar">
       <div data-slot="sidebar-header" data-sidebar="header" class="flex flex-col gap-2 p-2 [--radius:var(--radius-xl)]">
         <ul data-slot="sidebar-menu" data-sidebar="menu" class="flex w-full min-w-0 flex-col gap-0.5">
           <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class="group/menu-item relative">
             <a data-slot="sidebar-menu-button" data-sidebar="menu-button" data-size="lg" href="/" class={menuButton({ size: "lg" })}>
-              <div class="flex aspect-square size-8 items-center justify-center rounded-lg bg-gradient-to-r from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white"><Icon name="file-text" class="h-4 w-4" /></div>
-              <div class="grid flex-1 text-left text-sm leading-tight"><GoozeLogo variant="gradient" class="truncate font-semibold" /><span class="truncate text-xs">Documentation</span></div>
+              <div class="flex aspect-square size-8 shrink-0 items-center justify-center"><GoozeMark class="size-8!" /></div>
+              <div class="grid flex-1 text-left text-sm leading-tight"><GoozeLogo mark={false} class="truncate text-lg" /><span class="truncate text-xs text-muted-foreground">Documentation</span></div>
             </a>
           </li>
         </ul>
@@ -97,8 +98,8 @@ const state = (open: boolean) => (open ? "open" : "closed")
           <ul data-slot="sidebar-menu" data-sidebar="menu" class="flex w-full min-w-0 flex-col gap-0.5">
             {navMain.map((group) => (
               <li data-slot="collapsible" data-sidebar="menu-item" data-state={state(group.isActive)} class="group/menu-item relative group/collapsible">
-                <button data-slot="collapsible-trigger" data-sidebar="menu-button" data-size="default" data-tooltip={group.title} type="button" aria-expanded={group.isActive ? "true" : "false"} data-state={state(group.isActive)} class={cn(menuButton({ size: "default" }), group.isActive && "font-medium")}>
-                  <Icon name={group.icon} class={cn("transition-colors", group.isActive ? "text-[color:var(--gooze-green)]" : "text-[color:var(--gooze-teal)]")} />
+                <button data-slot="collapsible-trigger" data-sidebar="menu-button" data-size="default" data-tooltip={group.title} type="button" aria-expanded={group.isActive ? "true" : "false"} data-state={state(group.isActive)} class={cn(menuButton({ size: "default" }), "text-xs font-medium tracking-label uppercase text-muted-foreground", group.isActive && "text-foreground")}>
+                  <Icon name={group.icon} class={cn("transition-colors", group.isActive ? "text-foreground" : "text-muted-foreground")} />
                   <span>{group.title}</span>
                   <Icon name="chevron-right" class="ml-auto text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                 </button>
@@ -136,7 +137,7 @@ const state = (open: boolean) => (open ? "open" : "closed")
     <button data-sidebar="rail" data-slot="sidebar-rail" data-sidebar-toggle aria-label="Toggle Sidebar" tabindex="-1" title="Toggle Sidebar" type="button" class="absolute inset-y-0 z-20 hidden w-4 transition-all ease-linear group-data-[side=left]:-right-4 after:absolute after:inset-y-0 after:start-1/2 after:w-[2px] hover:after:bg-sidebar-border sm:flex ltr:-translate-x-1/2 rtl:-translate-x-1/2 in-data-[side=left]:cursor-w-resize [[data-side=left][data-state=collapsed]_&]:cursor-e-resize max-md:hidden!"></button>
   </div>
 </div>
-<div data-sidebar-overlay hidden class="fixed inset-0 z-40 bg-black/30 supports-backdrop-filter:backdrop-blur-sm md:hidden"></div>
+<div data-sidebar-overlay hidden class="fixed inset-0 z-40 bg-brand-ink/50 md:hidden"></div>
 
 {/* The collapsed state carries over a full page load, before the first paint.
     Client navigation keeps the sidebar itself (transition:persist). */}

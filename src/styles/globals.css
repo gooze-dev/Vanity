@@ -4,16 +4,55 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* On body, not :root: the root font-family can't see them, so body text keeps
-   the system font and only what names these variables uses Geist or Oxanium. */
-body {
-  --font-geist-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-geist-mono: "Geist Mono Variable", ui-monospace, monospace;
-  --font-oxanium: "Oxanium Variable", ui-sans-serif, system-ui, sans-serif;
+/* Gooze design system. Every colour, size and radius a component uses is a
+   token defined in this file; hex values live here and nowhere else. Tailwind's
+   named sizes and radii are remapped onto the scale, so text-4xl is the 40px h1
+   and rounded-lg the 14px card radius. */
+@theme static {
+  --font-sans: "Geist Variable", Geist, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", "Geist Mono", ui-monospace, monospace;
+  --font-display: "Oxanium Variable", Oxanium, "Geist Variable", Geist, system-ui, sans-serif;
+}
+
+@theme {
+  --text-xs: 12px;
+  --text-xs--line-height: 1.35;
+  --text-sm: 14px;
+  --text-sm--line-height: 1.45;
+  --text-base: 16px;
+  --text-base--line-height: 1.6;
+  --text-lg: 18px;
+  --text-lg--line-height: 1.6;
+  --text-xl: 20px;
+  --text-xl--line-height: 1.35;
+  --text-2xl: 28px;
+  --text-2xl--line-height: 1.2;
+  --text-3xl: 28px;
+  --text-3xl--line-height: 1.2;
+  --text-4xl: 40px;
+  --text-4xl--line-height: 1.1;
+  --text-5xl: 40px;
+  --text-5xl--line-height: 1.1;
+  --text-6xl: 64px;
+  --text-6xl--line-height: 1.05;
+  --text-6xl--letter-spacing: -0.01em;
+  --text-7xl: 64px;
+  --text-7xl--line-height: 1.05;
+  --text-7xl--letter-spacing: -0.01em;
+  --text-8xl: 96px;
+  --text-8xl--line-height: 1;
+  --text-8xl--letter-spacing: -0.01em;
+  --text-9xl: 96px;
+  --text-9xl--line-height: 1;
+  --text-9xl--letter-spacing: -0.01em;
+  --tracking-tight: -0.01em;
+  --tracking-label: 0.04em;
 }
 
 @theme inline {
-  /* Soft pulse of Claude orange around the Claude Code announcement pill. */
+  /* Soft pulse of Claude orange around the Claude Code announcement pill. Claude's
+     colour stays here on purpose: the pill keeps its own brand styling, outside
+     the design system's token rules. */
   --animate-claude-glow: claude-glow 2.8s ease-in-out infinite;
   @keyframes claude-glow {
     0%, 100% {
@@ -25,8 +64,6 @@ body {
   }
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -35,16 +72,10 @@ body {
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
@@ -56,99 +87,180 @@ body {
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
+  --color-highlight: var(--highlight);
+  --color-highlight-foreground: var(--highlight-fg);
+  --color-brand-ink: var(--brand-ink);
+  --color-status-killed: var(--status-killed);
+  --color-status-killed-foreground: var(--status-killed-fg);
+  --color-status-survived: var(--status-survived);
+  --color-status-survived-foreground: var(--status-survived-fg);
+  --color-status-error: var(--status-error);
+  --color-status-error-foreground: var(--status-error-fg);
+  --color-status-neutral: var(--status-neutral);
+  --color-status-neutral-foreground: var(--status-neutral-fg);
+  --radius-sm: var(--radius-token-sm);
+  --radius-md: var(--radius-token-md);
+  --radius-lg: var(--radius-token-lg);
+  --radius-xl: var(--radius-token-lg);
+  --radius-2xl: var(--radius-token-lg);
+  --radius-3xl: var(--radius-token-lg);
+  --radius-4xl: var(--radius-token-lg);
+  --shadow-pop: var(--pop-shadow);
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  /* Brand: the same in both themes. */
+  --brand-gopher: #00add8;
+  --brand-toxic: #b6f23a;
+  --brand-ink: #0c100d;
+  --brand-paper: #f5f6f0;
+  --brand-blue-deep: #007e9e;
+  --brand-orange: #f59e2c;
 
-  --gooze-green: #7DBC23;
-  --gooze-teal: #4CB8B8;
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Dark islands: code, diffs, terminals and casts in both themes. */
+  --code-fg: #eef1ea;
+  --code-muted: #8a938b;
+  --code-chrome: #1d231f;
+  --terminal-bg: #0c100d;
+  --terminal-chrome: #1d231f;
+  --terminal-fg: #d4dad1;
+  --terminal-border: #2a312c;
+  --terminal-dot: #3a403b;
+  --terminal-title: #9aa39b;
+  --landing-border: rgb(255 255 255 / 10%);
+  --landing-bar: #171b18;
+  --landing-bar-border: rgb(255 255 255 / 6%);
+  --landing-dot-1: #ff5f57;
+  --landing-dot-2: #febc2e;
+  --landing-dot-3: #28c840;
+  --cast-bar: #151a16;
+  --original: #00add8;
+  --mutant: #b6f23a;
+  --mutant-bg: #b6f23a1a;
+  --syn-keyword: #00add8;
+  --syn-string: #b6f23a;
+  --syn-number: #f59e2c;
+  --syn-comment: #8a938b;
+  --syn-func: #eef1ea;
+
+  --status-killed: #b6f23a;
+  --status-killed-fg: #0c100d;
+  --status-survived: #f59e2c;
+  --status-survived-fg: #0c100d;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --radius-token-sm: 4px;
+  --radius-token-md: 8px;
+  --radius-token-lg: 14px;
+  --radius-pill: 999px;
+
+  /* Light theme. */
+  --bg: #ffffff;
+  --bg-subtle: #f3f6f8;
+  --bg-raised: #ffffff;
+  --border: #dfe6ea;
+  --border-strong: #7f8c93;
+  --fg: #0c100d;
+  --fg-muted: #5a676e;
+  --accent: #0077a8;
+  --highlight: #00add8;
+  --highlight-fg: #0c100d;
+  --code-bg: #0c100d;
+  --code-border: #0c100d;
+  --inline-code-bg: #eef2f4;
+  --status-error: #d93636;
+  --status-error-fg: #ffffff;
+  --status-neutral: #e6ecef;
+  --status-neutral-fg: #3f4a50;
+  --pop-shadow: 0 8px 24px rgb(12 16 13 / 12%);
+
+  /* Design tokens under the names the components use. */
+  --focus-ring: var(--accent);
+  --background: var(--bg);
+  --foreground: var(--fg);
+  --card: var(--bg-subtle);
+  --card-foreground: var(--fg);
+  --popover: var(--bg-raised);
+  --popover-foreground: var(--fg);
+  --primary: var(--highlight);
+  --primary-foreground: var(--highlight-fg);
+  --secondary: var(--status-neutral);
+  --secondary-foreground: var(--status-neutral-fg);
+  --muted: var(--bg-subtle);
+  --muted-foreground: var(--fg-muted);
+  --destructive: var(--status-error);
+  --input: var(--border-strong);
+  --ring: var(--focus-ring);
+  --sidebar: var(--bg-subtle);
+  --sidebar-foreground: var(--fg);
+  --sidebar-primary: var(--highlight);
+  --sidebar-primary-foreground: var(--highlight-fg);
+  --sidebar-accent: var(--bg-raised);
+  --sidebar-accent-foreground: var(--fg);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--focus-ring);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --gooze-green: #7DBC23;
-  --gooze-teal: #4CB8B8;
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --bg: #0c100d;
+  --bg-subtle: #151a16;
+  --bg-raised: #1d231f;
+  --border: #2a312c;
+  --border-strong: #5b625c;
+  --fg: #eef1ea;
+  --fg-muted: #9aa39b;
+  --accent: #00add8;
+  --highlight: #b6f23a;
+  --highlight-fg: #0c100d;
+  --code-bg: #151a16;
+  --code-border: #2a312c;
+  --inline-code-bg: #151a16;
+  --status-error: #ff6b6b;
+  --status-error-fg: #0c100d;
+  --status-neutral: #2a312c;
+  --status-neutral-fg: #c9cfc6;
+  --pop-shadow: 0 8px 24px rgb(0 0 0 / 50%);
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans text-base;
+  }
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background-color: var(--highlight);
+    color: var(--highlight-fg);
   }
 
-  .gooze-docs {
-    --ring: var(--gooze-teal);
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+
+  /* Inline code everywhere: a chip for the token itself. Code inside a block or
+     a terminal stays plain. */
+  code:not(pre code, .gz-island code) {
+    background-color: var(--inline-code-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-token-sm);
+    color: var(--fg);
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    padding: 0.1em 0.35em;
   }
 
   /* Keep anchored sections clear of the sticky header. Set here instead of a
@@ -160,7 +272,7 @@ body {
   }
 
   .gooze-docs input[type="checkbox"] {
-    accent-color: var(--gooze-teal);
+    accent-color: var(--accent);
   }
 }
 
@@ -171,10 +283,9 @@ body {
 @layer components {
   .typeset-docs {
     --typeset-flow: 1.1em;
-    /* @theme inline doesn't emit --font-mono/--font-heading at runtime, so
-       point typeset at the font variables set at the top of this file. */
-    --typeset-font-heading: var(--font-geist-sans);
-    --typeset-font-mono: var(--font-geist-mono);
+    --typeset-leading: 1.6;
+    --typeset-font-heading: var(--font-display);
+    --typeset-font-mono: var(--font-mono);
   }
 
   .typeset-docs
@@ -189,27 +300,103 @@ body {
   }
 }
 
-/* Code block lines and Shiki tokens (components/CodeBlock.astro,
-   lib/highlighter.ts). Kept here instead of utility classes because they
-   repeat on every line and token of every code block. */
+/* The Lockup: the mark beside the lowercase wordmark. The text stays "Gooze" for
+   readers and search engines; CSS sets the case. */
 @layer components {
-  .sk {
-    color: var(--shiki-light);
+  .gz-lockup {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.28em;
   }
-  .dark .sk {
-    color: var(--shiki-dark);
+  .gz-lockup svg {
+    display: block;
+    width: 1.15em;
+    height: 1.15em;
+    flex-shrink: 0;
+  }
+  .gz-wordmark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    text-transform: lowercase;
+    color: var(--brand-gopher);
+  }
+  .dark .gz-wordmark .oze {
+    color: var(--brand-toxic);
+  }
+}
+
+/* Status tags: Available, Beta, Planned. */
+@layer components {
+  .gz-tag {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: var(--space-1);
+    height: 22px;
+    padding: 0 var(--space-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    color: var(--fg-muted);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .gz-tag--available {
+    background-color: var(--highlight);
+    border-color: transparent;
+    color: var(--highlight-fg);
+  }
+  .gz-tag--beta {
+    border-color: var(--border-strong);
+    color: var(--fg);
+  }
+  .gz-tag--planned {
+    border-style: dashed;
+    border-color: var(--border-strong);
+  }
+}
+
+/* Dark islands: code blocks, diffs, terminals and casts look the same in both
+   themes, so syntax and diff colours never change meaning. Components inside
+   read the island's values under their usual names. */
+@layer components {
+  .gz-island {
+    --foreground: var(--code-fg);
+    --muted-foreground: var(--code-muted);
+    --muted: var(--code-chrome);
+    --border: var(--code-border);
+    --ring: var(--brand-gopher);
+    --focus-ring: var(--brand-gopher);
+    color-scheme: dark;
+    background-color: var(--code-bg);
+    color: var(--code-fg);
   }
 
+  [data-slot="code-block"] {
+    border: 1px solid var(--code-border);
+  }
+  [data-prompt] [data-slot="code-block-line-content"]::before {
+    content: "$ ";
+    color: var(--code-muted);
+  }
+  [data-slot="code-block-copy-button"] {
+    border-color: var(--code-border);
+    background-color: var(--code-chrome);
+    color: var(--code-muted);
+  }
+
+  /* Shiki's colours arrive as var(--syn-*) (lib/highlighter.ts). Diff lines
+     override them: blue is the original, toxic the mutation, and the - and +
+     signs stay so colour is never the only cue. */
   [data-slot="code-block-line"] {
     position: relative;
     display: block;
     min-height: 1lh;
-    margin-inline: -1.25rem;
-    padding-inline: 1.25rem;
-  }
-  [data-slot="code-block"][data-size="sm"] [data-slot="code-block-line"] {
-    margin-inline: -0.75rem;
-    padding-inline: 0.75rem;
+    margin-inline: -1rem;
+    padding-inline: 1rem;
   }
   [data-slot="code-block-line-content"] {
     min-width: 0;
@@ -218,22 +405,31 @@ body {
     position: absolute;
     inset-inline-start: 0.25rem;
     top: 0;
-    color: var(--color-muted-foreground);
+    color: var(--code-muted);
     user-select: none;
   }
-  [data-slot="code-block-line"][data-variant="added"],
   [data-slot="code-block-line"][data-variant="highlighted"] {
-    background-color: color-mix(in oklab, var(--color-foreground) 5%, transparent);
+    background-color: color-mix(in oklab, var(--code-fg) 8%, transparent);
+  }
+  [data-slot="code-block-line"][data-variant="added"] {
+    background-color: var(--mutant-bg);
+    color: var(--mutant);
+  }
+  [data-slot="code-block-line"][data-variant="added"] .sk {
+    color: var(--mutant) !important;
   }
   [data-slot="code-block-line"][data-variant="added"]::after {
     content: "+";
+    color: inherit;
   }
   [data-slot="code-block-line"][data-variant="removed"] {
-    background-color: color-mix(in oklab, var(--color-destructive) 10%, transparent);
+    color: var(--original);
+  }
+  [data-slot="code-block-line"][data-variant="removed"] .sk {
+    color: var(--original) !important;
   }
   [data-slot="code-block-line"][data-variant="removed"]::after {
     content: "\2212";
-    color: var(--color-destructive);
   }
   [data-numbered] [data-slot="code-block-line"] {
     grid-column: span 2;
@@ -246,7 +442,172 @@ body {
     content: counter(line);
     min-width: 1.5rem;
     text-align: end;
-    color: var(--color-muted-foreground);
+    color: var(--code-muted);
     user-select: none;
   }
+
+  /* TerminalWindow: real output in a frame, dark in both themes. */
+  .gz-term {
+    overflow: hidden;
+    border: 1px solid var(--terminal-border);
+    border-radius: var(--radius-token-md);
+    background-color: var(--terminal-bg);
+    color: var(--terminal-fg);
+    color-scheme: dark;
+  }
+  .gz-term__bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    height: 32px;
+    padding: 0 var(--space-3);
+    background-color: var(--terminal-chrome);
+  }
+  .gz-term__bar i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--terminal-dot);
+  }
+  .gz-term__body {
+    margin: 0;
+    padding: var(--space-4);
+    overflow-x: auto;
+    background: none;
+    color: inherit;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.6;
+    white-space: pre;
+  }
+  .gz-term .t-mute,
+  .gz-term .t-cwd {
+    color: var(--code-muted);
+  }
+  .gz-term .t-orig {
+    color: var(--original);
+  }
+  .gz-term .t-mut {
+    color: var(--mutant);
+  }
+  .gz-term .t-surv {
+    color: var(--brand-orange);
+    font-weight: 600;
+  }
+  .gz-term .t-score {
+    color: var(--brand-toxic);
+    font-weight: 600;
+  }
+
+  /* LandingTerminal: the marketing window, with the three coloured dots. */
+  .gz-term--landing {
+    max-width: 720px;
+    border-color: var(--landing-border);
+  }
+  .gz-term--landing .gz-term__bar {
+    gap: 6px;
+    height: 28px;
+    background-color: var(--landing-bar);
+    border-bottom: 1px solid var(--landing-bar-border);
+  }
+  .gz-term--landing .gz-term__bar i:nth-child(1) {
+    background-color: var(--landing-dot-1);
+  }
+  .gz-term--landing .gz-term__bar i:nth-child(2) {
+    background-color: var(--landing-dot-2);
+  }
+  .gz-term--landing .gz-term__bar i:nth-child(3) {
+    background-color: var(--landing-dot-3);
+  }
+  .gz-term--landing .gz-term__body {
+    padding: 16px 20px 18px;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  /* TerminalCast: the frame around the asciinema player. */
+  .gz-cast {
+    overflow: hidden;
+    border: 1px solid var(--terminal-border);
+    border-radius: var(--radius-token-md);
+    background-color: var(--terminal-bg);
+    color-scheme: dark;
+  }
+
+  /* Tables never scroll sideways, and use the smaller code size. Wide enough for
+     it, the first column stays on one line and later columns break code at spaces,
+     not mid-word. The second column, usually the longest text, takes the squeeze;
+     a table of five or more columns has no width to spare, so it keeps breaking. */
+  [data-slot="table"] code {
+    box-decoration-break: clone;
+    font-size: 13px;
+  }
+  @media (min-width: 64rem) {
+    [data-slot="table-cell"]:first-child code {
+      white-space: nowrap;
+    }
+    [data-slot="table"]:not(:has([data-slot="table-head"]:nth-child(5))) {
+      [data-slot="table-cell"]:nth-child(n + 3) code,
+      [data-slot="table-head"] {
+        overflow-wrap: normal;
+      }
+    }
+  }
+
+  /* FAQ: hairlines, with + and − in muted mono as the toggle. */
+  .gz-faq-toggle::after {
+    content: "+";
+    color: var(--fg-muted);
+    font-family: var(--font-mono);
+  }
+  details[open] > summary .gz-faq-toggle::after {
+    content: "\2212";
+  }
+}
+
+/* The asciinema-player theme, selected with theme: "gooze". Its 16 ANSI colours
+   match the Gooze TUI's basic-ANSI fallbacks. Not in a layer, and with .ap-player
+   in the selector: the player's own stylesheet loads after this one, and its
+   .ap-player defaults would otherwise win. */
+.ap-player.asciinema-player-theme-gooze {
+  --term-color-foreground: #d4dad1;
+  --term-color-background: #0c100d;
+  --term-color-0: #0c100d;
+  --term-color-8: #5b625c;
+  --term-color-1: #ff6b6b;
+  --term-color-9: #ff8f8f;
+  --term-color-2: #8fc93a;
+  --term-color-10: #b6f23a;
+  --term-color-3: #f59e2c;
+  --term-color-11: #ffbd5c;
+  --term-color-4: #0077a8;
+  --term-color-12: #33bde0;
+  --term-color-5: #9aa39b;
+  --term-color-13: #c9cfc6;
+  --term-color-6: #00add8;
+  --term-color-14: #5ccfea;
+  --term-color-7: #d4dad1;
+  --term-color-15: #f5f6f0;
+}
+
+/* Rows clip their text by default, which cuts the box lines that need to touch
+   the row below. */
+.gz-cast pre.ap-term-text .ap-line {
+  overflow: visible;
+}
+
+/* Control bar, against asciinema-player 3.17.0's class names. */
+.gz-cast div.ap-player div.ap-control-bar {
+  background-color: var(--cast-bar);
+  border-top: 1px solid var(--terminal-border);
+  color: var(--code-fg);
+}
+.gz-cast div.ap-control-bar svg.ap-icon path {
+  fill: var(--code-fg);
+}
+.gz-cast div.ap-control-bar .ap-progressbar .ap-bar .ap-gutter-empty {
+  background-color: var(--terminal-border);
+}
+.gz-cast div.ap-control-bar .ap-progressbar .ap-bar .ap-gutter-full {
+  background-color: var(--brand-toxic);
 }

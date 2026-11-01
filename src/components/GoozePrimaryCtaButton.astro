@@ -1,7 +1,6 @@
 ---
 import Button from "@/components/ui/Button.astro"
-import { cn } from "@/lib/utils"
 
 const { class: className, ...props } = Astro.props
 ---
-<Button {...props} class={cn("bg-gradient-to-r from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] text-white hover:opacity-90", className)}><slot /></Button>
+<Button {...props} class={className}><slot /></Button>

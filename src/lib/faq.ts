@@ -17,7 +17,7 @@ function withLinks(text: string) {
   let last = 0
   for (const match of text.matchAll(LINK)) {
     html += escapeHtml(text.slice(last, match.index))
-    html += `<a href="${escapeHtml(match[2])}" target="_blank" rel="noopener noreferrer" class="underline underline-offset-4 hover:text-foreground">${escapeHtml(match[1])}</a>`
+    html += `<a href="${escapeHtml(match[2])}" target="_blank" rel="noopener noreferrer" class="text-accent underline underline-offset-4 hover:text-foreground">${escapeHtml(match[1])}</a>`
     last = match.index + match[0].length
   }
   return html + escapeHtml(text.slice(last))
@@ -30,7 +30,7 @@ export function withCode(text: string) {
     .split("`")
     .map((part, i) =>
       i % 2
-        ? `<code class="rounded bg-background px-1 py-0.5 font-mono text-[0.9em]">${escapeHtml(part)}</code>`
+        ? `<code>${escapeHtml(part)}</code>`
         : withLinks(part),
     )
     .join("")

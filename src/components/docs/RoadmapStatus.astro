@@ -4,9 +4,9 @@ import Icon from "@/components/Icon.astro"
 const { shipped, beta } = Astro.props
 ---
 {beta ? (
-  <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-destructive/10 px-2 py-0.5 text-xs font-medium text-destructive"><Icon name="flask-conical" class="size-3" aria-hidden="true" />Beta</span>
+  <span class="gz-tag gz-tag--beta"><Icon name="flask-conical" class="size-3" aria-hidden="true" />Beta</span>
 ) : shipped ? (
-  <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-[color:var(--gooze-green)]/15 px-2 py-0.5 text-xs font-medium text-[color:var(--gooze-green)]"><Icon name="circle-check" class="size-3" aria-hidden="true" />Shipped</span>
+  <span class="gz-tag gz-tag--available"><Icon name="circle-check" class="size-3" aria-hidden="true" />Shipped</span>
 ) : (
-  <span class="inline-flex shrink-0 items-center gap-1 rounded-full border border-[color:var(--gooze-teal)]/40 px-2 py-0.5 text-xs font-medium text-[color:var(--gooze-teal)]"><Icon name="circle-dashed" class="size-3" aria-hidden="true" />Planned</span>
+  <span class="gz-tag gz-tag--planned"><Icon name="circle-dashed" class="size-3" aria-hidden="true" />Planned</span>
 )}

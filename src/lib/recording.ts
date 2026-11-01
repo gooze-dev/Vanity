@@ -31,3 +31,31 @@ export function readCast(name: string) {
 export function recordingText(name: string) {
   return castText(readCast(name))
 }
+
+function escapeHtml(text: string) {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+}
+
+function span(className: string, text: string) {
+  return `<span class="${className}">${escapeHtml(text)}</span>`
+}
+
+// Colours only what the brand gives meaning: the survivors heading, the original
+// code, the mutation and the score. It adds spans and never changes a character.
+// Returns HTML, for set:html in a .gz-term body.
+export function terminalHtml(text: string) {
+  return text
+    .split("\n")
+    .map((line) => {
+      if (/^Survivors \(\d+\):$/.test(line)) return span("t-surv", line)
+      const survivor = line.match(/^(.* survived \([^)]*\): )(.*)( -> )(.*)$/)
+      if (survivor) {
+        const [, where, original, arrow, mutant] = survivor
+        return `${escapeHtml(where)}${span("t-orig", original)}${escapeHtml(arrow)}${span("t-mut", mutant)}`
+      }
+      const score = line.match(/^(Mutation score: )(\d+(?:\.\d+)?%)(.*)$/)
+      if (score) return `${escapeHtml(score[1])}${span("t-score", score[2])}${escapeHtml(score[3])}`
+      return escapeHtml(line)
+    })
+    .join("\n")
+}
