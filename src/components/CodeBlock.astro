@@ -12,10 +12,12 @@ type Props = {
   /** 1-based line numbers to call out. */
   highlight?: number[]
   lineNumbers?: boolean
+  /** Show the "$ " prompt on every line of a multi-line command block. */
+  prompt?: boolean
   class?: string
 }
 
-const { code, lang, title, highlight = [], lineNumbers = false, class: className } = Astro.props
+const { code, lang, title, highlight = [], lineNumbers = false, prompt = false, class: className } = Astro.props
 
 // Diff examples mark lines with a leading "+" or "-"; show them as added and
 // removed lines instead of plain text.
@@ -31,6 +33,31 @@ function escapeHtml(text: string) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
 }
 
+const goSource = new Set(["go", "golang"])
+
+// Adds <wbr> after each "/" and before each " --flag" in highlighted HTML. The
+// text can span several tokens, so it works on characters and skips the tags.
+function breakPoints(html: string) {
+  const parts = html.split(/(<[^>]+>|&[a-z#0-9]+;)/)
+  const text = parts.map((part, i) => (i % 2 ? (part.startsWith("&") ? "x" : "") : part)).join("")
+  let out = ""
+  let at = 0
+  parts.forEach((part, i) => {
+    if (i % 2) {
+      out += part
+      if (part.startsWith("&")) at += 1
+      return
+    }
+    for (const char of part) {
+      if (char === " " && /^ --?\w/.test(text.slice(at, at + 4))) out += "<wbr>"
+      out += char
+      if (char === "/") out += "<wbr>"
+      at += char.length
+    }
+  })
+  return out
+}
+
 // Shiki runs at build time, so pages ship highlighted HTML in both the light
 // and dark themes and no highlighter JavaScript.
 const raw = code.trimEnd()
@@ -41,20 +68,26 @@ const highlighted = (await highlightCode(raw, lang)) ?? lines.map(escapeHtml)
 // instead of a padded block whose button only shows on hover.
 const compact = lines.length === 1 && !title && !lineNumbers
 
+// Only Go source keeps its lines and may scroll. Everything else wraps, with
+// break points after "/" and before a flag, so a long command breaks where a
+// reader would break it. Copying reads the text, so <wbr> never reaches the clipboard.
+const wraps = !goSource.has(lang)
+const lineHtml = (html: string) => (wraps ? breakPoints(html) : html)
+
 // An empty line holds a newline so copying a selection keeps blank lines. The
 // lines go in as one string: whitespace in a <pre> is visible.
 const body = highlighted
   .map((content, index) => {
     const variant = compact ? "default" : lineVariant(lines[index] ?? "", highlight.includes(index + 1))
-    return `<span data-slot="code-block-line" data-variant="${variant}"><span data-slot="code-block-line-content">${content || "\n"}</span></span>`
+    return `<span data-slot="code-block-line" data-variant="${variant}"><span data-slot="code-block-line-content">${lineHtml(content) || "\n"}</span></span>`
   })
   .join("")
 
-const preClass = "min-h-0 min-w-0 scroll-fade-x scrollbar-thin overflow-auto px-4 py-3 text-start font-mono text-sm leading-[1.6] outline-none group-has-data-[slot=code-block-footer]/code-block:pb-2 group-has-data-[slot=code-block-header]/code-block:pt-2 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:py-3 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5 data-wrap:scroll-fade-y data-wrap:wrap-break-word data-wrap:whitespace-pre-wrap"
+const preClass = "min-h-0 min-w-0 overflow-auto px-4 py-3 text-start font-mono text-sm leading-[1.6] max-sm:text-[12.5px] outline-none group-has-data-[slot=code-block-footer]/code-block:pb-2 group-has-data-[slot=code-block-header]/code-block:pt-2 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:py-3 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5 data-wrap:overflow-x-hidden data-wrap:wrap-anywhere data-wrap:whitespace-pre-wrap"
 const codeClass = "grid min-h-lh min-w-max content-start in-data-numbered:grid-cols-[auto_1fr] in-data-wrap:min-w-0"
 const actionsClass = "-my-1 ms-auto -me-2 flex shrink-0 items-center gap-1 [[data-slot=code-block]>&]:absolute [[data-slot=code-block]>&]:end-2 [[data-slot=code-block]>&]:top-2 [[data-slot=code-block]>&]:z-10 [[data-slot=code-block]>&]:m-0"
 ---
-<div data-slot="code-block" data-variant="default" data-size="default" data-prompt={(compact && lang === "bash") || undefined} class={cn(codeBlockVariants({ variant: "default" }), compact && "flex-row items-center", className)}>
+<div data-slot="code-block" data-variant="default" data-size="default" data-prompt={(compact && lang === "bash") || prompt || undefined} class={cn(codeBlockVariants({ variant: "default" }), compact && "flex-row items-start", className)}>
   {title ? (
     <div data-slot="code-block-header" class="flex min-w-0 shrink-0 items-center gap-2 px-4 pt-3 text-muted-foreground group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pt-3 group-data-[variant=destructive]/code-block:text-destructive *:has-[>[data-slot=code-block-title]]:min-w-0">
       <div data-slot="code-block-title" class="min-w-0 truncate font-sans text-sm font-medium text-foreground group-data-[size=sm]/code-block:text-xs group-data-[variant=destructive]/code-block:text-destructive [&_svg]:pointer-events-none [&_svg]:inline-block [&_svg]:align-middle [&_svg:not([class*='size-'])]:size-4 group-data-[size=sm]/code-block:[&_svg:not([class*='size-'])]:size-3.5 *:[svg]:me-1.5">{title}</div>
@@ -63,6 +96,6 @@ const actionsClass = "-my-1 ms-auto -me-2 flex shrink-0 items-center gap-1 [[dat
   ) : !compact && (
     <div data-slot="code-block-actions" class={actionsClass}><CodeBlockCopyButton /></div>
   )}
-  <pre data-slot="code-block-content" data-numbered={lineNumbers || undefined} dir="ltr" tabindex="0" style="counter-reset:line 0" class={cn(preClass, compact && "min-w-0 flex-auto")}><code data-slot="code-block-code" class={codeClass} set:html={body} /></pre>
-  {compact && <CodeBlockCopyButton class="me-2 shrink-0" />}
+  <pre data-slot="code-block-content" data-numbered={lineNumbers || undefined} data-wrap={wraps || undefined} dir="ltr" tabindex="0" style="counter-reset:line 0" class={cn(preClass, !wraps && "gz-scroll-fade max-sm:px-2", wraps && !compact && "pe-11", compact && "min-w-0 flex-auto pe-2")}><code data-slot="code-block-code" class={codeClass} set:html={body} /></pre>
+  {compact && <CodeBlockCopyButton class="me-2 mt-2 shrink-0" />}
 </div>

@@ -9,7 +9,8 @@ import { faqPageJsonLd } from "@/lib/faq"
 const metadata = docsMetadata("/docs/usage/single-function")
 
 
-const percent = `// Percent returns part as a whole percentage of total, rounded down.
+const percent = `// Percent returns part as a whole
+// percentage of total, rounded down.
 // It expects total > 0.
 func Percent(part, total int) int {
 	return part * 100 / total
@@ -18,10 +19,16 @@ func Percent(part, total int) int {
 
 const percentTest = `func TestPercent(t *testing.T) {
 	if got := Percent(1, 4); got != 25 {
-		t.Errorf("Percent(1, 4) = %d, want 25", got)
+		t.Errorf(
+			"Percent(1, 4) = %d, want 25",
+			got,
+		)
 	}
 	if got := Percent(3, 3); got != 100 {
-		t.Errorf("Percent(3, 3) = %d, want 100", got)
+		t.Errorf(
+			"Percent(3, 3) = %d, want 100",
+			got,
+		)
 	}
 }`
 
@@ -85,7 +92,8 @@ const faqJsonLd = faqPageJsonLd(faqs)
         <div id="estimate">
           <h2>Preview the function</h2>
           <p>Add the first boundary case to the table in <code>TestInRange</code>:</p>
-          <CodeBlock lang="go" code={`		{0, 0, 10, true},  // lower bound is inside`} />
+          <CodeBlock lang="go" code={`		// lower bound is inside
+		{0, 0, 10, true},`} />
           <p>Then check what a run limited to <code>InRange</code> would test:</p>
           <CodeBlock lang="bash" code="gooze run --estimate --run '^InRange$' ./..." />
           <Recording name="calc-func-estimate" title="Recorded gooze run --estimate --run '^InRange$'" />
@@ -111,7 +119,8 @@ const faqJsonLd = faqPageJsonLd(faqs)
         <div id="loop">
           <h2>Write the next test, run again</h2>
           <p>Add the second boundary case and run the same command:</p>
-          <CodeBlock lang="go" code={`		{10, 0, 10, true}, // upper bound is inside`} />
+          <CodeBlock lang="go" code={`		// upper bound is inside
+		{10, 0, 10, true},`} />
           <CodeBlock lang="bash" code="gooze run --run '^InRange$' ./..." />
           <Recording name="calc-func-rerun" title="Recorded last lines of gooze run --run '^InRange$' after both new cases" />
           <p>Every narrowed run empties <code>.gooze-reports/run/</code> first, so it holds only
