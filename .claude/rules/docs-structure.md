@@ -1,15 +1,15 @@
 ---
 paths:
-  - "app/docs/**"
-  - "lib/docs-pages.ts"
-  - "components/gooze-docs-sidebar.tsx"
-  - "components/docs-pager.tsx"
-  - "components/docs-breadcrumb.tsx"
+  - "src/pages/docs/**"
+  - "src/lib/docs-pages.ts"
+  - "src/components/DocsSidebar.astro"
+  - "src/components/DocsPager.astro"
+  - "src/components/DocsBreadcrumb.astro"
 ---
 
 # Docs structure
 
-`lib/docs-pages.ts` is the single source for the docs structure. The sidebar, breadcrumbs,
+`src/lib/docs-pages.ts` is the single source for the docs structure. The sidebar, breadcrumbs,
 prev/next pager, search, sitemap and `llms-full.txt` all read it. Array order is reading order.
 
 ## Sections
@@ -35,9 +35,9 @@ Rules:
   general page first.
 - Inside a section, order pages by when a reader needs them, not alphabetically. A CI provider
   page comes before sharding, because sharding builds on it.
-- `sectionIcons` in `components/gooze-docs-sidebar.tsx` must change together with
+- `sectionIcons` in `src/components/DocsSidebar.astro` must change together with
   `docsSections`.
-- The overview page (`app/docs/page.tsx`) never lists pages by hand; the sidebar already does.
+- The overview page (`src/pages/docs/index.astro`) never lists pages by hand; the sidebar already does.
   It keeps the intro, the beginner pointer and Get started, and builds its section links from
   `docsSections` and `getSectionLanding`.
 
@@ -57,7 +57,7 @@ Link to the page that owns a topic instead of repeating it.
 
 Section order inside a page: intro, prerequisites, main content, examples, limitations, FAQ,
 next steps. The FAQ is always the last `h2` before next steps. Render it with
-`<DocsFaq faqs={faqs} />` (`components/docs-faq.tsx`), the same `faqs` array that feeds the
+`<DocsFaq faqs={faqs} />` (`src/components/DocsFaq.astro`), the same `faqs` array that feeds the
 page's FAQPage JSON-LD; never hand-write FAQ markup. The landing page uses the same
 `FaqList` and `faqPageJsonLd`, plus `<HeadingAnchors rootId="faq" />` for its copy links. Wrap commands and flags in answers in
 backticks, and the component shows them as code. `h2` headings form the page's
@@ -67,12 +67,12 @@ table of contents, so keep them short and unique on the page.
 
 Like GitHub, every `h2` and `h3` in a docs page and every FAQ question has a stable `#id` and
 a copy-link button that shows on hover or keyboard focus (always visible, dimmed, on touch
-screens). `components/heading-anchors.tsx` adds the buttons for the whole article, so pages
+screens). `src/components/HeadingAnchors.astro` adds the buttons for the whole article, so pages
 don't add them by hand.
 
 - Ids must be stable, because people share these links. A section's id comes from its wrapper
   (`<div id="matrix"><h2>…</h2>`); other headings get a slug of their text
-  (`lib/heading-id.ts`). Give a section an explicit wrapper id when its heading text may change.
+  (`src/lib/heading-id.ts`). Give a section an explicit wrapper id when its heading text may change.
 - Don't rename an existing id. If you must, keep the old id on an element nearby so old links
   still land.
 - FAQ ids are `faq-` plus the slug of the question (`DocsFaq`). Opening a `#faq-…` link opens
@@ -85,7 +85,7 @@ don't add them by hand.
 A table must fit the content column at every width (check 375, 768, 1024 and 1280px). No
 horizontal scrolling inside a table and no page overflow.
 
-- `components/ui/table.tsx` has no `overflow-x-auto` container, and cells wrap
+- `src/components/ui/Table.astro` has no `overflow-x-auto` container, and cells wrap
   (`[overflow-wrap:anywhere]`, top-aligned). Don't add `overflow-x-auto`, `whitespace-nowrap` or
   `min-w-*` back on a table, its wrapper or its cells.
 - Keep tables to about four columns with short cell text. Put long explanations under the
@@ -102,7 +102,7 @@ horizontal scrolling inside a table and no page overflow.
   pager, search and sitemap.
 - Never change a published URL just because a page moves to another section. The URL stays and
   only `section` changes. If a URL must change, keep a redirect stub at the old path (see
-  `app/docs/features/*` and `app/docs/gitlab`).
+  `src/pages/docs/features/*` and `src/pages/docs/gitlab`).
 - Don't create a section for a single page. Put it in the closest existing section.
 - Nest pages with `parent` only for real sub-pages (CLI subcommands). Keep nesting one level deep.
 - When a section grows past about eight pages, split it by reader task (for example "CI/CD" into

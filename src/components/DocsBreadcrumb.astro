@@ -1,0 +1,36 @@
+---
+import Icon from "@/components/Icon.astro"
+import { getDocsTrail, getSectionLanding, navTitle } from "@/lib/docs-pages"
+import { withSlash } from "@/lib/links"
+import { cn } from "@/lib/utils"
+
+type Crumb = { label: string; href?: string }
+
+const path = Astro.url.pathname.replace(/\/$/, "")
+
+// Home > Documentation > Section > parents... > page, from the docs registry.
+const crumbs: Crumb[] = [
+  { label: "Home", href: "/" },
+  { label: "Documentation", href: "/docs" },
+]
+const trail = getDocsTrail(path)
+if (trail.length && trail[trail.length - 1].href !== "/docs") {
+  const section = trail[0].section
+  const landing = getSectionLanding(section)?.href
+  // Only link the section when its landing page isn't the next crumb anyway.
+  crumbs.push({ label: section, href: landing !== trail[0].href ? landing : undefined })
+  for (const page of trail) crumbs.push({ label: navTitle(page), href: page.href })
+}
+delete crumbs[crumbs.length - 1].href
+
+const firstVisible = Math.max(0, crumbs.length - 2)
+---
+<nav aria-label="breadcrumb" data-slot="breadcrumb" class="min-w-0"><ol data-slot="breadcrumb-list" class="flex items-center gap-1.5 text-sm wrap-break-word text-muted-foreground sm:gap-2.5 flex-nowrap">{crumbs.map((crumb, index) => {
+  const collapsed = index < firstVisible
+  return (
+    <Fragment>
+      {index > 0 && <li data-slot="breadcrumb-separator" role="presentation" aria-hidden="true" class={cn("[&>svg]:size-3.5", index <= firstVisible && "hidden md:inline-flex")}><Icon name="chevron-right" /></li>}
+      <li data-slot="breadcrumb-item" class={cn("inline-flex items-center gap-1.5", index === crumbs.length - 1 ? "shrink-0" : "min-w-0", collapsed && "hidden md:inline-flex")}>{crumb.href ? <a data-slot="breadcrumb-link" href={withSlash(crumb.href)} class="truncate transition-colors hover:text-[color:var(--gooze-teal)]">{crumb.label}</a> : <span data-slot="breadcrumb-page" role="link" aria-disabled="true" aria-current="page" class="font-normal text-foreground truncate">{crumb.label}</span>}</li>
+    </Fragment>
+  )
+})}</ol></nav>

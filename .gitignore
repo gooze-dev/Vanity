@@ -13,8 +13,8 @@
 # testing
 /coverage
 
-# next.js
-/.next/
+# astro
+/.astro/
 /out/
 
 # production
@@ -33,12 +33,8 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
-# vercel
-.vercel
-
 # typescript
 *.tsbuildinfo
-next-env.d.ts
 
 # local SEO sprint scratch notes (not part of the product)
 /todo.md

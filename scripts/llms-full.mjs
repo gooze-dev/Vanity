@@ -1,9 +1,9 @@
 // Writes out/llms-full.txt: the full text of every docs page as Markdown, in
-// the same order as out/llms.txt. Runs after `next build` and reads the
+// the same order as out/llms.txt. Runs after `astro build` and reads the
 // exported HTML, so it always matches what is published.
 //
-// Plain .mjs with no dependencies on purpose: CI builds with Node 20, which
-// can't import the TypeScript page registry directly.
+// Plain .mjs with no dependencies on purpose: it needs no build step and only
+// reads the published HTML.
 import { readFileSync, writeFileSync, existsSync } from "node:fs"
 import { join } from "node:path"
 
@@ -36,7 +36,8 @@ function decode(text) {
   })
 }
 
-const stripTags = (html) => decode(html.replace(/<[^>]+>/g, ""))
+// Only real tags: a "<" in code, such as `if n < lo`, is text.
+const stripTags = (html) => decode(html.replace(/<(?:\/?[a-z!][^>]*)>/gi, ""))
 
 function articleHtml(html) {
   const start = html.search(/<article[^>]*id="docs-content"/)
@@ -61,8 +62,27 @@ function tableToMarkdown(table) {
   return `\n\n${[line(rows[0]), line(rows[0].map(() => "---")), ...rows.slice(1).map(line)].join("\n")}\n\n`
 }
 
+// Astro writes ">" unescaped, in text and in attribute values (Tailwind classes
+// such as has-[>svg]), which would end a tag early for the patterns below. It
+// also keeps a page source's line breaks; outside <pre> they are only spacing.
+function normalize(html) {
+  const parts = html.split(/(<[a-z](?:[^>"]|"[^"]*")*>|<\/[^>]+>|<!--[\s\S]*?-->)/gi)
+  let pre = 0
+  return parts
+    .map((part, index) => {
+      if (index % 2 === 1) {
+        if (/^<pre\b/i.test(part)) pre++
+        if (/^<\/pre>/i.test(part)) pre--
+        return part.replace(/"[^"]*"/g, (value) => value.replace(/>/g, "&gt;"))
+      }
+      const text = part.replace(/>/g, "&gt;")
+      return pre > 0 ? text : text.replace(/\s*\n\s*/g, " ")
+    })
+    .join("")
+}
+
 function toMarkdown(html) {
-  let s = html
+  let s = normalize(html)
     .replace(/<(script|style|svg|button|template)\b[\s\S]*?<\/\1>/gi, "")
     .replace(/<table\b[\s\S]*?<\/table>/gi, tableToMarkdown)
     // Code blocks: one element per line, so start a new line at each one.

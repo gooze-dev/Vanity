@@ -1,0 +1,6 @@
+---
+import { cn } from "@/lib/utils"
+
+const { class: className, ...props } = Astro.props
+---
+<th data-slot="table-head" class={cn("h-12 px-3 text-left align-middle font-medium text-foreground [&:has([role=checkbox])]:pr-0", className)} {...props}><slot /></th>

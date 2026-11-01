@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# gooze.dev
 
-## Getting Started
+The Gooze website and docs, built with [Astro](https://astro.build) as a fully static site. It also serves the Go vanity import paths `gooze.dev/pkg/gooze` and `gooze.dev/pkg/goozels`: `go get` reads the `go-import` and `go-source` meta tags on the pages in `src/pages/pkg/`.
 
-First, run the development server:
+## Getting started
+
+You need Node.js 22.23.4 or newer.
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:4321](http://localhost:4321). Pages live in `src/pages/`, and the docs structure in `src/lib/docs-pages.ts`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build and checks
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build     # writes the site to out/
+npm run preview   # serves out/ locally
+npm run lint      # eslint and astro check
+npm run seo:audit # checks the SEO rules on out/, after a build
+```
 
-## Learn More
+## Deploy
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`.github/workflows/pages.yml` publishes `out/` to GitHub Pages when a `v*` tag is pushed, so merging to main doesn't go live until a release. The workflow can also be run by hand.

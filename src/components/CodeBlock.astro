@@ -1,0 +1,68 @@
+---
+import CodeBlockCopyButton from "@/components/CodeBlockCopyButton.astro"
+import { highlightCode } from "@/lib/highlighter"
+import { codeBlockVariants } from "@/lib/variants"
+import { cn } from "@/lib/utils"
+
+type Props = {
+  code: string
+  lang: string
+  /** File name or label shown in a header row, e.g. ".github/workflows/gooze.yml". */
+  title?: string
+  /** 1-based line numbers to call out. */
+  highlight?: number[]
+  lineNumbers?: boolean
+  class?: string
+}
+
+const { code, lang, title, highlight = [], lineNumbers = false, class: className } = Astro.props
+
+// Diff examples mark lines with a leading "+" or "-"; show them as added and
+// removed lines instead of plain text.
+function lineVariant(line: string, highlighted: boolean) {
+  if (lang === "diff") {
+    if (line.startsWith("+")) return "added"
+    if (line.startsWith("-")) return "removed"
+  }
+  return highlighted ? "highlighted" : "default"
+}
+
+function escapeHtml(text: string) {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+}
+
+// Shiki runs at build time, so pages ship highlighted HTML in both the light
+// and dark themes and no highlighter JavaScript.
+const raw = code.trimEnd()
+const lines = raw.split("\n")
+const highlighted = (await highlightCode(raw, lang)) ?? lines.map(escapeHtml)
+
+// One-line commands: a compact row with the copy button always visible,
+// instead of a padded block whose button only shows on hover.
+const compact = lines.length === 1 && !title && !lineNumbers
+
+// An empty line holds a newline so copying a selection keeps blank lines. The
+// lines go in as one string: whitespace in a <pre> is visible.
+const body = highlighted
+  .map((content, index) => {
+    const variant = compact ? "default" : lineVariant(lines[index] ?? "", highlight.includes(index + 1))
+    return `<span data-slot="code-block-line" data-variant="${variant}"><span data-slot="code-block-line-content">${content || "\n"}</span></span>`
+  })
+  .join("")
+
+const preClass = "min-h-0 min-w-0 scroll-fade-x scrollbar-thin overflow-auto px-5 py-5 text-start font-mono leading-relaxed outline-none group-has-data-[slot=code-block-footer]/code-block:pb-2 group-has-data-[slot=code-block-header]/code-block:pt-2 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:py-3 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5 data-wrap:scroll-fade-y data-wrap:wrap-break-word data-wrap:whitespace-pre-wrap"
+const codeClass = "grid min-h-lh min-w-max content-start in-data-numbered:grid-cols-[auto_1fr] in-data-wrap:min-w-0"
+const actionsClass = "-my-1 ms-auto -me-1.5 flex shrink-0 items-center gap-1 *:data-[slot=button]:hover:bg-foreground/5 dark:*:data-[slot=button]:hover:bg-foreground/10 [[data-slot=code-block]>&]:absolute [[data-slot=code-block]>&]:end-4 [[data-slot=code-block]>&]:top-4 [[data-slot=code-block]>&]:z-10 [[data-slot=code-block]>&]:m-0 [[data-slot=code-block]>&]:opacity-0 [[data-slot=code-block]>&]:transition-opacity [[data-slot=code-block]>&]:group-focus-within/code-block:opacity-100 [[data-slot=code-block]>&]:group-hover/code-block:opacity-100 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-2 [[data-slot=code-block]>&]:pointer-coarse:opacity-100 [[data-slot=code-block]>&]:*:[button]:bg-background [[data-slot=code-block]>&]:*:[button]:ring-1 [[data-slot=code-block]>&]:*:[button]:ring-foreground/10"
+---
+<div data-slot="code-block" data-variant="default" data-size="default" class={cn(codeBlockVariants({ variant: "default" }), compact && "flex-row items-center", className)}>
+  {title ? (
+    <div data-slot="code-block-header" class="flex min-w-0 shrink-0 items-center gap-2 px-5 pt-5 text-muted-foreground group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pt-3 group-data-[variant=destructive]/code-block:text-destructive *:has-[>[data-slot=code-block-title]]:min-w-0">
+      <div data-slot="code-block-title" class="min-w-0 truncate font-sans text-sm font-medium text-foreground group-data-[size=sm]/code-block:text-xs group-data-[variant=destructive]/code-block:text-destructive [&_svg]:pointer-events-none [&_svg]:inline-block [&_svg]:align-middle [&_svg:not([class*='size-'])]:size-4 group-data-[size=sm]/code-block:[&_svg:not([class*='size-'])]:size-3.5 *:[svg]:me-1.5">{title}</div>
+      <div data-slot="code-block-actions" class={actionsClass}><CodeBlockCopyButton /></div>
+    </div>
+  ) : !compact && (
+    <div data-slot="code-block-actions" class={actionsClass}><CodeBlockCopyButton /></div>
+  )}
+  <pre data-slot="code-block-content" data-numbered={lineNumbers || undefined} dir="ltr" tabindex="0" style="counter-reset:line 0" class={cn(preClass, compact && "min-w-0 flex-auto py-3")}><code data-slot="code-block-code" class={codeClass} set:html={body} /></pre>
+  {compact && <CodeBlockCopyButton class="me-2 shrink-0" />}
+</div>

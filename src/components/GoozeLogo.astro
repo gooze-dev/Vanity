@@ -1,0 +1,11 @@
+---
+import { cn } from "@/lib/utils"
+
+const { class: className, variant = "split", letterSpacing = "-0.02em" } = Astro.props
+const style = { "font-family": "var(--font-oxanium)", "letter-spacing": letterSpacing }
+---
+{variant === "gradient" ? (
+  <span class={cn("inline-flex items-baseline font-extrabold bg-gradient-to-r from-[color:var(--gooze-green)] to-[color:var(--gooze-teal)] bg-clip-text text-transparent", className)} style={style}>Gooze</span>
+) : (
+  <span class={cn("inline-flex items-baseline font-extrabold", className)} style={style}><span style={{ color: "var(--gooze-green)" }}>Go</span><span style={{ color: "var(--gooze-teal)" }}>oze</span></span>
+)}

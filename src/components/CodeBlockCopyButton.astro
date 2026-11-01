@@ -1,0 +1,42 @@
+---
+import Icon from "@/components/Icon.astro"
+import Button from "@/components/ui/Button.astro"
+import { cn } from "@/lib/utils"
+
+const { class: className } = Astro.props
+---
+<Button data-slot="code-block-copy-button" variant="ghost" size="icon-xs" aria-label="Copy" type="button" class={cn("hover:bg-foreground/5 dark:hover:bg-foreground/10", className)}><Icon name="copy" data-copy-icon /><Icon name="check" data-check-icon class="hidden" /></Button><span aria-live="polite" class="sr-only"></span>
+
+<script>
+  // The only interactive part of a code block. One delegated listener; the text
+  // comes from the rendered lines, so the code isn't in the HTML twice.
+  document.addEventListener("click", (event) => {
+    const button = (event.target as Element).closest<HTMLButtonElement>('[data-slot="code-block-copy-button"]')
+    if (!button) return
+    const block = button.closest('[data-slot="code-block"]')
+    if (!block) return
+    const value = Array.from(block.querySelectorAll('[data-slot="code-block-line"]'))
+      .map((line) => (line.textContent === "\n" ? "" : line.textContent))
+      .join("\n")
+    navigator.clipboard
+      .writeText(value)
+      .then(() => {
+        const status = button.nextElementSibling
+        const copy = button.querySelector("[data-copy-icon]")
+        const check = button.querySelector("[data-check-icon]")
+        button.dataset.copied = "true"
+        button.setAttribute("aria-label", "Copied")
+        copy?.classList.add("hidden")
+        check?.classList.remove("hidden")
+        if (status) status.textContent = "Copied"
+        window.setTimeout(() => {
+          delete button.dataset.copied
+          button.setAttribute("aria-label", "Copy")
+          copy?.classList.remove("hidden")
+          check?.classList.add("hidden")
+          if (status) status.textContent = ""
+        }, 2000)
+      })
+      .catch(() => {})
+  })
+</script>

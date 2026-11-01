@@ -1,0 +1,156 @@
+---
+import { ClientRouter } from "astro:transitions"
+import geistSans from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url"
+import geistMono from "@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2?url"
+import oxanium from "@fontsource-variable/oxanium/files/oxanium-latin-wght-normal.woff2?url"
+import "@fontsource-variable/geist/index.css"
+import "@fontsource-variable/geist-mono/index.css"
+import "@fontsource-variable/oxanium/index.css"
+import "@/styles/globals.css"
+import {
+  absoluteUrl,
+  googleBotContent,
+  robotsContent,
+  siteDescription,
+  siteMetadata,
+  type Metadata,
+} from "@/lib/metadata"
+import { getSoftwareVersion } from "@/lib/version"
+
+type Props = { metadata?: Metadata }
+
+// A page's fields replace the site-wide ones field by field (lib/metadata.ts).
+const meta: Metadata = { ...siteMetadata, ...Astro.props.metadata }
+const { openGraph: og, twitter } = meta
+
+// `go get` reads go-import and go-source from these tags, so they stay byte
+// for byte what the Go toolchain has always been served: self-closed and
+// unescaped ({/dir} and #L{line} are literal). Written as raw HTML because
+// Astro would drop the "/".
+const otherTags = Object.entries(meta.other ?? {})
+  .map(([name, content]) => `<meta name="${name}" content="${content}"/>`)
+  .join("")
+
+// Structured data so search engines can render a rich result for the tool and
+// its publisher. Kept truthful: only fields we can stand behind.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      name: "Gooze",
+      description: siteDescription,
+      url: "https://gooze.dev/",
+      applicationCategory: "DeveloperApplication",
+      operatingSystem: "Linux, macOS, Windows",
+      programmingLanguage: "Go",
+      softwareVersion: await getSoftwareVersion(),
+      license: "https://opensource.org/licenses/MIT",
+      codeRepository: "https://github.com/gooze-dev/gooze",
+      sameAs: ["https://github.com/gooze-dev/gooze"],
+      featureList: [
+        "gooze.yaml config file with environment variable overrides",
+        "Incremental cache: re-tests only changed files",
+        "Sharding across CI jobs with report merge",
+        "Shared baselines via OCI registries",
+        "Coverage-profile gate for uncovered lines",
+        "//gooze:ignore directives",
+        "Interactive TUI report viewer",
+        "Editor integration via the goozels language server",
+        "Claude Code plugin (beta) with mutation results after each Go file edit",
+      ],
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    },
+    {
+      "@type": "WebSite",
+      name: "Gooze",
+      url: "https://gooze.dev/",
+      description: siteDescription,
+    },
+  ],
+}
+---
+<!doctype html>
+<html lang="en" transition:animate="none">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {[geistSans, geistMono, oxanium].map((href) => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin="" />)}
+    {meta.refresh && <meta http-equiv="refresh" content={`0;url=${meta.refresh}`} />}
+    <title>{meta.title?.absolute}</title>
+    {meta.description && <meta name="description" content={meta.description} />}
+    <meta name="application-name" content="Gooze" />
+    <meta name="author" content="Gooze" />
+    {meta.keywords && <meta name="keywords" content={meta.keywords.join(",")} />}
+    <meta name="creator" content="Gooze" />
+    <meta name="publisher" content="Gooze" />
+    {meta.robots && <meta name="robots" content={robotsContent(meta.robots)} />}
+    {meta.robots?.googleBot && <meta name="googlebot" content={googleBotContent(meta.robots.googleBot)} />}
+    <meta name="category" content="Developer Tools" />
+    <Fragment set:html={otherTags} />
+    {meta.alternates && <link rel="canonical" href={absoluteUrl(meta.alternates.canonical)} />}
+    <meta name="format-detection" content="telephone=no, email=no" />
+    {og && (
+      <Fragment>
+        <meta property="og:title" content={og.title} />
+        <meta property="og:description" content={og.description} />
+        <meta property="og:url" content={og.url} />
+        <meta property="og:site_name" content={og.siteName} />
+        {og.locale && <meta property="og:locale" content={og.locale} />}
+        {og.images.map((image) => (
+          <Fragment>
+            <meta property="og:image" content={absoluteUrl(image.url)} />
+            {image.width && <meta property="og:image:width" content={String(image.width)} />}
+            {image.height && <meta property="og:image:height" content={String(image.height)} />}
+            {image.alt && <meta property="og:image:alt" content={image.alt} />}
+            {image.type && <meta property="og:image:type" content={image.type} />}
+          </Fragment>
+        ))}
+        <meta property="og:type" content={og.type} />
+      </Fragment>
+    )}
+    {twitter && (
+      <Fragment>
+        <meta name="twitter:card" content={twitter.card} />
+        <meta name="twitter:title" content={twitter.title} />
+        <meta name="twitter:description" content={twitter.description} />
+        {twitter.images.map((image) => (
+          <Fragment>
+            <meta name="twitter:image" content={absoluteUrl(image.url)} />
+            {image.alt && <meta name="twitter:image:alt" content={image.alt} />}
+          </Fragment>
+        ))}
+      </Fragment>
+    )}
+    <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.ico`} sizes="48x48" type="image/x-icon" />
+    <link rel="icon" href={`${import.meta.env.BASE_URL}icon.svg`} sizes="any" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={`${import.meta.env.BASE_URL}apple-icon.png`} sizes="180x180" type="image/png" />
+    {/* Applies the stored theme before the first paint, and again after a client
+        navigation replaces the <html> attributes. It stays after the meta tags and
+        holds no "<": `go get` parses this head with an XML decoder. */}
+    <script is:inline>
+      (function () {
+        const applyTheme = function () {
+          try {
+            const theme = localStorage.getItem("theme") || "system"
+            const dark = matchMedia("(prefers-color-scheme: dark)").matches
+            const resolved = theme === "system" ? (dark ? "dark" : "light") : theme
+            document.documentElement.classList.add(resolved)
+            document.documentElement.style.colorScheme = resolved
+          } catch {
+            // No stored theme: the page stays light.
+          }
+        }
+        applyTheme()
+        document.addEventListener("astro:after-swap", applyTheme)
+      })()
+    </script>
+    {/* Client navigation keeps the docs sidebar and running animations in place,
+        with no cross-fade: pages change instantly, as they always have. */}
+    <ClientRouter />
+  </head>
+  <body class="antialiased">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <slot />
+  </body>
+</html>

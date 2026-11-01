@@ -1,0 +1,15 @@
+---
+import DocsRedirect from "@/components/DocsRedirect.astro"
+import DocsLayout from "@/layouts/DocsLayout.astro"
+import { redirectMetadata } from "@/lib/metadata"
+
+const TITLE = "GitLab CI"
+
+const TO = "/docs/ci/gitlab/"
+
+
+const metadata = redirectMetadata(TITLE, TO)
+---
+<DocsLayout metadata={metadata}>
+    <DocsRedirect title={TITLE} to={TO} />
+</DocsLayout>

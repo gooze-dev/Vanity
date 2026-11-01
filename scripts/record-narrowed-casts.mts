@@ -54,7 +54,7 @@ function addCase(after: string, testCase: string) {
 onExit(() => rmSync(work, { recursive: true, force: true }))
 mkdirSync(casts, { recursive: true })
 
-// --- Git diff mode (app/docs/usage/diff-mode) ---------------------------
+// --- Git diff mode (src/pages/docs/usage/diff-mode) ---------------------------
 // main: calc.go and the starting tests, with a full run as the baseline.
 // Branch boundary-tests: adds the two boundary tests.
 freshCalc(work)
@@ -78,7 +78,7 @@ rmSync(".git", { recursive: true, force: true })
 rmSync(".gitignore", { force: true })
 rec("diff-no-repo", "gooze run --diff main ./... 2>&1 | cat")
 
-// --- One function at a time (app/docs/usage/single-function) ------------
+// --- One function at a time (src/pages/docs/usage/single-function) ------------
 // calc grows a second function, Percent, below InRange (lines 10 and 13
 // don't move), with a test that kills all of its mutants.
 freshCalc(work)

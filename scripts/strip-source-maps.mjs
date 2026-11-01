@@ -1,7 +1,7 @@
-// Deletes source maps from the static export. Next copies a prebuilt map for
-// the legacy polyfill chunk into out/ even with productionBrowserSourceMaps
-// off; no script references it (no sourceMappingURL), so removing it cannot
-// break the site. Fails the build if a map is still referenced somewhere.
+// Deletes any source map from the static build, so none is ever published even
+// if a dependency ships one. No script may reference a map (no
+// sourceMappingURL), so removing them cannot break the site. Fails the build if
+// a map is still referenced somewhere.
 import { readdirSync, readFileSync, rmSync } from "node:fs"
 import { join } from "node:path"
 

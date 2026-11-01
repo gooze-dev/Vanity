@@ -1,0 +1,83 @@
+---
+import Icon from "@/components/Icon.astro"
+import { cn } from "@/lib/utils"
+
+// Built in the browser from the article's h2s; stays hidden on pages with fewer
+// than two sections.
+const { collapsible = false, class: className } = Astro.props
+---
+{collapsible ? (
+  <details data-toc hidden class={cn("group rounded-lg border px-4 py-3 text-sm", className)}>
+    <summary class="flex cursor-pointer list-none items-center justify-between font-medium [&::-webkit-details-marker]:hidden">On this page<Icon name="chevron-right" class="h-4 w-4 text-[color:var(--gooze-teal)] transition-transform group-open:rotate-90" /></summary>
+    <div class="mt-3"><ul data-toc-list class="space-y-2 border-l"></ul></div>
+  </details>
+) : (
+  <nav data-toc hidden aria-label="On this page" class={cn("text-sm", className)}>
+    <p class="mb-3 font-medium">On this page</p>
+    <ul data-toc-list class="space-y-2 border-l"></ul>
+  </nav>
+)}
+
+<script>
+  import { headingId } from "@/lib/heading-id"
+
+  const LINK_CLASS =
+    "-ml-px block border-l py-0.5 pl-3 leading-snug text-muted-foreground transition-colors hover:text-foreground"
+  const ACTIVE_CLASS = "border-[color:var(--gooze-teal)] text-foreground"
+  const INACTIVE_CLASS = "border-transparent"
+
+  let observer: IntersectionObserver | undefined
+
+  document.addEventListener("astro:page-load", () => {
+    observer?.disconnect()
+    const article = document.getElementById("docs-content")
+    const headings = article ? Array.from(article.querySelectorAll<HTMLHeadingElement>("h2")) : []
+
+    if (headings.length >= 2) {
+      const entries = headings.map((heading, index) => ({
+        id: headingId(heading, index),
+        text: heading.textContent ?? "",
+      }))
+
+      const links: HTMLAnchorElement[] = []
+      for (const toc of document.querySelectorAll<HTMLElement>("[data-toc]")) {
+        const list = toc.querySelector("[data-toc-list]")
+        list?.replaceChildren()
+        for (const entry of entries) {
+          const link = document.createElement("a")
+          link.href = `#${entry.id}`
+          link.textContent = entry.text
+          link.dataset.tocTarget = entry.id
+          const item = document.createElement("li")
+          item.append(link)
+          list?.append(item)
+          links.push(link)
+        }
+        toc.hidden = false
+      }
+
+      const setActive = (id: string) => {
+        for (const link of links) {
+          const state = link.dataset.tocTarget === id ? ACTIVE_CLASS : INACTIVE_CLASS
+          link.className = `${LINK_CLASS} ${state}`
+        }
+      }
+      setActive(entries[0].id)
+
+      const visible = new Set<HTMLHeadingElement>()
+      observer = new IntersectionObserver(
+        (observed) => {
+          for (const entry of observed) {
+            const target = entry.target as HTMLHeadingElement
+            if (entry.isIntersecting) visible.add(target)
+            else visible.delete(target)
+          }
+          const first = headings.findIndex((heading) => visible.has(heading))
+          if (first !== -1) setActive(entries[first].id)
+        },
+        { rootMargin: "-80px 0px -60% 0px" },
+      )
+      headings.forEach((heading) => observer?.observe(heading))
+    }
+  })
+</script>
