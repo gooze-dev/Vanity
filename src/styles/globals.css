@@ -8,9 +8,9 @@
    named sizes and radii are remapped onto the scale, so text-4xl is the 40px h1
    and rounded-lg the 14px card radius. */
 @theme static {
-  --font-sans: "Geist Variable", Geist, system-ui, sans-serif;
-  --font-mono: "Geist Mono Variable", "Geist Mono", ui-monospace, monospace;
-  --font-display: "Oxanium Variable", Oxanium, "Geist Variable", Geist, system-ui, sans-serif;
+  --font-sans: Geist, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+  --font-display: Oxanium, Geist, system-ui, sans-serif;
 }
 
 @theme {

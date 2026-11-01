@@ -20,9 +20,6 @@
     "record:threshold-casts": "node scripts/record-threshold-casts.mts"
   },
   "dependencies": {
-    "@fontsource-variable/geist": "^5.3.0",
-    "@fontsource-variable/geist-mono": "^5.3.0",
-    "@fontsource-variable/oxanium": "^5.3.0",
     "@tailwindcss/vite": "4.1.18",
     "asciinema-player": "3.17.0",
     "astro": "^7.4.4",

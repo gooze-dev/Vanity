@@ -78,7 +78,7 @@ export const siteMetadata: Metadata = {
         url: `${SITE_URL}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: "Gooze: mutation testing for Go",
+        alt: "Gooze: Test your tests. Mutation testing for Go.",
         type: "image/png",
       },
     ],
@@ -94,7 +94,7 @@ export const siteMetadata: Metadata = {
     images: [
       {
         url: `${SITE_URL}/og-image.png`,
-        alt: "Gooze: mutation testing for Go",
+        alt: "Gooze: Test your tests. Mutation testing for Go.",
       },
     ],
   },
