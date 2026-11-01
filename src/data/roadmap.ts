@@ -27,6 +27,7 @@ export const laterThemes = {
 
 export const nextCards = [
   { id: "custom-mutators", title: "Custom mutator plugins", detail: "Adding an operator to Gooze itself is one small function, and caching, sharding, and reporting work with it unchanged. A plugin API for your own operators is planned." },
+  { id: "config", title: "Config show and consistent keys", detail: "`gooze config show` and snake_case key names are built and ship in the next release. The old key names keep working with a warning." },
   { id: "build-tags", title: "Build tags", detail: "Passing `-tags` through to `go test` is planned, so files behind build constraints get mutated too." },
   { id: "exec", title: "Custom test runner", detail: "Gooze runs `go test` on the package that owns each mutated file; plugging in your own test command is planned." },
   { id: "agents", title: "Codex and opencode", detail: "Support for Codex and opencode is on the way: their setups exist and are being verified with each agent." },
@@ -135,15 +136,15 @@ export const roadmap: RoadmapItem[] = [
   {
     name: "Config show",
     area: "core",
-    milestone: "later",
-    theme: "configuration",
+    milestone: "next",
+    card: "config",
     description: "`gooze config show` prints every key with its effective value, where it came from, and its env var.",
   },
   {
     name: "Consistent config keys",
     area: "core",
-    milestone: "later",
-    theme: "configuration",
+    milestone: "next",
+    card: "config",
     description: "One naming style for every key and flag, with the old names kept as deprecated aliases for a release.",
   },
   {
@@ -201,16 +202,16 @@ export const roadmap: RoadmapItem[] = [
   {
     name: "Assignment operators",
     area: "operators",
-    milestone: "later",
-    theme: "operators",
-    description: "`+=` and `-=`, `*=` and `/=`, and the other compound assignments. Today only binary `+ - * / %` expressions are mutated.",
+    milestone: "shipped",
+    description: "`+=` and `-=`, `*=` and `/=`, and the other compound assignments, in the default mutagens.",
+    docs: "/docs/mutations",
   },
   {
     name: "Increment and decrement",
     area: "operators",
-    milestone: "later",
-    theme: "operators",
-    description: "`i++` to `i--` and back.",
+    milestone: "shipped",
+    description: "`i++` to `i--` and back, in the default mutagens, except in a `for` loop's post statement.",
+    docs: "/docs/mutations",
   },
   {
     name: "Index and slice bounds",
