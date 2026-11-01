@@ -229,15 +229,13 @@
     line-height: 1;
     text-transform: lowercase;
   }
-  /* The colour lives in the ink tile beside it; the wordmark stays readable. */
+  /* One blue for the mark's "<" and "go" in both themes. Logos are exempt from
+     text contrast; links and body text use --accent. */
   .gz-wordmark .go {
-    color: var(--accent);
+    color: var(--brand-gopher);
   }
   .gz-wordmark .oze {
     color: var(--fg);
-  }
-  [data-theme="dark"] .gz-wordmark .go {
-    color: var(--brand-gopher);
   }
   [data-theme="dark"] .gz-wordmark .oze {
     color: var(--brand-toxic);

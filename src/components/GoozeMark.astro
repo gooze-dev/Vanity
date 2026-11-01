@@ -1,11 +1,11 @@
 ---
-import iconDark from "@/assets/logo/gooze-icon-dark.svg"
 import colorMark from "@/assets/logo/gooze-mark.svg"
+import lightMark from "@/assets/logo/gooze-mark-light.svg"
 import { cn } from "@/lib/utils"
 
-// The mark alone: colour on dark, the colour mark on its ink tile on light.
+// The mark alone: colour on dark, the same bare mark with an ink bar on light.
 const { class: className } = Astro.props
 const ColorMark = colorMark
-const IconDark = iconDark
+const LightMark = lightMark
 ---
-<ColorMark class={cn("hidden dark:block", className)} aria-hidden="true" /><IconDark class={cn("dark:hidden", className)} aria-hidden="true" />
+<ColorMark class={cn("hidden dark:block", className)} aria-hidden="true" /><LightMark class={cn("dark:hidden", className)} aria-hidden="true" />
