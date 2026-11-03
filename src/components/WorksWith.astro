@@ -2,11 +2,12 @@
 import PartnerLogo from "@/components/PartnerLogo.astro"
 
 // Where Gooze runs: official-logo chips linking to their docs. Tools still to come
-// follow the shipped ones as dashed chips that are shown but never clickable.
+// follow the shipped ones as dashed chips that are shown but never clickable;
+// one without an official logo file shows its name only.
 const groups = [
   { label: "Agents", items: [
     { name: "Claude Code", logo: "claude", href: "/docs/claude-code/" },
-    { name: "Codex", logo: "codex" },
+    { name: "Codex" },
     { name: "opencode", logo: "opencode" },
   ] },
   { label: "CI", items: [
@@ -26,7 +27,7 @@ const groups = [
         <dt>{group.label}</dt>
         <dd>{group.items.map((item) => "href" in item
           ? <a href={item.href} class="gz-works__name"><PartnerLogo name={item.logo} />{item.name}</a>
-          : <span class="gz-works__name gz-works__name--soon" aria-disabled="true"><PartnerLogo name={item.logo} />{item.name}<span class="soon">Coming soon</span></span>)}</dd>
+          : <span class="gz-works__name gz-works__name--soon" aria-disabled="true">{"logo" in item && <PartnerLogo name={item.logo} />}{item.name}<span class="soon">Coming soon</span></span>)}</dd>
       </div>
     ))}
 </dl>

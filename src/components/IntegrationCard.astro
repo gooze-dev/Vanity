@@ -10,7 +10,7 @@ const { name, kind, status, href, icon = "terminal", logo, command } = Astro.pro
   status: "Available" | "Beta" | "Coming soon"
   href?: string
   icon?: "terminal" | "workflow"
-  logo?: "claude" | "github" | "github-actions" | "gitlab" | "vscode" | "neovim" | "goland" | "opencode" | "codex"
+  logo?: "claude" | "github" | "github-actions" | "gitlab" | "vscode" | "neovim" | "goland" | "opencode"
   command?: string
 }
 const tag = { Available: "gz-tag--available", Beta: "gz-tag--beta", "Coming soon": "gz-tag--soon" }[status]
