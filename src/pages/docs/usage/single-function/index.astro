@@ -48,7 +48,7 @@ const faqs = [
   },
   {
     q: "Why does a `--run` run print `no mutations`?",
-    a: "The file has stored results in the main reports and neither it nor its package's test files changed, so the run skips it. Change a test file, or pass `--no-cache` to test the function anyway.",
+    a: "In `v1.4.1` and earlier: the file has stored results in the main reports and neither it nor its package's test files changed, so the run skips it and scores nothing. Change a test file, or pass `--no-cache` to test the function anyway. In `v1.5.0+`, the run still skips the file but scores its stored results of the selection as cached.",
   },
   {
     q: "Which names does `--mutagens` accept?",
@@ -139,7 +139,9 @@ const faqJsonLd = faqPageJsonLd(faqs)
               results replace only the matching mutations, and the file stays complete.</li>
             <li><strong>Changed or new file:</strong> the run&apos;s results replace all of the
               file&apos;s results. If the run tested only part of the file, the file is marked
-              partial, and the next full <code>gooze run</code> re-tests it in full.</li>
+              partial, and the next full <code>gooze run</code> re-tests it in full. In{" "}<code>v1.5.0+</code>, a <code>--mutagens</code> run alone doesn&apos;t make a file
+              partial: if the file hasn&apos;t changed since, the next full run tests only the other
+              mutagens&apos; mutants.</li>
           </ul>
           <p>Here <code>calc_test.go</code> changed, so <code>calc.go</code> is now partial: the
             report has the 13 results of <code>InRange</code>, and <code>Percent</code>&apos;s
@@ -158,6 +160,11 @@ const faqJsonLd = faqPageJsonLd(faqs)
           <Recording name="calc-func-cached-run" title="Recorded last lines of gooze run --run '^InRange$' with nothing changed" />
           <p>That&apos;s why the loop starts with a new test: changing the test file is what puts
             the function back in the run. To test it without a change, add{" "}<code>--no-cache</code>.</p>
+          <p>In <code>v1.5.0+</code>, a skipped file still counts. The run scores the stored
+            results its selection picks as cached, saves them to <code>run/</code>, and checks the
+            gates and <code>--fail-fast</code> with them. Before, a run with everything cached
+            printed <code>100.00%</code> and passed its gate even when the selection had
+            survivors.</p>
         </div>
         <div id="matching">
           <h2>How --run matches functions</h2>
@@ -205,7 +212,9 @@ const faqJsonLd = faqPageJsonLd(faqs)
           <ul>
             <li>Its reports go to a fresh <code>&lt;output&gt;/run/</code> (by default{" "}<code>.gooze-reports/run/</code>), or <code>run/shard_N</code> when sharded. It
               never changes the main reports.</li>
-            <li>It uses the main reports as its cache: an unchanged file is skipped,{" "}<code>--no-cache</code> tests it anyway, and editing its test file makes it re-test.</li>
+            <li>It uses the main reports as its cache: an unchanged file is skipped,{" "}<code>--no-cache</code> tests it anyway, and editing its test file makes it re-test.
+              In <code>v1.5.0+</code>, the skipped file&apos;s stored results of the selection are
+              scored as cached (see <a href="#cache">above</a>).</li>
             <li>Its score covers only the selection and names it at the end of the line, followed
               by a line that points to <code>run/</code> and <code>gooze report merge</code>.</li>
             <li><code>gooze report view -o .gooze-reports/run</code> shows its results and

@@ -230,7 +230,7 @@ const sarif = `  merge:
 const faqs = [
   {
     q: "How do I run Gooze mutation tests in GitHub Actions?",
-    a: "In a `golang:1.27` container, install the CLI with `go install gooze.dev/pkg/gooze@latest` and run `gooze run ./...`. There is no dedicated action; the plain `go install` step is the supported approach.",
+    a: "In a `golang:1.27` container, install the CLI with `go install gooze.dev/pkg/gooze@latest` and run `gooze run ./...`. There is no dedicated action; the plain `go install` step is the supported approach. If your module pins Gooze as a tool in `go.mod`, run `go tool gooze run ./...` instead.",
   },
   {
     q: "How do I shard Gooze across multiple GitHub Actions runners?",
@@ -279,6 +279,7 @@ const metadata = docsMetadata("/docs/ci/github")
             start, the job log ends with the same line you saw locally:</p>
           <CodeBlock lang="yaml" code={simple} />
           <Recording name="calc-first-run" title="Recorded last line of the first gooze run on calc" />
+          <p>If you pinned Gooze in <code>go.mod</code> with{" "}<a href="/docs/install/#go-tool"><code>go get -tool</code></a>, drop the install step and run{" "}<code>go tool gooze</code> in place of <code>gooze</code>.</p>
           <p>The job passes even with those two survivors, because no threshold is set. The{" "}<a href="#gate">quality gate</a> below fixes that. First, a bigger module needs the
             run split up.</p>
         </div>

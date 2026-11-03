@@ -9,7 +9,7 @@ const metadata = docsMetadata("/docs/cli/config")
 <DocsLayout metadata={metadata}>
     <section>
       <h1 class="mt-0 text-4xl font-bold tracking-tight mb-4">gooze config</h1>
-      <p class="gz-prose gz-prose--lead mb-8">You&apos;re setting up Gooze in a repo and want a config file to start from.{" "}<code>gooze config</code> manages configuration; today the only subcommand is{" "}<code>init</code>, which generates a starter config file.</p>
+      <p class="gz-prose gz-prose--lead mb-8">You&apos;re setting up Gooze in a repo and want a config file to start from.{" "}<code>gooze config</code> manages configuration: <code>init</code> generates a starter config file, and{" "}<code>show</code> and <code>schema</code> (<code>v1.5.0+</code>) print the effective settings and the file&apos;s schema.</p>
       <div>
         <div id="usage">
           <h2>Usage</h2>
@@ -41,7 +41,7 @@ const metadata = docsMetadata("/docs/cli/config")
         </div>
         <div id="show">
           <h2>gooze config show</h2>
-          <p>A value isn&apos;t what you expected, and you want to know which setting won. This command
+          <p>Available in <code>v1.5.0+</code>. A value isn&apos;t what you expected, and you want to know which setting won. This command
             prints every config key with its effective value, where that value comes from
             (<code>flag</code>, <code>env</code>, <code>gooze.yaml</code> or <code>default</code>) and its environment variable.</p>
           <CodeBlock lang="bash" code="gooze config show" />
@@ -49,7 +49,7 @@ const metadata = docsMetadata("/docs/cli/config")
         </div>
         <div id="schema">
           <h2>gooze config schema</h2>
-          <p>Your editor can validate and complete <code>gooze.yaml</code> if it has the file&apos;s schema.
+          <p>Available in <code>v1.5.0+</code>. Your editor can validate and complete <code>gooze.yaml</code> if it has the file&apos;s schema.
             This command prints it as JSON Schema, so save it and point your editor at the file,
             for example through <code>yaml-language-server</code>.</p>
           <CodeBlock lang="bash" code="gooze config schema > gooze.schema.json" />
