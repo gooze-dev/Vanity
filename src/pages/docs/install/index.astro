@@ -21,7 +21,7 @@ const faqs = [
   },
   {
     q: "Can I pin Gooze in `go.mod` and run it with `go tool`?",
-    a: "Yes. Run `go get -tool gooze.dev/pkg/gooze@v1.4.1`, then `go tool gooze run ./...`. It raises your module's `go` line to `1.27.3` and adds about 55 indirect requirements to `go.mod`.",
+    a: "Yes. Run `go get -tool gooze.dev/pkg/gooze@v1.4.2`, then `go tool gooze run ./...`. It raises your module's `go` line to `1.27.3` and adds about 55 indirect requirements to `go.mod`.",
   },
   {
     q: "How do I verify Gooze is installed correctly?",
@@ -73,7 +73,7 @@ const faqJsonLd = faqPageJsonLd(faqs)
           <h2>Pin Gooze in go.mod (go tool)</h2>
           <p>You want everyone on the team, and CI, to run the same Gooze version without a
             separate install step. Add it to your module as a tool (this needs Go 1.24 or newer):</p>
-          <CodeBlock lang="bash" code="go get -tool gooze.dev/pkg/gooze@v1.4.1" />
+          <CodeBlock lang="bash" code="go get -tool gooze.dev/pkg/gooze@v1.4.2" />
           <p>Then run it through <code>go tool</code>; Go builds it on first use:</p>
           <CodeBlock lang="bash" code="go tool gooze run ./..." />
           <p>This changes your <code>go.mod</code>:</p>
@@ -81,7 +81,7 @@ const faqJsonLd = faqPageJsonLd(faqs)
             <li>It adds a <code>tool gooze.dev/pkg/gooze</code> line.</li>
             <li>It raises the module&apos;s <code>go</code> line to <code>1.27.3</code>, the Go
               version Gooze needs, so every build of your module needs it too. With{" "}<code>GOTOOLCHAIN=auto</code>, an older Go downloads that toolchain.</li>
-            <li>It adds Gooze&apos;s dependencies as indirect requirements, about 55 of them for{" "}<code>v1.4.1</code>.</li>
+            <li>It adds Gooze&apos;s dependencies as indirect requirements, about 55 of them for{" "}<code>v1.4.2</code>.</li>
           </ul>
           <p>If your module must stay on an older Go, or you don&apos;t want the extra requirements,
             use <code>go install</code> above instead. To upgrade, run <code>go get -tool</code>{" "}again with the new version.</p>

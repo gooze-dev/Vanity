@@ -154,17 +154,15 @@ const faqJsonLd = faqPageJsonLd(faqs)
         <div id="cache">
           <h2>Unchanged files are skipped</h2>
           <p>A narrowed run uses the main reports as its cache. A file whose source and test file
-            haven&apos;t changed since the main reports is skipped, and it isn&apos;t in the
-            run&apos;s score. Run <code>--run &apos;^InRange$&apos;</code> again right after
-            that full run, and there is nothing to test:</p>
+            haven&apos;t changed since the main reports is skipped, and nothing in it is tested.
+            Run <code>--run &apos;^InRange$&apos;</code> right after the first full run, before
+            you add a case:</p>
           <Recording name="calc-func-cached-run" title="Recorded last lines of gooze run --run '^InRange$' with nothing changed" />
+          <p>All 13 results of <code>InRange</code> are cached, with both survivors, so the score
+            matches the report from <a href="#start">where you start</a>. The run saves them to{" "}<code>run/</code> and checks the gates and <code>--fail-fast</code> with them. Before{" "}<code>v1.4.2</code>, a run with everything cached printed <code>100.00%</code> and
+            passed its gate even when the selection had survivors.</p>
           <p>That&apos;s why the loop starts with a new test: changing the test file is what puts
             the function back in the run. To test it without a change, add{" "}<code>--no-cache</code>.</p>
-          <p>In <code>v1.4.2+</code>, a skipped file still counts. The run scores the stored
-            results its selection picks as cached, saves them to <code>run/</code>, and checks the
-            gates and <code>--fail-fast</code> with them. Before, a run with everything cached
-            printed <code>100.00%</code> and passed its gate even when the selection had
-            survivors.</p>
         </div>
         <div id="matching">
           <h2>How --run matches functions</h2>

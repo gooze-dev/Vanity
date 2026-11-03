@@ -1,2 +1,2 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1792845741, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "diff-no-git (gooze v1.4.1, goozels v0.4.0, go1.27.3)"}
-[0.007834, "o", "Running with 1 worker(s) (shard 0/1)\r\nError: diff against main: --diff needs git, but git was not found on PATH: exec: \"git\": executable file not found in $PATH\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1793695335, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "diff-no-git (gooze v1.4.2, goozels v0.4.0, go1.27.3)"}
+[0.016085, "o", "Running with 1 worker(s) (shard 0/1)\r\nError: diff against main: --diff needs git, but git was not found on PATH: exec: \"git\": executable file not found in $PATH\r\n"]
