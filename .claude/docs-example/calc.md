@@ -1,7 +1,7 @@
 # The `calc` story
 
 The running example for the docs (see "Tell it as a story" in `../rules/writing.md`). Every
-output below is real: gooze v1.4.1 and goozels v0.4.0 on Go 1.27.3, 2026-10-24. The code lives in
+output below is real: gooze v1.4.2 and goozels v0.4.0 on Go 1.27.3, 2026-11-03. The code lives in
 `examples/calc/`, and `npm run record:casts` (`scripts/record-casts.mts`) records every step
 below into `public/casts/` (`calc-*.cast`); copy outputs from there instead of writing them by hand. If gooze output changes, rerun the steps and update
 this file and the pages that quote it.
@@ -80,11 +80,11 @@ Mutation score: 84.62% (11 killed, 2 survived; 0 cached, 13 tested)
 ## 3. Read it: `gooze report view`
 
 ```text
- PATH          │ MUTATIONS │ KILLED │ SURVIVED │ NOT COVERED │  SCORE 
-───────────────┼───────────┼────────┼──────────┼─────────────┼────────
- calc.go       │        13 │     11 │        2 │           0 │ 84.62% 
-───────────────┼───────────┼────────┼──────────┼─────────────┼────────
- TOTAL FILES 1 │        13 │     11 │        2 │           0 │ 84.62% 
+ PATH          │ MUTATIONS │ KILLED │ SURVIVED │ NOT COVERED │ TIMEOUT │ ERROR │  SCORE
+───────────────┼───────────┼────────┼──────────┼─────────────┼─────────┼───────┼────────
+ calc.go       │        13 │     11 │        2 │           0 │       0 │     0 │ 84.62%
+───────────────┼───────────┼────────┼──────────┼─────────────┼─────────┼───────┼────────
+ TOTAL FILES 1 │        13 │     11 │        2 │           0 │       0 │     0 │ 84.62%
 
 Survivors (2):
 calc.go:10: survived (comparison): if n < lo { -> if n <= lo {
@@ -111,11 +111,11 @@ Mutation score: 100.00% (13 killed, 0 survived; 0 cached, 13 tested)
 ```
 
 ```text
- PATH          │ MUTATIONS │ KILLED │ SURVIVED │ NOT COVERED │   SCORE 
-───────────────┼───────────┼────────┼──────────┼─────────────┼─────────
- calc.go       │        13 │     13 │        0 │           0 │ 100.00% 
-───────────────┼───────────┼────────┼──────────┼─────────────┼─────────
- TOTAL FILES 1 │        13 │     13 │        0 │           0 │ 100.00% 
+ PATH          │ MUTATIONS │ KILLED │ SURVIVED │ NOT COVERED │ TIMEOUT │ ERROR │   SCORE
+───────────────┼───────────┼────────┼──────────┼─────────────┼─────────┼───────┼─────────
+ calc.go       │        13 │     13 │        0 │           0 │       0 │     0 │ 100.00%
+───────────────┼───────────┼────────┼──────────┼─────────────┼─────────┼───────┼─────────
+ TOTAL FILES 1 │        13 │     13 │        0 │           0 │       0 │     0 │ 100.00%
 
 No survivors.
 
