@@ -41,13 +41,13 @@ const metadata = docsMetadata("/docs/cli/report")
             Survived, not covered, timed out and skipped mutations are listed; with none, <code>view</code>prints <code>No survivors.</code> The output is the same in a TTY and in CI.</p>
           <div id="view-build-errors">
             <h3>Timeouts and build errors</h3>
-            <p>In <code>v1.5.0+</code>, the table has a <code>TIMEOUT</code> and an{" "}<code>ERROR</code> column before <code>SCORE</code>, so each row adds up to{" "}<code>MUTATIONS</code>. Mutants that did not build are listed after the survivors, under{" "}<code>Build errors (N):</code>, one line each by file and line, in the same format.
+            <p>In <code>v1.4.2+</code>, the table has a <code>TIMEOUT</code> and an{" "}<code>ERROR</code> column before <code>SCORE</code>, so each row adds up to{" "}<code>MUTATIONS</code>. Mutants that did not build are listed after the survivors, under{" "}<code>Build errors (N):</code>, one line each by file and line, in the same format.
               They still don&apos;t count against the score, and the <code>github</code>,{" "}<code>sarif</code> and <code>codeclimate</code> formats leave them out.</p>
           </div>
           <div id="view-unmerged">
             <h3>Empty main reports</h3>
             <p>Right after a sharded run, or a run with <code>--diff</code> or <code>--run</code>,
-              the main reports can be empty, and <code>view</code> prints a score of{" "}<code>100.00%</code> with no survivors. In <code>v1.5.0+</code>, it then adds a line that
+              the main reports can be empty, and <code>view</code> prints a score of{" "}<code>100.00%</code> with no survivors. In <code>v1.4.2+</code>, it then adds a line that
               says where the unmerged reports are: the <code>shard_*</code> directories, with the{" "}<code>gooze report merge</code> command to run, or <code>run/</code>, with the{" "}<code>gooze report view -o</code> command that shows it.</p>
           </div>
           <h3>Paths</h3>
@@ -123,7 +123,7 @@ const metadata = docsMetadata("/docs/cli/report")
           <div id="view-by-line">
             <h3>One entry per line (--by-line)</h3>
             <p>One weak line often has several surviving mutants, and one test usually kills them
-              all. In <code>v1.5.0+</code>, <code>--by-line</code> lists the survivors once per line of a
+              all. In <code>v1.4.2+</code>, <code>--by-line</code> lists the survivors once per line of a
               file, so the list shows how many places need a test:</p>
             <CodeBlock lang="bash" code="gooze report view --by-line" />
             <ul>
@@ -223,7 +223,7 @@ gooze report push ghcr.io/your-org/your-repo/gooze-reports:main`} />
             reports. A shard doesn&apos;t check thresholds, so put them here when you shard. For the
             shards of a <code>--diff</code> run (<code>gooze report merge -o .gooze-reports/run</code>),
             the diff minimums apply (<code>--threshold-diff-*</code>, <code>threshold.diff.*</code>), as
-            for <code>view</code> (<code>v1.5.0+</code>). Earlier versions checked the plain minimums there.</p>
+            for <code>view</code> (<code>v1.4.2+</code>). Earlier versions checked the plain minimums there.</p>
           <h3>When you need this</h3>
           <p>If you run <code>gooze run -s INDEX/TOTAL</code>, Gooze writes into shard folders.
             You merge them before running <code>gooze report view</code>. After a run with{" "}<code>--diff</code>, <code>--run</code> or <code>--mutagens</code>, merge to add its
@@ -246,7 +246,7 @@ gooze report view`} />
               shards. For a file unchanged since the main reports (same source and test file
               hashes), they replace only the matching mutations, and the file stays complete. For
               a changed or new file, they replace all of the file&apos;s results; if the run tested
-              only part of the file, it is marked partial, and the next full{" "}<code>gooze run</code> re-tests it in full. In <code>v1.5.0+</code>, a{" "}<code>--mutagens</code> run alone doesn&apos;t make a file partial: if the file hasn&apos;t changed since, the
+              only part of the file, it is marked partial, and the next full{" "}<code>gooze run</code> re-tests it in full. In <code>v1.4.2+</code>, a{" "}<code>--mutagens</code> run alone doesn&apos;t make a file partial: if the file hasn&apos;t changed since, the
               next full run tests only the mutants of the other mutagens. Then <code>run/</code> is removed.</li>
             <li>When <code>merge</code> runs inside the checkout, base reports for files that no longer exist are dropped.</li>
           </ul>
