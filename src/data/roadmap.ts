@@ -136,14 +136,14 @@ export const roadmap: RoadmapItem[] = [
     name: "Config show",
     area: "core",
     milestone: "shipped",
-    description: "`gooze config show` prints every key with its effective value, where it came from and its env var; `gooze config schema` prints the JSON Schema of `gooze.yaml`. In `v1.5.0+`.",
+    description: "`gooze config show` prints every key with its effective value, where it came from and its env var; `gooze config schema` prints the JSON Schema of `gooze.yaml`.",
     docs: "/docs/cli/config#show",
   },
   {
     name: "Consistent config keys",
     area: "core",
     milestone: "shipped",
-    description: "Every `gooze.yaml` key in snake case, such as `no_cache` and `no_update_check`; the old names still work with a warning. In `v1.5.0+`.",
+    description: "Every `gooze.yaml` key in snake case, such as `no_cache` and `no_update_check`; the old names still work with a warning.",
     docs: "/docs/config#validation",
   },
   {
@@ -316,7 +316,7 @@ export const roadmap: RoadmapItem[] = [
     name: "Build tags",
     area: "execution",
     milestone: "shipped",
-    description: "Files a build constraint leaves out are skipped, and the `-tags` in `GOFLAGS` choose which files are mutated and tested. In `v1.5.0+`.",
+    description: "Files a build constraint leaves out are skipped, and the `-tags` in `GOFLAGS` choose which files are mutated and tested.",
     docs: "/docs/usage/ignoring-code#build-constraints",
   },
   {

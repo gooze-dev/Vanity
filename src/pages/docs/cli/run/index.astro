@@ -119,19 +119,19 @@ const runFlags: RunFlag[] = [
   {
     flag: "--go-cache",
     description:
-      "`v1.5.0+`. Where the builds of mutants are cached. `isolated` uses Gooze's own cache, which reads `GOCACHE` but never writes to it, so a long run doesn't fill your Go build cache. `shared` uses `GOCACHE`, which makes a re-test of the same mutants faster. Gooze falls back to `shared` on Go before 1.24 or when `GOCACHEPROG` is already set.",
+      "`v1.4.2+`. Where the builds of mutants are cached. `isolated` uses Gooze's own cache, which reads `GOCACHE` but never writes to it, so a long run doesn't fill your Go build cache. `shared` uses `GOCACHE`, which makes a re-test of the same mutants faster. Gooze falls back to `shared` on Go before 1.24 or when `GOCACHEPROG` is already set.",
     defaultValue: "isolated",
     configKey: "run.go_cache",
   },
   {
     flag: "--go-cache-size",
-    description: "`v1.5.0+`. Size in MB that a run trims Gooze's own build cache to when it ends, least recently used first. Entries used in the last hour are kept.",
+    description: "`v1.4.2+`. Size in MB that a run trims Gooze's own build cache to when it ends, least recently used first. Entries used in the last hour are kept.",
     defaultValue: "2048",
     configKey: "run.go_cache_size",
   },
   {
     flag: "--go-cache-prewarm",
-    description: "`v1.5.0+`. Build each package's tests once in `GOCACHE` before its mutants, so their dependencies are cached there. Only with `--go-cache isolated`.",
+    description: "`v1.4.2+`. Build each package's tests once in `GOCACHE` before its mutants, so their dependencies are cached there. Only with `--go-cache isolated`.",
     defaultValue: "false",
     configKey: "run.go_cache_prewarm",
   },
@@ -291,7 +291,7 @@ const runFlags: RunFlag[] = [
           <ul>
             <li>Gooze diffs from <code>git merge-base REF HEAD</code> to the working tree: committed,
               staged and unstaged changes, plus untracked <code>.go</code> files git doesn&apos;t
-              ignore. A changed <code>x_test.go</code> puts <code>x.go</code> in scope in full; in{" "}<code>v1.5.0+</code>, only a source&apos;s own <code>x_test.go</code> does.</li>
+              ignore. A changed <code>x_test.go</code> puts <code>x.go</code> in scope in full; in{" "}<code>v1.4.2+</code>, only a source&apos;s own <code>x_test.go</code> does.</li>
             <li>It needs git on <code>PATH</code> and a git repository. Without either, or with an
               unknown ref or no merge base, the run exits <code>4</code>.</li>
             <li>Path arguments, <code>-x/--exclude</code>, <code>--shard</code>,{" "}<code>--coverage-profile</code> and <code>--estimate</code> work with it. Below a{" "}<a href="/docs/ci/quality-gates/#diff"><code>--threshold-diff-*</code></a> threshold, the run exits{" "}<code>3</code>.</li>
