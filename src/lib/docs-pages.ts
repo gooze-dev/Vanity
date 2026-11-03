@@ -260,7 +260,7 @@ export const docsPages: DocsPage[] = [
     parent: "/docs/cli",
     description:
       "Work with Gooze mutation reports: view per-file scores and survivors, write them as GitHub annotations, SARIF or a GitLab Code Quality report, browse every mutant in the TUI, merge sharded runs, and push or pull OCI artifacts.",
-    keywords: ["report view","survivors","per-file score","github annotations","sarif","gitlab code quality","codeclimate","tui","oci artifacts","merge shards","report push","test results","golang mutation score"],
+    keywords: ["report view","survivors","survivors by line","build errors","per-file score","github annotations","sarif","gitlab code quality","codeclimate","tui","oci artifacts","merge shards","report push","test results","golang mutation score"],
   },
   {
     href: "/docs/cli/config",

@@ -70,7 +70,7 @@ const faqJsonLd = faqPageJsonLd(faqs)
               separately.</li>
             <li><code>timeout</code>: the tests exceeded{" "}<code>--mutation-timeout</code> (default <code>120</code>{" "}seconds). A timeout is not a kill.</li>
             <li><code>error</code>: the mutant did not
-              compile; excluded from the score.</li>
+              compile; excluded from the score. In <code>v1.5.0+</code>, the plain output of{" "}<code>gooze run</code> prints only its status line, with no diff, and{" "}<a href="/docs/cli/report/#view-build-errors"><code>gooze report view</code></a> lists it under{" "}<code>Build errors</code>.</li>
           </ul>
           <p>A missing test file does not skip anything: Gooze runs the sibling{" "}<code>&lt;name&gt;_test.go</code> if it exists, otherwise any{" "}<code>*_test.go</code> in the same package. If the package has no test file at all,
             the mutation is reported as <strong>survived</strong>.</p>

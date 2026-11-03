@@ -39,6 +39,17 @@ const metadata = docsMetadata("/docs/cli/report")
           <Recording name="calc-report-view" title="Recorded gooze report view after the first run" />
           <p>Each survivor line reads <code>path:line: status (mutagen): original -&gt; mutated</code>.
             Survived, not covered, timed out and skipped mutations are listed; with none, <code>view</code>prints <code>No survivors.</code> The output is the same in a TTY and in CI.</p>
+          <div id="view-build-errors">
+            <h3>Timeouts and build errors</h3>
+            <p>In <code>v1.5.0+</code>, the table has a <code>TIMEOUT</code> and an{" "}<code>ERROR</code> column before <code>SCORE</code>, so each row adds up to{" "}<code>MUTATIONS</code>. Mutants that did not build are listed after the survivors, under{" "}<code>Build errors (N):</code>, one line each by file and line, in the same format.
+              They still don&apos;t count against the score, and the <code>github</code>,{" "}<code>sarif</code> and <code>codeclimate</code> formats leave them out.</p>
+          </div>
+          <div id="view-unmerged">
+            <h3>Empty main reports</h3>
+            <p>Right after a sharded run, or a run with <code>--diff</code> or <code>--run</code>,
+              the main reports can be empty, and <code>view</code> prints a score of{" "}<code>100.00%</code> with no survivors. In <code>v1.5.0+</code>, it then adds a line that
+              says where the unmerged reports are: the <code>shard_*</code> directories, with the{" "}<code>gooze report merge</code> command to run, or <code>run/</code>, with the{" "}<code>gooze report view -o</code> command that shows it.</p>
+          </div>
           <h3>Paths</h3>
           <p>Paths limit the output to matching source files and read like{" "}<a href="/docs/cli/run/#usage"><code>gooze run</code></a> arguments, relative to the module root:</p>
           <ul>
@@ -108,6 +119,23 @@ const metadata = docsMetadata("/docs/cli/report")
               other format exits with code <code>2</code>. An unknown
               format also exits with <code>2</code>. The fields of each format are in{" "}<a href="/docs/reports/#formats">Report format</a>, and the pipelines that use
               them are in <a href="/docs/ci/github/#survivors">GitHub Actions</a> and{" "}<a href="/docs/ci/gitlab/#survivors">GitLab CI</a>.</p>
+          </div>
+          <div id="view-by-line">
+            <h3>One entry per line (--by-line)</h3>
+            <p>One weak line often has several surviving mutants, and one test usually kills them
+              all. In <code>v1.5.0+</code>, <code>--by-line</code> lists the survivors once per line of a
+              file, so the list shows how many places need a test:</p>
+            <CodeBlock lang="bash" code="gooze report view --by-line" />
+            <ul>
+              <li>The heading counts both, as <code>Survivors (N on M lines):</code>.</li>
+              <li>A line with several survivors reads{" "}<code>path:line: 5 survived (comparison ×4, numbers): original -&gt; mutated, mutated, ...</code>:
+                the count of each status, each mutagen with its count, the original code once, then
+                each mutated version without the words it shares with the original at the start and end.</li>
+              <li>A line with one survivor reads as it does without the flag.</li>
+            </ul>
+            <p>It changes only the text summary, also the one <code>--format github</code> prints
+              after its annotations. With <code>--all</code>, or with <code>--format sarif</code>,{" "}<code>codeclimate</code> or <code>gitlab</code>, which print no summary, it exits
+              with code <code>2</code>. It is off by default, because tools parse the one-line-per-mutant list.</p>
           </div>
           <h3>Every mutation (--all)</h3>
           <p><code>--all</code> lists every mutation with its status and diff instead of the
