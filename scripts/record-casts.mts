@@ -53,7 +53,11 @@ const payload = JSON.stringify({
   tool_input: { file_path: join(calc, "calc.go") },
   cwd: calc,
 })
-rec("calc-hook-claude", `echo '${payload}' | goozels hook claude | cat`)
+// The hook remembers per session what it sent, in the user cache, and shortens
+// a repeat; an empty cache makes every recording the session's first edit.
+const hookCache = mkdtempSync(join(tmpdir(), "tmp."))
+onExit(() => rmSync(hookCache, { recursive: true, force: true }))
+rec("calc-hook-claude", `echo '${payload}' | XDG_CACHE_HOME=${hookCache} goozels hook claude | cat`)
 
 copyFileSync(final, "calc_test.go")
 rec("calc-fixed-run", "gooze run ./... | tail -n 1")
@@ -66,7 +70,9 @@ rec("calc-cached-estimate", "gooze run --estimate ./... | cat")
 const empty = mkdtempSync(join(tmpdir(), "tmp."))
 process.chdir(empty)
 rec("config-init", "gooze config init | cat; gooze config init 2>&1 | cat")
-rec("config-init-file", "cat gooze.yaml")
+// asciinema 2.1 drops the end of a long output when the command exits at
+// once, so wait a moment after cat.
+rec("config-init-file", "cat gooze.yaml; sleep 0.2")
 rec("report-view-no-reports", "gooze report view 2>&1 | cat")
 process.chdir(calc)
 rec("run-invalid-parallel", "gooze run --parallel 0 ./... 2>&1 | cat")
