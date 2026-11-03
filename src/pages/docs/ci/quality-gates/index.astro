@@ -146,8 +146,8 @@ const faqJsonLd = faqPageJsonLd(faqs)
           <p>A pull request run with <a href="/docs/usage/diff-mode/">diff mode</a> scores
             only the lines it changes. That score deserves its own bar: new code can be held to
             100% while the codebase as a whole sits lower. The <code>threshold.diff</code> keys
-            (flags <code>--threshold-diff-total</code>, <code>--threshold-diff-average</code>,{" "}<code>--threshold-diff-file</code>) apply only to <code>gooze run --diff</code>, and
-            they replace the plain thresholds there. Every other run, view and merge uses the
+            (flags <code>--threshold-diff-total</code>, <code>--threshold-diff-average</code>,{" "}<code>--threshold-diff-file</code>) apply only to <code>gooze run --diff</code> and to{" "}<code>view</code> and <code>merge</code> of its reports (<code>-o .gooze-reports/run</code>;
+            <code>merge</code> since <code>v1.4.2</code>), and they replace the plain thresholds there. Every other run, view and merge uses the
             plain ones.</p>
           <p>With this <code>gooze.yaml</code>, <code>main</code> needs 80% and a branch&apos;s
             changed lines need 100%:</p>
