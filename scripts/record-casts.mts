@@ -4,7 +4,7 @@
 // recordings; see .claude/rules/tool-output.md.
 //
 // Needs asciinema, and gooze and goozels on PATH at the versions the docs
-// describe (gooze must match DOCS_FACTS_VERSION in lib/version.ts).
+// describe (gooze must match DOCS_FACTS_VERSION in src/lib/version.ts).
 //
 //   npm run record:casts
 import { mkdirSync, mkdtempSync, readdirSync, renameSync, rmSync, writeFileSync, copyFileSync } from "node:fs"
