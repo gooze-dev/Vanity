@@ -27,7 +27,7 @@ const mutationTypes = [
     name: "comparison",
     ops: "`<` `>` `<=` `>=` `==` `!=`",
     desc: "Swaps a relational operator. Exposes untested boundaries (off-by-one) and branches that are never taken in tests.",
-    rule: "each operator becomes every other comparison operator (`>=` shown; also `>`, `<=`, `==`, `!=`), except the one equivalent mutant when an operand can't be smaller than the other: `\"\"`, or `0` compared with `len(...)`, `cap(...)`, an unsigned value or a length stored in a variable that is never written again. `len(s) == 0` never becomes `len(s) <= 0`, which behaves the same. This is version 2 of the mutator (since `v1.2.0`); reports from version 1 are re-tested on upgrade.",
+    rule: "each operator becomes every other comparison operator (`>=` shown; also `>`, `<=`, `==`, `!=`), except the one equivalent mutant when an operand can't be smaller than the other: `\"\"`, or `0` compared with `len(...)`, `cap(...)`, an unsigned value or a length stored in a variable that is never written again. `len(s) == 0` never becomes `len(s) <= 0`, which behaves the same. In `v1.5.0+` it also skips the mutant that no value can pass when one side is the `math.Min*` or `math.Max*` constant of the other side's integer type: `v == math.MinInt64` never becomes `v <= math.MinInt64`. This needs `v` to be a parameter or a `var` declared with a predeclared integer type such as `int64` or `uint8`; a variable defined with `:=`, `byte` and `rune` keep their mutants. This is version 2 of the mutator (since `v1.2.0`); reports from version 1 are re-tested on upgrade.",
     example: `- if a < b {
 + if a >= b {`,
     survives: "a boundary or the two branches of this condition aren't both exercised.",
@@ -54,7 +54,7 @@ const mutationTypes = [
     name: "numbers",
     ops: "int & float literals",
     desc: "Replaces a numeric constant with `0` and `1`. Finds magic numbers (limits, sizes, rates) that no test pins down.",
-    rule: "a numeric literal becomes `0` and `1` (`0` shown)",
+    rule: "a numeric literal becomes `0` and `1` (`0` shown). In `v1.5.0+`, a bit size of `64` in a `strconv` parser skips the mutants that behave the same: `strconv.ParseInt` and `ParseUint` read `0` as the size of `int`, 64 bits on 64-bit platforms, so `64` never becomes `0` (it still becomes `1`), and `strconv.ParseFloat` treats every size but `32` as `64`, so neither mutant is made. `strconv.FormatFloat` keeps both, since it panics on any other size.",
     example: `- limit := 5
 + limit := 0`,
     survives: "the exact value of this constant doesn't matter to any test.",
@@ -63,7 +63,7 @@ const mutationTypes = [
     name: "unary",
     ops: "`-` `+` `!` `^`",
     desc: "Flips a sign or drops a negation. Catches missing checks on negation, sign, and bitwise complement.",
-    rule: "`-x` becomes `+x` (and vice versa); each unary operator (`-`, `+`, `!`, `^`) is also removed",
+    rule: "`-x` becomes `+x` (and vice versa); each unary operator (`-`, `+`, `!`, `^`) is also removed. In `v1.5.0+`, the sign of a literal rotation by half the size is kept, since `bits.RotateLeft64(x, -32)` and `bits.RotateLeft64(x, 32)` give the same value. This covers `bits.RotateLeft8` to `RotateLeft64`; `bits.RotateLeft` keeps its mutants, since its size depends on the platform, and the literal itself keeps its `numbers` mutants.",
     example: `- ok := !flag
 + ok := flag`,
     survives: "no test checks the negation or sign here.",
