@@ -163,9 +163,11 @@ gooze report view`} />
             <li><strong>History.</strong> CI checkouts are often shallow, so the base branch or the
               merge base is missing. Fetch full history or the base branch (see{" "}<a href="#errors">Errors</a>).</li>
             <li><strong>One job.</strong> A diff run is small, so run it in one job and gate in
-              that job. Gating a sharded diff run on the score of the changed lines isn&apos;t
-              supported yet: <code>gooze report merge</code> folds the shards into the main
-              reports, whose score covers the whole codebase. Keep sharding for the full run on{" "}<code>main</code>.</li>
+              that job. If you shard it, a shard doesn&apos;t check thresholds: gate when you
+              merge the shards with <code>gooze report merge -o .gooze-reports/run</code>, which
+              checks the <code>threshold.diff</code> keys on the changed lines (<code>v1.4.2+</code>).
+              A plain <code>gooze report merge</code> folds them into the main reports, whose
+              score covers the whole codebase.</li>
             <li><strong>Baseline.</strong> Don&apos;t push a diff run&apos;s reports as the
               baseline. Push from the full run on <code>main</code>.</li>
             <li><strong>Coverage profile.</strong> <code>--coverage-profile</code> still applies:
@@ -198,7 +200,6 @@ gooze report view`} />
             <li>The score describes the change, not the codebase. Use a full run on{" "}<code>main</code>, or <code>gooze report merge</code> and{" "}<code>gooze report view</code>, for the whole picture.</li>
             <li>Deleted lines have no mutants. A pull request that only removes code tests nothing.</li>
             <li>A mutant that spans several lines is placed on its first changed line.</li>
-            <li>A sharded diff run can&apos;t be gated on the score of the changed lines yet (see{" "}<a href="#ci">Run it in CI</a>).</li>
             <li>Unchanged code isn&apos;t re-tested even when its behavior depends on a line you
               changed in another file.</li>
           </ul>
