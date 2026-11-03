@@ -63,8 +63,8 @@ export const docsPages: DocsPage[] = [
       "Install the Gooze CLI · Gooze docs",
     section: "Get started",
     description:
-      "Install Gooze with go install or a prebuilt release binary, then verify the installation and start measuring how well your Go tests catch bugs.",
-    keywords: ["install gooze","download cli","prebuilt binaries","go install","setup framework","go module"],
+      "Install Gooze with go install or pin it in go.mod as a Go tool, then verify the installation and start measuring how well your Go tests catch bugs.",
+    keywords: ["install gooze","download cli","prebuilt binaries","go install","go get -tool","go tool","setup framework","go module"],
   },
   {
     href: "/docs/quick-start",

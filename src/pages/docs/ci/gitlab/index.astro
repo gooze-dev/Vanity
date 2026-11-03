@@ -228,6 +228,7 @@ const metadata = docsMetadata("/docs/ci/gitlab")
             with the line you saw locally, and the job passes, because no threshold is set:</p>
           <CodeBlock lang="yaml" code={simple} />
           <Recording name="calc-first-run" title="Recorded last line of the first gooze run on calc" />
+          <p>If you pinned Gooze in <code>go.mod</code> with{" "}<a href="/docs/install/#go-tool"><code>go get -tool</code></a>, drop the install line and run{" "}<code>go tool gooze</code> in place of <code>gooze</code>.</p>
         </div>
         <div id="sharded">
           <h2>2. Sharded: run in parallel</h2>
