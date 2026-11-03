@@ -195,7 +195,7 @@ gooze report push ghcr.io/your-org/your-repo/gooze-reports:main`} />
             reports. A shard doesn&apos;t check thresholds, so put them here when you shard. For the
             shards of a <code>--diff</code> run (<code>gooze report merge -o .gooze-reports/run</code>),
             the diff minimums apply (<code>--threshold-diff-*</code>, <code>threshold.diff.*</code>), as
-            for <code>view</code>.</p>
+            for <code>view</code> (<code>v1.5.0+</code>). Earlier versions checked the plain minimums there.</p>
           <h3>When you need this</h3>
           <p>If you run <code>gooze run -s INDEX/TOTAL</code>, Gooze writes into shard folders.
             You merge them before running <code>gooze report view</code>. After a run with{" "}<code>--diff</code>, <code>--run</code> or <code>--mutagens</code>, merge to add its

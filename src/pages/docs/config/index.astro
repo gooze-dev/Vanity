@@ -216,7 +216,8 @@ gooze run ./...`} />
         <div id="example">
           <h2>Complete gooze.yaml reference</h2>
           <p>Every supported key, with its default value. All keys are optional:
-            Gooze falls back to these defaults when a key is omitted.</p>
+            Gooze falls back to these defaults when a key is omitted. The{" "}<code>no_cache</code>, <code>no_update_check</code> and <code>run.go_cache*</code>{" "}keys need <code>v1.5.0+</code>; see <a href="#validation">Validation</a> for the
+            old names.</p>
           <CodeBlock lang="yaml" code={`# gooze.yaml
 output: .gooze-reports        # where reports and the incremental cache live
 no_cache: false               # set true to force a full re-run
@@ -281,8 +282,9 @@ log:
             <li><code>report.format</code> must be <code>text</code>, <code>github</code>,{" "}<code>gitlab</code>, <code>sarif</code> or <code>codeclimate</code></li>
           </ul>
           <p>An invalid value exits with code <code>2</code>.</p>
-          <p>Three old keys still work and print a warning: <code>no-cache</code> is now{" "}<code>no_cache</code>,{" "}
-            <code>no-update-check</code> is now <code>no_update_check</code>, and <code>version</code> is no longer needed.
+          <p>In <code>v1.5.0+</code>, every key is in snake case. Three old keys still work and print a warning: <code>no-cache</code> is now{" "}<code>no_cache</code>,{" "}
+            <code>no-update-check</code> is now <code>no_update_check</code>, and <code>version</code> is ignored.
+            Gooze <code>v1.4.1</code> and earlier read only the old names, and <code>version</code> must be <code>1</code> there.
             If an old and a new key disagree, or you want to see which setting won, run{" "}<a href="/docs/cli/config/#show"><code>gooze config show</code></a>.</p>
           <Recording name="run-invalid-parallel" title="Recorded gooze run with --parallel 0" />
         </div>

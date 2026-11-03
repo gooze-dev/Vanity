@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     q: "Why did a test change put a whole source file in scope?",
-    a: "A changed or new `x_test.go` can kill mutants anywhere in `x.go`, so Gooze tests `x.go` in full. A source without its own test file is never pulled in by a test change; only its own changed lines are in scope.",
+    a: "A changed or new `x_test.go` can kill mutants anywhere in `x.go`, so Gooze tests `x.go` in full. Since `v1.5.0`, a source without its own test file is never pulled in by a test change; only its own changed lines are in scope.",
   },
   {
     q: "Which score should a CI gate read in diff mode?",
@@ -109,7 +109,8 @@ run:
           <p>A changed or new <code>x_test.go</code> puts its source file <code>x.go</code> in
             scope <strong>in full</strong>. New tests can kill survivors anywhere in that file, not
             only next to the lines you touched. A source without its own test file is never pulled
-            in by a test change: only its own changed lines are in scope.</p>
+            in by a test change: only its own changed lines are in scope (<code>v1.5.0+</code>). Before{" "}<code>v1.5.0</code>, such a source ran with the first test file of its package, and a
+            change to that file put it in scope in full.</p>
           <p>That is what happens on the <code>calc</code> branch above: the branch changes only{" "}<code>calc_test.go</code>, so all of <code>calc.go</code> is tested, including the
             two bound checks the new tests kill.</p>
         </div>
