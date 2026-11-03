@@ -29,8 +29,6 @@ export const laterThemes = {
 // no description of their own, so the page never says the same thing twice.
 export const nextCards = [
   { id: "custom-mutators", title: "Custom mutator plugins", detail: "A plugin API for writing your own operators outside the Gooze source is planned. Adding an operator to Gooze itself is one small function, and caching, sharding, and reporting work with it unchanged." },
-  { id: "config", title: "Config show and consistent keys", detail: "`gooze config show` prints every key with its effective value, where it came from, and its env var, and keys and flags get one naming style, with snake_case key names. Both are built and ship in the next release; the old key names keep working with a warning for a release." },
-  { id: "build-tags", title: "Build tags", detail: "Passing `-tags` through to `go test` is planned, so files behind build constraints get mutated too." },
   { id: "exec", title: "Custom test runner", detail: "Gooze runs `go test` on the package that owns each mutated file; plugging in your own test command is planned." },
   { id: "agents", title: "Codex and opencode", detail: "Mutation results after every edit through a post-edit hook; the hooks exist in goozels and are being verified with each agent." },
   { id: "json", title: "JSON and HTML reports", detail: "JSON reports in the Stryker mutation-testing-report schema and a static HTML page from `gooze report html` are on the way, both covering every mutation." },
@@ -132,19 +130,21 @@ export const roadmap: RoadmapItem[] = [
     area: "core",
     milestone: "later",
     theme: "configuration",
-    description: "A published schema, registered in SchemaStore, so any YAML-aware editor validates and completes the config.",
+    description: "Publish the schema that `gooze config schema` prints in SchemaStore, so any YAML-aware editor validates and completes the config without setup.",
   },
   {
     name: "Config show",
     area: "core",
-    milestone: "next",
-    card: "config",
+    milestone: "shipped",
+    description: "`gooze config show` prints every key with its effective value, where it came from and its env var; `gooze config schema` prints the JSON Schema of `gooze.yaml`. In `v1.5.0+`.",
+    docs: "/docs/cli/config#show",
   },
   {
     name: "Consistent config keys",
     area: "core",
-    milestone: "next",
-    card: "config",
+    milestone: "shipped",
+    description: "Every `gooze.yaml` key in snake case, such as `no_cache` and `no_update_check`; the old names still work with a warning. In `v1.5.0+`.",
+    docs: "/docs/config#validation",
   },
   {
     name: "Git diff mode",
@@ -315,8 +315,9 @@ export const roadmap: RoadmapItem[] = [
   {
     name: "Build tags",
     area: "execution",
-    milestone: "next",
-    card: "build-tags",
+    milestone: "shipped",
+    description: "Files a build constraint leaves out are skipped, and the `-tags` in `GOFLAGS` choose which files are mutated and tested. In `v1.5.0+`.",
+    docs: "/docs/usage/ignoring-code#build-constraints",
   },
   {
     name: "Cross-package coverage",
@@ -394,9 +395,9 @@ export const roadmap: RoadmapItem[] = [
   {
     name: "Go tool install",
     area: "workflow",
-    milestone: "later",
-    theme: "install",
-    description: "Pin Gooze in your `go.mod` with `go get -tool` and run `go tool gooze`, documented on the install and CI pages.",
+    milestone: "shipped",
+    description: "Pin Gooze in your `go.mod` with `go get -tool` and run `go tool gooze`, locally and in CI.",
+    docs: "/docs/install#go-tool",
     issue: 52,
   },
   {
