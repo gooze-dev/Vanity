@@ -58,11 +58,11 @@ export function requireGooze(args: string[], text: string, missing: string) {
   }
 }
 
-// Exits unless the gooze on PATH is DOCS_FACTS_VERSION in lib/version.ts, and
+// Exits unless the gooze on PATH is DOCS_FACTS_VERSION in src/lib/version.ts, and
 // returns the versions for the cast titles: "gooze v1.4.1, goozels v0.4.0,
 // go1.27.3".
 export function docsVersions(): string {
-  const version = readFileSync(join(root, "lib/version.ts"), "utf8")
+  const version = readFileSync(join(root, "src/lib/version.ts"), "utf8")
   const want = /^export const DOCS_FACTS_VERSION = "(.*)";$/m.exec(version)?.[1]
   const gooze = run("gooze", "version")
   if (!gooze.startsWith(`gooze ${want} `)) fail(`gooze on PATH is '${gooze}', docs describe ${want}`)
