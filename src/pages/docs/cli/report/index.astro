@@ -246,7 +246,8 @@ gooze report view`} />
               shards. For a file unchanged since the main reports (same source and test file
               hashes), they replace only the matching mutations, and the file stays complete. For
               a changed or new file, they replace all of the file&apos;s results; if the run tested
-              only part of the file, it is marked partial, and the next full{" "}<code>gooze run</code> re-tests it in full. Then <code>run/</code> is removed.</li>
+              only part of the file, it is marked partial, and the next full{" "}<code>gooze run</code> re-tests it in full. In <code>v1.5.0+</code>, a{" "}<code>--mutagens</code> run alone doesn&apos;t make a file partial: if the file hasn&apos;t changed since, the
+              next full run tests only the mutants of the other mutagens. Then <code>run/</code> is removed.</li>
             <li>When <code>merge</code> runs inside the checkout, base reports for files that no longer exist are dropped.</li>
           </ul>
         </div>

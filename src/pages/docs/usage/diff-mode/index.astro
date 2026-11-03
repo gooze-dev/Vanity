@@ -142,7 +142,8 @@ gooze report view`} />
           <ul>
             <li>Its reports go to a fresh <code>.gooze-reports/run/</code> (<code>run/shard_N</code> when sharded). The main reports don&apos;t change.</li>
             <li>It uses the main reports as its cache: a file unchanged since them is skipped and
-              isn&apos;t in the score. <code>--no-cache</code> tests the changed lines anyway.</li>
+              isn&apos;t in the score. In <code>v1.5.0+</code>, its stored results on the changed
+              lines are scored as cached instead, so the gate counts them.{" "}<code>--no-cache</code> tests the changed lines anyway.</li>
             <li><code>gooze report merge</code> folds <code>run/</code> into the main reports and
               removes it. A file that changed since the main reports gets the diff run&apos;s
               results in place of its own. If the run tested only some of its lines, the file is
