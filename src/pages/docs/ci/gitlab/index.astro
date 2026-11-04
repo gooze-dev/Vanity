@@ -151,6 +151,13 @@ const allowLowScore = `merge:
     exit_codes: [3]`
 
 
+const compatConfig = `# gooze.yaml
+report:
+  oci:
+    compat_hosts:
+      - registry.gitlab.example.com
+`
+
 const keepCache = `test:
   cache:
     key: gooze
@@ -336,6 +343,17 @@ const metadata = docsMetadata("/docs/ci/gitlab")
           <p class="">The usual causes of the other codes in GitLab CI: <code>4</code>, a shallow clone
             without <code>GIT_DEPTH: 0</code> and the target branch; <code>5</code>, a job
             token without registry access; <code>6</code>, a merge job without{" "}<code>dependencies</code> on the shard jobs. Every code:{" "}<a href="/docs/cli/#exit-codes">CLI reference</a>.</p>
+        </div>
+        <div id="registry-media-types">
+          <h2>GitLab container registry</h2>
+          <p>GitLab&apos;s container registry accepts only media types from a{" "}<a href="https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/supported-media-types.md">fixed allowlist</a>,
+            and the types Gooze uses for reports on other registries aren&apos;t on it. Up to <code>v1.4.2</code>,{" "}<code>gooze report push</code> to{" "}<code>registry.gitlab.com</code> fails with{" "}<code>400</code> and{" "}<code>unknown media type</code>.</p>
+          <p>In <code>v1.4.3+</code>, Gooze pushes to <code>registry.gitlab.com</code> in compat mode by itself: an
+            image manifest with an unknown config and one{" "}<code>application/tar+gzip</code> layer, all on the allowlist. You don&apos;t
+            need to change your pipeline. The reports inside are the same, and{" "}<code>gooze report pull</code> reads both kinds of artifact, so baselines pushed before still work.</p>
+          <p>A self-managed GitLab registry has its own host. Turn compat mode on for it with the flag, an environment variable or{" "}<code>gooze.yaml</code>:</p>
+          <CodeBlock lang="yaml" code={compatConfig} />
+          <p>Or set <code>GOOZE_REPORT_OCI_COMPAT=true</code> in the job, or pass{" "}<code>--oci-compat</code> to <code>gooze report push</code>. Hosts in{" "}<code>compat_hosts</code> match their subdomains too. If a registry still rejects a push for an unknown media type, the error names these settings.</p>
         </div>
         <div id="auth">
           <h2>Authentication</h2>
