@@ -5,18 +5,9 @@ import Button from "@/components/ui/Button.astro"
 <Button data-theme-toggle variant="ghost" size="icon" type="button" class="h-9 w-9"><Icon name="sun" class="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" /><Icon name="moon" class="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" /><span class="sr-only">Toggle theme</span></Button>
 
 <script>
-  // The saved choice lives in localStorage "theme" (light or dark; absent follows
-  // the system). The base layout applies it before the first paint.
+  // The saved choice lives in localStorage "theme" (light or dark; absent means
+  // dark, the default). The base layout applies it before the first paint.
   const root = document.documentElement
-  const media = window.matchMedia("(prefers-color-scheme: light)")
-
-  function saved() {
-    try {
-      return localStorage.getItem("theme")
-    } catch {
-      return null
-    }
-  }
 
   function apply(theme: string) {
     // Switch without running every color transition on the page.
@@ -28,8 +19,6 @@ import Button from "@/components/ui/Button.astro"
     window.getComputedStyle(document.body)
     window.setTimeout(() => style.remove(), 1)
   }
-
-  const system = () => (media.matches ? "light" : "dark")
 
   // Delegated: the toggle is replaced on every client navigation.
   document.addEventListener("click", (event) => {
@@ -43,10 +32,7 @@ import Button from "@/components/ui/Button.astro"
     apply(next)
   })
 
-  media.addEventListener("change", () => {
-    if (!saved()) apply(system())
-  })
   window.addEventListener("storage", (event) => {
-    if (event.key === "theme") apply(event.newValue || system())
+    if (event.key === "theme") apply(event.newValue === "light" ? "light" : "dark")
   })
 </script>
