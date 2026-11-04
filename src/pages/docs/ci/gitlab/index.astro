@@ -131,6 +131,39 @@ merge:
     - gooze report view --threshold-total 60`
 
 
+const shardedDiff = `# Merge requests: the changed lines, in 3 shards.
+diff:
+  stage: test
+  parallel: 3
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    GIT_DEPTH: 0
+  script:
+    - gooze report pull "$REPORTS_REF" || echo "no baseline yet"
+    - git fetch origin "+refs/heads/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME:refs/remotes/origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - gooze run -s "$((CI_NODE_INDEX - 1))/$CI_NODE_TOTAL" --diff "origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" ./...
+  after_script:
+    # One archive per shard: only this shard's dir.
+    - tar -czf "shard-$CI_NODE_INDEX.tar.gz" ".gooze-reports/run/shard_$((CI_NODE_INDEX - 1))" || true
+  artifacts:
+    when: always
+    expire_in: 1 day
+    paths: ["shard-$CI_NODE_INDEX.tar.gz"]
+
+diff-merge:
+  stage: merge
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: always
+  needs: [diff]
+  script:
+    - for a in shard-*.tar.gz; do tar -xzf "$a"; done
+    # The same score an unsharded gooze run --diff gives. Fails the job
+    # (exit code 3) when the changed lines score below 80%.
+    - gooze report merge -o .gooze-reports/run --threshold-diff-total 80`
+
+
 const gate = `merge:
   # ...or in the single job, as the last line of the script.
   script:
@@ -270,6 +303,16 @@ const metadata = docsMetadata("/docs/ci/gitlab")
               branch pushes the baseline.</li>
             <li>Diff mode needs git. The <code>golang</code> image includes it; a minimal image
               may not.</li>
+          </ul>
+          <h3 id="sharded-diff">Shard a large merge request</h3>
+          <p>When a merge request changes many files, split the diff run into shards and merge
+            them like the full run. Each shard hands only its own directory to the merge job:</p>
+          <CodeBlock lang="yaml" code={shardedDiff} />
+          <ul>
+            <li>A diff shard writes to <code>.gooze-reports/run/shard_&lt;index&gt;/</code>, and{" "}<code>gooze report merge -o .gooze-reports/run</code> merges them. The merge applies the{" "}<code>--threshold-diff-*</code> gates, because the shards share a <code>--diff</code> selection.</li>
+            <li>In <code>v1.4.3+</code>, a shard also copies the baseline results it reuses for
+              the files it owns, so the merge gives the same score as an unsharded{" "}<code>gooze run --diff</code>. Up to <code>v1.4.2</code>, a merge request
+              whose changed lines were all in the baseline merged to{" "}<code>100.00% (no mutations)</code>.</li>
           </ul>
         </div>
         <div id="survivors">
