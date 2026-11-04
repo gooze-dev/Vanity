@@ -78,7 +78,7 @@ const jsonLd = {
 }
 ---
 <!doctype html>
-<html lang="en" transition:animate="none">
+<html lang="en" data-theme="dark" style="color-scheme: dark" transition:animate="none">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -144,10 +144,10 @@ const jsonLd = {
           try {
             saved = localStorage.getItem("theme")
           } catch {
-            // No storage: follow the system.
+            // No storage: use the default.
           }
-          if (saved === "dark" || saved === "light") return saved
-          return matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"
+          // Dark unless the reader picked light with the toggle.
+          return saved === "light" ? "light" : "dark"
         }
         const apply = function (root) {
           const theme = resolve()
