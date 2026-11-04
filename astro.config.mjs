@@ -11,13 +11,13 @@ const hashOnlyAssetNames = {
   outputOptions(options) {
     const dir = String(options.dir ?? "")
     // The prerender build emits the page CSS; only its asset names change.
-    if (dir.endsWith("/.prerender")) return { ...options, assetFileNames: "_s/[hash][extname]" }
+    if (dir.endsWith("/.prerender")) return { ...options, assetFileNames: "_gz/[hash][extname]" }
     if (!dir.endsWith("/out")) return
     return {
       ...options,
-      entryFileNames: "_s/[hash].js",
-      chunkFileNames: "_s/[hash].js",
-      assetFileNames: "_s/[hash][extname]",
+      entryFileNames: "_gz/[hash].js",
+      chunkFileNames: "_gz/[hash].js",
+      assetFileNames: "_gz/[hash][extname]",
     }
   },
 }
@@ -36,9 +36,9 @@ export default defineConfig({
   // /docs with a 301 to /docs/; "ignore" lets dev and preview resolve /docs too,
   // where "always" would answer 404.
   trailingSlash: "ignore",
-  // Assets go to /_s/ under hash-only names, so URLs don't name the framework
+  // Assets go to /_gz/ under hash-only names, so URLs don't name the framework
   // or the source components.
-  build: { format: "directory", assets: "_s" },
+  build: { format: "directory", assets: "_gz" },
   // Links load on hover, so a click swaps the page without waiting.
   prefetch: { prefetchAll: true, defaultStrategy: "hover" },
   devToolbar: { enabled: false },
