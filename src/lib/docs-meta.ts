@@ -1,4 +1,4 @@
-import { getDocsPage, SITE_URL } from "@/lib/docs-pages"
+import { getDocsPage, ogImageSlug, SITE_URL } from "@/lib/docs-pages"
 import type { Metadata } from "@/lib/metadata"
 
 // docsMetadata builds the Metadata for a docs page from the central
@@ -18,11 +18,16 @@ export function docsMetadata(href: string): Metadata {
   // here replaces the site-wide objects wholesale, so the inherited images are
   // dropped unless we restate them. Without this every docs share renders a
   // blank card.
+  //
+  // Pages with an ogImage config get their own build-time card at
+  // /og/<slug>.png (see scripts/generate-og-cards.mjs); every other page keeps
+  // the site-wide og-image.png.
+  const cardSlug = page.ogImage ? ogImageSlug(href) : null
   const image = {
-    url: "/og-image.png",
+    url: cardSlug ? `${SITE_URL}/og/${cardSlug}.png` : "/og-image.png",
     width: 1200,
     height: 630,
-    alt: "Gooze: Test your tests. Mutation testing for Go.",
+    alt: page.ogImage?.title ?? "Gooze: Test your tests. Mutation testing for Go.",
     type: "image/png",
   }
 

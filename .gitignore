@@ -42,3 +42,6 @@ yarn-error.log*
 
 # gooze reports from recording examples/calc
 /examples/calc/.gooze-reports/
+
+# build-time generated Open Graph cards (scripts/generate-og-cards.mjs)
+/public/og/

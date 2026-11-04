@@ -10,6 +10,16 @@
 
 export const SITE_URL = "https://gooze.dev"
 
+/**
+ * Stable file name for a docs page's build-time Open Graph card:
+ * /docs/quick-start -> quick-start, /docs/ci/sharing-reports ->
+ * ci-sharing-reports. The generator (scripts/generate-og-cards.mjs) and the
+ * metadata builder (lib/docs-meta.ts) must agree on this.
+ */
+export function ogImageSlug(href: string): string {
+  return href.replace(/^\/docs\/?/, "").replace(/\/+$/, "").replace(/\//g, "-") || "docs"
+}
+
 export const docsSections = [
   "Get started",
   "Guides",
@@ -42,6 +52,20 @@ export interface DocsPage {
   description: string
   /** Extra terms that should match in search but may not appear in the title. */
   keywords: string[]
+  /**
+   * Optional per-page Open Graph card. When set, scripts/generate-og-cards.mjs
+   * renders a 1200x630 card for this page to public/og/<slug>.png at build
+   * time and docsMetadata() points og:image at it. Pages without one keep the
+   * site-wide /og-image.png card. Text follows .claude/rules/writing.md.
+   */
+  ogImage?: {
+    /** Card title; defaults to the page's seoTitle or title. */
+    title?: string
+    /** One-line factual subtitle; defaults to the page description. */
+    subtitle?: string
+    /** Accent key from the design system: gopher, toxic, blue, or orange. */
+    accent?: "gopher" | "toxic" | "blue" | "orange"
+  }
 }
 
 export const docsPages: DocsPage[] = [
@@ -75,6 +99,11 @@ export const docsPages: DocsPage[] = [
     description:
       "Run your first Go mutation test in under 5 minutes: start a run, read your first mutation score, and find the code your tests don't really check.",
     keywords: ["quick start","tutorial","first mutation run","calculate score","go testing guide","beginner setup"],
+    ogImage: {
+      title: "Quick start",
+      subtitle: "Run your first mutation test in under 5 minutes and find the code your tests don't really check.",
+      accent: "gopher",
+    },
   },
   {
     href: "/docs/mutation-testing",
@@ -208,6 +237,11 @@ export const docsPages: DocsPage[] = [
     description:
       "Share Gooze mutation reports through an OCI registry like GHCR, so CI and teammates start from one baseline. What OCI is, tags, digests, and why a registry.",
     keywords: ["oci registry","oci artifact","ghcr","gitlab container registry","push reports","pull reports","test baseline","ci artifacts","authentication","oras"],
+    ogImage: {
+      title: "Report artifacts",
+      subtitle: "Share mutation reports through an OCI registry so CI and teammates start from one baseline.",
+      accent: "blue",
+    },
   },
   {
     href: "/docs/editor-support",
@@ -219,6 +253,11 @@ export const docsPages: DocsPage[] = [
     description:
       "Mutation testing results in your editor and AI coding agents: the goozels language server for VS Code, Neovim and more, plus goozels check for agents.",
     keywords: ["editor support","goozels lsp","language server protocol","vscode extension","neovim integration","inline results","goozels check","claude code","claude plugin","codex","opencode","ai coding agents"],
+    ogImage: {
+      title: "Editor support and AI agents",
+      subtitle: "Mutation testing results in your editor and AI coding agents via the goozels language server.",
+      accent: "orange",
+    },
   },
   {
     href: "/docs/claude-code",
@@ -229,6 +268,11 @@ export const docsPages: DocsPage[] = [
     description:
       "Install the gooze plugin for Claude Code: project setup with /gooze:init, the kill-survivors loop, CI setup, and mutation results after every edit.",
     keywords: ["claude code","claude plugin","ai coding agent","vibe coding","/gooze:init","mutation testing skill","post-edit hook","code review","ci setup"],
+    ogImage: {
+      title: "Claude Code",
+      subtitle: "The gooze plugin for Claude Code: /gooze:init, a kill-survivors loop, CI setup, and results after every edit.",
+      accent: "orange",
+    },
   },
   {
     href: "/docs/cli",
@@ -325,6 +369,11 @@ export const docsPages: DocsPage[] = [
     description:
       "Compare Go mutation testing tools side by side on caching, sharding, CI, editor support and a Claude Code plugin, from tiny projects to large monorepos.",
     keywords: ["go mutation testing comparison","mutation testing tools","framework comparison","tdd monorepo","microservices mutation testing","monorepo mutation testing","golang test performance","claude code plugin","ai coding agent"],
+    ogImage: {
+      title: "Comparison",
+      subtitle: "Compare Go mutation testing tools side by side on caching, sharding, CI, editor support, and a Claude Code plugin.",
+      accent: "toxic",
+    },
   },
   {
     href: "/docs/best-go-mutation-testing-tool",
@@ -335,6 +384,11 @@ export const docsPages: DocsPage[] = [
     description:
       "Why Gooze is the best Go mutation testing tool for most teams: it re-tests only changed files, keeps TDD loops short, and compares with other tools.",
     keywords: ["best go mutation testing tool","golang mutation testing","tdd feedback","go mutation testing comparison","fast mutation testing","go test quality"],
+    ogImage: {
+      title: "Best Go mutation testing tool",
+      subtitle: "Gooze re-tests only changed files, keeps TDD loops short, and compares with other tools.",
+      accent: "toxic",
+    },
   },
   {
     href: "/docs/best-go-mutation-testing-tool-for-ci",
@@ -345,6 +399,11 @@ export const docsPages: DocsPage[] = [
     description:
       "The best Go mutation testing tool for CI/CD: shard across parallel runners, cache incrementally, gate pull requests on mutation score, and share OCI baselines.",
     keywords: ["best go mutation testing ci","ci/cd mutation testing","sharding","mutation score gate","github actions","gitlab ci"],
+    ogImage: {
+      title: "Best Go mutation testing tool for CI/CD",
+      subtitle: "Shard across parallel runners, cache incrementally, gate pull requests on mutation score, and share OCI baselines.",
+      accent: "blue",
+    },
   },
   {
     href: "/docs/troubleshooting",
