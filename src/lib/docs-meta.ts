@@ -23,11 +23,13 @@ export function docsMetadata(href: string): Metadata {
   // /og/<slug>.png (see scripts/generate-og-cards.mjs); every other page keeps
   // the site-wide og-image.png.
   const cardSlug = page.ogImage ? ogImageSlug(href) : null
+  const cardTitle = page.ogImage?.title ?? page.title
   const image = {
     url: cardSlug ? `${SITE_URL}/og/${cardSlug}.png` : "/og-image.png",
     width: 1200,
     height: 630,
-    alt: page.ogImage?.title ?? "Gooze: Test your tests. Mutation testing for Go.",
+    // Review fix (#10): describe the image, not just repeat the card title.
+    alt: `Gooze docs: ${cardTitle}`,
     type: "image/png",
   }
 

@@ -63,8 +63,8 @@ export interface DocsPage {
     title?: string
     /** One-line factual subtitle; defaults to the page description. */
     subtitle?: string
-    /** Accent key from the design system: gopher, toxic, blue, or orange. */
-    accent?: "gopher" | "toxic" | "blue" | "orange"
+    /** Accent key from the design system: gopher, toxic, blue, orange, or claude. */
+    accent?: "gopher" | "toxic" | "blue" | "orange" | "claude"
   }
 }
 
@@ -238,8 +238,10 @@ export const docsPages: DocsPage[] = [
       "Share Gooze mutation reports through an OCI registry like GHCR, so CI and teammates start from one baseline. What OCI is, tags, digests, and why a registry.",
     keywords: ["oci registry","oci artifact","ghcr","gitlab container registry","push reports","pull reports","test baseline","ci artifacts","authentication","oras"],
     ogImage: {
-      title: "Report artifacts",
-      subtitle: "Share mutation reports through an OCI registry so CI and teammates start from one baseline.",
+      // Shared cache first: one run on main, every pull request and laptop
+      // pulls the baseline from the OCI registry with no extra storage.
+      title: "Shared mutation cache",
+      subtitle: "Run once on main; every pull request and laptop pulls the baseline from the OCI registry you already have.",
       accent: "blue",
     },
   },
@@ -254,8 +256,10 @@ export const docsPages: DocsPage[] = [
       "Mutation testing results in your editor and AI coding agents: the goozels language server for VS Code, Neovim and more, plus goozels check for agents.",
     keywords: ["editor support","goozels lsp","language server protocol","vscode extension","neovim integration","inline results","goozels check","claude code","claude plugin","codex","opencode","ai coding agents"],
     ogImage: {
-      title: "Editor support and AI agents",
-      subtitle: "Mutation testing results in your editor and AI coding agents via the goozels language server.",
+      // Editor support only: the AI-agents half belongs to the separate
+      // /docs/ai-agents/ page (#67), which does not exist yet.
+      title: "Editor support",
+      subtitle: "Mutation testing results in your editor via the goozels language server for VS Code, Neovim and more.",
       accent: "orange",
     },
   },
@@ -271,7 +275,7 @@ export const docsPages: DocsPage[] = [
     ogImage: {
       title: "Claude Code",
       subtitle: "The gooze plugin for Claude Code: /gooze:init, a kill-survivors loop, CI setup, and results after every edit.",
-      accent: "orange",
+      accent: "claude",
     },
   },
   {
@@ -370,8 +374,9 @@ export const docsPages: DocsPage[] = [
       "Compare Go mutation testing tools side by side on caching, sharding, CI, editor support and a Claude Code plugin, from tiny projects to large monorepos.",
     keywords: ["go mutation testing comparison","mutation testing tools","framework comparison","tdd monorepo","microservices mutation testing","monorepo mutation testing","golang test performance","claude code plugin","ai coding agent"],
     ogImage: {
+      // #73: name the tools the page covers, each the same way as on the page.
       title: "Comparison",
-      subtitle: "Compare Go mutation testing tools side by side on caching, sharding, CI, editor support, and a Claude Code plugin.",
+      subtitle: "Gooze vs gremlins, go-mutesting, go-mutesting (avito-tech), and go-mutants on caching, sharding, CI, and editor support.",
       accent: "toxic",
     },
   },
@@ -385,8 +390,10 @@ export const docsPages: DocsPage[] = [
       "Why Gooze is the best Go mutation testing tool for most teams: it re-tests only changed files, keeps TDD loops short, and compares with other tools.",
     keywords: ["best go mutation testing tool","golang mutation testing","tdd feedback","go mutation testing comparison","fast mutation testing","go test quality"],
     ogImage: {
+      // #74: one factual line with the page's criteria (cache, diff mode,
+      // sharding, CI) instead of a hand-wavy "compares with other tools".
       title: "Best Go mutation testing tool",
-      subtitle: "Gooze re-tests only changed files, keeps TDD loops short, and compares with other tools.",
+      subtitle: "Incremental cache, diff mode, sharding across CI jobs, and score gates keep TDD loops short.",
       accent: "toxic",
     },
   },

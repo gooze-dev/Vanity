@@ -25,6 +25,7 @@ import { fileURLToPath } from "node:url";
 
 import { docsPages, ogImageSlug } from "../src/lib/docs-pages.ts";
 import { Resvg } from "@resvg/resvg-js";
+import { wrapLines } from "./og-wrap.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT_DIR = join(ROOT, "public", "og");
@@ -39,57 +40,37 @@ const ACCENT_TOXIC = "#b6f23a";
 const BORDER = "#2a312c";
 
 // Accents available to pages. Each matches a design-system brand token.
+// `text` is the color used for chip text on the dark card: it must clear the
+// contrast bar even when the bar color (e.g. brand-blue-deep) does not.
 const ACCENTS = {
-  gopher: ACCENT_GOPHER,
-  toxic: ACCENT_TOXIC,
-  blue: "#007e9e",
-  orange: "#f59e2c",
+  gopher: { bar: ACCENT_GOPHER, text: ACCENT_GOPHER },
+  toxic: { bar: ACCENT_TOXIC, text: ACCENT_TOXIC },
+  blue: { bar: "#007e9e", text: "#4fc3f7" },
+  orange: { bar: "#f59e2c", text: "#f59e2c" },
+  // Claude Code keeps its own brand color (like the landing page pill), not
+  // the Gooze orange: #D97757 is Claude's, see ClaudeCodeAnnouncement.astro.
+  claude: { bar: "#D97757", text: "#D97757" },
 };
 
 // Default accent for pages that do not set one.
-const DEFAULT_ACCENT = ACCENT_GOPHER;
+const DEFAULT_ACCENT = ACCENTS.gopher;
 
 const W = 1200;
 const H = 630;
 
-// The capital-G mark, inlined from the design system asset.
+// The capital-G mark, inlined from the design system asset. 64x64 canvas.
 const MARK_SVG = readFileSync(join(ROOT, "public", "logo", "gooze-mark.svg"), "utf8");
 
-// Fonts are the same self-hosted files the site preloads.
-const FONT_OXANIUM = readFileSync(join(ROOT, "public", "fonts", "Oxanium.ttf"));
-const FONT_GEIST = readFileSync(join(ROOT, "public", "fonts", "Geist.ttf"));
+// Claude Code's own mascot, used only on the /docs/claude-code card so that
+// card keeps its brand look (see src/components/ClaudeCodeAnnouncement.astro:
+// Claude's orange stays outside the design system's token rules on purpose).
+const CLAUDE_SVG = readFileSync(join(ROOT, "public", "partners", "claude.svg"), "utf8");
 
-// Wrap text into at most maxLines lines, each capped at maxChars. Lines fill
-// greedily at word boundaries up to the cap, and an overflow that truly cannot
-// fit folds into the final line with an ellipsis, so a subtitle that fits
-// never shows a truncation ellipsis.
-function wrapLines(text, maxChars, maxLines) {
-  const words = text.split(/\s+/);
-  const totalChars = text.length;
-  if (totalChars <= maxChars) return [text];
-
-  const lines = [];
-  let current = "";
-  for (let i = 0; i < words.length; i++) {
-    const word = words[i];
-    const candidate = current ? `${current} ${word}` : word;
-    if (current && candidate.length > maxChars) {
-      lines.push(current);
-      current = word;
-      if (lines.length === maxLines) {
-        // No more room: the rest folds into the final line, ellipsized.
-        const rest = words.slice(i).join(" ");
-        lines[maxLines - 1] = `${rest.slice(0, maxChars - 1)}…`;
-        break;
-      }
-    } else {
-      current = candidate;
-    }
-  }
-  if (current && lines.length < maxLines) lines.push(current);
-  // Hard safety cap: no line may exceed the box width.
-  return lines.map((l) => (l.length > maxChars ? `${l.slice(0, maxChars - 1)}…` : l));
-}
+// Fonts are STATIC instances of the same self-hosted families (variable fonts
+// fall back to the bundled system serif in resvg). They live in scripts/fonts
+// because only the build needs them; the site keeps shipping the variable
+// files from public/fonts. Loaded via fontFiles (see render() below) — resvg-js
+// 2.x has no fontBuffers option.
 
 function escapeXml(s) {
   return s
@@ -104,7 +85,13 @@ function escapeXml(s) {
 // /docs/ci/sharing-reports -> ci-sharing-reports.png (lib/ogImageSlug keeps
 // the metadata builder in agreement).
 
+// Claude Code pages carry their own brand: Claude orange for the accent, the
+// Claude mascot in the tile, and a soft glow behind it.
+const CLAUDE_PAGE_HREF = "/docs/claude-code";
+const CLAUDE_ORANGE = "#D97757";
+
 function cardSvg(href, title, subtitle, accent, section) {
+  const isClaude = href === CLAUDE_PAGE_HREF;
   const titleLines = wrapLines(title, 22, 3).map(escapeXml);
   const subLines = wrapLines(subtitle, 60, 2).map(escapeXml);
 
@@ -136,6 +123,27 @@ function cardSvg(href, title, subtitle, accent, section) {
     gridLines.push(`<line x1="660" y1="${gy}" x2="1160" y2="${gy}" stroke="#1a211d" stroke-width="1"/>`);
   }
 
+  // Mark tile, top left. The mark is centered inside the 88px tile:
+  // offset = 72 + (88 - 64*s)/2, so at scale 1.3 the 83.2px canvas has
+  // (88 - 83.2)/2 = 2.4px of margin on every side (review fix: the old
+  // translate(44,44) put the top-left corner at x=44/y=44, 28px outside the
+  // tile, overflowing it).
+  const markInner = isClaude
+    ? CLAUDE_SVG.replace(/<svg[^>]*>|<\/svg>/g, "")
+    : MARK_SVG.replace(/<svg[^>]*>|<\/svg>/g, "");
+  const markScale = isClaude ? 2.3333 : 1.3; // claude canvas is 24x24 -> ~56px
+  const markOffset = isClaude ? 72 + (88 - 56) / 2 : 72 + (88 - 64 * markScale) / 2;
+
+  // Claude card keeps a soft brand glow behind the tile (the landing pill's
+  // claude-glow box-shadow, static: rgb(217 119 87 / 0.45)).
+  const glow = isClaude
+    ? `<radialGradient id="claudeGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="${CLAUDE_ORANGE}" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="${CLAUDE_ORANGE}" stop-opacity="0"/>
+    </radialGradient>
+    <circle cx="116" cy="116" r="78" fill="url(#claudeGlow)"/>`
+    : "";
+
   // Accent chip: page accent in a rounded pill under the mark, top right.
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
   <defs>
@@ -143,14 +151,15 @@ function cardSvg(href, title, subtitle, accent, section) {
       <stop offset="0" stop-color="${INK}"/>
       <stop offset="0.72" stop-color="${INK_RAISED}"/>
     </linearGradient>
+    ${glow}
   </defs>
   <rect width="${W}" height="${H}" fill="url(#bg)"/>
   ${gridLines.join("")}
   <rect x="72" y="72" width="88" height="88" rx="20" fill="#151a16" stroke="${BORDER}" stroke-width="1.5"/>
-  <g transform="translate(44,44) scale(1.3)">${MARK_SVG.replace(/<svg[^>]*>|<\/svg>/g, "")}</g>
+  <g transform="translate(${markOffset},${markOffset}) scale(${markScale})">${markInner}</g>
   <g transform="translate(196, 84)">
-    <rect x="0" y="0" width="${section.length * 15 + 34}" height="40" rx="20" fill="none" stroke="${accent}" stroke-width="2.5" opacity="0.85"/>
-    <text x="17" y="27" font-family="Oxanium, sans-serif" font-size="22" font-weight="700" fill="${accent}">${escapeXml(section)}</text>
+    <rect x="0" y="0" width="${section.length * 15 + 34}" height="40" rx="20" fill="none" stroke="${accent.bar}" stroke-width="2.5" opacity="0.85"/>
+    <text x="17" y="27" font-family="Oxanium, sans-serif" font-size="22" font-weight="700" fill="${accent.text}">${escapeXml(section)}</text>
   </g>
   <g font-family="Oxanium, sans-serif">
     <text x="72" y="${blockTop}" font-size="62" font-weight="700" fill="${FG}" letter-spacing="0.5">${titleTspans}</text>
@@ -158,14 +167,16 @@ function cardSvg(href, title, subtitle, accent, section) {
   <g font-family="Geist, sans-serif">
     <text x="72" y="${subTop}" font-size="30" fill="${FG_MUTED}" font-weight="400">${subTspans}</text>
   </g>
-  <rect x="72" y="${H - 120}" width="52" height="7" rx="3.5" fill="${accent}"/>
+  <rect x="72" y="${H - 120}" width="52" height="7" rx="3.5" fill="${accent.bar}"/>
   <text x="72" y="${H - 62}" font-family="Oxanium, sans-serif" font-size="26" font-weight="600" fill="${FG_MUTED}">Test your tests.</text>
   <text x="${W - 72}" y="${H - 62}" text-anchor="end" font-family="Oxanium, sans-serif" font-size="26" font-weight="600" fill="${FG_MUTED}">gooze.dev</text>
 </svg>`;
 }
 
 function resolveAccent(accent) {
-  return accent && /^#[0-9a-fA-F]{6}$/.test(accent) ? accent : DEFAULT_ACCENT;
+  if (typeof accent === "object" && accent.bar) return accent;
+  if (accent && ACCENTS[accent]) return ACCENTS[accent];
+  return DEFAULT_ACCENT;
 }
 
 function render(pages) {
@@ -177,11 +188,26 @@ function render(pages) {
   }
   for (const page of configured) {
     const og = page.ogImage;
-    const accent = ACCENTS[og.accent] ?? resolveAccent(og.accent);
+    const accent = resolveAccent(og.accent);
     const svg = cardSvg(page.href, og.title ?? page.seoTitle ?? page.title, og.subtitle ?? page.description, accent, page.section);
     const resvg = new Resvg(svg, {
       fitTo: { mode: "width", value: W },
-      font: { fontBuffers: [FONT_OXANIUM, FONT_GEIST] },
+      font: {
+        // NOTE: resvg-js 2.x loads fonts from PATHS (fontFiles/fontDirs), not
+        // from buffers — a fontBuffers field is silently ignored and the card
+        // falls back to system fonts (the "serif/monospace" bug the review
+        // caught). These are the static instances so the variable fonts the
+        // site preloads (public/fonts) are not needed here.
+        fontFiles: [
+          join(ROOT, "scripts", "fonts", "Oxanium-Bold.ttf"),
+          join(ROOT, "scripts", "fonts", "Oxanium-SemiBold.ttf"),
+          join(ROOT, "scripts", "fonts", "Geist-Regular.ttf"),
+        ],
+        defaultFontFamily: "Oxanium",
+        // Fail loudly on a missing family instead of silently falling back to
+        // the system serif.
+        loadSystemFonts: false,
+      },
     });
     const png = resvg.render().asPng();
     const slug = ogImageSlug(page.href);
