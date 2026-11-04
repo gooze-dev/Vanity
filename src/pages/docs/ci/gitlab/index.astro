@@ -353,7 +353,7 @@ const metadata = docsMetadata("/docs/ci/gitlab")
             need to change your pipeline. The reports inside are the same, and{" "}<code>gooze report pull</code> reads both kinds of artifact, so baselines pushed before still work.</p>
           <p>A self-managed GitLab registry has its own host. Turn compat mode on for it with the flag, an environment variable or{" "}<code>gooze.yaml</code>:</p>
           <CodeBlock lang="yaml" code={compatConfig} />
-          <p>Or set <code>GOOZE_REPORT_OCI_COMPAT=true</code> in the job, or pass{" "}<code>--oci-compat</code> to <code>gooze report push</code>. Hosts in{" "}<code>compat_hosts</code> match their subdomains too. If a registry still rejects a push for an unknown media type, the error names these settings.</p>
+          <p>Or set <code>GOOZE_REPORT_OCI_COMPAT=true</code> in the job, or pass{" "}<code>--oci-compat</code> to <code>gooze report push</code>. Hosts in{" "}<code>compat_hosts</code> match their subdomains too. If a registry still rejects a push for an unknown media type, the error names these settings. An explicit{" "}<code>false</code> (<code>--oci-compat=false</code>, the variable or{" "}<code>compat: false</code> in <code>gooze.yaml</code>) turns compat mode off, also for{" "}<code>registry.gitlab.com</code>.</p>
         </div>
         <div id="auth">
           <h2>Authentication</h2>

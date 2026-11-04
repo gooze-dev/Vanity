@@ -172,7 +172,7 @@ const faqJsonLd = faqPageJsonLd(faqs)
                 </TableRow>
                 <TableRow>
                   <TableCell><code>GOOZE_REPORT_OCI_COMPAT</code></TableCell>
-                  <TableCell>When <code>true</code>, <code>gooze report push</code> uses only widely accepted media types (default <code>false</code>); see{" "}<a href="/docs/ci/gitlab/#registry-media-types">GitLab registry</a>. <code>v1.4.3+</code></TableCell>
+                  <TableCell>When <code>true</code>, <code>gooze report push</code> uses only widely accepted media types; <code>false</code> turns them off, also for{" "}<code>registry.gitlab.com</code>. Unset, they are on for{" "}<code>registry.gitlab.com</code> and the compat hosts; see{" "}<a href="/docs/ci/gitlab/#registry-media-types">GitLab registry</a>. <code>v1.4.3+</code></TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell><code>GOOZE_REPORT_OCI_COMPAT_HOSTS</code></TableCell>
@@ -259,7 +259,7 @@ threshold:                    # quality gates; 0 is off; failing one, exit code 
 report:
   format: text                # gooze report view output: text | github | gitlab | sarif | codeclimate
   oci:                        # v1.4.3+
-    compat: false             # push with widely accepted media types (on by itself for registry.gitlab.com)
+    compat: false             # true or false; unset, on by itself for registry.gitlab.com
     compat_hosts: []          # more hosts, and their subdomains, that get compat media types
 
 log:
