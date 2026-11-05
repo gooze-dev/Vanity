@@ -1,2 +1,2 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1793695322, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "perm-run (gooze v1.4.2 (go1.27.3))"}
-[1.298084, "o", "Mutation score: 83.33% (5 killed, 1 survived; 0 cached, 6 tested)\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1793856084, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "perm-run (gooze v1.5.0 (go1.27.3))"}
+[1.461612, "o", "Mutation score: 83.33% (5 killed, 1 survived; 0 cached, 6 tested)\r\n"]

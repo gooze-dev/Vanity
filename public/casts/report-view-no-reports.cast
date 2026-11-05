@@ -1,2 +1,2 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1793695443, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "report-view-no-reports (gooze v1.4.2, goozels v0.4.0, go1.27.3)"}
-[0.013733, "o", "Error: no reports directory at .gooze-reports; run `gooze run` first, or pass -o with the reports directory\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1793856080, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "report-view-no-reports (gooze v1.5.0, goozels v0.4.1, go1.27.3)"}
+[0.007609, "o", "Error: no reports directory at .gooze-reports; run `gooze run` first, or pass -o with the reports directory\r\n"]

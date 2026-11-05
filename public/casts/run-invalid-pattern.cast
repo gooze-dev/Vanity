@@ -1,3 +1,3 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1793695354, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "run-invalid-pattern (gooze v1.4.2, goozels v0.4.0, go1.27.3)"}
-[0.014322, "o", "Running with 1 worker(s) (shard 0/1)\r\n"]
-[0.015257, "o", "Error: invalid --run pattern \"(\": error parsing regexp: missing closing ): `(`\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1793856178, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "run-invalid-pattern (gooze v1.5.0, goozels v0.4.1, go1.27.3)"}
+[0.009776, "o", "Running with 1 worker(s) (shard 0/1)\r\n"]
+[0.059952, "o", "Error: invalid --run pattern \"(\": error parsing regexp: missing closing ): `(`\r\n"]

@@ -263,6 +263,13 @@ export const roadmap: RoadmapItem[] = [
     docs: "/docs/ci/gitlab#survivors",
   },
   {
+    name: "GitLab metrics",
+    area: "reporting",
+    milestone: "shipped",
+    description: "The mutation score and counts in the merge request widget, compared with the target branch, with `gooze report view --format metrics`.",
+    docs: "/docs/ci/gitlab#metrics",
+  },
+  {
     name: "Code Climate report",
     area: "reporting",
     milestone: "shipped",
@@ -308,7 +315,7 @@ export const roadmap: RoadmapItem[] = [
     name: "OCI artifacts",
     area: "reporting",
     milestone: "shipped",
-    description: "Share reports through any OCI registry with `gooze report push` and `pull`.",
+    description: "Share reports through any OCI registry with `gooze report push` and `pull`, GitLab's container registry included.",
     docs: "/docs/ci/sharing-reports",
   },
   // Smart test execution
@@ -318,6 +325,13 @@ export const roadmap: RoadmapItem[] = [
     milestone: "shipped",
     description: "Files a build constraint leaves out are skipped, and the `-tags` in `GOFLAGS` choose which files are mutated and tested.",
     docs: "/docs/usage/ignoring-code#build-constraints",
+  },
+  {
+    name: "Test flags",
+    area: "execution",
+    milestone: "shipped",
+    description: "Pass extra flags such as `-short`, `-race` or `-tags` to the `go test` of every mutant with `--test-flags` or `run.test_flags`.",
+    docs: "/docs/cli/run#flags",
   },
   {
     name: "Cross-package coverage",

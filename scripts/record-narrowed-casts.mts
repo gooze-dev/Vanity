@@ -33,8 +33,12 @@ requireGooze(["run", "--help"], "--mutagens", "--run/--mutagens")
 const goozeVersion = run("gooze", "version")
 const goozelsVersion = run("goozels", "version")
 const goozeBinDir = dirname(which("gooze") ?? fail("gooze is not on PATH"))
-if (isExecutable(join(goozeBinDir, "git"))) {
-  fail(`${goozeBinDir} contains git; diff-no-git needs a directory without it`)
+// gooze runs go before it checks git, so diff-no-git keeps go on PATH.
+const goBinDir = join(run("go", "env", "GOROOT"), "bin")
+for (const dir of [goozeBinDir, goBinDir]) {
+  if (isExecutable(join(dir, "git"))) {
+    fail(`${dir} contains git; diff-no-git needs directories without it`)
+  }
 }
 const title = goozeVersion.replace(/ \((go[0-9.]*)\)$/, `, ${goozelsVersion}, $1`)
 stableGit()
@@ -73,7 +77,7 @@ rec("calc-diff-no-changes", "gooze run --diff main ./... | tail -n 2")
 
 rec("diff-unknown-ref", "gooze run --diff no-such-branch ./... 2>&1 | cat")
 // Only gooze's own directory on PATH, so git is not found.
-rec("diff-no-git", `PATH='${goozeBinDir}' gooze run --diff main ./... 2>&1 | cat`)
+rec("diff-no-git", `PATH='${goozeBinDir}:${goBinDir}' gooze run --diff main ./... 2>&1 | cat`)
 rmSync(".git", { recursive: true, force: true })
 rmSync(".gitignore", { force: true })
 rec("diff-no-repo", "gooze run --diff main ./... 2>&1 | cat")
