@@ -139,10 +139,11 @@ merge:
   script:
     - gooze report pull "$REPORTS_REF" || echo "no baseline yet"
     - for a in shard-*.tar.gz; do tar -xzf "$a"; done
-    - gooze report merge
+    # Gate off here, so the baseline push below always runs.
+    - gooze report merge --gate none --summary --write gitlab=gl-code-quality-report.json --write metrics=metrics.txt --write text=report.txt
     - gooze report push "$REPORTS_REF"
     # Last: fails the job (exit code 3) below 60%, after the baseline push.
-    - gooze report view --threshold-total 60`
+    - gooze report view --summary --threshold-total 60`
 
 
 const shardedDiff = `# Merge requests: the changed lines, in 3 shards.
@@ -171,17 +172,24 @@ diff-merge:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: always
   needs: [diff]
+  coverage: '/^Mutation score: (\\d+(?:\\.\\d+)?)%/'
   script:
+    - gooze report pull "$REPORTS_REF" || echo "no baseline yet"
     - for a in shard-*.tar.gz; do tar -xzf "$a"; done
-    # The same score an unsharded gooze run --diff gives.
-    - gooze report merge -o .gooze-reports/run
-    # Writes the report, then fails the job (exit code 3) when the changed
-    # lines score below 80%.
-    - gooze report view -o .gooze-reports/run --format gitlab --threshold-diff-total 80 > gl-code-quality-report.json
+    # One merge scores the changed lines and the whole project, writes
+    # every report, and fails the job (exit code 3) only when the changed
+    # lines score below threshold.diff.total.
+    - >
+      gooze report merge -o .gooze-reports --scope diff,total --gate diff --summary
+      --write-diff gitlab=gl-code-quality-report.json
+      --write metrics=metrics.txt
+      --write text=report.txt
   artifacts:
     when: always
+    paths: [report.txt]
     reports:
-      codequality: gl-code-quality-report.json`
+      codequality: gl-code-quality-report.json
+      metrics: metrics.txt`
 
 
 const gate = `merge:
@@ -277,6 +285,10 @@ const faqs = [
     q: "Can Gooze show surviving mutants in a GitLab merge request?",
     a: "Yes. `gooze report view --format gitlab > gl-code-quality-report.json` writes a Code Quality report in the Code Climate JSON format (`--format codeclimate` is the same), one finding per line with surviving mutants. Declare it as `artifacts: reports: codequality` and the merge request lists the findings. Gooze doesn't post MR notes.",
   },
+  {
+    q: "How do I write several Gooze reports in one GitLab job?",
+    a: "Repeat `--write <format>=<path>` (`v1.6.0+`): `gooze report merge --write gitlab=gl-code-quality-report.json --write metrics=metrics.txt --write text=report.txt`. The reports are loaded and scored once. `--write-diff` does the same for the changed lines of a `--diff` merge.",
+  },
 ]
 
 
@@ -324,6 +336,7 @@ const metadata = docsMetadata("/docs/ci/gitlab")
             <li>In <code>v1.5.0+</code>, a shard&apos;s directory also holds the cached results
               of the files it owns, so the merged score matches an unsharded run even if the merge
               job had no baseline.</li>
+            <li>In <code>v1.6.0+</code>,{" "}<code>gooze report pull</code> replaces the stored reports instead of adding to them, so a report of a deleted file doesn&apos;t outlive the baseline. It keeps the{" "}<code>shard_&lt;index&gt;</code> and <code>run</code> directories, so it doesn&apos;t matter whether the merge job pulls before or after unpacking the shard archives. It prints the ref, the digest, the number of report files and the baseline&apos;s score.</li>
           </ul>
         </div>
         <div id="diff">
@@ -355,8 +368,11 @@ const metadata = docsMetadata("/docs/ci/gitlab")
             them like the full run. Each shard hands only its own directory to the merge job:</p>
           <CodeBlock lang="yaml" code={shardedDiff} />
           <ul>
-            <li>A diff shard writes to <code>.gooze-reports/run/shard_&lt;index&gt;/</code>, and{" "}<code>gooze report merge -o .gooze-reports/run</code> merges them. The merged reports keep the{" "}<code>--diff</code> selection, so <code>report view</code> applies the{" "}<code>--threshold-diff-*</code> gates and writes the{" "}<a href="#survivors">Code Quality report</a> for the changed lines.</li>
-            <li>The merge job needs no baseline: each shard already carries the cached results it used.</li>
+            <li>A diff shard writes to <code>.gooze-reports/run/shard_&lt;index&gt;/</code>. In{" "}<code>v1.6.0+</code>,{" "}<code>gooze report merge -o .gooze-reports --scope diff,total</code> merges the shards and scores the changed lines (the{" "}<code>threshold.diff.*</code> keys apply), then adds the results to the baseline and scores the whole project (the{" "}<code>threshold.*</code> keys apply). The merged <code>.gooze-reports/run</code> stays, so{" "}<code>gooze report view -o .gooze-reports/run</code> still shows the changed lines afterwards.</li>
+            <li>Repeat <code>--write &lt;format&gt;=&lt;path&gt;</code> for each report you want: the reports are loaded and scored once, however many files you write.{" "}<code>--write</code> writes the whole project&apos;s scope and{" "}<code>--write-diff</code> the changed lines. With both scopes, the{" "}<code>metrics</code> file holds <code>gooze_*</code> and <code>gooze_diff_*</code> together.</li>
+            <li><code>--gate diff</code> lets only the changed lines decide exit code{" "}<code>3</code>; the whole project&apos;s score is shown but never fails the job. The threshold error is printed once and names its scope. Without <code>--gate</code>, a merge of{" "}<code>--diff</code> shards gates on the changed lines.</li>
+            <li><code>--summary</code> keeps the job log short: the per-file table, the score line and the threshold verdict, without the list of surviving mutants.{" "}<code>report.txt</code> keeps the full text report as an artifact.</li>
+            <li>Up to <code>v1.5.0</code>, this took a <code>report view</code> per format, and the diff reports had to be written before merging into the baseline, which deleted{" "}<code>.gooze-reports/run</code>.</li>
             <li>In <code>v1.5.0+</code>, a shard also copies the baseline results it reuses for
               the files it owns, so the merge gives the same score as an unsharded{" "}<code>gooze run --diff</code>. Up to <code>v1.4.2</code>, a merge request
               whose changed lines were all in the baseline merged to{" "}<code>100.00% (no mutations)</code>.</li>
@@ -385,6 +401,7 @@ const metadata = docsMetadata("/docs/ci/gitlab")
               the job runs Gooze there.</li>
             <li><code>GOOZE_REPORT_FORMAT: gitlab</code> in the job&apos;s <code>variables</code>{" "}works instead of the flag. Don&apos;t put <code>report.format: gitlab</code> in{" "}<code>gooze.yaml</code>: local <code>gooze report view</code> would print JSON too.</li>
           </ul>
+          <p>To write several formats at once, repeat <code>--write</code> in{" "}<code>v1.6.0+</code>, one <code>&lt;format&gt;=&lt;path&gt;</code> each:{" "}<code>gooze report view --write gitlab=gl-code-quality-report.json --write metrics=metrics.txt</code>. Gooze loads the reports once, and stdout keeps{" "}<code>--format</code>.</p>
           <p>The format only changes what <code>view</code> prints. Thresholds and exit codes work
             the same, as the next section shows.</p>
           <h3 id="metrics">The mutation score in the merge request</h3>
@@ -402,6 +419,7 @@ const metadata = docsMetadata("/docs/ci/gitlab")
           <CodeBlock lang="yaml" code={gate} />
           <p>The <code>calc</code> run at <code>84.62%</code> passes a minimum of{" "}<code>60</code> and fails a minimum of <code>90</code>, until the two boundary
             tests bring it to <code>100.00%</code>.</p>
+          <p>When a merge reports two scopes, <code>--gate diff</code>,{" "}<code>--gate total</code> or <code>--gate none</code> (or{" "}<code>report.gate</code> in <code>gooze.yaml</code>) picks the one that decides the exit code, as in the{" "}<a href="#sharded-diff">sharded merge request</a> example.</p>
           <p class="">A shard doesn&apos;t check thresholds, so gate only in the merge job. To show a low
             score as a warning instead of failing the pipeline, add{" "}<code>allow_failure: exit_codes: [3]</code>; every other code still fails it. More
             in <a href="#exit-codes">exit codes</a>.</p>
