@@ -147,6 +147,36 @@ const metadata = docsMetadata("/docs/cli/report")
               after its annotations. With <code>--all</code>, or with <code>--format sarif</code>,{" "}<code>codeclimate</code> or <code>gitlab</code>, which print no summary, it exits
               with code <code>2</code>. It is off by default, because tools parse the one-line-per-mutant list.</p>
           </div>
+          <div id="view-summary">
+            <h3>Short output for CI logs (--summary, --top)</h3>
+            <p>On a large module the survivor list runs to thousands of lines, too long for a job
+              log. In <code>v1.6.0+</code>, <code>--summary</code> prints only the per-file table,
+              the score line and the threshold verdict, and <code>--top N</code> keeps the{" "}<code>N</code> files with the most mutants against the score in the table. The{" "}<code>TOTAL FILES</code> row and the score still count every file:</p>
+            <CodeBlock lang="bash" code="gooze report view --summary --top 10" />
+            <p>Under GitLab CI (<code>GITLAB_CI=true</code>), the table, the survivors and the build
+              errors are <a href="https://docs.gitlab.com/ci/jobs/job_logs/#custom-collapsible-sections">collapsible sections</a> of the job log; the
+              survivors and build errors start collapsed. <code>--summary</code> can&apos;t be combined with{" "}<code>--all</code>, <code>--by-line</code> or a <code>--format</code> that prints no
+              summary (exit code <code>2</code>).</p>
+          </div>
+          <div id="view-write">
+            <h3>Several reports at once (--write)</h3>
+            <p>In <code>v1.6.0+</code>, <code>--write &lt;format&gt;=&lt;path&gt;</code> writes a report
+              file besides the output, and repeats for each file you want. Gooze loads and scores the
+              reports once for all of them:</p>
+            <CodeBlock lang="bash" code="gooze report view --summary --write gitlab=gl-code-quality-report.json --write metrics=metrics.txt --write text=report.txt" />
+            <ul>
+              <li>The formats are <code>text</code>, <code>gitlab</code>, <code>codeclimate</code>,{" "}<code>sarif</code> and <code>metrics</code>. <code>github</code> annotations only work in
+                the job log, so they stay on <code>--format</code>.</li>
+              <li>A <code>text</code> file holds the whole report: <code>--summary</code>,{" "}<code>--top</code> and the GitLab sections shape only the output.</li>
+              <li>stdout keeps <code>--format</code>, and the files never change the exit code.</li>
+            </ul>
+          </div>
+          <div id="view-gate">
+            <h3>Which score fails (--gate)</h3>
+            <p>In <code>v1.6.0+</code>, <code>--gate</code> (or <code>report.gate</code> in{" "}<code>gooze.yaml</code>) picks the scope whose thresholds decide exit code{" "}<code>3</code>: <code>diff</code> for the changed lines of a <code>--diff</code> run,{" "}<code>total</code> for the whole project, or <code>none</code>. The default,{" "}<code>auto</code>, gates on the reports&apos; own scope, as before. A scope the gate leaves
+              out is shown but never fails. A <code>--diff</code> run&apos;s score line names the changed
+              lines.</p>
+          </div>
           <h3>Every mutation (--all)</h3>
           <p><code>--all</code> lists every mutation with its status and diff instead of the
             summary. It takes the same paths:</p>
@@ -207,6 +237,10 @@ gooze report push ghcr.io/your-org/your-repo/gooze-reports:main`} />
           <h2>gooze report pull</h2>
           <p>Pulls reports from an OCI registry and extracts them into the reports directory.
             Use this to restore a baseline before an incremental run.</p>
+          <p>In <code>v1.6.0+</code>, a pull replaces the stored reports instead of adding to them,
+            so a report of a file that the baseline no longer has doesn&apos;t stay behind. It keeps
+            the <code>shard_*</code> and <code>run</code> directories, which wait for{" "}<a href="#merge"><code>merge</code></a>, and changes nothing when the pull fails. It prints the
+            reference, the digest, the number of report files and the pulled score.</p>
           <h3>Usage</h3>
           <CodeBlock lang="bash" code="gooze report pull <reference>" />
           <p>The reference must include a tag or a digest. Extracting into the current directory
@@ -231,11 +265,28 @@ gooze report push ghcr.io/your-org/your-repo/gooze-reports:main`} />
             (<code>run/</code> and <code>run/shard_*</code>) and removes <code>run/</code>.</p>
           <h3>Usage</h3>
           <CodeBlock lang="bash" code="gooze report merge" />
+          <p>In <code>v1.6.0+</code>, <code>merge</code> shows the merged reports as{" "}<code>view</code> does, with the same <code>--format</code>, <code>--summary</code>,{" "}<code>--top</code>, <code>--by-line</code>, <code>--write</code> and <code>--gate</code>{" "}flags. Earlier versions printed the run&apos;s progress view and the score.</p>
           <p>It takes the same threshold flags as <code>view</code>, checked on the merged
             reports. A shard doesn&apos;t check thresholds, so put them here when you shard. For the
             shards of a <code>--diff</code> run (<code>gooze report merge -o .gooze-reports/run</code>),
             the diff minimums apply (<code>--threshold-diff-*</code>, <code>threshold.diff.*</code>), as
             for <code>view</code> (<code>v1.4.2+</code>). Earlier versions checked the plain minimums there.</p>
+          <div id="merge-scopes">
+            <h3>Both scopes of a merge request (--scope)</h3>
+            <p>A merge request has two scores: its changed lines and the whole project. In{" "}<code>v1.6.0+</code>, one command reports both:</p>
+            <CodeBlock lang="bash" code={`gooze report merge --scope diff,total --summary \\
+  --write-diff gitlab=gl-code-quality-report.json \\
+  --write metrics=metrics.txt --write text=report.txt`} />
+            <ol>
+              <li>It merges the <code>--diff</code> shards in <code>.gooze-reports/run</code> and shows the
+                changed lines. <code>--write-diff</code> writes their files.</li>
+              <li>It folds them into the baseline in <code>.gooze-reports</code> and shows the whole
+                project. <code>--write</code> writes its files, and <code>--format</code> applies here.</li>
+              <li>The merged <code>.gooze-reports/run</code> stays, so{" "}<code>gooze report view -o .gooze-reports/run</code> still shows the changed lines.</li>
+            </ol>
+            <p>The gate defaults to the changed lines, so the whole project&apos;s score is shown but
+              doesn&apos;t fail the job; <code>--gate total</code> or <code>none</code> changes that. The{" "}<code>metrics</code> file holds both scopes,{" "}<code>gooze_*</code> and <code>gooze_diff_*</code>, with one <code>#&nbsp;EOF</code>. Without a{" "}<code>--diff</code> run in <code>run/</code>, <code>--scope diff,total</code> exits with code{" "}<code>6</code>.</p>
+          </div>
           <h3>When you need this</h3>
           <p>If you run <code>gooze run -s INDEX/TOTAL</code>, Gooze writes into shard folders.
             You merge them before running <code>gooze report view</code>. After a run with{" "}<code>--diff</code>, <code>--run</code> or <code>--mutagens</code>, merge to add its
@@ -251,7 +302,7 @@ gooze report view`} />
           <p>This example splits work into 4 jobs, then merges, then prints the full score and survivors.</p>
           <h3>Notes</h3>
           <ul>
-            <li>If there are no shard directories, <code>merge</code> just rebuilds the index and prints the score.</li>
+            <li>If there are no shard directories, <code>merge</code> just rebuilds the index and shows the reports.</li>
             <li>Shard reports replace base reports for the same source file; base reports for files
               no shard re-tested are kept, so caching can still work.</li>
             <li>Reports in <code>run/</code> (and <code>run/shard_*</code>) are folded in after the
@@ -259,7 +310,7 @@ gooze report view`} />
               hashes), they replace only the matching mutations, and the file stays complete. For
               a changed or new file, they replace all of the file&apos;s results; if the run tested
               only part of the file, it is marked partial, and the next full{" "}<code>gooze run</code> re-tests it in full. In <code>v1.4.2+</code>, a{" "}<code>--mutagens</code> run alone doesn&apos;t make a file partial: if the file hasn&apos;t changed since, the
-              next full run tests only the mutants of the other mutagens. Then <code>run/</code> is removed.</li>
+              next full run tests only the mutants of the other mutagens. Then <code>run/</code> is removed, unless{" "}<code>--scope diff,total</code> keeps it.</li>
             <li>When <code>merge</code> runs inside the checkout, base reports for files that no longer exist are dropped.</li>
           </ul>
         </div>
