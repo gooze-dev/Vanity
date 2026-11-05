@@ -1,4 +1,4 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1793695321, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-report-view-sarif-gate (gooze v1.4.2 (go1.27.3))"}
-[0.01375, "o", "Error: mutation score 84.62% is below threshold.total 90%\r\n"]
-[0.01482, "o", "exit code 3\r\n"]
-[0.015699, "o", "gooze.sarif\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1793856083, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-report-view-sarif-gate (gooze v1.5.0 (go1.27.3))"}
+[0.014929, "o", "Error: mutation score 84.62% is below threshold.total 90%\r\n"]
+[0.016227, "o", "exit code 3\r\n"]
+[0.016961, "o", "gooze.sarif\r\n"]

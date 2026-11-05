@@ -1,3 +1,3 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1793695358, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-threshold-file (gooze v1.4.2 (go1.27.3))"}
-[0.021878, "o", "Mutation score: 84.62% (11 killed, 2 survived)\r\nError: calc.go: score 84.62% is below threshold.file 90%\r\n"]
-[0.022517, "o", "exit code 3\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1793856114, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-threshold-file (gooze v1.5.0 (go1.27.3))"}
+[0.012788, "o", "Mutation score: 84.62% (11 killed, 2 survived)\r\nError: calc.go: score 84.62% is below threshold.file 90%\r\n"]
+[0.013369, "o", "exit code 3\r\n"]
