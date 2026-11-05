@@ -184,15 +184,24 @@ const shardedDiff = `  # Pull requests: the changed lines, in 3 shards.
     container: golang:1.27
     steps:
       - run: go install gooze.dev/pkg/gooze@latest
+      - run: gooze report pull "$REPORTS_REF" || echo "no baseline yet"
       - uses: actions/download-artifact@v4
         with:
           path: .gooze-reports/run
           pattern: gooze-diff-shard-*
           merge-multiple: true
 
-      # The same score an unsharded gooze run --diff gives. Fails the job
-      # (exit code 3) when the changed lines score below 80%.
-      - run: gooze report merge -o .gooze-reports/run --threshold-diff-total 80`
+      # Shows the changed lines, then the whole project, and writes every
+      # report. Fails the job (exit code 3) only when the changed lines
+      # score below 80%.
+      - run: >
+          gooze report merge --scope diff,total --gate diff --summary
+          --threshold-diff-total 80
+          --write-diff sarif=gooze.sarif
+          --write text=report.txt
+      # The merged run dir stays: annotate the changed lines' survivors.
+      - if: \${{ always() }}
+        run: gooze report view -o .gooze-reports/run --format github --summary --gate none`
 
 
 const gate = `      # Last step: fails the job (exit code 3) below 60%, after the
@@ -368,7 +377,9 @@ const metadata = docsMetadata("/docs/ci/github")
             them like the full run. Each shard uploads only its own directory:</p>
           <CodeBlock lang="yaml" code={shardedDiff} />
           <ul>
-            <li>A diff shard writes to <code>.gooze-reports/run/shard_&lt;index&gt;/</code>, and{" "}<code>gooze report merge -o .gooze-reports/run</code> merges them. The merge applies the{" "}<code>--threshold-diff-*</code> gates, because the shards share a <code>--diff</code> selection.</li>
+            <li>A diff shard writes to <code>.gooze-reports/run/shard_&lt;index&gt;/</code>. In{" "}<code>v1.6.0+</code>,{" "}<code>gooze report merge --scope diff,total</code> merges them and shows the changed lines, then adds them to the baseline and shows the whole project, in one step. <code>--gate diff</code> lets only the changed lines fail the job. See{" "}<a href="/docs/cli/report/#merge-scopes">both scopes of a merge request</a>.</li>
+            <li>Repeat <code>--write</code> (whole project) and <code>--write-diff</code> (changed lines) for each report file; the reports are loaded once.{" "}<code>--summary</code> keeps the log to the tables and scores, and{" "}<code>report.txt</code> keeps the full list.</li>
+            <li>The merged <code>.gooze-reports/run</code> stays, so the last step can still print the{" "}<a href="#survivors">annotations</a> of the changed lines. Up to <code>v1.5.0</code>, the diff shards were merged with{" "}<code>gooze report merge -o .gooze-reports/run</code>, and folding them into the baseline removed <code>run/</code>.</li>
             <li>In <code>v1.5.0+</code>, a shard also copies the baseline results it reuses for
               the files it owns, so the merge gives the same score as an unsharded{" "}<code>gooze run --diff</code>. Up to <code>v1.4.2</code>, a pull request
               whose changed lines were all in the baseline merged to{" "}<code>100.00% (no mutations)</code>.</li>
