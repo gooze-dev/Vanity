@@ -155,6 +155,46 @@ jobs:
     # ...same steps as above, then the score gate`
 
 
+const shardedDiff = `  # Pull requests: the changed lines, in 3 shards.
+  diff:
+    if: \${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    container: golang:1.27
+    strategy:
+      matrix:
+        shard: [0, 1, 2]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: go install gooze.dev/pkg/gooze@latest
+      - run: gooze report pull "$REPORTS_REF" || echo "no baseline yet"
+      - run: gooze run -s \${{ matrix.shard }}/3 --diff "origin/\${{ github.base_ref }}" ./...
+
+      # Only this shard's dir goes to the merge job.
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gooze-diff-shard-\${{ matrix.shard }}
+          path: .gooze-reports/run/
+
+  diff-merge:
+    if: \${{ github.event_name == 'pull_request' }}
+    needs: diff
+    runs-on: ubuntu-latest
+    container: golang:1.27
+    steps:
+      - run: go install gooze.dev/pkg/gooze@latest
+      - uses: actions/download-artifact@v4
+        with:
+          path: .gooze-reports/run
+          pattern: gooze-diff-shard-*
+          merge-multiple: true
+
+      # The same score an unsharded gooze run --diff gives. Fails the job
+      # (exit code 3) when the changed lines score below 80%.
+      - run: gooze report merge -o .gooze-reports/run --threshold-diff-total 80`
+
+
 const gate = `      # Last step: fails the job (exit code 3) below 60%, after the
       # baseline is already pushed.
       - name: Mutation score gate
@@ -322,6 +362,16 @@ const metadata = docsMetadata("/docs/ci/github")
               doesn&apos;t push: the baseline comes only from the full run on <code>main</code>.</li>
             <li>Diff mode needs git. The <code>golang</code> image includes it; a minimal image
               may not.</li>
+          </ul>
+          <h3 id="sharded-diff">Shard a large pull request</h3>
+          <p>When a pull request changes many files, split the diff run into shards and merge
+            them like the full run. Each shard uploads only its own directory:</p>
+          <CodeBlock lang="yaml" code={shardedDiff} />
+          <ul>
+            <li>A diff shard writes to <code>.gooze-reports/run/shard_&lt;index&gt;/</code>, and{" "}<code>gooze report merge -o .gooze-reports/run</code> merges them. The merge applies the{" "}<code>--threshold-diff-*</code> gates, because the shards share a <code>--diff</code> selection.</li>
+            <li>In <code>v1.5.0+</code>, a shard also copies the baseline results it reuses for
+              the files it owns, so the merge gives the same score as an unsharded{" "}<code>gooze run --diff</code>. Up to <code>v1.4.2</code>, a pull request
+              whose changed lines were all in the baseline merged to{" "}<code>100.00% (no mutations)</code>.</li>
           </ul>
         </div>
         <div id="survivors">

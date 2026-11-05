@@ -205,6 +205,7 @@ gooze report push ghcr.io/org/repo/gooze-reports:main   # publish updated`} />
             <li>If unset, Gooze falls back to the Docker credential store, so a prior{" "}<code>docker login</code> also works.</li>
             <li>For a non-TLS registry add <code>--plain-http</code>;
               to skip TLS verification (self-signed certs) add{" "}<code>--insecure</code>.</li>
+            <li>GitLab&apos;s container registry accepts only allowlisted media types; Gooze{" "}<code>v1.5.0+</code> packages reports for it by itself (see{" "}<a href="/docs/ci/gitlab/#registry-media-types">GitLab registry</a>).</li>
           </ul>
           <p class="">Platform-specific credentials (<code>GITHUB_TOKEN</code>,{" "}<code>CI_JOB_TOKEN</code>, an Artifact Registry access token) are covered on the{" "}<a href="/docs/ci/github/#auth">GitHub</a>,{" "}<a href="/docs/ci/gitlab/#auth">GitLab</a> and{" "}<a href="/docs/ci/cloud-build/#cached">Cloud Build</a> pages.</p>
         </div>

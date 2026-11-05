@@ -48,23 +48,31 @@ variables:
   GOOZE_REGISTRY_USERNAME: "gitlab-ci-token"
   GOOZE_REGISTRY_PASSWORD: "$CI_JOB_TOKEN"
 
+default:
+  before_script:
+    - go install gooze.dev/pkg/gooze@latest
+
 test:
   stage: test
   parallel: 3
   script:
-    - go install gooze.dev/pkg/gooze@latest
     # Reuse the main baseline so unchanged files are skipped (the cache).
     - gooze report pull "$REPORTS_REF" || echo "no baseline yet"
     - gooze run -s "$((CI_NODE_INDEX - 1))/$CI_NODE_TOTAL" ./...
+  after_script:
+    # Only this shard's dir goes to the merge job, as one archive.
+    - tar -czf "shard-$CI_NODE_INDEX.tar.gz" ".gooze-reports/shard_$((CI_NODE_INDEX - 1))" || true
   artifacts:
-    paths:
-      - .gooze-reports/        # handed to the merge job; no registry push here
+    when: always
+    expire_in: 1 day
+    paths: ["shard-$CI_NODE_INDEX.tar.gz"]
 
 merge:
   stage: merge
-  dependencies: [test]
+  needs: [test]
   script:
-    - go install gooze.dev/pkg/gooze@latest
+    - gooze report pull "$REPORTS_REF" || echo "no baseline yet"
+    - for a in shard-*.tar.gz; do tar -xzf "$a"; done
     - gooze report merge
     # Only main publishes the merged baseline back to the registry.
     - |
@@ -115,20 +123,65 @@ test:
   script:
     - gooze report pull "$REPORTS_REF" || echo "no baseline yet"
     - gooze run -s "$((CI_NODE_INDEX - 1))/$CI_NODE_TOTAL" ./...
+  after_script:
+    # Only this shard's dir goes to the merge job, as one archive.
+    - tar -czf "shard-$CI_NODE_INDEX.tar.gz" ".gooze-reports/shard_$((CI_NODE_INDEX - 1))" || true
   artifacts:
-    paths:
-      - .gooze-reports/
+    when: always
+    expire_in: 1 day
+    paths: ["shard-$CI_NODE_INDEX.tar.gz"]
 
 merge:
   stage: merge
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-  dependencies: [test]
+  needs: [test]
   script:
+    - gooze report pull "$REPORTS_REF" || echo "no baseline yet"
+    - for a in shard-*.tar.gz; do tar -xzf "$a"; done
     - gooze report merge
     - gooze report push "$REPORTS_REF"
     # Last: fails the job (exit code 3) below 60%, after the baseline push.
     - gooze report view --threshold-total 60`
+
+
+const shardedDiff = `# Merge requests: the changed lines, in 3 shards.
+diff:
+  stage: test
+  parallel: 3
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    GIT_DEPTH: 0
+  script:
+    - gooze report pull "$REPORTS_REF" || echo "no baseline yet"
+    - git fetch origin "+refs/heads/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME:refs/remotes/origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - gooze run -s "$((CI_NODE_INDEX - 1))/$CI_NODE_TOTAL" --diff "origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" ./...
+  after_script:
+    # Only this shard's dir goes to the merge job: its tested and cached results.
+    - tar -czf "shard-$CI_NODE_INDEX.tar.gz" ".gooze-reports/run/shard_$((CI_NODE_INDEX - 1))" || true
+  artifacts:
+    when: always
+    expire_in: 1 day
+    paths: ["shard-$CI_NODE_INDEX.tar.gz"]
+
+diff-merge:
+  stage: merge
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: always
+  needs: [diff]
+  script:
+    - for a in shard-*.tar.gz; do tar -xzf "$a"; done
+    # The same score an unsharded gooze run --diff gives.
+    - gooze report merge -o .gooze-reports/run
+    # Writes the report, then fails the job (exit code 3) when the changed
+    # lines score below 80%.
+    - gooze report view -o .gooze-reports/run --format gitlab --threshold-diff-total 80 > gl-code-quality-report.json
+  artifacts:
+    when: always
+    reports:
+      codequality: gl-code-quality-report.json`
 
 
 const gate = `merge:
@@ -150,6 +203,13 @@ const allowLowScore = `merge:
   allow_failure:
     exit_codes: [3]`
 
+
+const compatConfig = `# gooze.yaml
+report:
+  oci:
+    compat_hosts:
+      - registry.gitlab.example.com
+`
 
 const metrics = `diff:
   # ...the diff job from above, then:
@@ -252,11 +312,19 @@ const metadata = docsMetadata("/docs/ci/gitlab")
           <h2>3. Sharded + cached baseline</h2>
           <p>Each shard pulls the <code>:main</code> baseline
             for the cache (<a href="/docs/usage/incremental-runs/">incremental runs</a>),
-            then hands its reports to the merge job as an artifact; shards never push to the
-            registry. The merge job combines them and, <strong>only on <code>main</code></strong>, publishes the
+            then hands only its own <code>shard_&lt;index&gt;</code> directory to the merge job, as one archive;
+            shards never push to the registry. The merge job pulls the baseline too, adds the shard
+            directories and combines them. <strong>Only on <code>main</code></strong> does it publish the
             single merged baseline back to <code>:main</code>. Files that didn&apos;t change,
             such as an untouched <code>calc.go</code>, come from the cache.</p>
           <CodeBlock lang="yaml" code={cached} />
+          <ul>
+            <li><code>CI_NODE_INDEX</code> is 1-based and the shard directories are 0-based, so
+              the archive is built in <code>after_script</code> instead of listing the directory under{" "}<code>artifacts: paths</code>. <code>when: always</code> keeps a shard&apos;s archive when its job fails.</li>
+            <li>In <code>v1.5.0+</code>, a shard&apos;s directory also holds the cached results
+              of the files it owns, so the merged score matches an unsharded run even if the merge
+              job had no baseline.</li>
+          </ul>
         </div>
         <div id="diff">
           <h2>4. Merge requests: only the changed lines</h2>
@@ -281,6 +349,17 @@ const metadata = docsMetadata("/docs/ci/gitlab")
               branch pushes the baseline.</li>
             <li>Diff mode needs git. The <code>golang</code> image includes it; a minimal image
               may not.</li>
+          </ul>
+          <h3 id="sharded-diff">Shard a large merge request</h3>
+          <p>When a merge request changes many files, split the diff run into shards and merge
+            them like the full run. Each shard hands only its own directory to the merge job:</p>
+          <CodeBlock lang="yaml" code={shardedDiff} />
+          <ul>
+            <li>A diff shard writes to <code>.gooze-reports/run/shard_&lt;index&gt;/</code>, and{" "}<code>gooze report merge -o .gooze-reports/run</code> merges them. The merged reports keep the{" "}<code>--diff</code> selection, so <code>report view</code> applies the{" "}<code>--threshold-diff-*</code> gates and writes the{" "}<a href="#survivors">Code Quality report</a> for the changed lines.</li>
+            <li>The merge job needs no baseline: each shard already carries the cached results it used.</li>
+            <li>In <code>v1.5.0+</code>, a shard also copies the baseline results it reuses for
+              the files it owns, so the merge gives the same score as an unsharded{" "}<code>gooze run --diff</code>. Up to <code>v1.4.2</code>, a merge request
+              whose changed lines were all in the baseline merged to{" "}<code>100.00% (no mutations)</code>.</li>
           </ul>
         </div>
         <div id="survivors">
@@ -354,6 +433,17 @@ const metadata = docsMetadata("/docs/ci/gitlab")
           <p class="">The usual causes of the other codes in GitLab CI: <code>4</code>, a shallow clone
             without <code>GIT_DEPTH: 0</code> and the target branch; <code>5</code>, a job
             token without registry access; <code>6</code>, a merge job without{" "}<code>dependencies</code> on the shard jobs. Every code:{" "}<a href="/docs/cli/#exit-codes">CLI reference</a>.</p>
+        </div>
+        <div id="registry-media-types">
+          <h2>GitLab container registry</h2>
+          <p>GitLab&apos;s container registry accepts only media types from a{" "}<a href="https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/supported-media-types.md">fixed allowlist</a>,
+            and the types Gooze uses for reports on other registries aren&apos;t on it. Up to <code>v1.4.2</code>,{" "}<code>gooze report push</code> to{" "}<code>registry.gitlab.com</code> fails with{" "}<code>400</code> and{" "}<code>unknown media type</code>.</p>
+          <p>In <code>v1.5.0+</code>, Gooze pushes to <code>registry.gitlab.com</code> in compat mode by itself: an
+            image manifest with an unknown config and one{" "}<code>application/tar+gzip</code> layer, all on the allowlist. You don&apos;t
+            need to change your pipeline. The reports inside are the same, and{" "}<code>gooze report pull</code> reads both kinds of artifact, so baselines pushed before still work.</p>
+          <p>A self-managed GitLab registry has its own host. Turn compat mode on for it with the flag, an environment variable or{" "}<code>gooze.yaml</code>:</p>
+          <CodeBlock lang="yaml" code={compatConfig} />
+          <p>Or set <code>GOOZE_REPORT_OCI_COMPAT=true</code> in the job, or pass{" "}<code>--oci-compat</code> to <code>gooze report push</code>. Hosts in{" "}<code>compat_hosts</code> match their subdomains too. If a registry still rejects a push for an unknown media type, the error names these settings. An explicit{" "}<code>false</code> (<code>--oci-compat=false</code>, the variable or{" "}<code>compat: false</code> in <code>gooze.yaml</code>) turns compat mode off, also for{" "}<code>registry.gitlab.com</code>.</p>
         </div>
         <div id="auth">
           <h2>Authentication</h2>

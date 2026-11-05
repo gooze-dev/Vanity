@@ -190,6 +190,7 @@ const metadata = docsMetadata("/docs/cli/report")
             <li><code>-o, --output &lt;dir&gt;</code>: reports directory to package (default <code>.gooze-reports</code>)</li>
             <li><code>--plain-http</code>: use a non-TLS (HTTP) registry</li>
             <li><code>--insecure</code>: skip TLS certificate verification</li>
+            <li><code>--oci-compat</code>: push with only widely accepted media types, for registries such as GitLab&apos;s that reject others (config <code>report.oci.compat</code>; on by itself for{" "}<code>registry.gitlab.com</code> and the hosts in <code>report.oci.compat_hosts</code>; see{" "}<a href="/docs/ci/gitlab/#registry-media-types">GitLab registry</a>). <code>v1.5.0+</code></li>
           </ul>
           <div id="auth">
             <h3>Authentication</h3>
@@ -210,7 +211,8 @@ gooze report push ghcr.io/your-org/your-repo/gooze-reports:main`} />
           <CodeBlock lang="bash" code="gooze report pull <reference>" />
           <p>The reference must include a tag or a digest. Extracting into the current directory
             (<code>-o .</code>) works, file modes are preserved, and pulling an artifact that was not
-            pushed by Gooze fails with an error saying it is not a gooze reports artifact.</p>
+            pushed by Gooze fails with an error saying it is not a gooze reports artifact. Pull reads
+            artifacts pushed with or without <code>--oci-compat</code>.</p>
           <h3>Example</h3>
           <CodeBlock lang="bash" code="gooze report pull ghcr.io/your-org/your-repo/gooze-reports:main" />
           <h3>Flags</h3>

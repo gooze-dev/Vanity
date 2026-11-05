@@ -175,6 +175,14 @@ const faqJsonLd = faqPageJsonLd(faqs)
                   <TableCell>Extra <code>go test</code> flags for every mutant&apos;s tests, separated by spaces, such as{" "}<code>-short -tags=integration</code>; see{" "}<a href="/docs/cli/run/">gooze run</a>. <code>v1.5.0+</code></TableCell>
                 </TableRow>
                 <TableRow>
+                  <TableCell><code>GOOZE_REPORT_OCI_COMPAT</code></TableCell>
+                  <TableCell>When <code>true</code>, <code>gooze report push</code> uses only widely accepted media types; <code>false</code> turns them off, also for{" "}<code>registry.gitlab.com</code>. Unset, they are on for{" "}<code>registry.gitlab.com</code> and the compat hosts; see{" "}<a href="/docs/ci/gitlab/#registry-media-types">GitLab registry</a>. <code>v1.5.0+</code></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell><code>GOOZE_REPORT_OCI_COMPAT_HOSTS</code></TableCell>
+                  <TableCell>More registry hosts that get those media types without the setting, separated by commas or spaces. <code>v1.5.0+</code></TableCell>
+                </TableRow>
+                <TableRow>
                   <TableCell><code>GOOZE_LOG_FILENAME</code></TableCell>
                   <TableCell>Log file path</TableCell>
                 </TableRow>
@@ -255,6 +263,9 @@ threshold:                    # quality gates; 0 is off; failing one, exit code 
 
 report:
   format: text                # gooze report view output: text | github | gitlab | sarif | codeclimate | metrics
+  oci:                        # v1.5.0+
+    # compat: true            # unset: on by itself for registry.gitlab.com; true or false sets it for every registry
+    compat_hosts: []          # more hosts, and their subdomains, that get compat media types
 
 log:
   filename: .gooze.log
