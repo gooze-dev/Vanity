@@ -211,6 +211,17 @@ report:
       - registry.gitlab.example.com
 `
 
+const metrics = `diff:
+  # ...the diff job from above, then:
+  script:
+    - gooze run --diff "origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" ./...
+    - gooze report view -o .gooze-reports/run --format metrics > metrics.txt
+  artifacts:
+    when: always
+    reports:
+      metrics: metrics.txt`
+
+
 const keepCache = `test:
   cache:
     key: gooze
@@ -376,6 +387,13 @@ const metadata = docsMetadata("/docs/ci/gitlab")
           </ul>
           <p>The format only changes what <code>view</code> prints. Thresholds and exit codes work
             the same, as the next section shows.</p>
+          <h3 id="metrics">The mutation score in the merge request</h3>
+          <p>The Code Quality report shows where mutants survive, but not how the score moves. In{" "}<code>v1.5.0+</code>,{" "}<code>gooze report view --format metrics</code> writes the score and the count of each status as a{" "}<a href="https://docs.gitlab.com/ci/testing/metrics_reports/">metrics report</a>, which GitLab Premium and Ultimate show in the merge request next to the target branch&apos;s values:</p>
+          <CodeBlock lang="yaml" code={metrics} />
+          <p>A <code>--diff</code> run&apos;s metrics are named <code>gooze_diff_*</code>: its score
+            covers only the changed lines, so it shows as its own value instead of a change from
+            the whole project&apos;s score. Run the full suite on the target branch with the same
+            job to compare <code>gooze_mutation_score_percent</code> there.</p>
         </div>
         <div id="gate">
           <h2>Fail the build below a score (quality gate)</h2>

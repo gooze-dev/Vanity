@@ -100,6 +100,11 @@ const metadata = docsMetadata("/docs/cli/report")
                     <TableCell>A Code Climate JSON report for GitLab Code Quality, instead of the summary.
                       Both names write the same report.</TableCell>
                   </TableRow>
+                  <TableRow>
+                    <TableCell><code>metrics</code></TableCell>
+                    <TableCell><code>v1.5.0+</code>. The score and the count of each status as a GitLab
+                      metrics report, instead of the summary.</TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </div>
@@ -109,13 +114,17 @@ const metadata = docsMetadata("/docs/cli/report")
               root, so they match the files on GitHub and GitLab even when the module is in a
               subdirectory. Outside a git repository, Gooze uses the working directory&apos;s path
               inside <code>$GITHUB_WORKSPACE</code> or, on GitLab, <code>$CI_PROJECT_DIR</code>.</p>
-            <p>Thresholds work as with <code>text</code>. With <code>sarif</code> and{" "}<code>codeclimate</code>, the file is written first, so a gate that fails still
+            <p>Thresholds work as with <code>text</code>. With <code>sarif</code>,{" "}<code>codeclimate</code> and <code>metrics</code>, the file is written first, so a gate that fails still
               leaves a complete file:</p>
             <CodeBlock lang="bash" code="gooze report view --format sarif --threshold-total 90 > gooze.sarif" />
             <Recording name="calc-report-view-sarif-gate" title="Recorded gooze report view --format sarif below a threshold" />
             <p>The same with <code>codeclimate</code>, for GitLab Code Quality:</p>
             <CodeBlock lang="bash" code="gooze report view --format codeclimate --threshold-total 90 > gl-code-quality-report.json" />
             <Recording name="calc-report-view-codeclimate" title="Recorded gooze report view --format codeclimate below a threshold" />
+            <p><code>--format metrics</code> writes one <code>name value</code> line per metric and
+              ends with <code># EOF</code>: <code>gooze_mutation_score_percent</code>, then{" "}<code>gooze_mutants_total</code> and one{" "}<code>gooze_mutants_&lt;status&gt;</code> line for each status. The reports of a{" "}<code>--diff</code> run get <code>gooze_diff_</code> names instead, because their score
+              covers only the changed lines and GitLab compares metrics by name with the target
+              branch. Without mutations there is no score line, only the counts. See{" "}<a href="/docs/ci/gitlab/#metrics">GitLab CI</a> for the job.</p>
             <p><code>--all</code> always lists mutations as text, so <code>--all</code> with any
               other format exits with code <code>2</code>. An unknown
               format also exits with <code>2</code>. The fields of each format are in{" "}<a href="/docs/reports/#formats">Report format</a>, and the pipelines that use

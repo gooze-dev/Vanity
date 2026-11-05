@@ -136,6 +136,12 @@ const runFlags: RunFlag[] = [
     configKey: "run.go_cache_prewarm",
   },
   {
+    flag: "--test-flags",
+    description: "`v1.5.0+`. Extra `go test` flags for the tests of every mutant, such as `-short`, `-race`, `-tags=integration` or `-skip=TestSlow`. Repeatable, or several in one value separated by spaces; a flag's value goes after `=`. `-json`, `-count`, `-vet`, `-overlay`, `-c` and `-o` are rejected with exit code `2`, since Gooze sets them itself. Env: `GOOZE_RUN_TEST_FLAGS`.",
+    defaultValue: "empty",
+    configKey: "run.test_flags",
+  },
+  {
     flag: "--parallel",
     alias: "-p",
     description: "Number of parallel workers for mutation testing (at least `1`).",

@@ -167,8 +167,12 @@ const faqJsonLd = faqPageJsonLd(faqs)
                 </TableRow>
                 <TableRow>
                   <TableCell><code>GOOZE_REPORT_FORMAT</code></TableCell>
-                  <TableCell>How <code>gooze report view</code> writes survivors: <code>text</code> (default),{" "}<code>github</code> (workflow annotations, then the summary) or{" "}<code>sarif</code> (a SARIF 2.1.0 log) or <code>codeclimate</code> (a Code
-                    Climate report for GitLab Code Quality; <code>gitlab</code> is the same); see{" "}<a href="/docs/cli/report/#view-format">output formats</a>.</TableCell>
+                  <TableCell>How <code>gooze report view</code> writes survivors: <code>text</code> (default),{" "}<code>github</code> (workflow annotations, then the summary) or{" "}<code>sarif</code> (a SARIF 2.1.0 log), <code>codeclimate</code> (a Code
+                    Climate report for GitLab Code Quality; <code>gitlab</code> is the same) or{" "}<code>metrics</code> (a GitLab metrics report, <code>v1.5.0+</code>); see{" "}<a href="/docs/cli/report/#view-format">output formats</a>.</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell><code>GOOZE_RUN_TEST_FLAGS</code></TableCell>
+                  <TableCell>Extra <code>go test</code> flags for every mutant&apos;s tests, separated by spaces, such as{" "}<code>-short -tags=integration</code>; see{" "}<a href="/docs/cli/run/">gooze run</a>. <code>v1.5.0+</code></TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell><code>GOOZE_REPORT_OCI_COMPAT</code></TableCell>
@@ -245,6 +249,7 @@ run:
   go_cache: isolated          # isolated (Gooze's own cache, reads GOCACHE) or shared (GOCACHE)
   go_cache_size: 2048         # MB that Gooze's own build cache is trimmed to after a run
   go_cache_prewarm: false     # build each package's tests in GOCACHE before its mutants
+  test_flags: []              # extra go test flags, e.g. [-short, -tags=integration] (v1.5.0+)
 
 threshold:                    # quality gates; 0 is off; failing one, exit code 3
   total: 0                    # the score of all mutations
@@ -257,7 +262,7 @@ threshold:                    # quality gates; 0 is off; failing one, exit code 
     file: 0
 
 report:
-  format: text                # gooze report view output: text | github | gitlab | sarif | codeclimate
+  format: text                # gooze report view output: text | github | gitlab | sarif | codeclimate | metrics
   oci:                        # v1.5.0+
     # compat: true            # unset: on by itself for registry.gitlab.com; true or false sets it for every registry
     compat_hosts: []          # more hosts, and their subdomains, that get compat media types
@@ -290,7 +295,8 @@ log:
             <li><code>run.fail_fast</code> must be <code>off</code>, <code>gate</code>,{" "}<code>file</code> or <code>first</code></li>
             <li>every <code>threshold</code> score must be a number from <code>0</code> to <code>100</code></li>
             <li><code>threshold.max_survivors</code> must be a whole number, at least <code>0</code></li>
-            <li><code>report.format</code> must be <code>text</code>, <code>github</code>,{" "}<code>gitlab</code>, <code>sarif</code> or <code>codeclimate</code></li>
+            <li><code>report.format</code> must be <code>text</code>, <code>github</code>,{" "}<code>gitlab</code>, <code>sarif</code>, <code>codeclimate</code> or <code>metrics</code></li>
+            <li>every <code>run.test_flags</code> entry must be a flag, with its value after{" "}<code>=</code>, and not one Gooze sets itself</li>
           </ul>
           <p>An invalid value exits with code <code>2</code>.</p>
           <p>In <code>v1.4.2+</code>, every key is in snake case. Three old keys still work and print a warning: <code>no-cache</code> is now{" "}<code>no_cache</code>,{" "}
