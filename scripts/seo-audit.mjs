@@ -9,6 +9,8 @@
 import { readFileSync, readdirSync, statSync, existsSync } from "fs";
 import { join } from "path";
 
+import { docsPages, ogImageSlug } from "../src/lib/docs-pages.ts";
+
 const OUT = "out";
 const SITE = "https://gooze.dev";
 
@@ -102,6 +104,28 @@ for (const r of rows) {
   if (!r.desc) fail(r.route, "indexable page has no meta description");
   else if (len < DESC_MIN || len > DESC_MAX)
     warn(r.route, `description length ${len} outside ${DESC_MIN}-${DESC_MAX}`);
+}
+
+// Build-time Open Graph cards: every docs page with an ogImage config must
+// point og:image at its own /og/<slug>.png and that file must exist in the
+// static export, so a share of the page never falls back to the home card.
+const cardPages = docsPages.filter((p) => p.ogImage);
+if (cardPages.length === 0) {
+  fail("/docs", "no docs pages declare ogImage; per-page social cards are unconfigured");
+} else {
+  for (const page of cardPages) {
+    const slug = ogImageSlug(page.href);
+    const cardPath = join(OUT, "og", `${slug}.png`);
+    const row = rows.find((r) => r.route === `${page.href}/`);
+    if (!row) {
+      fail(page.href, "ogImage page not found in the built export");
+      continue;
+    }
+    if (row.ogImage !== `${SITE}/og/${slug}.png`)
+      fail(page.href, `og:image ${row.ogImage} != ${SITE}/og/${slug}.png`);
+    if (!existsSync(cardPath))
+      fail(page.href, `build-time card missing at ${cardPath} (run npm run build)`);
+  }
 }
 
 // Report
