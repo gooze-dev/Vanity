@@ -130,6 +130,22 @@ const metadata = docsMetadata("/docs/cli/report")
               format also exits with <code>2</code>. The fields of each format are in{" "}<a href="/docs/reports/#formats">Report format</a>, and the pipelines that use
               them are in <a href="/docs/ci/github/#survivors">GitHub Actions</a> and{" "}<a href="/docs/ci/gitlab/#survivors">GitLab CI</a>.</p>
           </div>
+          <div id="view-summary">
+            <h3>A short summary for CI logs (--summary, --top)</h3>
+            <p>On a large module the survivor list fills the job log. In <code>v1.5.1+</code>,{" "}<code>--summary</code> prints only the per-file table, the score and the threshold
+              verdict:</p>
+            <CodeBlock lang="bash" code="gooze report view --summary" />
+            <Recording name="calc-report-view-summary" title="Recorded gooze report view --summary after the first run" />
+            <p><code>--top N</code> keeps only the <code>N</code> files with the most mutants
+              against the score in the table (survived, not covered, timed out and skipped), and
+              a line under the table says how many of all files it shows. The total and the score
+              still count every file. It works with or without <code>--summary</code>:</p>
+            <CodeBlock lang="bash" code="gooze report view --summary --top 10" />
+            <p><code>--summary</code> with <code>--all</code>, <code>--by-line</code> or a{" "}<code>--format</code> that writes no text summary (<code>sarif</code>,{" "}<code>codeclimate</code>, <code>gitlab</code>, <code>metrics</code>) exits with code{" "}<code>2</code>, and so do <code>--top</code> with <code>--all</code> and a negative{" "}<code>--top</code>.</p>
+            <p>Under GitLab CI (<code>GITLAB_CI=true</code>), the table, the survivors and the build
+              errors are collapsible sections of the job log, and the survivors and build errors
+              start collapsed. Elsewhere the output doesn&apos;t change.</p>
+          </div>
           <div id="view-by-line">
             <h3>One entry per line (--by-line)</h3>
             <p>One weak line often has several surviving mutants, and one test usually kills them
@@ -205,8 +221,13 @@ gooze report push ghcr.io/your-org/your-repo/gooze-reports:main`} />
         </div>
         <div id="pull">
           <h2>gooze report pull</h2>
-          <p>Pulls reports from an OCI registry and extracts them into the reports directory.
+          <p>Pulls reports from an OCI registry into the reports directory.
             Use this to restore a baseline before an incremental run.</p>
+          <p>In <code>v1.5.1+</code>, the pulled reports replace the stored ones, so the reports of
+            files the baseline no longer has don&apos;t stay behind and change the score. The{" "}<code>shard_*</code> directories and the <code>run/</code> directory of a{" "}<code>--diff</code> or <code>--run</code> run are kept, for{" "}<a href="#merge"><code>gooze report merge</code></a> to fold in. If the pull fails,
+            the reports directory doesn&apos;t change. Then it prints the reference, the artifact&apos;s
+            digest, how many report files it holds and their mutation score. Earlier versions
+            extracted the artifact over the stored reports and printed nothing.</p>
           <h3>Usage</h3>
           <CodeBlock lang="bash" code="gooze report pull <reference>" />
           <p>The reference must include a tag or a digest. Extracting into the current directory

@@ -189,8 +189,9 @@ const gate = `merge:
   script:
     - go install gooze.dev/pkg/gooze@latest
     - gooze report merge
-    # Fails the job (exit code 3) below 60%.
-    - gooze report view --threshold-total 60`
+    # Fails the job (exit code 3) below 60%. --summary (v1.5.1+) keeps
+    # the job log to the per-file table and the score.
+    - gooze report view --summary --threshold-total 60`
 
 
 const allowLowScore = `merge:
@@ -405,6 +406,9 @@ const metadata = docsMetadata("/docs/ci/gitlab")
           <p class="">A shard doesn&apos;t check thresholds, so gate only in the merge job. To show a low
             score as a warning instead of failing the pipeline, add{" "}<code>allow_failure: exit_codes: [3]</code>; every other code still fails it. More
             in <a href="#exit-codes">exit codes</a>.</p>
+          <p>In <code>v1.5.1+</code>, <code>gooze report view</code> sees{" "}<code>GITLAB_CI=true</code> and writes the per-file table, the survivors and the build
+            errors as collapsible sections of the job log, with the survivors and build errors
+            collapsed. <code>--summary</code> leaves out the survivors, and{" "}<code>--top 10</code> keeps the table to the ten files with the most survivors (see{" "}<a href="/docs/cli/report/#view-summary">report view</a>).</p>
         </div>
         <div id="exit-codes">
           <h2>Exit codes</h2>

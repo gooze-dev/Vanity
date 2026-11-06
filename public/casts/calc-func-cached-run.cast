@@ -1,2 +1,2 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1793856168, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-func-cached-run (gooze v1.5.0, goozels v0.4.1, go1.27.3)"}
-[0.086152, "o", "Mutation score: 84.62% (11 killed, 2 survived; 13 cached, 0 tested; functions matching ^InRange$)\r\nReports of this run are in .gooze-reports/run; add them to the main reports with gooze report merge.\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1793964783, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-func-cached-run (gooze v1.5.1, goozels v0.4.1, go1.27.3)"}
+[0.091748, "o", "Mutation score: 84.62% (11 killed, 2 survived; 13 cached, 0 tested; functions matching ^InRange$)\r\nReports of this run are in .gooze-reports/run; add them to the main reports with gooze report merge.\r\n"]
