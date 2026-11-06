@@ -1,2 +1,2 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1793856164, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-diff-no-changes (gooze v1.5.0, goozels v0.4.1, go1.27.3)"}
-[0.050318, "o", "Mutation score: 100.00% (no mutations; changed lines since main)\r\nReports of this run are in .gooze-reports/run; add them to the main reports with gooze report merge.\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1793964775, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-diff-no-changes (gooze v1.5.1, goozels v0.4.1, go1.27.3)"}
+[0.051182, "o", "Mutation score: 100.00% (no mutations; changed lines since main)\r\nReports of this run are in .gooze-reports/run; add them to the main reports with gooze report merge.\r\n"]

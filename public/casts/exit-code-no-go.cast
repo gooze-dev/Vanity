@@ -1,0 +1,3 @@
+{"version": 2, "width": 80, "height": 24, "timestamp": 1793964812, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "exit-code-no-go (gooze v1.5.1 (go1.27.3))"}
+[0.013211, "o", "Error: gooze needs go, but go was not found on PATH: exec: \"go\": executable file not found in $PATH\r\n"]
+[0.013834, "o", "exit code 2\r\n"]

@@ -1,2 +1,2 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1793856086, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-opt-in-mutagens (gooze v1.5.0 (go1.27.3))"}
-[1.830554, "o", "Mutation score: 100.00% (8 killed, 0 survived; 0 cached, 8 tested; mutagens branch, statement, loop)\r\nReports of this run are in .gooze-reports/run; add them to the main reports with gooze report merge.\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1793964758, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-opt-in-mutagens (gooze v1.5.1 (go1.27.3))"}
+[4.116014, "o", "Mutation score: 100.00% (8 killed, 0 survived; 0 cached, 8 tested; mutagens branch, statement, loop)\r\nReports of this run are in .gooze-reports/run; add them to the main reports with gooze report merge.\r\n"]

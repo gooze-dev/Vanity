@@ -64,6 +64,8 @@ rec("calc-threshold-diff", 'gooze run --diff main ./... | tail -n 2; echo "exit 
 // --- Exit codes of other errors -------------------------------------------
 rec("exit-code-usage", 'gooze run --run "(" ./... 2>&1 | tail -n 1; echo "exit code ${PIPESTATUS[0]}"')
 rec("exit-code-git", 'gooze run --diff no-such-branch ./... 2>&1 | tail -n 1; echo "exit code ${PIPESTATUS[0]}"')
+// Only gooze's own directory on PATH, so go is missing.
+rec("exit-code-no-go", 'env PATH="$(dirname "$(command -v gooze)")" gooze run ./... 2>&1 | tail -n 1; echo "exit code ${PIPESTATUS[0]}"')
 rec("exit-code-no-reports", 'gooze report view -o missing 2>&1 | cat; echo "exit code ${PIPESTATUS[0]}"')
 
 console.log(`recorded the threshold casts with ${title}`)

@@ -28,7 +28,7 @@ const commands = [
 const exitCodes: { code: string; meaning: string; action: string }[] = [
   { code: "0", meaning: "Completed; every threshold set is met.", action: "Nothing." },
   { code: "1", meaning: "Unexpected failure, such as reading or writing reports.", action: "Read the error; rerun with -v for the log." },
-  { code: "2", meaning: "Bad flag, argument or config value (an invalid --run pattern, a threshold above 100).", action: "Fix the command or gooze.yaml." },
+  { code: "2", meaning: "Bad flag, argument or config value (an invalid --run pattern, a threshold above 100), or no go on PATH (v1.5.1+).", action: "Fix the command or gooze.yaml, or install Go." },
   { code: "3", meaning: "Completed, but a score is below a threshold. Reports are written.", action: "Kill the survivors, or treat it as a warning." },
   { code: "4", meaning: "--diff can't compare against git: no git, not a repository, unknown ref.", action: "Install git, or fetch the base ref (fetch-depth: 0)." },
   { code: "5", meaning: "report push or pull failed at the registry.", action: "Check the reference and credentials." },
@@ -92,6 +92,7 @@ const metadata = docsMetadata("/docs/cli")
           </Table>
           <p>Some of them, recorded:</p>
           <Recording name="exit-code-usage" title="Recorded exit code 2 for an invalid --run pattern" />
+          <Recording name="exit-code-no-go" title="Recorded exit code 2 without go on PATH" />
           <Recording name="exit-code-git" title="Recorded exit code 4 for an unknown diff ref" />
           <Recording name="exit-code-no-reports" title="Recorded exit code 6 for a missing reports directory" />
           <p>Errors print as <code>Error: ...</code>; the command&apos;s usage text follows only for

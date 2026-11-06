@@ -41,6 +41,7 @@ await tui("calc-first-run-tui", "gooze run ./...", "wait:Test Results", "sleep:3
 rmSync(".gooze-reports", { recursive: true, force: true })
 rec("calc-first-run", "gooze run ./... | tail -n 1")
 rec("calc-report-view", "gooze report view | cat")
+rec("calc-report-view-summary", "gooze report view --summary | cat")
 rec("calc-survivors", "gooze report view | tail -n 4")
 rec("calc-goozels-check", "goozels check calc.go | cat")
 // Browse the mutations and open the first survivor's diff (5th in the list).

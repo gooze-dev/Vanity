@@ -1,2 +1,2 @@
-{"version": 2, "width": 80, "height": 24, "timestamp": 1793856064, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-survivors (gooze v1.5.0, goozels v0.4.1, go1.27.3)"}
-[0.010645, "o", "calc.go:10: survived (comparison): if n < lo { -> if n <= lo {\r\ncalc.go:13: survived (comparison): if n > hi { -> if n >= hi {\r\n\r\nMutation score: 84.62% (11 killed, 2 survived)\r\n"]
+{"version": 2, "width": 80, "height": 24, "timestamp": 1793964733, "idle_time_limit": 1.0, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}, "title": "calc-survivors (gooze v1.5.1, goozels v0.4.1, go1.27.3)"}
+[0.020679, "o", "calc.go:10: survived (comparison): if n < lo { -> if n <= lo {\r\ncalc.go:13: survived (comparison): if n > hi { -> if n >= hi {\r\n\r\nMutation score: 84.62% (11 killed, 2 survived)\r\n"]
