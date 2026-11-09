@@ -182,6 +182,7 @@ export const roadmap: RoadmapItem[] = [
     milestone: "later",
     theme: "operators",
     description: "Replace a returned value with its zero value, `nil` or an empty collection (`return x` to `return 0`, `return items` to `return nil`).",
+    issue: 217,
   },
   {
     name: "Number parsing",
@@ -197,6 +198,7 @@ export const roadmap: RoadmapItem[] = [
     milestone: "later",
     theme: "operators",
     description: "`\"\"` to `\"x\"` and back, and other string constant changes. Today only integer and float literals are mutated.",
+    issue: 218,
   },
   {
     name: "Assignment operators",
