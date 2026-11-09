@@ -220,6 +220,14 @@ export const roadmap: RoadmapItem[] = [
     description: "`s[i]` to `s[i+1]`, `s[1:]` to `s[:]`.",
   },
   {
+    name: "Subsumption analysis",
+    area: "operators",
+    milestone: "later",
+    theme: "operators",
+    description: "Skip mutants that any test killing another mutant on the same line also kills, such as most of the five replacements of `<`. Fewer mutants to run and fewer duplicate survivors, with the same strength; `mutagen.subsumption: off` keeps them all.",
+    issue: 216,
+  },
+  {
     name: "Default operators",
     area: "operators",
     milestone: "shipped",
