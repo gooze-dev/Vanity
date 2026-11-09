@@ -113,6 +113,11 @@ run:
             change to that file put it in scope in full.</p>
           <p>That is what happens on the <code>calc</code> branch above: the branch changes only{" "}<code>calc_test.go</code>, so all of <code>calc.go</code> is tested, including the
             two bound checks the new tests kill.</p>
+          <p>A branch that only adds a test file without a matching source, such as{" "}<code>extra_test.go</code>, has nothing to mutate. In <code>v1.6.0+</code> the score
+            line says so, in <code>gooze run</code> and in <code>gooze report view</code> of its
+            reports: <code>1 changed test file, no changed source lines to mutate</code>, so
+            nobody reads the <code>100.00%</code> as a test of the new file. Earlier versions
+            printed <code>no mutations</code>.</p>
         </div>
         <div id="scores">
           <h2>The score of the change</h2>

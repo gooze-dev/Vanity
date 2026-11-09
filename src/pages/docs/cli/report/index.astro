@@ -45,6 +45,15 @@ const metadata = docsMetadata("/docs/cli/report")
               make each row add up to <code>MUTATIONS</code>. Mutants that did not build are listed after the survivors, under{" "}<code>Build errors (N):</code>, one line each by file and line, in the same format.
               They still don&apos;t count against the score, and the <code>github</code>,{" "}<code>sarif</code> and <code>codeclimate</code> formats leave them out.</p>
           </div>
+          <div id="view-partial">
+            <h3>Reports of a run that stopped early</h3>
+            <p>A run stopped by <a href="/docs/ci/quality-gates/#fail-fast"><code>--fail-fast</code></a>{" "}or by Ctrl-C saves the mutants it tested, so its reports hold only part of the
+              results. In <code>v1.6.0+</code>, the run records that in{" "}<code>_partial.json</code>, and <code>view</code> and <code>merge</code> print the same
+              note as the run, such as{" "}<code>stopped early by fail-fast first after 15 of 19</code>. The gates still check
+              the results there are, and the exit code doesn&apos;t change. The results stay
+              mergeable: <code>merge</code> adds up the records of its shards, and the next run
+              tests only what was left and clears the record.</p>
+          </div>
           <div id="view-unmerged">
             <h3>Empty main reports</h3>
             <p>Right after a sharded run, or a run with <code>--diff</code> or <code>--run</code>,
