@@ -284,6 +284,10 @@ gooze report push ghcr.io/your-org/your-repo/gooze-reports:main`} />
                 project. <code>--write</code> writes its files, and <code>--format</code> applies here.</li>
               <li>The merged <code>.gooze-reports/run</code> stays, so{" "}<code>gooze report view -o .gooze-reports/run</code> still shows the changed lines.</li>
             </ol>
+            <p>Each scope gets its own table, titled <code>Changed lines since &lt;ref&gt;</code> and{" "}<code>Whole project</code>. The survivors are listed once, under the changed lines; the
+              whole project shows its table and score, and its <code>--write</code> files still
+              hold every survivor. The score lines end with{" "}<code>changed lines since &lt;ref&gt;</code> and <code>whole project</code>. Under
+              GitLab CI each scope has its own collapsible sections, titled with the scope.</p>
             <p>By default both scopes are gated: the changed lines on{" "}<code>threshold.diff.*</code> and the whole project on <code>threshold.*</code>, and
               every breach is printed. <code>--gate diff</code> or <code>--gate total</code> lets
               only one scope fail the job, and <code>--gate none</code> neither. The{" "}<code>metrics</code> file holds both scopes,{" "}<code>gooze_*</code> and <code>gooze_diff_*</code>, with one <code>#&nbsp;EOF</code>. Without a{" "}<code>--diff</code> run in <code>run/</code>, <code>--scope diff,total</code> exits with code{" "}<code>6</code>.</p>

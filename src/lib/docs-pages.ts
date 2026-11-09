@@ -186,8 +186,8 @@ export const docsPages: DocsPage[] = [
       "Mutation Score Thresholds and Exit Codes in CI · Gooze",
     section: "CI/CD",
     description:
-      "Fail CI below a mutation score with Gooze thresholds: total, average and per file, a cap on surviving mutants, a stricter bar for pull request diffs, stopping early once a gate fails, gates on sharded runs, and every exit code.",
-    keywords: ["quality gate","mutation score threshold","minimum score","exit codes","fail ci","pull request","diff threshold","per-file score","allow_failure","allowExitCodes"],
+      "Fail CI below a mutation score with Gooze thresholds: total, average and per file, a cap on surviving mutants, timeouts counted as killed, a stricter bar for pull request diffs, both scopes gated in one merge, stopping early, sharded runs, and every exit code.",
+    keywords: ["quality gate","mutation score threshold","minimum score","exit codes","fail ci","pull request","diff threshold","per-file score","timeouts","merge request","allow_failure","allowExitCodes"],
   },
   {
     href: "/docs/ci/sharding",

@@ -20,8 +20,10 @@ const config = `threshold:
   average: 75     # the mean of the file scores
   file: 50        # the score every file must reach
   max_survivors: 5 # the most surviving mutants allowed
+  timeouts: survived # or killed (v1.6.0+)
   diff:           # --diff runs only, on the changed lines
-    total: 100`
+    total: 100
+    max_survivors: 0 # 0 uses max_survivors above (v1.6.0+)`
 
 
 const faqs = [
@@ -40,6 +42,14 @@ const faqs = [
   {
     q: "Can pull requests have a stricter threshold than main?",
     a: "Yes. `threshold.diff.total`, `threshold.diff.average` and `threshold.diff.file` (flags `--threshold-diff-*`) apply only to `gooze run --diff` runs, which score the changed lines. They replace the plain thresholds there, so one `gooze.yaml` can ask for 80% on main and 100% on the changed lines.",
+  },
+  {
+    q: "Can one CI job gate the changed lines and the whole project?",
+    a: "Yes. In `v1.6.0+`, `gooze report merge --scope diff,total` checks the changed lines against `threshold.diff.*` and the whole project against `threshold.*`, and prints every breach before it exits with code `3`. `--gate diff`, `--gate total` or `--gate none` (or `report.gate`) narrows which scope can fail the job.",
+  },
+  {
+    q: "Can timed-out mutants count as killed?",
+    a: "Yes. In `v1.6.0+`, `--threshold-timeouts killed` (or `threshold.timeouts: killed`) counts them as killed in the score and in every gate. They are still counted and listed as `timeout`, and the score line ends with `timeouts count as killed`. The default, `survived`, counts them as not killed.",
   },
   {
     q: "Can Gooze stop a run as soon as a threshold fails?",
@@ -69,9 +79,10 @@ const faqJsonLd = faqPageJsonLd(faqs)
       <p class="gz-prose gz-prose--lead mb-8">Your CI runs Gooze on every push, but the job passes at any score, so tests can get
         weaker without anyone noticing. A threshold turns the score into a gate: below it, Gooze
         exits with code <code>3</code> and the job fails. This page shows the three score
-        thresholds, a cap on surviving mutants, a stricter bar for pull requests, how to stop a
-        run once a gate fails, where sharded runs check them, and how to handle each exit code
-        in your pipeline.</p>
+        thresholds, a cap on surviving mutants, how timeouts count, a stricter bar for pull
+        requests, gating the changed lines and the whole project in one job, how to stop a run
+        once a gate fails, where sharded runs check them, and how to handle each exit code in
+        your pipeline.</p>
       <div>
         <div id="thresholds">
           <h2>Three thresholds</h2>
@@ -125,9 +136,22 @@ const faqJsonLd = faqPageJsonLd(faqs)
             survivors, so a cap of <code>1</code> fails:</p>
           <CodeBlock lang="bash" code="gooze report view --threshold-max-survivors 1" />
           <Recording name="calc-threshold-max-survivors" title="Recorded gooze report view above threshold.max_survivors" />
-          <p>Only <code>survived</code> mutants count. <code>not_covered</code> and{" "}<code>timeout</code> lower the score, so the score thresholds catch them. The cap
-            has no <code>diff</code> copy: a <code>--diff</code> run, and{" "}<code>gooze report view</code> of its reports, count the survivors on the changed
-            lines against the same number.</p>
+          <p>Only <code>survived</code> mutants count. <code>not_covered</code> and{" "}<code>timeout</code> lower the score, so the score thresholds catch them. A{" "}<code>--diff</code> run, and <code>gooze report view</code> of its reports, count the
+            survivors on the changed lines. In <code>v1.6.0+</code>,{" "}<code>--threshold-diff-max-survivors</code> (<code>threshold.diff.max_survivors</code>)
+            gives them their own cap, for example <code>0</code> new survivors while the whole
+            project allows a few. Left at <code>0</code>, it uses{" "}<code>threshold.max_survivors</code>, as earlier versions do. A breach names the key
+            of its scope, such as <code>threshold.diff.max_survivors</code>.</p>
+        </div>
+        <div id="timeouts">
+          <h2>Timeouts: survived or killed</h2>
+          <p>A mutant that makes a loop never end times out. By default a timeout counts as not
+            killed, so one hanging mutant on a changed line fails a 100% diff gate, and on a busy
+            runner a borderline timeout can make the gate flaky. Yet a test that hangs on a mutant
+            did notice the change.</p>
+          <p>In <code>v1.6.0+</code>, <code>--threshold-timeouts killed</code> (or{" "}<code>threshold.timeouts: killed</code>, <code>GOOZE_THRESHOLD_TIMEOUTS</code>) counts
+            timed-out mutants as killed in the total, the file scores and every gate, on{" "}<code>gooze run</code>, <code>gooze report view</code> and{" "}<code>gooze report merge</code>, for both scopes and for <code>--fail-fast</code>. The{" "}<code>TIMEOUT</code> column and the survivor list still show them, and the score line
+            ends with <code>timeouts count as killed</code>, so a reader knows why the score
+            is higher. <code>survived</code>, the default, keeps the earlier behavior.</p>
         </div>
         <div id="config">
           <h2>Set them once in gooze.yaml</h2>
@@ -135,7 +159,7 @@ const faqJsonLd = faqPageJsonLd(faqs)
             CI, put the thresholds in <code>gooze.yaml</code>:</p>
           <CodeBlock lang="yaml" code={config} />
           <p>A flag overrides the file for one run (<code>--threshold-total 0</code> turns the
-            total off), and so does an environment variable such as{" "}<code>GOOZE_THRESHOLD_TOTAL</code>, <code>GOOZE_THRESHOLD_DIFF_FILE</code> or{" "}<code>GOOZE_THRESHOLD_MAX_SURVIVORS</code>. A score outside <code>0</code> to{" "}<code>100</code>, or a negative cap, is a usage error:</p>
+            total off), and so does an environment variable such as{" "}<code>GOOZE_THRESHOLD_TOTAL</code>, <code>GOOZE_THRESHOLD_DIFF_FILE</code>,{" "}<code>GOOZE_THRESHOLD_MAX_SURVIVORS</code> or <code>GOOZE_THRESHOLD_TIMEOUTS</code>. A score outside <code>0</code> to{" "}<code>100</code>, or a negative cap, is a usage error:</p>
           <Recording name="threshold-out-of-range" title="Recorded threshold out of range" />
           <p class="">All keys: <a href="/docs/config/#threshold">configuration</a>. goozels marks a
             bad threshold in <code>gooze.yaml</code> while you type, and an editor run below a
@@ -156,6 +180,43 @@ const faqJsonLd = faqPageJsonLd(faqs)
             its diff run passes the stricter gate:</p>
           <CodeBlock lang="bash" code="gooze run --diff main ./..." />
           <Recording name="calc-threshold-diff" title="Recorded diff run that meets threshold.diff.total" />
+        </div>
+        <div id="both-scopes">
+          <h2>Gate the changed lines and the whole project</h2>
+          <p>A merge request has two scores: its changed lines, and the whole project once they
+            are added to the baseline. In <code>v1.6.0+</code>, one{" "}<a href="/docs/cli/report/#merge-scopes"><code>gooze report merge --scope diff,total</code></a> shows both and gates both: the changed lines on{" "}<code>threshold.diff.*</code>, the whole project on <code>threshold.*</code>. Every
+            breach is printed, each with the key of its scope, and the exit code is{" "}<code>3</code>:</p>
+          <CodeBlock lang="bash" code="gooze report merge --scope diff,total --threshold-diff-total 100 --threshold-total 80" />
+          <p><code>--gate</code> (or <code>report.gate</code>) narrows which scope can fail the
+            job. The other one is still shown:</p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead><code>--gate</code></TableHead>
+                <TableHead>Can fail the job</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody class="text-muted-foreground">
+              <TableRow>
+                <TableCell><code>auto</code> (default)</TableCell>
+                <TableCell>Every scope shown, each on its own thresholds</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell><code>diff</code></TableCell>
+                <TableCell>Only the changed lines</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell><code>total</code></TableCell>
+                <TableCell>Only the whole project</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell><code>none</code></TableCell>
+                <TableCell>Neither; the scores are only shown</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+          <p class="">A plain <code>report view</code> or <code>report merge</code> shows one scope, so{" "}<code>auto</code> gates that one, as in earlier versions. The pipelines that use both
+            scopes are in <a href="/docs/ci/gitlab/#sharded-diff">GitLab CI</a> and{" "}<a href="/docs/ci/github/">GitHub Actions</a>.</p>
         </div>
         <div id="fail-fast">
           <h2>Stop early once a gate fails</h2>
@@ -242,7 +303,11 @@ const faqJsonLd = faqPageJsonLd(faqs)
               </TableRow>
               <TableRow>
                 <TableCell><code>gooze report view</code>, <code>gooze report merge</code></TableCell>
-                <TableCell><code>threshold.*</code> on the reports they show</TableCell>
+                <TableCell><code>threshold.*</code> on the reports they show; <code>threshold.diff.*</code> on a <code>--diff</code> run&apos;s reports</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell><code>gooze report merge --scope diff,total</code></TableCell>
+                <TableCell><code>threshold.diff.*</code> on the changed lines and <code>threshold.*</code> on the whole project; <code>--gate</code> narrows it (<code>v1.6.0+</code>)</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell><code>gooze run --estimate</code></TableCell>

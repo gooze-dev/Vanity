@@ -166,6 +166,10 @@ const faqJsonLd = faqPageJsonLd(faqs)
                   <TableCell>Most surviving mutants allowed (default <code>0</code>, off); see{" "}<a href="#threshold">quality gates</a>.{" "}<code>GOOZE_THRESHOLD_DIFF_MAX_SURVIVORS</code> sets the cap on the changed lines (<code>v1.6.0+</code>).</TableCell>
                 </TableRow>
                 <TableRow>
+                  <TableCell><code>GOOZE_THRESHOLD_TIMEOUTS</code></TableCell>
+                  <TableCell>How timed-out mutants count in the score and the gates:{" "}<code>survived</code> (default) or <code>killed</code> (<code>v1.6.0+</code>); see{" "}<a href="/docs/ci/quality-gates/#timeouts">timeouts</a>.</TableCell>
+                </TableRow>
+                <TableRow>
                   <TableCell><code>GOOZE_REPORT_FORMAT</code></TableCell>
                   <TableCell>How <code>gooze report view</code> writes survivors: <code>text</code> (default),{" "}<code>github</code> (workflow annotations, then the summary) or{" "}<code>sarif</code> (a SARIF 2.1.0 log), <code>codeclimate</code> (a Code
                     Climate report for GitLab Code Quality; <code>gitlab</code> is the same) or{" "}<code>metrics</code> (a GitLab metrics report, <code>v1.5.0+</code>); see{" "}<a href="/docs/cli/report/#view-format">output formats</a>.</TableCell>
@@ -261,6 +265,7 @@ threshold:                    # quality gates; 0 is off; failing one, exit code 
     average: 0
     file: 0
     max_survivors: 0          # 0 uses threshold.max_survivors (v1.6.0+)
+  timeouts: survived          # or killed: timed-out mutants count as killed (v1.6.0+)
 
 report:
   format: text                # gooze report view output: text | github | gitlab | sarif | codeclimate | metrics
