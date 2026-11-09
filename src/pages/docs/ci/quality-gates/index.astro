@@ -35,7 +35,7 @@ const faqs = [
   },
   {
     q: "Can Gooze fail CI on the number of surviving mutants?",
-    a: "Yes. `--threshold-max-survivors` (or `threshold.max_survivors` in `gooze.yaml`) is the most surviving mutants allowed. With more, `gooze run`, `gooze report view` and `gooze report merge` exit with code `3`. Only `survived` mutants count: `not_covered` and `timeout` lower the score instead. A `--diff` run counts the survivors on its changed lines.",
+    a: "Yes. `--threshold-max-survivors` (or `threshold.max_survivors` in `gooze.yaml`) is the most surviving mutants allowed. With more, `gooze run`, `gooze report view` and `gooze report merge` exit with code `3`. Only `survived` mutants count: `not_covered` and `timeout` lower the score instead. A `--diff` run counts the survivors on its changed lines, against `threshold.diff.max_survivors` (`--threshold-diff-max-survivors`, v1.6.0+) when set and `threshold.max_survivors` otherwise.",
   },
   {
     q: "Can pull requests have a stricter threshold than main?",
@@ -234,7 +234,7 @@ const faqJsonLd = faqPageJsonLd(faqs)
               </TableRow>
               <TableRow>
                 <TableCell><code>gooze run --diff REF</code></TableCell>
-                <TableCell><code>threshold.diff.*</code> and <code>threshold.max_survivors</code> on the changed lines</TableCell>
+                <TableCell><code>threshold.diff.*</code> on the changed lines; without{" "}<code>threshold.diff.max_survivors</code>, <code>threshold.max_survivors</code></TableCell>
               </TableRow>
               <TableRow>
                 <TableCell><code>gooze run -s INDEX/TOTAL</code></TableCell>

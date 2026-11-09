@@ -173,7 +173,7 @@ const metadata = docsMetadata("/docs/cli/report")
           </div>
           <div id="view-gate">
             <h3>Which score fails (--gate)</h3>
-            <p>In <code>v1.6.0+</code>, <code>--gate</code> (or <code>report.gate</code> in{" "}<code>gooze.yaml</code>) picks the scope whose thresholds decide exit code{" "}<code>3</code>: <code>diff</code> for the changed lines of a <code>--diff</code> run,{" "}<code>total</code> for the whole project, or <code>none</code>. The default,{" "}<code>auto</code>, gates on the reports&apos; own scope, as before. A scope the gate leaves
+            <p>In <code>v1.6.0+</code>, <code>--gate</code> (or <code>report.gate</code> in{" "}<code>gooze.yaml</code>) narrows which scopes can fail with exit code{" "}<code>3</code>: <code>diff</code> for the changed lines of a <code>--diff</code> run,{" "}<code>total</code> for the whole project, or <code>none</code>. The default,{" "}<code>auto</code>, gates every scope shown on its own thresholds: the reports&apos; own scope for{" "}<code>view</code>, as before, and both scopes for{" "}<a href="#merge-scopes"><code>merge --scope diff,total</code></a>. A scope the gate leaves
               out is shown but never fails. A <code>--diff</code> run&apos;s score line names the changed
               lines.</p>
           </div>
@@ -284,8 +284,9 @@ gooze report push ghcr.io/your-org/your-repo/gooze-reports:main`} />
                 project. <code>--write</code> writes its files, and <code>--format</code> applies here.</li>
               <li>The merged <code>.gooze-reports/run</code> stays, so{" "}<code>gooze report view -o .gooze-reports/run</code> still shows the changed lines.</li>
             </ol>
-            <p>The gate defaults to the changed lines, so the whole project&apos;s score is shown but
-              doesn&apos;t fail the job; <code>--gate total</code> or <code>none</code> changes that. The{" "}<code>metrics</code> file holds both scopes,{" "}<code>gooze_*</code> and <code>gooze_diff_*</code>, with one <code>#&nbsp;EOF</code>. Without a{" "}<code>--diff</code> run in <code>run/</code>, <code>--scope diff,total</code> exits with code{" "}<code>6</code>.</p>
+            <p>By default both scopes are gated: the changed lines on{" "}<code>threshold.diff.*</code> and the whole project on <code>threshold.*</code>, and
+              every breach is printed. <code>--gate diff</code> or <code>--gate total</code> lets
+              only one scope fail the job, and <code>--gate none</code> neither. The{" "}<code>metrics</code> file holds both scopes,{" "}<code>gooze_*</code> and <code>gooze_diff_*</code>, with one <code>#&nbsp;EOF</code>. Without a{" "}<code>--diff</code> run in <code>run/</code>, <code>--scope diff,total</code> exits with code{" "}<code>6</code>.</p>
           </div>
           <h3>When you need this</h3>
           <p>If you run <code>gooze run -s INDEX/TOTAL</code>, Gooze writes into shard folders.

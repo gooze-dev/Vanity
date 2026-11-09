@@ -370,7 +370,7 @@ const metadata = docsMetadata("/docs/ci/gitlab")
           <ul>
             <li>A diff shard writes to <code>.gooze-reports/run/shard_&lt;index&gt;/</code>. In{" "}<code>v1.6.0+</code>,{" "}<code>gooze report merge -o .gooze-reports --scope diff,total</code> merges the shards and scores the changed lines (the{" "}<code>threshold.diff.*</code> keys apply), then adds the results to the baseline and scores the whole project (the{" "}<code>threshold.*</code> keys apply). The merged <code>.gooze-reports/run</code> stays, so{" "}<code>gooze report view -o .gooze-reports/run</code> still shows the changed lines afterwards.</li>
             <li>Repeat <code>--write &lt;format&gt;=&lt;path&gt;</code> for each report you want: the reports are loaded and scored once, however many files you write.{" "}<code>--write</code> writes the whole project&apos;s scope and{" "}<code>--write-diff</code> the changed lines. With both scopes, the{" "}<code>metrics</code> file holds <code>gooze_*</code> and <code>gooze_diff_*</code> together.</li>
-            <li><code>--gate diff</code> lets only the changed lines decide exit code{" "}<code>3</code>; the whole project&apos;s score is shown but never fails the job. The threshold error is printed once and names its scope. Without <code>--gate</code>, a merge of{" "}<code>--diff</code> shards gates on the changed lines.</li>
+            <li><code>--gate diff</code> lets only the changed lines decide exit code{" "}<code>3</code>; the whole project&apos;s score is shown but never fails the job. Without <code>--gate</code>, both scopes are gated, each on its own thresholds, and every breach is printed with the key of its scope.</li>
             <li><code>--summary</code> keeps the job log short: the per-file table, the score line and the threshold verdict, without the list of surviving mutants.{" "}<code>report.txt</code> keeps the full text report as an artifact.</li>
             <li>Up to <code>v1.5.0</code>, this took a <code>report view</code> per format, and the diff reports had to be written before merging into the baseline, which deleted{" "}<code>.gooze-reports/run</code>.</li>
             <li>In <code>v1.5.0+</code>, a shard also copies the baseline results it reuses for
@@ -419,7 +419,7 @@ const metadata = docsMetadata("/docs/ci/gitlab")
           <CodeBlock lang="yaml" code={gate} />
           <p>The <code>calc</code> run at <code>84.62%</code> passes a minimum of{" "}<code>60</code> and fails a minimum of <code>90</code>, until the two boundary
             tests bring it to <code>100.00%</code>.</p>
-          <p>When a merge reports two scopes, <code>--gate diff</code>,{" "}<code>--gate total</code> or <code>--gate none</code> (or{" "}<code>report.gate</code> in <code>gooze.yaml</code>) picks the one that decides the exit code, as in the{" "}<a href="#sharded-diff">sharded merge request</a> example.</p>
+          <p>When a merge reports two scopes, <code>--gate diff</code>,{" "}<code>--gate total</code> or <code>--gate none</code> (or{" "}<code>report.gate</code> in <code>gooze.yaml</code>) narrows which of them can fail the job, as in the{" "}<a href="#sharded-diff">sharded merge request</a> example.</p>
           <p class="">A shard doesn&apos;t check thresholds, so gate only in the merge job. To show a low
             score as a warning instead of failing the pipeline, add{" "}<code>allow_failure: exit_codes: [3]</code>; every other code still fails it. More
             in <a href="#exit-codes">exit codes</a>.</p>

@@ -163,7 +163,7 @@ const faqJsonLd = faqPageJsonLd(faqs)
                 </TableRow>
                 <TableRow>
                   <TableCell><code>GOOZE_THRESHOLD_MAX_SURVIVORS</code></TableCell>
-                  <TableCell>Most surviving mutants allowed (default <code>0</code>, off); see{" "}<a href="#threshold">quality gates</a>.</TableCell>
+                  <TableCell>Most surviving mutants allowed (default <code>0</code>, off); see{" "}<a href="#threshold">quality gates</a>.{" "}<code>GOOZE_THRESHOLD_DIFF_MAX_SURVIVORS</code> sets the cap on the changed lines (<code>v1.6.0+</code>).</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell><code>GOOZE_REPORT_FORMAT</code></TableCell>
@@ -260,6 +260,7 @@ threshold:                    # quality gates; 0 is off; failing one, exit code 
     total: 0
     average: 0
     file: 0
+    max_survivors: 0          # 0 uses threshold.max_survivors (v1.6.0+)
 
 report:
   format: text                # gooze report view output: text | github | gitlab | sarif | codeclimate | metrics
@@ -281,7 +282,7 @@ log:
           <h2>Quality gates</h2>
           <p>The <code>threshold</code> keys make <code>gooze run</code>,{" "}<code>gooze report view</code> and <code>gooze report merge</code> exit with code{" "}<code>3</code> when a score is below them: <code>total</code> for the score of all
             mutations, <code>average</code> for the mean of the file scores, and{" "}<code>file</code> for every file&apos;s own score. <code>max_survivors</code> is a
-            count, not a percent: more surviving mutants than it allows fail the same way. The{" "}<code>threshold.diff</code> keys replace the scores for{" "}<code>gooze run --diff</code>, on the changed lines; there,{" "}<code>max_survivors</code> counts the changed lines&apos; survivors. Flags{" "}<code>--threshold-total</code> and <code>--threshold-diff-total</code> (and the
+            count, not a percent: more surviving mutants than it allows fail the same way. The{" "}<code>threshold.diff</code> keys replace the scores for{" "}<code>gooze run --diff</code>, on the changed lines; there,{" "}<code>max_survivors</code> counts the changed lines&apos; survivors. In{" "}<code>v1.6.0+</code>, <code>threshold.diff.max_survivors</code> gives them their own cap;{" "}<code>0</code> keeps <code>threshold.max_survivors</code>. Flags{" "}<code>--threshold-total</code> and <code>--threshold-diff-total</code> (and the
             others) override them for one command. How to pick and use them:{" "}<a href="/docs/ci/quality-gates/">Quality gates</a>.</p>
         </div>
         <div id="validation">
