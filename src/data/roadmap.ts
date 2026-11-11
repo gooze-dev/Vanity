@@ -284,6 +284,14 @@ export const roadmap: RoadmapItem[] = [
     description: "Choose which mutant statuses appear in the output, for example only survivors.",
   },
   {
+    name: "Equivalent mutants",
+    area: "reporting",
+    milestone: "later",
+    theme: "reports",
+    description: "A status of their own for mutants that can't change behavior, so no test can kill them: listed apart from survivors, left out of the score, each with the rule or `//gooze:ignore` that marked it. Today the built-in rules drop them without a trace, and the ones no rule knows count as survivors.",
+    issue: 231,
+  },
+  {
     name: "LLM training dataset",
     area: "reporting",
     milestone: "later",
