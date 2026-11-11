@@ -152,6 +152,12 @@ export const roadmap: RoadmapItem[] = [
     issue: 176,
   },
   {
+    name: "Config migration",
+    area: "core",
+    milestone: "major",
+    description: "`gooze config migrate` rewrites a 1.x `gooze.yaml` for the new release: it renames the old keys and can write the 1.x defaults out, so the upgrade by itself changes no result.",
+  },
+  {
     name: "Old config key names",
     area: "core",
     milestone: "major",
