@@ -279,6 +279,14 @@ export const roadmap: RoadmapItem[] = [
     issue: 228,
   },
   {
+    name: "Subsumption analysis",
+    area: "operators",
+    milestone: "later",
+    theme: "operators",
+    description: "Skip mutants that any test killing another mutant on the same line also kills, such as most of the five replacements of `<`. Fewer mutants to run and fewer duplicate survivors, with the same strength; `mutagen.subsumption: off` keeps them all.",
+    issue: 216,
+  },
+  {
     name: "Assignment operators",
     area: "operators",
     milestone: "shipped",
@@ -566,14 +574,6 @@ export const roadmap: RoadmapItem[] = [
     theme: "performance",
     description: "Run each mutant's tests with `-failfast`, and record which test killed it.",
     issue: 226,
-  },
-  {
-    name: "Fewer redundant mutants",
-    area: "performance",
-    milestone: "later",
-    theme: "performance",
-    description: "Leave out the mutants that any test killing another mutant on the same line also kills (subsumption). A comparison then gives two or three mutants, not five.",
-    issue: 216,
   },
   {
     name: "Parallel workers",
