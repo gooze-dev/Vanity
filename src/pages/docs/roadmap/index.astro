@@ -170,7 +170,7 @@ const metadata = docsMetadata("/docs/roadmap")
             <h2 id="next-major" class={titleClass}>{nextMajor}</h2>
             <span class={countClass}>{features(counts.major)}</span>
           </div>
-          <p class={descClass}>New defaults wait for the next major release, so an upgrade within 1.x never switches on mutagens or settings you didn&apos;t choose. Each of these is, or will be, an option in 1.x first. A new major version of a Go module has a new path, so the install command changes with it.</p>
+          <p class={descClass}>New defaults wait for the next major release, so an upgrade within 1.x never switches on mutagens or settings you didn&apos;t choose. Each of these is, or will be, an option in 1.x first.</p>
           <ul class="flex flex-col gap-2.5">{byMilestone("major").map((item) => (
             <li id={itemId(item)} class="max-w-[62ch] text-sm leading-normal text-muted-foreground"><b class="font-semibold text-foreground" set:html={`${withCode(item.name)}:`} />{" "}<Fragment set:html={description(item)} />{item.issue && <Fragment>{" "}<a href={`https://github.com/gooze-dev/gooze/issues/${item.issue}`} class={linkClass}>Issue #{item.issue}</a></Fragment>}</li>
           ))}</ul>
