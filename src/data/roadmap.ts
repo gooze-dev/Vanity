@@ -2,10 +2,12 @@ import { DOCS_FACTS_VERSION } from "@/lib/version"
 
 // The single source for /docs/roadmap. Moving a feature is one line: change its
 // milestone. Every count on the page is computed from this list. Text uses
-// `backticks` for code (lib/faq withCode). Don't add dates or version numbers
-// for unreleased work.
+// `backticks` for code (lib/faq withCode). Don't add dates for unreleased work.
+// The only version it names is the next major, for the "major" milestone: a
+// change of a default, or the removal of something that still works. New
+// options, new opt-in mutagens and report changes are Later.
 
-export type Milestone = "shipped" | "beta" | "next" | "later"
+export type Milestone = "shipped" | "beta" | "next" | "later" | "major"
 
 export const areas = {
   core: "Core features",
@@ -49,7 +51,7 @@ export interface RoadmapItem {
   until?: { text: string; href: string }
   /** The docs page, when the feature has one. */
   docs?: string
-  /** Tracking issue in gooze-dev/gooze. */
+  /** Tracking issue in gooze-dev/gooze. Linked from Later and the next major. */
   issue?: number
   /** Old anchor kept for existing links, when it isn't the slug of the name. */
   anchor?: string
@@ -131,6 +133,29 @@ export const roadmap: RoadmapItem[] = [
     milestone: "later",
     theme: "configuration",
     description: "Publish the schema that `gooze config schema` prints in SchemaStore, so any YAML-aware editor validates and completes the config without setup.",
+    issue: 41,
+  },
+  {
+    name: "Gates per function and package",
+    area: "core",
+    milestone: "later",
+    theme: "configuration",
+    description: "Thresholds on the score of each function and package, such as \"no function below 60%\", next to the total and per-file ones.",
+    issue: 184,
+  },
+  {
+    name: "Subcommand plugins",
+    area: "core",
+    milestone: "later",
+    theme: "configuration",
+    description: "Run a `gooze-<command>` executable on `PATH` as a gooze subcommand, the way `git` and `kubectl` plugins work.",
+    issue: 176,
+  },
+  {
+    name: "Old config key names",
+    area: "core",
+    milestone: "major",
+    description: "`no-cache`, `no-update-check` and `version` in `gooze.yaml` stop being read. Today they work with a warning that names the new key.",
   },
   {
     name: "Config show",
@@ -182,6 +207,7 @@ export const roadmap: RoadmapItem[] = [
     milestone: "later",
     theme: "operators",
     description: "Replace a returned value with its zero value, `nil` or an empty collection (`return x` to `return 0`, `return items` to `return nil`).",
+    issue: 217,
   },
   {
     name: "Number parsing",
@@ -197,6 +223,54 @@ export const roadmap: RoadmapItem[] = [
     milestone: "later",
     theme: "operators",
     description: "`\"\"` to `\"x\"` and back, and other string constant changes. Today only integer and float literals are mutated.",
+    issue: 218,
+  },
+  {
+    name: "Call arguments",
+    area: "operators",
+    milestone: "later",
+    theme: "operators",
+    description: "A `call` mutagen: swap two arguments of the same type, zero an argument, or replace a call's result. It shows the tests that check a dependency was called, but not with what.",
+    issue: 247,
+  },
+  {
+    name: "Function bodies",
+    area: "operators",
+    milestone: "later",
+    theme: "operators",
+    description: "A `body` mutagen that removes a whole function body. A function whose tests still pass is covered but not checked.",
+    issue: 248,
+  },
+  {
+    name: "Concurrency",
+    area: "operators",
+    milestone: "later",
+    theme: "operators",
+    description: "Remove a `Lock`, an `Unlock` or a `wg.Wait()`, turn an atomic operation into a plain one, change a channel's buffer.",
+    issue: 239,
+  },
+  {
+    name: "Type switch and `select`",
+    area: "operators",
+    milestone: "later",
+    theme: "operators",
+    description: "`branch` also empties the clauses of a type switch and of a `select`, such as `case <-ctx.Done():`.",
+    issue: 238,
+  },
+  {
+    name: "Arid code",
+    area: "operators",
+    milestone: "later",
+    theme: "operators",
+    description: "Skip the code nobody writes a test for: logging calls, time and deadline values, flag definitions and metrics calls. Today each site needs a `//gooze:ignore`.",
+    issue: 227,
+  },
+  {
+    name: "`branch` and `statement` by default",
+    area: "operators",
+    milestone: "major",
+    description: "The two opt-in mutagens that remove `if` blocks and statements join the default set, and arid code is skipped by default. More mutants per run, so a score gate can move. Until then, name them in `--mutagens`.",
+    issue: 228,
   },
   {
     name: "Assignment operators",
@@ -292,6 +366,46 @@ export const roadmap: RoadmapItem[] = [
     issue: 231,
   },
   {
+    name: "Survivors by line",
+    area: "reporting",
+    milestone: "later",
+    theme: "reports",
+    description: "`gooze report view` lists one entry per line with its mutants folded, as `--by-line` does today, and caps the entries per file.",
+    issue: 221,
+  },
+  {
+    name: "Killed since the last run",
+    area: "reporting",
+    milestone: "later",
+    theme: "reports",
+    description: "After you add a test, the report says which earlier survivors are now killed and which are left.",
+    issue: 223,
+  },
+  {
+    name: "Ignore reasons",
+    area: "reporting",
+    milestone: "later",
+    theme: "reports",
+    description: "An optional reason on `//gooze:ignore`, and a report of what is ignored, by reason.",
+    issue: 225,
+  },
+  {
+    name: "Statistics per function",
+    area: "reporting",
+    milestone: "later",
+    theme: "reports",
+    description: "Scores per function and per package next to the per-file ones, with the average, median, minimum and maximum.",
+    issue: 183,
+  },
+  {
+    name: "Stryker Dashboard",
+    area: "reporting",
+    milestone: "later",
+    theme: "reports",
+    description: "Convert reports to the Stryker schema and push them to the Stryker Dashboard, for a hosted report and a score badge.",
+    issue: 175,
+  },
+  {
     name: "LLM training dataset",
     area: "reporting",
     milestone: "later",
@@ -356,6 +470,53 @@ export const roadmap: RoadmapItem[] = [
     description: "Generate the coverage profile during the run instead of requiring your own `--coverage-profile`.",
   },
   {
+    name: "Flaky tests",
+    area: "execution",
+    milestone: "later",
+    theme: "execution",
+    description: "Find the tests that fail without a mutation from run to run, and don't count their failures as kills.",
+    issue: 235,
+  },
+  {
+    name: "Go workspaces",
+    area: "execution",
+    milestone: "later",
+    theme: "execution",
+    description: "One run, one report and one score for every module of a `go.work`. Today each module needs its own run.",
+    issue: 236,
+  },
+  {
+    name: "Score from a sample",
+    area: "execution",
+    milestone: "later",
+    theme: "execution",
+    description: "`gooze run --sample` tests random mutants until the score is known within a few points, for a first look at a large module.",
+    issue: 234,
+  },
+  {
+    name: "Untested changed lines",
+    area: "execution",
+    milestone: "later",
+    theme: "execution",
+    description: "In a `--diff` run, changed lines no test runs are reported as `not_covered` at once, without testing their mutants.",
+    issue: 142,
+  },
+  {
+    name: "Untested branches",
+    area: "execution",
+    milestone: "later",
+    theme: "execution",
+    description: "The mutants of a condition are `not_covered` when no test enters the block it guards, so the report says \"this branch has no test\", not \"strengthen the test\".",
+    issue: 230,
+  },
+  {
+    name: "Timeout from the test time",
+    area: "execution",
+    milestone: "major",
+    description: "Each package's timeout is a multiple of the time its tests take without a mutation, instead of a fixed 120 seconds, so a mutant that hangs costs seconds. It comes to 1.x first as an option; `--mutation-timeout` stays as the override.",
+    issue: 139,
+  },
+  {
     name: "Package-owned tests",
     area: "execution",
     milestone: "shipped",
@@ -373,9 +534,9 @@ export const roadmap: RoadmapItem[] = [
   {
     name: "CPU-based parallelism",
     area: "performance",
-    milestone: "later",
-    theme: "performance",
-    description: "Default `--parallel` to the number of CPU cores instead of `1`.",
+    milestone: "major",
+    description: "The number of workers follows the CPU and memory in use, under `run.max_cpu` and `run.max_memory`, instead of defaulting to `1`. It comes to 1.x first as `run.parallel: auto`.",
+    issue: 182,
   },
   {
     name: "No project copies",
@@ -391,6 +552,22 @@ export const roadmap: RoadmapItem[] = [
     theme: "performance",
     description: "Build all mutants of a package into one test binary and switch between them at run time (mutant schemata), instead of recompiling for every mutant.",
     issue: 55,
+  },
+  {
+    name: "Stop at the first failing test",
+    area: "performance",
+    milestone: "later",
+    theme: "performance",
+    description: "Run each mutant's tests with `-failfast`, and record which test killed it.",
+    issue: 226,
+  },
+  {
+    name: "Fewer redundant mutants",
+    area: "performance",
+    milestone: "later",
+    theme: "performance",
+    description: "Leave out the mutants that any test killing another mutant on the same line also kills (subsumption). A comparison then gives two or three mutants, not five.",
+    issue: 216,
   },
   {
     name: "Parallel workers",
@@ -435,6 +612,14 @@ export const roadmap: RoadmapItem[] = [
     milestone: "later",
     theme: "install",
     description: "An official container image for running Gooze in any CI system.",
+  },
+  {
+    name: "Pull request comments",
+    area: "workflow",
+    milestone: "later",
+    theme: "install",
+    description: "Survivors as review comments on the pull request, one per line, resolved when the mutant is killed.",
+    issue: 240,
   },
   {
     name: "GitHub Actions",
@@ -487,6 +672,9 @@ export const roadmap: RoadmapItem[] = [
   },
 ]
 
+/** The release the "major" milestone waits for. */
+export const nextMajor = "2.0.0"
+
 /** The release the Shipped milestone describes. */
 export const shippedVersion = DOCS_FACTS_VERSION
 
@@ -497,6 +685,7 @@ export const counts = {
   beta: byMilestone("beta").length,
   next: byMilestone("next").length,
   later: byMilestone("later").length,
+  major: byMilestone("major").length,
   total: roadmap.length,
 }
 
