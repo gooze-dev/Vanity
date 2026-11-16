@@ -15,7 +15,7 @@ const RELEASES_API =
   "https://api.github.com/repos/gooze-dev/gooze/releases/latest";
 
 // Last known-good version; bump when the API is expected to be unavailable.
-const FALLBACK_VERSION = "1.5.1";
+const FALLBACK_VERSION = "1.6.1";
 
 // The Gooze release the docs' factual claims (roadmap limitations, comparison
 // table, llms.txt key facts) were last checked against. Unlike
