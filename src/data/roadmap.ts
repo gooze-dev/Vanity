@@ -200,6 +200,13 @@ export const roadmap: RoadmapItem[] = [
     docs: "/docs/cli/run#timeout",
   },
   {
+    name: "Memory and disk limits",
+    area: "core",
+    milestone: "shipped",
+    description: "`--mutation-memory` and `--mutation-disk` kill the tests of a mutation that takes too much memory (Linux) or disk space.",
+    docs: "/docs/cli/run#limits",
+  },
+  {
     name: "Config file",
     area: "core",
     milestone: "shipped",

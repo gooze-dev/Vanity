@@ -421,6 +421,18 @@ export const docsFlags: DocsFlag[] = [
     description: "Per-mutation timeout, in seconds, before a mutation is marked timed out.",
   },
   {
+    flag: "--mutation-memory",
+    command: "gooze run",
+    href: "/docs/cli/run#limits",
+    description: "Memory limit, in MiB, of one mutation's tests; above it they are killed (Linux only).",
+  },
+  {
+    flag: "--mutation-disk",
+    command: "gooze run",
+    href: "/docs/cli/run#limits",
+    description: "Disk space limit, in MiB, of one mutation's temp and build files; above it its tests are killed.",
+  },
+  {
     flag: "--no-cache",
     command: "global",
     href: "/docs/cli/run#cache",

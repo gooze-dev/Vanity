@@ -160,6 +160,18 @@ const runFlags: RunFlag[] = [
     configKey: "run.mutation_timeout",
   },
   {
+    flag: "--mutation-memory",
+    description: "`v1.6.1+`. Memory in MiB that the tests of one mutation may hold, all their processes together; above it they are killed and the mutation is reported as `timeout`. `0` is no limit. Linux only. Env: `GOOZE_RUN_MUTATION_MEMORY`.",
+    defaultValue: "0 (no limit)",
+    configKey: "run.mutation_memory",
+  },
+  {
+    flag: "--mutation-disk",
+    description: "`v1.6.1+`. Disk space in MiB that the tests of one mutation may take in their temp directory and their build directory; above it they are killed and the mutation is reported as `timeout`. `0` is no limit. Env: `GOOZE_RUN_MUTATION_DISK`.",
+    defaultValue: "0 (no limit)",
+    configKey: "run.mutation_disk",
+  },
+  {
     flag: "--coverage-profile",
     description:
       "Path to a Go coverage profile; mutations on uncovered lines are reported as `not_covered` without running tests.",
@@ -364,6 +376,31 @@ gooze run --mutagens comparison --mutagens boolean ./...`} />
           <p>You can also set it with <code>run.mutation_timeout</code> in{" "}<code>gooze.yaml</code> or <code>GOOZE_RUN_MUTATION_TIMEOUT</code>.
             If you see many unexpected timeouts, run verbose and inspect the logs:</p>
           <CodeBlock lang="bash" code="gooze run --verbose ./..." />
+        </div>
+        <div id="limits">
+          <h2>Memory and disk limits</h2>
+          <p>A mutation can turn a loop into one that never ends, and such a loop can allocate
+            memory or write files until the timeout stops it. In <code>v1.6.1+</code>, two
+            limits stop it sooner. Both are in MiB, and <code>0</code>, the default, is no limit.</p>
+          <ul>
+            <li><code>--mutation-memory</code> (<code>run.mutation_memory</code>): the memory
+              the tests of one mutation may hold, all their processes together. Linux only.</li>
+            <li><code>--mutation-disk</code> (<code>run.mutation_disk</code>): the space their
+              files may take in the temp directory Gooze gives them and in their build directory,
+              where Go puts <code>t.TempDir()</code>. Files written anywhere else are not counted.</li>
+          </ul>
+          <CodeBlock lang="bash" code="gooze run --mutation-memory 1024 --mutation-disk 1024 ./..." />
+          <p>Above a limit, Gooze kills the tests and reports the mutation as{" "}<code>timeout</code>.
+            A limit is for one mutation: with <code>--parallel 4</code>, four test runs may each
+            use it. <code>gooze config init</code> writes <code>1024</code> for both; a{" "}<code>gooze.yaml</code> you already have gets no limit until you add the keys:</p>
+          <CodeBlock lang="yaml" code={`run:
+  mutation_memory: 1024
+  mutation_disk: 1024`} />
+          <p>If the tests of a package go over a limit without any mutation, Gooze doesn&apos;t test
+            its mutations and exits with code <code>7</code>; raise the limit for that project.</p>
+          <p>Gooze also cleans up after every mutation&apos;s tests. It keeps the first and the last
+            1 MiB of their output, removes their temp directory, and on Linux stops any process
+            they left running, so none outlives the run or stays a zombie.</p>
         </div>
         <div id="workspace">
           <h2>Workspace: how mutants are built</h2>

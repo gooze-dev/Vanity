@@ -229,7 +229,7 @@ gooze run ./...`} />
           <h2>Complete gooze.yaml reference</h2>
           <p>Every supported key, with its default value. All keys are optional:
             Gooze falls back to these defaults when a key is omitted. The{" "}<code>no_cache</code>, <code>no_update_check</code> and <code>run.go_cache*</code>{" "}keys need <code>v1.4.2+</code>; see <a href="#validation">Validation</a> for the
-            old names.</p>
+            old names. <code>run.mutation_memory</code> and <code>run.mutation_disk</code>{" "}need <code>v1.6.1+</code>; <code>gooze config init</code> writes{" "}<code>1024</code> for both, see{" "}<a href="/docs/cli/run#limits">Memory and disk limits</a>.</p>
           <CodeBlock lang="yaml" code={`# gooze.yaml
 output: .gooze-reports        # where reports and the incremental cache live
 no_cache: false               # set true to force a full re-run
@@ -241,6 +241,8 @@ paths:
 run:
   parallel: 1                 # concurrent mutation workers
   mutation_timeout: 120       # per-mutation timeout, in seconds
+  mutation_memory: 0          # MiB of memory one mutation's tests may hold; 0 is no limit (Linux only)
+  mutation_disk: 0            # MiB of temp and build files one mutation's tests may write; 0 is no limit
   coverage_profile: ''        # e.g. coverage.out to skip uncovered lines
   diff: ''                    # git ref, e.g. origin/main: mutate only changed lines (needs git)
   mutagens: []                # e.g. [comparison, boolean]; empty runs the nine defaults
@@ -291,6 +293,7 @@ log:
           <ul>
             <li><code>run.parallel</code> must be at least <code>1</code></li>
             <li><code>run.mutation_timeout</code> must be at least <code>1</code> (seconds)</li>
+            <li><code>run.mutation_memory</code> and <code>run.mutation_disk</code> must be at least <code>0</code> (MiB)</li>
             <li><code>run.workspace</code> must be <code>overlay</code> or <code>deep-copy</code></li>
             <li><code>run.fail_fast</code> must be <code>off</code>, <code>gate</code>,{" "}<code>file</code> or <code>first</code></li>
             <li>every <code>threshold</code> score must be a number from <code>0</code> to <code>100</code></li>
